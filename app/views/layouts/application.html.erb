@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <!-- TODO: meta tags -->
+
+  <title><%=full_title(yield(:title)) %></title>
+  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+  <%= csrf_meta_tags %>
+</head>
+<body>
+
+  <div align="center">
+    <div id="main_page">
+      <div id="header">
+        <!-- <div id="logo"></div> -->
+        <div style="height:70px; width:900px;">
+          <br>TODO: banner
+        </div>
+        <%=render :partial => "layouts/menu"%>
+      </div>
+      <div>
+        <div id="content">
+          <%unless flash[:notice].nil? then%>
+            <div id="notice" class="notice"><%=flash[:notice]%></div>
+            <script type="text/javascript">setTimeout("$('#notice').slideUp(500);", 2000);</script>
+          <%end%>
+          <%= yield %>
+        </div>
+        <div id="rightside">
+          <div>
+            <div style="padding-top: 5px"><%= link_to(image_tag("layout/diark_link.png", :alt=>"link to diark"), "http://www.diark.org/diark", :target => "_blank") %></div>
+            <div style="padding-top: 5px"><%= link_to(image_tag("layout/cymobase_link.png", :alt=>"link to cymobase"), "http://www.cymobase.org/cymobase", :target => "_blank") %></div>
+            <div style="padding-top: 5px"><%= link_to(image_tag("layout/motorprotein_link.png", :alt=>"link to motorprotein"), "http://www.motorprotein.de", :target => "_blank") %></div>
+            <div style="padding-top: 5px"><%= link_to(image_tag("layout/mpg.png", :alt=>"link to MPG"), "http://www.mpg.de", :target => "_blank") %></div>
+            <div style="padding-top: 5px"><%= link_to(image_tag("layout/mpibpc.png", :alt=>"MPI for biophysical chemistry"), "http://www.mpibpc.mpg.de", :target => "_blank") %></div>
+          </div>
+        </div>
+      </div>
+      <div id="footer">
+        &#169; <%= link_to( "GenePainter Team #{Time.now.year}", team_path, :class => "internal") %>|
+        <%= link_to "Impressum", "http://www.mpibpc.gwdg.de/metanavi/impressum/index.html", :target => "_blank", :class => "external"%><br /><br />
+        <%= link_to(image_tag("layout/firefox.png", :alt=>"MPI for biophysical chemistry"), "http://www.mozilla.org/products/firefox", :target => "_blank") %>
+        <%= link_to(image_tag("layout/web_2_0.png", :alt=>"Web_2.0"), "http://en.wikipedia.org/wiki/Web_2.0", :target => "_blank") %>
+        <%= link_to(image_tag("layout/ror.gif", :alt=>"Ruby on Rails"), "http://www.rubyonrails.org", :target => "_blank") %>
+        <%= link_to(image_tag("layout/ajax.png", :alt=>"Ajax"), "http://www.adaptivepath.com/publications/essays/archives/000385.php", :target => "_blank") %>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

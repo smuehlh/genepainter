@@ -1,0 +1,21 @@
+<div id="menu">
+  <ul>
+    <% if controller.action_name == "home" then selected = " class='selected'" else selected = "" end %>
+    <li<%=raw(selected)%>><%= link_to "Home", root_path %></li>
+
+    <% if controller.action_name == "genepainter" then selected = " class='selected'" else selected = "" end%>
+    <li<%=raw(selected)%>><%= link_to "GenePainter", genepainter_path %></li>
+
+    <% if controller.action_name == "help" then selected = " class='selected'" else selected = "" end%>
+    <li<%=raw(selected)%>><%= link_to "Help", help_path %></li>
+
+    <% if controller.action_name == "download" then selected = " class='selected'" else selected = "" end%>
+    <li<%=raw(selected)%>><%= link_to "Download", download_path %></li>
+
+    <% if controller.action_name == "team" then selected = " class='selected'" else selected = "" end%>
+    <li<%=raw(selected)%>><%= link_to "Team", team_path %></li>
+
+    <% if controller.action_name == "contact" then selected = " class='selected'" else selected = "" end%>
+    <li<%=raw(selected)%>><%= link_to "Contact", contact_path %></li>
+  </ul>
+</div>

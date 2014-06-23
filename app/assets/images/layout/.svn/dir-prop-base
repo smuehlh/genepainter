@@ -1,0 +1,19 @@
+K 10
+svn:ignore
+V 256
+._radio_on.png
+._radio_off.png
+._check_off.png
+._check_on.png
+._baghira.png
+._sherekhan.png
+._radio_disabled.png
+._example_result.png
+._example_residues.png
+._example_regime_model.png
+._example_parameter.png
+._log.png
+._peakr_link.png
+._sherekhan_link.png
+
+END
