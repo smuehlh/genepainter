@@ -1,13 +1,76 @@
 <% provide(:title, 'GenePainter') %>
 <%= content_tag(:h1, "Data Upload") %>
 <%= content_tag(:h2, "Multiple Sequence Alignment") %>
-<p>Nothing here yet</p>
+
+<%= content_tag(:b, "Enter accession number(s), gi(s), or FASTA sequence(s)") %>
+<%= content_tag(:a, "Help", :class => "help", :href => "#", :id => "text_seq_help") %>
+
+<%=render :partial => "gene_painter/text_seq_help"%>
+
+<%= javascript_tag defer: 'defer' do -%>
+  $("a#text_seq_help").click(function() {
+     $("div#text_seq_help").toggle("slow");
+  });
+<% end -%>
+
+<%= content_tag(:textarea, nil, :id => "text_seq", :placeholder => "Enter FASTA sequence(s)", :cols => 80, :rows => 5, :style => "margin-top: 5px") %>
+
+<%= tag(:br) %>
+
+<%= content_tag(:label, content_tag(:b, "Or upload file")) %>
+
+<!-- TODO: Only accept some file extensions. bug??-->
+<%= file_field_tag("upload_seq",
+  :data => {url: post_upload_file_path}
+  )
+%>
+
+<%= content_tag(:a, "Help", :class => "help", :href => "#", :id => "upload_seq_help") %>
+
+<%=render :partial => "gene_painter/upload_seq_help"%>
+
+<%= javascript_tag defer: 'defer' do -%>
+  $("a#upload_seq_help").click(function() {
+     $("div#upload_seq_help").toggle("slow");
+  });
+<% end -%>
 
 <%= content_tag(:h2, "Gene Structures") %>
-<p>Nothing here yet</p>
+<%= content_tag(:label, content_tag(:b, "Upload files")) %>
+
+
+<!-- TODO: Only accept some file extensions -->
+<%= file_field_tag("upload_gene_struct", { multiple: true, disabled: "disabled", accept: "" }) %>
+<%= content_tag(:a, "Help", :class => "help", :href => "#", :id => "upload_gene_struct_help") %>
+
+<%=render :partial => "gene_painter/upload_gene_struct_help"%>
+
+<%= javascript_tag defer: 'defer' do -%>
+  $("a#upload_gene_struct_help").click(function() {
+     $("div#upload_gene_struct_help").toggle("slow");
+  });
+<% end -%>
+
+<%= content_tag(:p,
+  content_tag(:b, "Or generate gene structures for selected sequences (Data Center)"))
+%>
 
 <%= content_tag(:h2, "Species Mapping") %>
-<p>Nothing here yet</p>
+
+<%= content_tag(:div,
+  add_species,
+  :class => "add_species_input")
+%>
+
+<%= button_tag("Add species") %>
+
+<%= content_tag(:div,
+  content_tag(:label, content_tag(:b, "Or upload file")) +
+  file_field_tag("upload_species_mapping",
+  :style => "padding-top: 10px; padding-bottom: 10px") +
+  content_tag(:a, "Help", :class => "help", :href => "#", :id => "uploade_species_mapping_help")
+  )
+%>
 
 <%= content_tag(:h1, "Data Center") %>
 <p>Nothing here yet</p>

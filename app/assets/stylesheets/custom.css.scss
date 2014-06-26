@@ -29,7 +29,7 @@ $dunkelgrau: #737373;
 $menu_links_inactiv: #F2F2F2;
 $menu_links_selected: #999999;
 $content_background: #F6F6F6;
-$h1_color: #669900;
+$h1_color: #336699;
 // $h1_color: #793C67;
 $h2_color: #ddd;
 $nice_button_bg: $h1_color;
@@ -54,8 +54,10 @@ a {
     }
 }
 
-a.external { background: url("icons/link.png") no-repeat center right; text-decoration:underline; padding-right:18px;}
-a.internal { background:url("icons/anchor.png") no-repeat center right; text-decoration:underline; padding-right:18px;}
+a.external { background: url("icons/link.png") no-repeat center right; text-decoration:underline; padding-right:18px; }
+a.internal { background: url("icons/anchor.png") no-repeat center right; text-decoration:underline; padding-right:18px; }
+
+a.help { background: url("icons/help.png") no-repeat center right; text-decoration:underline; padding-right:18px; padding-left:18px; }
 
 h1, h2, h3, h4, h5 {
 }
@@ -74,7 +76,7 @@ h1, h2, h3, h4, h5 {
 #logo {
     height:70px;
     width: 900px;
-    background: url("layout/bagheera-banner_v5.png") no-repeat scroll right top transparent;
+    background: url("layout/genepainter-banner-v3.png") no-repeat scroll right top transparent;
 }
 
 #nav, ul{
@@ -508,7 +510,7 @@ tr:hover td {
     top: 0;
     visibility: visible;
     width: 100%;
-    z-index: 1;
+    z-index: 1
 }
 
 #waiting_infobox {
@@ -530,4 +532,20 @@ td, th {
 }
 .img_help {
     float: right;
+}
+
+label {
+  margin-right: 20px;
+}
+
+div.help {
+  display: none;
+  background: #FFE4E1;
+  margin: 5px;
+  padding-top: 10px;
+  padding-bottom: 10px
+}
+
+div.add_species_input {
+  padding-bottom: 10px;
 }

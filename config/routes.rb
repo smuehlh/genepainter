@@ -1,11 +1,13 @@
 Rails.application.routes.draw do
 
   root to: 'static_pages#home'
-  match '/genepainter', to: 'gene_painter#gene_painter', :via => [:get]
+  match '/genepainter', to: 'gene_painter#gene_painter', as: 'gene_painter', :via => [:get]
   match '/help', to: 'static_pages#help', as: 'help', :via => [:get]
   match '/download', to: 'static_pages#download', as: 'download', :via => [:get]
   match '/team', to: 'static_pages#team', as: 'team', :via => [:get]
   match '/contact', to: 'static_pages#contact', as: 'contact', :via => [:get]
+
+  match 'upload_file', to: 'gene_painter#upload_file', as: 'post/upload_file', :via => [:post]
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
