@@ -12,5 +12,49 @@
 //
 //= require jquery
 //= require jquery_ujs
+//= require jquery-fileupload/basic
 //= require turbolinks
 //= require_tree .
+
+$(function () {
+  
+    $.ajaxSetup ({
+     cache: false
+    });
+
+    $('#sequence_uploader').fileupload({
+        // dataType: 'json',
+        // done: function (e, data) {
+        //
+        //
+        //     $.each(data.result.files, function (index, file) {
+        //         console.log(file.name);
+        //         $('<p/>').text(file.name).appendTo(document.body);
+        //     });
+        // }
+        autoUpload: false,
+        add: function(e, data) {
+            if (data.files[0].size <= 52428800) {
+              data.submit();
+            } else {
+              // TODO: nicer error modal
+              alert('File must be less than 50 MB. <br /> Please contact us to upload larger files.');
+            }
+        },
+        submit: function() {
+            hide_show_waiting('show');
+        }
+    });
+});
+
+function hide_show_waiting(kind) {
+
+    if (kind === 'show') {
+
+        $('#waiting').css({'height' : $(document).height()});
+        $('#waiting').show();
+    }
+    else {
+        $('#waiting').hide();
+    }
+};

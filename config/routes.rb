@@ -7,7 +7,7 @@ Rails.application.routes.draw do
   match '/team', to: 'static_pages#team', as: 'team', :via => [:get]
   match '/contact', to: 'static_pages#contact', as: 'contact', :via => [:get]
 
-  match 'upload_file', to: 'gene_painter#upload_file', as: 'post/upload_file', :via => [:post]
+  match 'upload_sequence', to: 'gene_painter#upload_sequence', as: 'post/upload_sequence', :via => [:post]
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

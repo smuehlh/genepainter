@@ -57,7 +57,11 @@ a {
 a.external { background: url("icons/link.png") no-repeat center right; text-decoration:underline; padding-right:18px; }
 a.internal { background: url("icons/anchor.png") no-repeat center right; text-decoration:underline; padding-right:18px; }
 
-a.help { background: url("icons/help.png") no-repeat center right; text-decoration:underline; padding-right:18px; padding-left:18px; }
+img.help {
+  cursor: pointer;
+  margin: 0px;
+  padding-left: 20px;
+}
 
 h1, h2, h3, h4, h5 {
 }

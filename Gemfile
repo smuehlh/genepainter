@@ -40,3 +40,5 @@ gem 'spring',        group: :development
 
 gem 'execjs'
 gem 'therubyracer'
+
+gem "jquery-fileupload-rails"
