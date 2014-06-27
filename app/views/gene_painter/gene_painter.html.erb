@@ -9,6 +9,8 @@
 <%=render :partial => "gene_painter/text_seq_help"%>
 
 <%= javascript_tag defer: 'defer' do -%>
+  set_up_fileupload("#sequence_uploader");
+
   $("img.text_seq_help").click(function() {
      $("div#text_seq_help").toggle("slow");
   });
@@ -76,7 +78,7 @@
   content_tag(:label, content_tag(:b, "Or upload file")) +
   file_field_tag("upload_species_mapping",
   :style => "padding-top: 10px; padding-bottom: 10px") +
-  content_tag(:a, "Help", :class => "help", :href => "#", :id => "uploade_species_mapping_help")
+  image_tag("icons/help.png", :class => "help upload_species_mapping_help")
   )
 %>
 
