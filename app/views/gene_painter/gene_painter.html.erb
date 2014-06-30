@@ -68,14 +68,17 @@
 <%= content_tag(:h2, "Species Mapping", :class => "species_mapping_heading") %>
 
 <%= content_tag(:div, nil,
-  :class => "add_species_input")
+  :class => "add_species_input",)
 %>
 
-<%= button_tag("Add species") %>
+<%= button_tag("Add species",
+  :id => "btnAddSpecies",
+  :disabled => true) %>
 
 <%= content_tag(:div,
   content_tag(:label, content_tag(:b, "Or upload file")) +
   file_field_tag("upload_species_mapping",
+  :disabled => true,
   :style => "padding-top: 10px; padding-bottom: 10px") +
   image_tag("icons/help.png", :class => "help upload_species_mapping_help")
   )

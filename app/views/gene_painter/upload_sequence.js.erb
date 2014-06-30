@@ -1,19 +1,60 @@
 <% require 'gene_painter_helper.rb' %>
+<% if @fatal_error.blank? then %>
+  <% if @seq_names.length > 0 %>
+    // update name of uploaded file
+    $('#uploaded_sequence').html('<%= @basename %>');
 
-<% if @seq_names.length > 0 %>
-  // update name of uploaded file
-  $('#uploaded_sequence').html('<%= @basename %>');
+    var $btnAddSpecies = $('#btnAddSpecies');
 
-  // enable gene structures uploader
-  $('#upload_gene_struct').prop('disabled', false);
+    // enable button and uploaders
+    $('#upload_gene_struct').prop('disabled', false);
+    $('#upload_species_mapping').prop('disabled', false);
+    $btnAddSpecies.prop('disabled', false);
 
-  // hide loading screen
+    // hide loading screen
+    hide_show_waiting('hide');
+
+    $('.add_species_input').html('');
+    $('.add_species_input').append($('<%= add_species(@seq_names) %>'));
+
+    /*
+    * @param: itemList
+    * removes selected items
+    */
+    function removeSelectedItems(itemList) {
+      for (var i = 0; i < itemList.length; i++) {
+        if ( $(itemList[i]).is(':checked') ) {
+
+          $(itemList[i]).parent().remove();
+        }
+      }
+    }
+
+    // bind event to add species button
+    $btnAddSpecies.click(function() {
+      var $prevBtnAddSpecies = $btnAddSpecies.prev(),
+        seq_name_list = $prevBtnAddSpecies.find('ul input'); // a list of html elements (not jquery objects)
+
+      if (seq_name_list.length == 0) {
+
+        // disable add species button
+        $btnAddSpecies.prop('disabled', true);
+      } else {
+
+        // duplicate a species mapping input section
+        var $newBlock = $prevBtnAddSpecies.clone();
+        $newBlock.insertAfter($prevBtnAddSpecies);
+
+        // eleminate selected items
+        removeSelectedItems($newBlock.find('ul input'));
+      }
+    });
+
+  <% end %>
+<% else%>
   hide_show_waiting('hide');
+  alert('Error occurred.');
 
-  $('.add_species_input').html('');
-  $('.add_species_input').append($('<%= add_species(@seq_names) %>'));
-
-<% else %>
-  alert('Wrong format file');
-  hide_show_waiting('hide');
+  // toggle help
+  $("div#upload_seq_help").show("slow");
 <% end %>
