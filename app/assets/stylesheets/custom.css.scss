@@ -30,7 +30,6 @@ $menu_links_inactiv: #F2F2F2;
 $menu_links_selected: #999999;
 $content_background: #F6F6F6;
 $h1_color: #336699;
-// $h1_color: #793C67;
 $h2_color: #ddd;
 $nice_button_bg: $h1_color;
 $h1_accent_color: #FF8D66 ; // #FFA666;
@@ -552,4 +551,9 @@ div.help {
 
 div.add_species_input {
   padding-bottom: 10px;
+}
+
+.filename {
+  color: #336699;
+  font-weight: bold;
 }

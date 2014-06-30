@@ -32,6 +32,7 @@
 
 <%= content_tag(:span,
   "No file uploaded",
+  :class => "filename",
   :id => "uploaded_sequence") %>
 
 <%= image_tag("icons/help.png", :class => "help upload_seq_help") %>
@@ -47,13 +48,12 @@
 <%= content_tag(:h2, "Gene Structures") %>
 <%= content_tag(:label, content_tag(:b, "Upload files")) %>
 
-
 <!-- TODO: Only accept some file extensions -->
 <%= file_field_tag("upload_gene_struct", { multiple: true, disabled: "disabled", accept: "" }) %>
 
 <%= image_tag("icons/help.png", :class => "help upload_gene_struct_help") %>
 
-<%=render :partial => "gene_painter/upload_gene_struct_help"%>
+<%= render :partial => "gene_painter/upload_gene_struct_help"%>
 
 <%= javascript_tag defer: 'defer' do -%>
   $("img.upload_gene_struct_help").click(function() {
@@ -65,10 +65,9 @@
   content_tag(:b, "Or generate gene structures for selected sequences (Data Center)"))
 %>
 
-<%= content_tag(:h2, "Species Mapping") %>
+<%= content_tag(:h2, "Species Mapping", :class => "species_mapping_heading") %>
 
-<%= content_tag(:div,
-  add_species,
+<%= content_tag(:div, nil,
   :class => "add_species_input")
 %>
 

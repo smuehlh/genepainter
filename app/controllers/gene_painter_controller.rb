@@ -1,3 +1,5 @@
+require 'parse_data.rb'
+
 class GenePainterController < ApplicationController
 
   # Render start page for GenePainter
@@ -6,11 +8,10 @@ class GenePainterController < ApplicationController
   end
 
   def upload_sequence
+    @basename = params[:files][0].original_filename
+    path = params[:files][0].path()
 
-    # basename = File.basename(params.length)
-    basename = params[:files][0].original_filename
-		# save in session
-		session[:file] = {name: basename}
+    @seq_names = read_in_alignment(path)[0]
 
     respond_to do |format|
       format.js

@@ -21,6 +21,9 @@ $(function () {
     $.ajaxSetup ({
      cache: false
     });
+
+    // set up uploaders
+    set_up_fileupload("#sequence_uploader");
 });
 
 function set_up_fileupload(btnSelector) {
@@ -51,3 +54,7 @@ function hide_show_waiting(kind) {
         $('#waiting').hide();
     }
 };
+
+function add_species_mapping(seqNames) {
+  $input = $('<')
+}

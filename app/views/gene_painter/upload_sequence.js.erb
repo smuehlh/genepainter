@@ -1,3 +1,19 @@
-$("#uploaded_sequence").html('<%=session[:file][:name]%>');
+<% require 'gene_painter_helper.rb' %>
 
-hide_show_waiting('hide');
+<% if @seq_names.length > 0 %>
+  // update name of uploaded file
+  $('#uploaded_sequence').html('<%= @basename %>');
+
+  // enable gene structures uploader
+  $('#upload_gene_struct').prop('disabled', false);
+
+  // hide loading screen
+  hide_show_waiting('hide');
+
+  $('.add_species_input').html('');
+  $('.add_species_input').append($('<%= add_species(@seq_names) %>'));
+
+<% else %>
+  alert('Wrong format file');
+  hide_show_waiting('hide');
+<% end %>
