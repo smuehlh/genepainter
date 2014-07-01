@@ -24,10 +24,26 @@ class GenePainterController < ApplicationController
 
   def upload_sequence
     @fatal_error = catch(:error) {
-      @basename = params[:files][0].original_filename
-      path = params[:files][0].path()
+      file = params[:files][0]
+      @basename = file.original_filename
+      path = file.path()
 
       @seq_names = read_in_alignment(path)[0]
+
+      # check file size
+      Helper.filesize_below_limit(file.tempfile, MAX_FILESIZE)
+
+      # store file in place
+      Helper.mkdir_or_die(@@f_dest)
+      Helper.move_or_copy_file(path, @@f_dest, "move")
+
+      # rename to original name
+      Helper.rename(File.join(@@f_dest, File.basename(path)),
+        File.join(@@f_dest, @basename))
+
+      # call fromdos
+      is_sucess = system("fromdos",@@f_dest)
+      throw :error, ["Cannot upload file", "Please contact us."] if ! is_sucess
 
       [] # default for @fatal_error
     }
