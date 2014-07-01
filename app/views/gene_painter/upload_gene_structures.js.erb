@@ -1,0 +1,21 @@
+<% if @fatal_error.blank? then %>
+  hide_show_waiting('hide');
+
+  // Update number of files uploaded
+  var $fileCount = $('span#uploaded_gene_structures');
+
+  if ($fileCount.text() == "No files uploaded") {
+    $fileCount.text('1 file uploaded');
+  } else {
+    var curTotal = parseInt($fileCount.text().split(' ')[0]);
+    curTotal += 1;
+
+    $fileCount.text(curTotal + ' files uploaded');
+  }
+<% else%>
+  hide_show_waiting('hide');
+  alert('Error occurred.');
+
+  // toggle help
+  $("div#upload_gene_structures_help").show("slow");
+<% end %>
