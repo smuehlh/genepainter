@@ -1,0 +1,13 @@
+<% if @fatal_error.blank? then %>
+  hide_show_waiting('hide');
+
+  // update uploaded filename
+  $('#uploaded_species_mapping').html('<%= @basename %>');
+
+<% else%>
+  hide_show_waiting('hide');
+  alert('Error occurred.');
+
+  // toggle help
+  $("div#upload_species_mapping_help").show("slow");
+<% end %>

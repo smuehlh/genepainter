@@ -48,13 +48,13 @@ class GenePainterController < ApplicationController
       [] # default for @fatal_error
     }
 
-  	rescue RuntimeError => exp
-  		@fatal_error = [exp.message]
+    rescue RuntimeError => exp
+      @fatal_error = [exp.message]
 
-  	rescue NoMethodError, TypeError, NameError, Errno::ENOENT => exp
-  		@fatal_error = ["Cannot load file.", "Please contact us."]
+    rescue NoMethodError, TypeError, NameError, Errno::ENOENT => exp
+      @fatal_error = ["Cannot load file.", "Please contact us."]
 
-  	ensure
+    ensure
       respond_to do |format|
         format.js
       end
@@ -92,6 +92,43 @@ class GenePainterController < ApplicationController
 
     rescue NoMethodError, TypeError, NameError, Errno::ENOENT => exp
       @fatal_error = ["Cannot load file.", "Please contact us."]
+
+    ensure
+      respond_to do |format|
+        format.js
+      end
+  end
+
+  def upload_species_mapping
+    @fatal_error = catch(:error) {
+      file = params[:files][0]
+      @basename = file.original_filename
+      path = file.path()
+
+      # check file size
+      Helper.filesize_below_limit(file.tempfile, MAX_FILESIZE)
+
+      # store file in place
+      Helper.mkdir_or_die(@@f_dest)
+      Helper.move_or_copy_file(path, @@f_dest, "move")
+
+      # rename to original name
+      Helper.rename(File.join(@@f_dest, File.basename(path)),
+        File.join(@@f_dest, @basename))
+
+      # call fromdos
+      is_sucess = system("fromdos",@@f_dest)
+      throw :error, ["Cannot upload file", "Please contact us."] if ! is_sucess
+
+      [] # default for @fatal_error
+    }
+
+    rescue RuntimeError => exp
+      @fatal_error = [exp.message]
+
+    rescue NoMethodError, TypeError, NameError, Errno::ENOENT => exp
+      @fatal_error = ["Cannot load file.", "Please contact us."]
+      # @fatal_error = [exp.message]
 
     ensure
       respond_to do |format|

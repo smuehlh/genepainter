@@ -25,7 +25,7 @@ $(function () {
     // set up uploaders
     set_up_fileupload("#sequence_uploader");
     set_up_fileupload("#gene_structures_uploader");
-
+    set_up_fileupload("#species_mapping_uploader");
 });
 
 function set_up_fileupload(btnSelector) {

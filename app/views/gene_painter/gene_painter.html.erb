@@ -94,14 +94,32 @@
 
 <%= content_tag(:div,
   content_tag(:label, content_tag(:b, "Or upload file")) +
-  file_field_tag("upload_species_mapping",
-  :disabled => true,
-  :style => "padding-top: 10px; padding-bottom: 10px") +
+  file_field_tag("species_mapping_uploader",
+    :name => "files[]",
+    :multiple => true,
+    :data => {url: post_upload_species_mapping_path},
+    :disabled => true,
+    :style => "margin-top: 10px;"
+    ) +
+  content_tag(:span,
+    "No file uploaded",
+    :class => "filename",
+    :id => "uploaded_species_mapping") +
   image_tag("icons/help.png", :class => "help upload_species_mapping_help")
   )
 %>
 
-<%= content_tag(:h1, "Data Center") %>
+<%= render :partial => "gene_painter/upload_species_mapping_help"%>
+
+<%= javascript_tag defer: 'defer' do -%>
+  set_up_fileupload("#species_mapping_uploader");
+
+  $("img.upload_species_mapping_help").click(function() {
+     $("div#upload_species_mapping_help").toggle("slow");
+  });
+<% end -%>
+
+<%= content_tag(:h1, "Data Center", :style => "margin-top: 10px;") %>
 <p>Nothing here yet</p>
 
 <%= content_tag(:h1, "Aligned Gene Structures") %>

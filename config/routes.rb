@@ -9,6 +9,7 @@ Rails.application.routes.draw do
 
   match 'upload_sequence', to: 'gene_painter#upload_sequence', as: 'post/upload_sequence', :via => [:post]
   match 'upload_gene_structures', to: 'gene_painter#upload_gene_structures', as: 'post/upload_gene_structures', :via => [:post]
+  match 'upload_species_mapping', to: 'gene_painter#upload_species_mapping', as: 'post/upload_species_mapping', :via => [:post]
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
