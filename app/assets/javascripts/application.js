@@ -26,6 +26,8 @@ $(function () {
     set_up_fileupload("#sequence_uploader");
     set_up_fileupload("#gene_structures_uploader");
     set_up_fileupload("#species_mapping_uploader");
+
+    create_alignment_file_ajax();
 });
 
 function set_up_fileupload(btnSelector) {
@@ -56,3 +58,25 @@ function hide_show_waiting(kind) {
         $('#waiting').hide();
     }
 };
+
+function create_alignment_file_ajax() {
+  $('textarea#text_seq').first().on('input', function() {
+    if (this.value.length) {
+      //console.log(this.value);
+
+      // $.post('/create_alignment_file', this.value, function() {
+      //   alert('success');
+      // });
+
+      var that = this;
+
+      $.ajax({
+        type: 'POST',
+        url: '/create_alignment_file',
+        data: {'sequence': that.value},
+        dataType: 'script'
+      });
+    }
+  });
+
+}

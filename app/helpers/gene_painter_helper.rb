@@ -6,7 +6,8 @@ module GenePainterHelper
     seq_names_list = ""
     seq_names.each do |seq_name|
       seq_names_list << content_tag(:li,
-        check_box_tag("seq_name", seq_name, false, :disabled => true) +
+        check_box_tag("seq_name", seq_name, false, :disabled => false) +
+        # check_box_tag("seq_name", seq_name, false, :disabled => true) +
         "&nbsp;&nbsp;".html_safe +
         content_tag(:span, seq_name))
     end

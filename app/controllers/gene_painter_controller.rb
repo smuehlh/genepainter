@@ -5,6 +5,7 @@ class GenePainterController < ApplicationController
 
   @@f_dest = ""
   @@f_mode = 0444
+  @@default_fname = ""
 
   def self.f_dest
     @@f_dest
@@ -18,8 +19,10 @@ class GenePainterController < ApplicationController
   def gene_painter
     prepare_new_session
 
+    # Generate a dir in tmp to store uploaded files
     id = Helper.make_new_tmp_dir(TMP_PATH)
     @@f_dest = File.join(TMP_PATH, id)
+    @@default_fname = "#{@@f_dest}/alignment"
   end
 
   def upload_sequence
@@ -134,6 +137,39 @@ class GenePainterController < ApplicationController
       respond_to do |format|
         format.js
       end
+  end
+
+  def create_alignment_file
+    sequence_string = params[:sequence]
+    @errors = []
+
+    begin
+      # Use default filename
+      if File.exist?(@@default_fname)
+        f = File.open(@@default_fname, "w+")
+      else
+        f = File.new(@@default_fname, "w+")
+      end
+
+      if File.writable?(f)
+        f.write(sequence_string)
+      end
+      f.close
+
+      @seq_names = read_in_alignment(@@default_fname)[0]
+    rescue  NoMethodError => ex
+      @errors << "Error parsing sequence alignment"
+    rescue RuntimeError, Errno::ENOENT, NameError => ex
+      @errors << ex.message
+    ensure
+      # logger.debug(@errors.inspect)
+      # logger.debug(@seq_names.inspect)
+
+      respond_to do |format|
+        format.js
+      end
+    end
+
   end
 
 	# prepare a new session
