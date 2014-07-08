@@ -14,6 +14,7 @@
 //= require jquery_ujs
 //= require jquery-fileupload/basic
 //= require turbolinks
+//= require view_helpers
 //= require_tree .
 
 $(function () {
@@ -62,12 +63,6 @@ function hide_show_waiting(kind) {
 function create_alignment_file_ajax() {
   $('textarea#text_seq').first().on('input', function() {
     if (this.value.length) {
-      //console.log(this.value);
-
-      // $.post('/create_alignment_file', this.value, function() {
-      //   alert('success');
-      // });
-
       var that = this;
 
       $.ajax({

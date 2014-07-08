@@ -4,7 +4,8 @@
     // update name of uploaded file
     $('#uploaded_sequence').html('<%= @basename %>');
 
-    var $btnAddSpecies = $('#btnAddSpecies');
+    var $btnAddSpecies = $('#btnAddSpecies'),
+    $initialBlock = $('div.add_species_input');
 
     // enable button and uploaders
     $('#gene_structures_uploader').prop('disabled', false);
@@ -17,38 +18,16 @@
     $('.add_species_input').html('');
     $('.add_species_input').append($('<%= add_species(@seq_names) %>'));
 
-    /*
-    * @param: itemList
-    * removes selected items
-    */
-    function removeSelectedItems(itemList) {
-      for (var i = 0; i < itemList.length; i++) {
-        if ( $(itemList[i]).is(':checked') ) {
-
-          $(itemList[i]).parent().remove();
-        }
-      }
-    }
-
-    // bind event to add species button
-    $btnAddSpecies.click(function() {
-      var $prevBtnAddSpecies = $btnAddSpecies.prev(),
-        seq_name_list = $prevBtnAddSpecies.find('ul input'); // a list of html elements (not jquery objects)
-
-      if (seq_name_list.length == 0) {
-
-        // disable add species button
-        $btnAddSpecies.prop('disabled', true);
-      } else {
-
-        // duplicate a species mapping input section
-        var $newBlock = $prevBtnAddSpecies.clone();
-        $newBlock.insertAfter($prevBtnAddSpecies);
-
-        // eleminate selected items
-        removeSelectedItems($newBlock.find('ul input'));
+    seq_names = $initialBlock.find('ul input');
+    seq_names.click(function() {
+      disable($btnAddSpecies, false);
+      if (getSelectedItems(seq_names).length == seq_names.length)  {
+        disable($btnAddSpecies, true);
       }
     });
+
+    // bind event to add species button
+    $btnAddSpecies.click(addSpeciesMappingBlock);
 
   <% end %>
 <% else%>

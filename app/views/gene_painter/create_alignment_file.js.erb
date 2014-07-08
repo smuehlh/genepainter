@@ -1,0 +1,38 @@
+<% if @errors.blank? and !@seq_names.blank? then %>
+  var $helpBlock = $('div#text_seq_help'),
+    $btnAddSpecies = $('button#btnAddSpecies'),
+    $initialBlock = $('div.add_species_input');
+
+  // The user inputs the right format text, hide the help text
+  if ($helpBlock.is(':visible')) {
+    $helpBlock.hide('slow');
+  }
+
+  // This add a section to allow the user to add species mapping
+  $initialBlock.html('');
+  $initialBlock.append($('<%= add_species(@seq_names) %>'));
+
+  seq_names = $initialBlock.find('ul input');
+  seq_names.click(function() {
+    disable($btnAddSpecies, false);
+    if (getSelectedItems(seq_names).length == seq_names.length)  {
+      disable($btnAddSpecies, true);
+    }
+  });
+
+  // enable button and uploaders
+  disable($('#gene_structures_uploader'), false);
+  disable($('#species_mapping_uploader'), false);
+  disable($btnAddSpecies, false);
+
+  // bind event to add species button
+  $btnAddSpecies.click(addSpeciesMappingBlock);
+
+<% else %>
+  var $helpBlock = $('div#text_seq_help');
+
+  // Show help block unless the user provides correct format alignment
+  if (!$helpBlock.is(':visible')) {
+    $helpBlock.show('slow');
+  }
+<% end %>

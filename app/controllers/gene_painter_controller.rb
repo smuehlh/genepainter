@@ -162,8 +162,8 @@ class GenePainterController < ApplicationController
     rescue RuntimeError, Errno::ENOENT, NameError => ex
       @errors << ex.message
     ensure
-      # logger.debug(@errors.inspect)
-      # logger.debug(@seq_names.inspect)
+      logger.debug(@errors.inspect)
+      logger.debug(@seq_names.inspect)
 
       respond_to do |format|
         format.js
