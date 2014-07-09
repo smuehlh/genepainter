@@ -57,3 +57,15 @@ function addSpeciesMappingBlock() {
 
   $newBlock.insertAfter($currentSpeciesMappingBlock);
 }
+
+/**
+ * Checks all input.
+ * @param inputs an array of checkbox input elements.
+ */
+function checkAll(inputs, checkOrNot) {
+  if (checkOrNot == true) {
+    inputs.prop('checked', 'checked');
+  } else {
+    inputs.removeAttr('checked');
+  }
+}

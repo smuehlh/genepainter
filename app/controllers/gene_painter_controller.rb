@@ -7,12 +7,23 @@ class GenePainterController < ApplicationController
   @@f_mode = 0444
   @@default_fname = ""
 
-  def self.f_dest
+  @@seq_names = []
+  @@name_species_map = {}
+
+  def f_dest
     @@f_dest
   end
 
-  def self.f_mode
+  def f_mode
     @@f_mode
+  end
+
+  def seq_names
+    @@seq_names
+  end
+
+  def name_species_map
+    @@name_species_map
   end
 
   # Render start page for GenePainter
@@ -23,6 +34,8 @@ class GenePainterController < ApplicationController
     id = Helper.make_new_tmp_dir(TMP_PATH)
     @@f_dest = File.join(TMP_PATH, id)
     @@default_fname = "#{@@f_dest}/alignment"
+
+    # map_sequence_name_to_species
   end
 
   def upload_sequence
@@ -58,6 +71,8 @@ class GenePainterController < ApplicationController
       @fatal_error = ["Cannot load file.", "Please contact us."]
 
     ensure
+      @@seq_names = @seq_names
+
       respond_to do |format|
         format.js
       end
@@ -134,6 +149,8 @@ class GenePainterController < ApplicationController
       # @fatal_error = [exp.message]
 
     ensure
+      map_sequence_name_to_species
+
       respond_to do |format|
         format.js
       end
@@ -146,9 +163,9 @@ class GenePainterController < ApplicationController
     begin
       # Use default filename
       if File.exist?(@@default_fname)
-        f = File.open(@@default_fname, "w+")
+        f = File.open(@@default_fname, 'w+')
       else
-        f = File.new(@@default_fname, "w+")
+        f = File.new(@@default_fname, 'w+')
       end
 
       if File.writable?(f)
@@ -158,13 +175,10 @@ class GenePainterController < ApplicationController
 
       @seq_names = read_in_alignment(@@default_fname)[0]
     rescue  NoMethodError => ex
-      @errors << "Error parsing sequence alignment"
+      @errors << 'Error parsing sequence alignment'
     rescue RuntimeError, Errno::ENOENT, NameError => ex
       @errors << ex.message
     ensure
-      logger.debug(@errors.inspect)
-      logger.debug(@seq_names.inspect)
-
       respond_to do |format|
         format.js
       end
@@ -177,4 +191,9 @@ class GenePainterController < ApplicationController
 		reset_session
 	    session[:file] = {}
 	end
+
+  def map_sequence_name_to_species
+    @@name_species_map = map_genenames_to_speciesnames(@@f_dest + '/fastaheaders2species.txt')
+  end
+
 end

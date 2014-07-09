@@ -1,0 +1,39 @@
+<div id='data_table'>
+  <table id='one-column-emphasis'>
+    <thead>
+      <tr>
+        <th scope='col'>Analyze</th>
+        <th scope='col'>View</th>
+        <th scope='col'>Sequence Name</th>
+        <th scope='col'>Gene Structure</th>
+        <th scope='col'>Generate Gene Structure</th>
+        <th scope='col' style='width: 30%;'>Species</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Will be added when species mapping file is uploaded.
+      See upload_species_mapping.js.erb for details. -->
+    </tbody>
+  </table>
+</div>
+
+<%=
+  content_tag(:div,
+    check_box_tag('select_all') +
+    content_tag(:span, 'Select All', :style => 'padding-left: 5px; padding-right: 20px') +
+    check_box_tag('deselect_all') +
+    content_tag(:span, 'Deselect All', :style => 'padding-left: 5px; padding-right: 20px'),
+    :id => 'options',
+    :style => 'padding: 10px')
+%>
+
+<%= javascript_tag defer: 'defer' do -%>
+
+<% end -%>
+
+<%=
+  content_tag(:div,
+    content_tag(:button, 'Submit') +
+    content_tag(:p, '<b>Press submit when finished with data selection.</b>'.html_safe)
+  )
+%>
