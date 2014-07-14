@@ -14,6 +14,22 @@
   $("img.text_seq_help").click(function() {
      $("div#text_seq_help").toggle("slow");
   });
+
+  var $textArea = $('textarea#text_seq');
+
+  // This is to disable upload button when there is input
+  // in textarea which also has to have the correct format
+  $textArea.blur(function(){
+    var helpIsVisible = $('div#text_seq_help').is(':visible');
+
+    if (! helpIsVisible) {
+      if (this.value.length > 0) {
+        $('input#sequence_uploader').prop('disabled', ! helpIsVisible);
+      }
+    } else {
+      $('input#sequence_uploader').removeAttr('disabled');
+    }
+  });
 <% end -%>
 
 <%= content_tag(:textarea, nil, :id => "text_seq", :placeholder => "Enter FASTA sequence(s)", :cols => 80, :rows => 5, :style => "margin-top: 5px") %>
@@ -44,6 +60,12 @@
 
   $("img.upload_seq_help").click(function() {
      $("div#upload_seq_help").toggle("slow");
+  });
+
+  var $inputSequenceUploader = $('input#sequence_uploader'),
+    $textArea = $('textarea#text_seq');
+  $inputSequenceUploader.change(function(){
+    $textArea.prop('disabled', true);
   });
 <% end -%>
 

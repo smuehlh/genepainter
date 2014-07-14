@@ -13,6 +13,7 @@
 //= require jquery
 //= require jquery_ujs
 //= require jquery-fileupload/basic
+//= require underscore
 //= require turbolinks
 //= require view_helpers
 //= require_tree .
@@ -73,5 +74,4 @@ function create_alignment_file_ajax() {
       });
     }
   });
-
 }

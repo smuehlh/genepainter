@@ -41,12 +41,12 @@ module GenePainterHelper
         path = f_dest + '/gene_structures/' + name + '.yaml'
         gene_structure_status = get_status_of_gene_structure(path).to_s
 
-        table_body += '<td style="text-align: left">' + gene_structure_status + '</td>'
+        table_body += '<td>' + gene_structure_status + '</td>'
 
         if gene_structure_status == 'missing'
-          table_body += '<td>' + check_box_tag("generateGeneStructure") + '</td>'
+          table_body += '<td>' + check_box_tag("generateGeneStructure", name) + '</td>'
         else
-          table_body += '<td>' + check_box_tag("generateGeneStructure", nil, false, :disabled => true) + '</td>'
+          table_body += '<td>' + check_box_tag("generateGeneStructure", name, false, :disabled => true) + '</td>'
         end
 
         table_body += '<td style="text-align: left">' + map[name].to_s  + '</td>'

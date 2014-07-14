@@ -28,12 +28,52 @@
 %>
 
 <%= javascript_tag defer: 'defer' do -%>
+  var $selectAll = $('input#select_all'),
+    $deselectAll = $('input#deselect_all');
+
+  $deselectAll.change(function() {
+    var analyzeCheckBoxes = $('div#data_table').find('input#analyze'),
+      viewCheckBoxes = $('div#data_table').find('input#view');
+
+    checkAll($.merge(analyzeCheckBoxes, viewCheckBoxes), false);
+  });
+
+  $selectAll.change(function() {
+    var analyzeCheckBoxes = $('div#data_table').find('input#analyze'),
+      viewCheckBoxes = $('div#data_table').find('input#view');
+
+    checkAll($.merge(analyzeCheckBoxes, _.first(viewCheckBoxes, 20)), true);
+  });
 
 <% end -%>
 
 <%=
   content_tag(:div,
-    content_tag(:button, 'Submit') +
-    content_tag(:p, '<b>Press submit when finished with data selection.</b>'.html_safe)
+    content_tag(:button, 'Submit', :id => 'generateGeneStructureBtn') +
+    content_tag(:p, '<b>Press submit when finished with data selection.</b>'.html_safe),
   )
 %>
+
+<%= javascript_tag defer: 'defer' do -%>
+  var $btnSubmit = $('button#generateGeneStructureBtn');
+
+  $btnSubmit.click(function() {
+    var needGeneStructures = [];
+    var boxes = $('div#data_table').find('input#generateGeneStructure');
+
+    for (var i = 0; i < boxes.length; i++) {
+      if ( $(boxes[i]).is(':checked') ) {
+        needGeneStructures.push(boxes[i].value);
+      }
+    }
+
+    <!-- Call generate_gene_structures action in controller -->
+    $.ajax({
+      type: 'POST',
+      url: '/create_gene_structures',
+      data: {'data': needGeneStructures},
+      dataType: 'script'
+    });
+
+  });
+<% end -%>

@@ -42,3 +42,6 @@ gem 'execjs'
 gem 'therubyracer'
 
 gem "jquery-fileupload-rails"
+
+# Underscore is a JavaScript library that provides a whole mess of useful functional programming helpers without extending any built-in objects
+gem 'underscore-rails'
