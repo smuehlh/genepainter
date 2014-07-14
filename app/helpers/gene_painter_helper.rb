@@ -31,11 +31,20 @@ module GenePainterHelper
 
   def create_table(seq_names, map, f_dest)
     table_body = ''
+    viewCount = 0
 
     seq_names.each { |name|
       table_body += '<tr>'
         table_body += '<td>' + check_box_tag("analyze", nil, true) + '</td>'
-        table_body += '<td>' + check_box_tag("view", nil, true) + '</td>'
+
+        # Only check first 20 check boxes in View column
+        if (viewCount < 20)
+          viewCount += 1
+          table_body += '<td>' + check_box_tag("view", nil, true) + '</td>'
+        else
+          table_body += '<td>' + check_box_tag("view", nil, false) + '</td>'
+        end
+
         table_body += '<td style="text-align: left">' + name + '</td>'
 
         path = f_dest + '/gene_structures/' + name + '.yaml'
