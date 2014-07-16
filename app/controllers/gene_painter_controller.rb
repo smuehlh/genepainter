@@ -197,9 +197,11 @@ class GenePainterController < ApplicationController
 
     output_path = File.join(@@f_dest, 'gene_structures')
 
-    @retValue = generate_gene_structures(neededGeneStructures, path_to_species_to_fasta, path_to_fasta, output_path)
+    @retValue, @generatedGeneStructures = generate_gene_structures(neededGeneStructures, path_to_species_to_fasta, path_to_fasta, output_path)
 
-    # logger.debug(@retValue.inspect)
+    @generatedGeneStructures.collect! {
+      |gGS| File.basename(gGS, '.*')
+    }
 
     ensure
       respond_to do |format|

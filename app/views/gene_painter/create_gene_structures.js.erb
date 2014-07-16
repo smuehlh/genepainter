@@ -1,5 +1,19 @@
 <% if @retValue then %>
-  console.log('succeeded');
+   hide_show_waiting('hide');
+
+  <% @generatedGeneStructures.each do |newGS| %>
+    // Update gene structure status
+    $('span#<%= newGS %>').text('complete').css('color', 'green').css('font-weight', 'bold');
+
+    // Disable Generate Gene Structure option
+    $('span#<%= newGS %>').parent().next().children().prop('disabled', true);
+  <% end %>
+
+  var $btnSubmit = $('button#generateGeneStructureBtn'),
+    text = '<span style="margin-left: 200px; color: green; font-weight: bold"><%= @generatedGeneStructures.length %> new gene structure(s) created.</span>';
+
+  $btnSubmit.after(text);
+
 <% else%>
   console.log('failed');
 <% end %>

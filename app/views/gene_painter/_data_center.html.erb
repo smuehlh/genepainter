@@ -58,6 +58,8 @@
   var $btnSubmit = $('button#generateGeneStructureBtn');
 
   $btnSubmit.click(function() {
+    hide_show_waiting('show');
+
     var needGeneStructures = [];
     var boxes = $('div#data_table').find('input#generateGeneStructure');
 
@@ -74,6 +76,5 @@
       data: {'data': needGeneStructures},
       dataType: 'script'
     });
-
   });
 <% end -%>
