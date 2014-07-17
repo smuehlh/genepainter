@@ -69,3 +69,47 @@ function checkAll(inputs, checkOrNot) {
     inputs.removeAttr('checked');
   }
 }
+
+// Helpers for Aligned Gene Structures section
+
+/**
+ * Returns true if there is an unique intron.
+ */
+function uniqIntron(introns) {
+
+  return _.filter(introns, function(intron) {
+    return intron.innerHTML == '|';
+  }).length == 1;
+}
+
+function colorUniqIntronColumn(col, color) {
+  _.each(col, function(element){
+    $(element).css('background-color', color);
+  });
+}
+
+function highlightUniqIntrons(styleOrNot) {
+  var $textBasedTable = $('table#text_based_output');
+
+  var numberOfGenes = $textBasedTable.find('tr').length,
+    allCells = $textBasedTable.find('td').toArray(),
+    charPerRow = allCells.length / numberOfGenes;
+
+  intronsByColumn = []
+
+  for (var i = 0; i < charPerRow; i++) {
+    intronsByColumn.push(allCells.filter(function(value, index) {
+      return (index - i) % charPerRow == 0;
+    }));
+  }
+
+  for (var i = 1; i < charPerRow; i++) {
+    if (uniqIntron(intronsByColumn[i])) {
+      if (styleOrNot) {
+        colorUniqIntronColumn(intronsByColumn[i], 'orange');
+      } else {
+        colorUniqIntronColumn(intronsByColumn[i], 'white');
+      }
+    }
+  }
+}

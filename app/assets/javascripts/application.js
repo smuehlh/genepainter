@@ -12,6 +12,7 @@
 //
 //= require jquery
 //= require jquery_ujs
+//= require jquery-ui
 //= require jquery-fileupload/basic
 //= require underscore
 //= require turbolinks
@@ -19,7 +20,7 @@
 //= require_tree .
 
 $(function () {
-
+  
     $.ajaxSetup ({
      cache: false
     });

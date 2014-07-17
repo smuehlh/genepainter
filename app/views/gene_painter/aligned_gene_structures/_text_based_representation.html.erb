@@ -1,0 +1,28 @@
+<div id='text-based' style='font-family: Courier;'>
+  <%=
+    generate_text_based_output.html_safe
+   %>
+</div>
+
+<h4>View Options</h4>
+<%=
+  content_tag(:div,
+    check_box_tag('highlight_unique') +
+    content_tag(:span, 'Highlight unique introns', :style => 'padding-left: 5px; padding-right: 20px')
+    )
+%>
+
+<%= javascript_tag defer: 'defer' do -%>
+  $('input#highlight_unique').change(function() {
+    var styleOrNot = $(this).is(':checked');
+
+    highlightUniqIntrons(styleOrNot);
+  });
+<% end -%>
+
+<%=
+  content_tag(:div,
+    check_box_tag('highlight_common') +
+    content_tag(:span, 'Highlight introns common to', :style => 'padding-left: 5px; padding-right: 20px')
+    )
+%>

@@ -66,4 +66,27 @@ module GenePainterHelper
     return table_body
   end
 
+  # helpers for aligned gene structures section
+  def generate_text_based_output
+
+    data = ''
+    data += '<table id="text_based_output" style="display:inline-block; white-space: nowrap; margin: 10px; margin-right: 20px; border-spacing: 0; font-size: 15px;">'
+
+    File.open('/fab8/vbui/genepainter_resources/output/out-std.txt', "r").each_line do |line|
+      tokens = line.gsub(/\s+/, ' ').strip.split(' ')
+      data += '<tr>'
+      data += '<td>' + tokens[0] + '</td>'
+
+      tokens[1].split(//).each do |char|
+        data += '<td>' + char + '</td>'
+      end
+
+      data += '</tr>'
+    end
+
+    data += '</table>'
+
+    return data
+  end
+
 end

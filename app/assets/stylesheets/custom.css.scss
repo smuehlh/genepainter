@@ -558,7 +558,7 @@ div.add_species_input {
   font-weight: bold;
 }
 
-div#data_table {
+div#data_table, #text-based {
   max-height: 400px;
   overflow: auto;
 }
@@ -598,4 +598,12 @@ div#data_table {
 {
 	color: #339;
 	background: #eff2ff;
+}
+
+ul.ui-tabs-nav.ui-helper-reset.ui-helper-clearfix.ui-widget-header.ui-corner-all {
+  border: 1px solid #aaaaaa;
+}
+
+.ui-tabs .ui-tabs-panel {
+	padding: 1em 0.4em !important;
 }
