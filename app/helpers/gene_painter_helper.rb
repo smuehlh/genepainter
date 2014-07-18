@@ -67,12 +67,11 @@ module GenePainterHelper
   end
 
   # helpers for aligned gene structures section
-  def generate_text_based_output
-
+  def generate_text_based_output(filename)
     data = ''
     data += '<table id="text_based_output" style="display:inline-block; white-space: nowrap; margin: 10px; margin-right: 20px; border-spacing: 0; font-size: 15px;">'
 
-    File.open('/fab8/vbui/genepainter_resources/output/out-std.txt', "r").each_line do |line|
+    File.open(filename, "r").each_line do |line|
       tokens = line.gsub(/\s+/, ' ').strip.split(' ')
       data += '<tr>'
       data += '<td>' + tokens[0] + '</td>'
@@ -87,6 +86,12 @@ module GenePainterHelper
     data += '</table>'
 
     return data
+  end
+
+  # Converts a svg file to png.
+  # @return {string} png_path path to png file.
+  def convert_svg_to_png(filepath)
+    7
   end
 
 end

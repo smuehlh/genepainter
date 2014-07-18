@@ -408,8 +408,8 @@ tr.highlight {
     color: $h1_color;
 }
 tr:hover td {
-    background: #ededed; /* to better keep track of the line the mouse is over */
-    color:black;
+    // background: #ededed; /* to better keep track of the line the mouse is over */
+    // color:black;
 }
 
 /*.predTable td .normal_text {
@@ -558,7 +558,7 @@ div.add_species_input {
   font-weight: bold;
 }
 
-div#data_table, #text-based {
+div#data_table, #text-based, #graphical {
   max-height: 400px;
   overflow: auto;
 }
@@ -606,4 +606,9 @@ ul.ui-tabs-nav.ui-helper-reset.ui-helper-clearfix.ui-widget-header.ui-corner-all
 
 .ui-tabs .ui-tabs-panel {
 	padding: 1em 0.4em !important;
+}
+
+#text-based tr:hover td {
+    background: #ededed; /* to better keep track of the line the mouse is over */
+    color:black;
 }

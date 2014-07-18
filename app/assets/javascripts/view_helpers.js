@@ -75,17 +75,32 @@ function checkAll(inputs, checkOrNot) {
 /**
  * Returns true if there is an unique intron.
  */
-function uniqIntron(introns) {
-
-  return _.filter(introns, function(intron) {
-    return intron.innerHTML == '|';
-  }).length == 1;
+function uniqIntron(col) {
+  return numberOfIntrons(col) == 2;
 }
 
-function colorUniqIntronColumn(col, color) {
-  _.each(col, function(element){
-    $(element).css('background-color', color);
-  });
+function numberOfIntrons(col) {
+  var $textBasedTable = $('table#text_based_output'),
+    numberOfGenes = $textBasedTable.find('tr').length;
+
+  return numberOfGenes - _.filter(col, function(intron) {
+    return intron.innerHTML == '-';
+  }).length; // - 1 is because the last row doesn't count. Ugly fix.
+}
+
+function colorIntronColumn(col, styleOrNot) {
+  if (styleOrNot) {
+    _.each(col, function(element){
+      if (element != _.last(col)) // don't color the last row. Ugly fix.
+        $(element).css('background-color', 'orange');
+    });
+  } else {
+    _.each(col, function(element){
+      if (element != _.last(col))
+        $(element).removeAttr('style');
+    });
+  }
+
 }
 
 function highlightUniqIntrons(styleOrNot) {
@@ -95,7 +110,7 @@ function highlightUniqIntrons(styleOrNot) {
     allCells = $textBasedTable.find('td').toArray(),
     charPerRow = allCells.length / numberOfGenes;
 
-  intronsByColumn = []
+  var intronsByColumn = [];
 
   for (var i = 0; i < charPerRow; i++) {
     intronsByColumn.push(allCells.filter(function(value, index) {
@@ -106,10 +121,103 @@ function highlightUniqIntrons(styleOrNot) {
   for (var i = 1; i < charPerRow; i++) {
     if (uniqIntron(intronsByColumn[i])) {
       if (styleOrNot) {
-        colorUniqIntronColumn(intronsByColumn[i], 'orange');
+        colorIntronColumn(intronsByColumn[i], styleOrNot);
       } else {
-        colorUniqIntronColumn(intronsByColumn[i], 'white');
+        colorIntronColumn(intronsByColumn[i], styleOrNot);
       }
     }
   }
+}
+
+/**
+ * Returns columns with at least x % amount of introns
+ */
+function intronCols(xPercent) {
+  var $textBasedTable = $('table#text_based_output');
+
+  var numberOfGenes = $textBasedTable.find('tr').length,
+    allCells = $textBasedTable.find('td').toArray(),
+    charPerRow = allCells.length / numberOfGenes,
+    numberOfCommonIntrons = Math.round(xPercent*(numberOfGenes - 1)/100);
+
+  var cols = [],
+    allCols = [];
+
+  for (var i = 0; i < charPerRow; i++) {
+    allCols.push(allCells.filter(function(value, index) {
+      return (index - i) % charPerRow == 0;
+    }));
+  }
+
+  for (var i = 1; i < charPerRow; i++) {
+    if (numberOfIntrons(allCols[i]) >= numberOfCommonIntrons) {
+      cols.push(allCols[i]);
+    }
+  }
+
+  return cols;
+}
+
+function highlightIntrons(xPercent, styleOrNot) {
+  var $textBasedTable = $('table#text_based_output');
+
+  var numberOfGenes = $textBasedTable.find('tr').length,
+    allCells = $textBasedTable.find('td').toArray(),
+    charPerRow = allCells.length / numberOfGenes;
+
+  var cols = intronCols(xPercent);
+
+  for (var i = 0; i < cols.length; i++) {
+    if (styleOrNot) {
+      colorIntronColumn(cols[i], styleOrNot);
+    } else {
+      colorIntronColumn(cols[i], styleOrNot);
+    }
+  }
+}
+
+/**
+ * Sets background color of a DOM element
+ * to color.
+ */
+function colorCell(cell, color) {
+  $(cell).css('background-color', color);
+}
+
+/**
+ * Converts numbers of introns to wavelengths
+ * then from wavelengths to RGB color objects.
+ *
+ * @return {Array} colorObjs color objects.
+ */
+function intronCountsToColors() {
+  // Visible Spectrum
+  var start = 450; // nm blue
+  var end = 780;   // nm red
+  var total = end - start + 1;
+
+  var $textBasedTable = $('table#text_based_output'),
+    numberOfGenes = $textBasedTable.find('tr').length,
+    allCells = $textBasedTable.find('td').toArray(),
+    charPerRow = allCells.length / numberOfGenes;
+
+  var allCols = [],
+    wavelengths = [],
+    colorObjs = [];
+
+  for (var i = 0; i < charPerRow; i++) {
+    allCols.push(allCells.filter(function(value, index) {
+      return (index - i) % charPerRow == 0;
+    }));
+  }
+
+  for (var i = 1; i < charPerRow; i++) {
+    wavelengths.push( (numberOfIntrons(allCols[i])*total / (numberOfGenes - 1)) + start ); // TODO: too much magic here, will explain later.
+  }
+
+  for (var i = 0; i < wavelengths.length; i++) {
+    colorObjs.push( Math.nmToRGB(wavelengths[i]) );
+  }
+
+  return colorObjs;
 }
