@@ -20,7 +20,7 @@
 //= require_tree .
 
 $(function () {
-  
+
     $.ajaxSetup ({
      cache: false
     });
@@ -74,5 +74,16 @@ function create_alignment_file_ajax() {
         dataType: 'script'
       });
     }
+  });
+}
+
+function update_data_center_table(str_map) {
+  var speciesCells = $('td#species'),
+    map = JSON.parse(str_map.replace(/&quot;/g, '"').replace(/=&gt;/g, ':'));
+
+  $.each(speciesCells, function() {
+    console.log($(this).attr('data'));
+
+    this.innerText = map[$(this).attr('data')];
   });
 }

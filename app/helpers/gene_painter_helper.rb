@@ -29,7 +29,7 @@ module GenePainterHelper
     )
   end
 
-  def create_table(seq_names, map, f_dest)
+  def create_data_center_table(seq_names, f_dest)
     table_body = ''
     viewCount = 0
 
@@ -58,7 +58,8 @@ module GenePainterHelper
           table_body += '<td></td>'
         end
 
-        table_body += '<td style="text-align: left">' + map[name].to_s  + '</td>'
+        # table_body += '<td style="text-align: left">' + map[name].to_s  + '</td>'
+        table_body += "<td style=\"text-align: left\" data=\"#{name}\" id=\"species\"></td>"
 
       table_body += '</tr>'
     }
@@ -69,7 +70,7 @@ module GenePainterHelper
   # helpers for aligned gene structures section
   def generate_text_based_output(filename)
     data = ''
-    data += '<table id="text_based_output" style="display:inline-block; white-space: nowrap; margin: 10px; margin-right: 20px; border-spacing: 0; font-size: 15px;">'
+    data += '<table id="text_based_output" style="display:inline-block; white-space: nowrap; margin: 5px; margin-right: 15px; border-spacing: 0; font-size: 13px;">'
 
     File.open(filename, "r").each_line do |line|
       tokens = line.gsub(/\s+/, ' ').strip.split(' ')
@@ -89,9 +90,52 @@ module GenePainterHelper
   end
 
   # Converts a svg file to png.
-  # @return {string} png_path path to png file.
+  # @return {string} new_name
   def convert_svg_to_png(filepath)
-    7
+    basename = File.basename(filepath, '.svg')
+    new_name = "#{basename}.png"
+
+    new_path = File.join("#{Rails.root}/public/tmp", new_name)
+
+    retVal = system "convert #{filepath} #{new_path}"
+
+    if retVal
+      return new_name
+    else
+      return nil
+    end
   end
 
+  def render_svg(filename)
+    svg_path = File.join("#{Rails.root}/public/tmp", filename)
+    return File.open(svg_path, 'rb').read
+  end
+
+  def render_standard
+    new_img = convert_svg_to_png('/fab8/vbui/genepainter_resources/output/svg_new/xy-normal.svg')
+
+    if !new_img.nil?
+      output = image_tag "/tmp/#{new_img}"
+    else
+      output = ''
+    end
+
+    output += render_svg('xy-normal-merged.svg').delete!("\n").html_safe
+
+    return output
+  end
+
+  def render_reduced
+    new_img = convert_svg_to_png('/fab8/vbui/genepainter_resources/output/svg_new/xy-reduced.svg')
+
+    if !new_img.nil?
+      output = image_tag "/tmp/#{new_img}"
+    else
+      output = ''
+    end
+
+    output += render_svg('xy-reduced-merged.svg').delete!("\n").html_safe
+
+    return output
+  end
 end

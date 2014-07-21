@@ -1,5 +1,6 @@
 require 'parse_data.rb'
 require 'genestructures.rb'
+require 'parse_svg.rb'
 require 'helper.rb'
 
 class GenePainterController < ApplicationController
@@ -75,8 +76,6 @@ class GenePainterController < ApplicationController
 
     ensure
       @@seq_names = @seq_names
-
-      logger.debug(@@f_dest)
 
       respond_to do |format|
         format.js
@@ -202,6 +201,11 @@ class GenePainterController < ApplicationController
     @generatedGeneStructures.collect! {
       |gGS| File.basename(gGS, '.*')
     }
+
+    # /fab8/server/db_scripts/gene_painter_new/gene_painter$
+
+    # Generate svg output files
+
 
     ensure
       respond_to do |format|

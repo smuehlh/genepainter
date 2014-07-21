@@ -4,8 +4,7 @@
   // update uploaded filename
   $('#uploaded_species_mapping').html('<%= @basename %>');
 
-  var $dataTableBody = $($('div#data_table').find('tbody')[0]);
-  $dataTableBody.append('<%= create_table(controller.seq_names, controller.name_species_map, controller.f_dest).html_safe %>');
+  update_data_center_table('<%= controller.name_species_map %>')
 
 <% else%>
   hide_show_waiting('hide');
