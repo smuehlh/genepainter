@@ -112,7 +112,7 @@ module GenePainterHelper
   end
 
   def render_standard
-    new_img = convert_svg_to_png('/fab8/vbui/genepainter_resources/output/svg_new/xy-normal.svg')
+    new_img = convert_svg_to_png("#{Rails.root}/public/tmp/#{controller.id}-normal.svg")
 
     if !new_img.nil?
       output = image_tag "/tmp/#{new_img}"
@@ -120,13 +120,13 @@ module GenePainterHelper
       output = ''
     end
 
-    output += render_svg('xy-normal-merged.svg').delete!("\n").html_safe
+    output += render_svg("#{controller.id}-normal-merged.svg").delete!("\n").html_safe
 
     return output
   end
 
   def render_reduced
-    new_img = convert_svg_to_png('/fab8/vbui/genepainter_resources/output/svg_new/xy-reduced.svg')
+    new_img = convert_svg_to_png("#{Rails.root}/public/tmp/#{controller.id}-reduced.svg")
 
     if !new_img.nil?
       output = image_tag "/tmp/#{new_img}"
@@ -134,7 +134,7 @@ module GenePainterHelper
       output = ''
     end
 
-    output += render_svg('xy-reduced-merged.svg').delete!("\n").html_safe
+    output += render_svg("#{controller.id}-reduced-merged.svg").delete!("\n").html_safe
 
     return output
   end

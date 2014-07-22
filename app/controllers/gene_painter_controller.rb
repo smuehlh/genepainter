@@ -5,12 +5,17 @@ require 'helper.rb'
 
 class GenePainterController < ApplicationController
 
+  @@id = ''
   @@f_dest = ''
   @@f_gene_structures = ''
   @@default_fname = ''
 
   @@seq_names = []
   @@name_species_map = {}
+
+  def id
+    @@id
+  end
 
   def f_dest
     @@f_dest
@@ -37,6 +42,8 @@ class GenePainterController < ApplicationController
     @@f_dest = File.join(TMP_PATH, id)
     @@default_fname = File.join(@@f_dest, 'alignment')
     @@f_gene_structures = File.join(@@f_dest, 'gene_structures')
+
+    @@id = @@f_dest.split('/').last
 
     Helper.mkdir_or_die(@@f_gene_structures)
 
@@ -187,24 +194,52 @@ class GenePainterController < ApplicationController
   end
 
   def create_gene_structures
-    neededGeneStructures = params[:data] == nil ? [] : params[:data]
-    path_to_species_to_fasta = @@f_dest + '/fastaheaders2species.txt'
 
-    # Get all files with extension .fas
-    paths = Dir[@@f_dest + '/*.fas']
-    path_to_fasta = paths[0]
+    missing_gene_structures = params[:data] == nil ? [] : params[:data]
 
-    output_path = File.join(@@f_dest, 'gene_structures')
+    alignment_files = Dir[@@f_dest + '/*.fas']
+    f_alignment = alignment_files.first
 
-    @retValue, @generatedGeneStructures = generate_gene_structures(neededGeneStructures, path_to_species_to_fasta, path_to_fasta, output_path)
+    # Path to dir that contains gene structures
+    d_gene_structures = File.join(@@f_dest, 'gene_structures')
 
-    @generatedGeneStructures.collect! {
-      |gGS| File.basename(gGS, '.*')
-    }
+    # Path to gene_painter.rb
+    f_gene_painter = '/fab8/server/db_scripts/gene_painter_new/gene_painter/gene_painter.rb'
+
+    # Path to output dir
+    d_output = "#{Rails.root}/public/tmp"
+
+    # Prefix to all output files
+    prefix = @@id
+
+    f_species_to_fasta = Dir[@@f_dest + '/fastaheaders2species.txt']
+
+    if f_species_to_fasta.blank?
+      logger.debug("Didn't find any fastaheaders2species files.")
+
+      # Call gene_painter
+      @retVal_no_taxonomy = system "ruby #{f_gene_painter} -i #{f_alignment} -p #{d_gene_structures} --outfile #{prefix} --path-to-output #{d_output} --intron-phase --phylo --spaces --alignment --svg --svg-format both --svg-merged --svg-nested --statistics"
+
+      logger.debug(@retVal_no_taxonomy)
+
+    else
+
+
+    end
+
+    #
+    # @retValue, @generatedGeneStructures = generate_gene_structures(neededGeneStructures, path_to_species_to_fasta, path_to_fasta, output_path)
+    #
+    # @generatedGeneStructures.collect! {
+    #   |gGS| File.basename(gGS, '.*')
+    # }
 
     # /fab8/server/db_scripts/gene_painter_new/gene_painter$
 
-    # Generate svg output files
+    # Call gene_painter.rb
+
+    # Check if there is a species mapping file
+    # species_mapping_files = Dir[@@f_dest]
 
 
     ensure

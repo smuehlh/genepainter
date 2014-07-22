@@ -1,12 +1,7 @@
 <div id='text-based' style='font-family: Courier;'>
-  <%=
-    generate_text_based_output('/fab8/vbui/genepainter_resources/output/out-std.txt').html_safe
-   %>
 
    <%= javascript_tag defer: 'defer' do -%>
-     var colors = intronCountsToColors();
-
-     function colorLastRow() {
+     function colorLastRow(colors) {
        var numberOfCells = $($('div#text-based').find('tr')[0]).children().length;
        var tmpElement = '<tr id="lastRow">';
 
@@ -29,8 +24,6 @@
       tmpElement += '</tr>';
       $($('div#text-based').find('tbody')[0]).append(tmpElement);
      }
-
-     colorLastRow();
    <% end -%>
 </div>
 
@@ -109,26 +102,6 @@
           content_tag(:span, 'Show intron phase', :style => 'padding-left: 5px; padding-right: 20px')
           )
       %>
-
-      <%= javascript_tag defer: 'defer' do -%>
-        var $textBasedTable = $('div#text-based');
-
-        $('input#show_intron_phase').change(function() {
-          var showOrNot = $(this).is(':checked');
-
-          if (showOrNot) {
-            $textBasedTable.html('<%=
-              generate_text_based_output("/fab8/vbui/genepainter_resources/output/out-intron-phase.txt").html_safe
-             %>');
-          } else {
-            $textBasedTable.html('<%=
-              generate_text_based_output("/fab8/vbui/genepainter_resources/output/out-std.txt").html_safe
-             %>');
-          }
-
-          colorLastRow();
-        });
-      <% end -%>
     </td>
   <tr>
 </table>

@@ -1,18 +1,58 @@
-<% if @retValue then %>
-   hide_show_waiting('hide');
+<% if @retVal_no_taxonomy then %>
+  hide_show_waiting('hide');
 
-  <% @generatedGeneStructures.each do |newGS| %>
-    // Update gene structure status
-    $('span#<%= newGS %>').text('complete').css('color', 'green').css('font-weight', 'bold');
+  <% std_path = "#{Rails.root}/public/tmp/#{controller.id}-std.txt" %>
+  <% intron_phase_path = "#{Rails.root}/public/tmp/#{controller.id}-intron-phase.txt" %>
 
-    // Disable Generate Gene Structure option
-    $('span#<%= newGS %>').parent().next().children().prop('disabled', true);
-  <% end %>
+  $('div#text-based').html('');
+  $('div#text-based').append('<%= generate_text_based_output(std_path).html_safe %>');
 
-  var $btnSubmit = $('button#generateGeneStructureBtn'),
-    text = '<span style="margin-left: 200px; color: green; font-weight: bold"><%= @generatedGeneStructures.length %> new gene structure(s) created.</span>';
+  var colors = intronCountsToColors();
+  colorLastRow(colors);
 
-  $btnSubmit.after(text);
+  var $textBasedTable = $('div#text-based');
+
+  $('input#show_intron_phase').change(function() {
+    var showOrNot = $(this).is(':checked');
+
+    if (showOrNot) {
+      $textBasedTable.html('<%= generate_text_based_output(intron_phase_path).html_safe %>');
+    } else {
+      $textBasedTable.html('<%= generate_text_based_output(std_path).html_safe %>');
+    }
+
+    colorLastRow(colors);
+  });
+
+  // Populate graphical tab
+  $('div#graphical').html('')
+  $('div#graphical').append('<%= render_standard.html_safe %>');
+
+  $('input#standard').change(function() {
+    var checkedOrNot = $(this).is(':checked');
+
+    if (checkedOrNot) {
+      $('div#graphical').html('')
+      $('div#graphical').append('<%= render_standard.html_safe %>');
+
+      $('input#focus_on_common_introns').prop('disabled', true);
+    } else {
+      $('input#focus_on_common_introns').removeAttr('disabled');
+    }
+  });
+
+  $('input#focus_on_common_introns').change(function() {
+    var checkedOrNot = $(this).is(':checked');
+
+    if (checkedOrNot) {
+      $('div#graphical').html('')
+      $('div#graphical').append('<%= render_reduced.html_safe %>');
+
+      $('input#standard').prop('disabled', true);
+    } else {
+      $('input#standard').removeAttr('disabled');
+    }
+  });
 
 <% else%>
   console.log('failed');
