@@ -29,34 +29,18 @@ module GenePainterHelper
     )
   end
 
-  def create_data_center_table(seq_names, f_dest)
+  def create_data_center_table(seq_names)
     table_body = ''
-    viewCount = 0
 
     seq_names.each { |name|
       table_body += '<tr>'
         table_body += '<td>' + check_box_tag("analyze", nil, true) + '</td>'
-
-        # Only check first 20 check boxes in View column
-        if (viewCount < 20)
-          viewCount += 1
-          table_body += '<td>' + check_box_tag("view", nil, true) + '</td>'
-        else
-          table_body += '<td>' + check_box_tag("view", nil, false) + '</td>'
-        end
-
+        table_body += "<td>" + check_box_tag("view", nil, false, :data => name, :disabled => true) + '</td>'
         table_body += '<td style="text-align: left">' + name + '</td>'
 
-        path = f_dest + '/gene_structures/' + name + '.yaml'
-        gene_structure_status = get_status_of_gene_structure(path).to_s
-
-        table_body += '<td><span id="' + name + '">' + gene_structure_status + '</span></td>'
-
-        if gene_structure_status == 'missing'
-          table_body += '<td>' + check_box_tag("generateGeneStructure", name) + '</td>'
-        else
-          table_body += '<td></td>'
-        end
+        # All gene structures are missing if no files are uploaded
+        table_body += '<td><span id="' + name + '">missing</span></td>'
+        table_body += '<td>' + check_box_tag("generateGeneStructure", name, nil, :disabled => true) + '</td>'
 
         # table_body += '<td style="text-align: left">' + map[name].to_s  + '</td>'
         table_body += "<td style=\"text-align: left\" data=\"#{name}\" id=\"species\"></td>"
@@ -65,6 +49,12 @@ module GenePainterHelper
     }
 
     return table_body
+  end
+
+  # Returns gene structure status
+  def gene_structure_status(filename)
+    f_path = "#{controller.f_dest}/gene_structures/#{filename}"
+    return get_status_of_gene_structure(f_path).to_s
   end
 
   # helpers for aligned gene structures section
@@ -112,7 +102,7 @@ module GenePainterHelper
   end
 
   def render_standard
-    new_img = convert_svg_to_png("#{Rails.root}/public/tmp/#{controller.id}-normal.svg")
+    new_img = convert_svg_to_png("#{Rails.root}/public/tmp/#{controller.id}-selected-normal.svg")
 
     if !new_img.nil?
       output = image_tag "/tmp/#{new_img}"
@@ -126,7 +116,7 @@ module GenePainterHelper
   end
 
   def render_reduced
-    new_img = convert_svg_to_png("#{Rails.root}/public/tmp/#{controller.id}-reduced.svg")
+    new_img = convert_svg_to_png("#{Rails.root}/public/tmp/#{controller.id}-selected-reduced.svg")
 
     if !new_img.nil?
       output = image_tag "/tmp/#{new_img}"

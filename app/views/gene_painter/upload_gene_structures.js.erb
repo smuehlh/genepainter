@@ -13,10 +13,22 @@
     $fileCount.text(curTotal + ' files uploaded');
   }
 
-  var $dataTableBody = $($('div#data_table').find('tbody')[0]);
+  // Update gene structure status
+  var basename = _.first('<%= @filename %>'.split('.'));
+  var $span = $('span#' + basename);
 
-  $dataTableBody.html('');
-  $dataTableBody.append('<%= create_data_center_table(controller.seq_names, controller.f_dest).html_safe %>');
+  if ($span.length) {
+    $span.html('<%= gene_structure_status(@filename) %>');
+
+    // Give the user option to generate gene structure if missing
+    if ($span.html != 'missing') {
+      $span.parent().next().html('');
+    }
+  }
+
+  $(_.filter($('input#view'), function(item) {
+      return $(item).attr('data') == basename
+    })).removeAttr('disabled').prop('checked', true);
 
 <% else%>
   hide_show_waiting('hide');

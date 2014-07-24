@@ -29,11 +29,19 @@
     // bind event to add species button
     $btnAddSpecies.click(addSpeciesMappingBlock);
 
+    // Initial data center table
+    var $dataTableBody = $($('div#data_table').find('tbody')[0]);
+    $dataTableBody.html('');
+    $dataTableBody.append('<%= create_data_center_table(controller.seq_names).html_safe %>');
+
+    // Show data center
+    $('div#b_data_center').toggle("slow");
+
   <% end %>
 <% else%>
   hide_show_waiting('hide');
   alert('Error occurred.');
 
   // toggle help
-  $("div#upload_seq_help").show("slow");
+  $("div#upload_seq_help").show('slow');
 <% end %>

@@ -6,6 +6,13 @@
 
   update_data_center_table('<%= controller.name_species_map %>')
 
+  // enable create missing gene structure option
+  $.each($('input#generateGeneStructure'), function() {
+    if ( $(this).parent().next().text().length ) {
+      $(this).removeAttr('disabled');
+    }
+  });
+
 <% else%>
   hide_show_waiting('hide');
   alert('Error occurred.');

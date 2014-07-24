@@ -101,6 +101,8 @@ class GenePainterController < ApplicationController
       Helper.rename(File.join(@@f_gene_structures, File.basename(file.path())),
         File.join(@@f_gene_structures, file.original_filename))
 
+      @filename = file.original_filename
+
 			# call fromdos
 			is_sucess = system('fromdos',@@f_dest)
 			throw :error, ['Cannot upload file', 'Please contact us.'] if ! is_sucess
@@ -194,53 +196,48 @@ class GenePainterController < ApplicationController
   end
 
   def create_gene_structures
-
     missing_gene_structures = params[:data] == nil ? [] : params[:data]
+    selected_genes = params[:data] = nil ? [] : params[:genes]
 
-    alignment_files = Dir[@@f_dest + '/*.fas']
-    f_alignment = alignment_files.first
-
-    # Path to dir that contains gene structures
+    f_alignment = Dir[@@f_dest + '/*.fas'].first
     d_gene_structures = File.join(@@f_dest, 'gene_structures')
-
-    # Path to gene_painter.rb
     f_gene_painter = '/fab8/server/db_scripts/gene_painter_new/gene_painter/gene_painter.rb'
-
-    # Path to output dir
     d_output = "#{Rails.root}/public/tmp"
+    f_species_to_fasta = Dir[@@f_dest + '/fastaheaders2species.txt'].first
+    f_taxonomy_list = '/fab8/vbui/genepainter_resources/taxonomy_list.csv'
 
     # Prefix to all output files
     prefix = @@id
 
-    f_species_to_fasta = Dir[@@f_dest + '/fastaheaders2species.txt']
+    # Creates missing gene structures
+    if !missing_gene_structures.blank?
+      @retVal, @new_genes = generate_gene_structures(missing_gene_structures, f_species_to_fasta, f_alignment, d_gene_structures)
+
+      logger.debug(@retVal)
+      logger.debug(@new_genes.inspect)
+    else
+      @new_genes = []
+    end
 
     if f_species_to_fasta.blank?
       logger.debug("Didn't find any fastaheaders2species files.")
 
       # Call gene_painter
-      @retVal_no_taxonomy = system "ruby #{f_gene_painter} -i #{f_alignment} -p #{d_gene_structures} --outfile #{prefix} --path-to-output #{d_output} --intron-phase --phylo --spaces --alignment --svg --svg-format both --svg-merged --svg-nested --statistics"
-
-      logger.debug(@retVal_no_taxonomy)
-
+      system "ruby #{f_gene_painter} -i #{f_alignment} -p #{d_gene_structures} --outfile #{prefix} --path-to-output #{d_output} --intron-phase --phylo --spaces --alignment --svg --svg-format both --svg-merged --svg-nested --statistics"
     else
-
-
+      system "ruby #{f_gene_painter} -i #{f_alignment} -p #{d_gene_structures} --outfile #{prefix} --path-to-output #{d_output} --intron-phase --phylo --spaces --alignment --svg --svg-format both --svg-merged --svg-nested --statistics --taxonomy-to-fasta #{f_species_to_fasta} --tree --taxonomy #{f_taxonomy_list}"
     end
 
-    #
-    # @retValue, @generatedGeneStructures = generate_gene_structures(neededGeneStructures, path_to_species_to_fasta, path_to_fasta, output_path)
-    #
-    # @generatedGeneStructures.collect! {
-    #   |gGS| File.basename(gGS, '.*')
-    # }
+    # number of check in view column + number of files in gene_structures folder < 20
+    logger.debug(Dir[f_gene_structures + '/*.yaml'].length)
 
-    # /fab8/server/db_scripts/gene_painter_new/gene_painter$
-
-    # Call gene_painter.rb
-
-    # Check if there is a species mapping file
-    # species_mapping_files = Dir[@@f_dest]
-
+    # Create images for selected genes only
+    build_svg_by_genestructs("#{Rails.root}/public/tmp/#{@@id}-normal.svg",
+      "#{Rails.root}/public/tmp/#{@@id}-selected-normal.svg",
+      selected_genes)
+    build_svg_by_genestructs("#{Rails.root}/public/tmp/#{@@id}-reduced.svg",
+      "#{Rails.root}/public/tmp/#{@@id}-selected-reduced.svg",
+      selected_genes)
 
     ensure
       respond_to do |format|

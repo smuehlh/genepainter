@@ -32,7 +32,7 @@
   });
 <% end -%>
 
-<%= content_tag(:textarea, nil, :id => "text_seq", :placeholder => "Enter FASTA sequence(s)", :cols => 80, :rows => 5, :style => "margin-top: 5px") %>
+<%= content_tag(:textarea, nil, :id => "text_seq", :placeholder => "Enter FASTA sequence(s)", :cols => 80, :rows => 5, :style => "margin-top: 5px; width: 723px;") %>
 
 <%= tag(:br) %>
 
@@ -144,13 +144,14 @@
 <% end -%>
 
 <%= content_tag(:h1, "Data Center", :style => "margin-top: 10px;") %>
-<%= render :partial => "gene_painter/data_center"%>
-
+<div id="b_data_center" style="display: none">
+  <%= render :partial => "gene_painter/data_center"%>
+</div>
 <%= content_tag(:h1, "Aligned Gene Structures") %>
-<%= render :partial => "gene_painter/aligned_gene_structures/aligned_gene_structures"%>
+<div id="b_aligned_gene_structures" style="display: none">
+  <%= render :partial => "gene_painter/aligned_gene_structures/aligned_gene_structures"%>
+</div>
 
 <%= content_tag(:h1, "Phylogenetic Distribution of Intron Positions") %>
-<p>Nothing here yet</p>
 
 <%= content_tag(:h1, "Download") %>
-<p>Nothing here yet</p>

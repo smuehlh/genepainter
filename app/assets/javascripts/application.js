@@ -82,8 +82,6 @@ function update_data_center_table(str_map) {
     map = JSON.parse(str_map.replace(/&quot;/g, '"').replace(/=&gt;/g, ':'));
 
   $.each(speciesCells, function() {
-    console.log($(this).attr('data'));
-
     this.innerText = map[$(this).attr('data')];
   });
 }

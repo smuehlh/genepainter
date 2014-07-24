@@ -12,7 +12,7 @@
           content_tag(:span, 'Standard', :style => 'padding-left: 5px; padding-right: 20px')
           )
       %>
-      
+
       <%=
         content_tag(:div,
           check_box_tag('focus_on_common_introns') +
@@ -20,8 +20,29 @@
         )
       %>
     </td>
-    <td style='padding-left: 30px;'>
+    <td style='padding-left: 200px;'>
+      <span>Select gene structures</span>
+      <%= image_tag("icons/popup_icon.png", :style => "cursor: pointer", :id => 'gene_selection_popup') %>
 
+      <div id='gene_selection_dialog' title="Select Gene Structures" style="display: none">
+        <p>Select maximum of 20 genes.</p>
+
+
+      </div>
+
+      <%= javascript_tag defer: 'defer' do -%>
+        $('img#gene_selection_popup').click(function() {
+
+          $('div#gene_selection_dialog').dialog({
+            modal: true,
+            buttons: {
+              Ok: function() {
+                $( this ).dialog( "close" );
+              }
+            }
+          });
+        });
+      <% end -%>
     </td>
   <tr>
 </table>

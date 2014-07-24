@@ -1,6 +1,5 @@
 # svg parser
 
-
 # this method builds a new SVG file containing only selected genestructures
 # @path_to_complete_svg [String] path to SVG file containing all data
 # @path_to_reduced_svg [String] path to new SVG file containing only selected genestructures
@@ -43,6 +42,7 @@ def read_genestructure_svg(path_to_svg)
 		if ! is_collecting_legend && line.start_with?("<text") then 
 			current_name = line.match(/>(.*)</)[1]
 			genestruct_by_name[current_name] = tmp
+			genestruct_by_name[current_name].push( line )
 			if current_name == "Legend" then 
 				is_collecting_legend = true
 			else

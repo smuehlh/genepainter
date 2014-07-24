@@ -47,32 +47,67 @@
 
 <%=
   content_tag(:div,
-    content_tag(:button, 'Submit', :id => 'generateGeneStructureBtn') +
+    content_tag(:button, 'Submit', :id => 'btnSubmit') +
     content_tag(:p, '<b>Press submit when finished with data selection.</b>'.html_safe),
   )
 %>
 
+<div id="dialog-message" title="Error" style="display: none">
+  <p>
+    Please upload or select to generate gene structures before submitting.
+  </p>
+</div>
+
 <%= javascript_tag defer: 'defer' do -%>
-  var $btnSubmit = $('button#generateGeneStructureBtn');
+  var $btnSubmit = $('button#btnSubmit');
+
+  function showErrorModal() {
+    $( "#dialog-message" ).dialog({
+      modal: true,
+      buttons: {
+        Ok: function() {
+          $( this ).dialog( "close" );
+        }
+      }
+    });
+  }
 
   $btnSubmit.click(function() {
-    hide_show_waiting('show');
-
-    var needGeneStructures = [];
+    var missingGeneStructures = [];
     var boxes = $('div#data_table').find('input#generateGeneStructure');
 
     for (var i = 0; i < boxes.length; i++) {
       if ( $(boxes[i]).is(':checked') ) {
-        needGeneStructures.push(boxes[i].value);
+        missingGeneStructures.push(boxes[i].value);
       }
     }
 
-    <!-- Call generate_gene_structures action in controller -->
-    $.ajax({
-      type: 'POST',
-      url: '/create_gene_structures',
-      data: {'data': needGeneStructures},
-      dataType: 'script'
-    });
+    /** Returns genes that are checked to
+     * view in the graphical representation tab.
+     *
+     * This calls use underscorejs' filter() method to
+     * get all inputs that are checked, then pipe
+     * them to the map() method to extract the data
+     * attributes.
+     */
+    var selected_genes = _.filter($('div#data_table').find('input#view'), function(item) {
+        return $(item).is(':checked');
+      }).map(function(item) {
+          return $(item).attr('data');
+        });
+
+    if (missingGeneStructures.length == 0 && $('span#uploaded_gene_structures').html() == 'No files uploaded') {
+      showErrorModal();
+    } else {
+      
+      $.ajax({
+        type: 'POST',
+        url: '/create_gene_structures',
+        data: {'data': missingGeneStructures, 'genes': selected_genes},
+        dataType: 'script'
+      });
+
+      hide_show_waiting('show');
+    }
   });
 <% end -%>
