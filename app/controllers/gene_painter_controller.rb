@@ -204,7 +204,7 @@ class GenePainterController < ApplicationController
     f_gene_painter = '/fab8/server/db_scripts/gene_painter_new/gene_painter/gene_painter.rb'
     d_output = "#{Rails.root}/public/tmp"
     f_species_to_fasta = Dir[@@f_dest + '/fastaheaders2species.txt'].first
-    f_taxonomy_list = '/fab8/vbui/genepainter_resources/taxonomy_list.csv'
+    f_taxonomy_list = '/fab8/vbui/genepainter_resources/input/taxonomy_list.csv'
 
     # Prefix to all output files
     prefix = @@id
@@ -228,16 +228,20 @@ class GenePainterController < ApplicationController
       system "ruby #{f_gene_painter} -i #{f_alignment} -p #{d_gene_structures} --outfile #{prefix} --path-to-output #{d_output} --intron-phase --phylo --spaces --alignment --svg --svg-format both --svg-merged --svg-nested --statistics --taxonomy-to-fasta #{f_species_to_fasta} --tree --taxonomy #{f_taxonomy_list}"
     end
 
-    # number of check in view column + number of files in gene_structures folder < 20
-    logger.debug(Dir[f_gene_structures + '/*.yaml'].length)
-
-    # Create images for selected genes only
-    build_svg_by_genestructs("#{Rails.root}/public/tmp/#{@@id}-normal.svg",
-      "#{Rails.root}/public/tmp/#{@@id}-selected-normal.svg",
-      selected_genes)
-    build_svg_by_genestructs("#{Rails.root}/public/tmp/#{@@id}-reduced.svg",
-      "#{Rails.root}/public/tmp/#{@@id}-selected-reduced.svg",
-      selected_genes)
+    if Dir[f_gene_structures + '/*.yaml'].length > 20
+      # Create images for selected genes only
+      build_svg_by_genestructs("#{Rails.root}/public/tmp/#{@@id}-normal.svg",
+        "#{Rails.root}/public/tmp/#{@@id}-selected-normal.svg",
+        selected_genes)
+      build_svg_by_genestructs("#{Rails.root}/public/tmp/#{@@id}-reduced.svg",
+        "#{Rails.root}/public/tmp/#{@@id}-selected-reduced.svg",
+        selected_genes)
+    else
+      File.rename("#{Rails.root}/public/tmp/#{@@id}-normal.svg",
+        "#{Rails.root}/public/tmp/#{@@id}-selected-normal.svg")
+      File.rename("#{Rails.root}/public/tmp/#{@@id}-reduced.svg",
+        "#{Rails.root}/public/tmp/#{@@id}-selected-reduced.svg")
+    end
 
     ensure
       respond_to do |format|

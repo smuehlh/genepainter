@@ -79,7 +79,7 @@ function create_alignment_file_ajax() {
 
 function update_data_center_table(str_map) {
   var speciesCells = $('td#species'),
-    map = JSON.parse(str_map.replace(/&quot;/g, '"').replace(/=&gt;/g, ':'));
+    map = JSON.parse(str_map.replace(/&quot;/g, '"').replace(/""/g, '"').replace(/=&gt;/g, ':'));
 
   $.each(speciesCells, function() {
     this.innerText = map[$(this).attr('data')];

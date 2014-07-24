@@ -4,7 +4,7 @@
   // update uploaded filename
   $('#uploaded_species_mapping').html('<%= @basename %>');
 
-  update_data_center_table('<%= controller.name_species_map %>')
+  update_data_center_table('<%= controller.name_species_map %>');
 
   // enable create missing gene structure option
   $.each($('input#generateGeneStructure'), function() {
