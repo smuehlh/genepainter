@@ -19,8 +19,15 @@
 //= require view_helpers
 //= require_tree .
 
-$( window ).bind('unload', function() {
-  
+$( window ).bind('beforeunload', function() {
+
+  //alert('test');
+
+  // /// uggly
+  $.ajax({
+    type: 'POST',
+    url: '/clean_up'
+  });
 });
 
 

@@ -267,4 +267,18 @@ class GenePainterController < ApplicationController
       gene_structures)
   end
 
+  def clean_up
+    files_to_remove = Dir["#{Rails.root}/public/tmp/#{@@id}*"]
+
+    if files_to_remove.blank?
+      logger.debug "nothing to remove."
+    else
+      files_to_remove.each do |file|
+        File.delete(file)
+        logger.debug "removed #{file}"
+      end
+    end
+
+  end
+
 end
