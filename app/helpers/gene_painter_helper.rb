@@ -101,31 +101,25 @@ module GenePainterHelper
     return File.open(svg_path, 'rb').read
   end
 
-  def render_standard
-    new_img = convert_svg_to_png("#{Rails.root}/public/tmp/#{controller.id}-selected-normal.svg")
-
-    if !new_img.nil?
-      output = image_tag "/tmp/#{new_img}"
-    else
-      output = ''
-    end
-
-    output += render_svg("#{controller.id}-normal-merged.svg").delete!("\n").html_safe
-
-    return output
+  def convert_svg_to_pngs
+    convert_svg_to_png("#{Rails.root}/public/tmp/#{controller.id}-selected-normal.svg")
+    convert_svg_to_png("#{Rails.root}/public/tmp/#{controller.id}-selected-reduced.svg")
   end
 
-  def render_reduced
-    new_img = convert_svg_to_png("#{Rails.root}/public/tmp/#{controller.id}-selected-reduced.svg")
+  def populate_select_genes_modal
+    table = '<table>'
 
-    if !new_img.nil?
-      output = image_tag "/tmp/#{new_img}"
-    else
-      output = ''
-    end
+    all_gene_structures = Dir["#{controller.f_dest}/gene_structures/*.yaml"]
+    all_gene_structures.map! { |gene_structure|
+      File.basename(gene_structure, '.yaml')
+    }
 
-    output += render_svg("#{controller.id}-reduced-merged.svg").delete!("\n").html_safe
+    all_gene_structures.each { |gene_structure|
+      table << "<tr><td>#{check_box_tag("view", nil, false, :data => gene_structure)}</td>"
+      table << "<td>#{gene_structure}</td></tr>"
+    }
 
-    return output
+    table << '</table>'
   end
+
 end

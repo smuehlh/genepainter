@@ -19,6 +19,11 @@
 //= require view_helpers
 //= require_tree .
 
+$( window ).bind('unload', function() {
+  
+});
+
+
 $(function () {
 
     $.ajaxSetup ({

@@ -1,5 +1,11 @@
 <div id='graphical'>
+  <img id='placeholder'>
 
+  </img>
+
+  <div id='svg-merged'>
+    
+  </div>
 </div>
 
 <h4>View Options</h4>
@@ -21,13 +27,14 @@
       %>
     </td>
     <td style='padding-left: 200px;'>
-      <span>Select gene structures</span>
-      <%= image_tag("icons/popup_icon.png", :style => "cursor: pointer", :id => 'gene_selection_popup') %>
+      <div id='select_genes' style = 'display: none'>
+        <span>Select gene structures</span>
+        <%= image_tag("icons/popup_icon.png", :style => "cursor: pointer", :id => 'gene_selection_popup') %>
 
-      <div id='gene_selection_dialog' title="Select Gene Structures" style="display: none">
-        <p>Select maximum of 20 genes.</p>
-
-
+        <div id='gene_selection_dialog' title="Select Gene Structures" style="display: none">
+          <p>Select maximum of 20 genes.</p>
+          <div id='placeholder' style='max-height: 300px; overflow: auto'></div>
+        </div>
       </div>
 
       <%= javascript_tag defer: 'defer' do -%>
@@ -37,6 +44,21 @@
             modal: true,
             buttons: {
               Ok: function() {
+                var selected_genes = _.filter($('div#placeholder').find('input#view'), function(item) {
+                  return $(item).is(':checked');
+                }).map(function(item){
+                  return $(item).attr('data');
+                });
+
+                if (selected_genes.length) {
+                  $.ajax({
+                    type: 'POST',
+                    url: '/build_svg',
+                    data: {'data': selected_genes},
+                    dataType: 'script'
+                  });
+                }
+
                 $( this ).dialog( "close" );
               }
             }

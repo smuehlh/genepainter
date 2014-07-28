@@ -26,9 +26,19 @@
     }
   }
 
-  $(_.filter($('input#view'), function(item) {
-      return $(item).attr('data') == basename
-    })).removeAttr('disabled').prop('checked', true);
+  var count = _.filter($('input#view'), function(item) {
+    return $(item).is(':checked');
+  }).length;
+
+  if (count < 20) {
+    $(_.filter($('input#view'), function(item) {
+        return $(item).attr('data') == basename
+      })).removeAttr('disabled').prop('checked', true);
+  } else {
+    $(_.filter($('input#view'), function(item) {
+        return $(item).attr('data') == basename
+      })).removeAttr('disabled');
+  }
 
 <% else%>
   hide_show_waiting('hide');

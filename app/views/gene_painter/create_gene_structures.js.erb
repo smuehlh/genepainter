@@ -23,54 +23,68 @@ hide_show_waiting('hide');
 <% std_path = "#{Rails.root}/public/tmp/#{controller.id}-std.txt" %>
 <% intron_phase_path = "#{Rails.root}/public/tmp/#{controller.id}-intron-phase.txt" %>
 
-$('div#text-based').html('');
-$('div#text-based').append('<%= generate_text_based_output(std_path).html_safe %>');
+<% if FileTest.exists?(std_path) %>
 
-var colors = intronCountsToColors();
-colorLastRow(colors);
+  $('div#text-based').html('');
+  $('div#text-based').append('<%= generate_text_based_output(std_path).html_safe %>');
 
-var $textBasedTable = $('div#text-based');
-
-$('input#show_intron_phase').change(function() {
-  var showOrNot = $(this).is(':checked');
-
-  if (showOrNot) {
-    $textBasedTable.html('<%= generate_text_based_output(intron_phase_path).html_safe %>');
-  } else {
-    $textBasedTable.html('<%= generate_text_based_output(std_path).html_safe %>');
-  }
-
+  var colors = intronCountsToColors();
   colorLastRow(colors);
-});
 
-// Populate graphical tab
-$('div#graphical').html('')
-$('div#graphical').append('<%= render_standard.html_safe %>');
+  var $textBasedTable = $('div#text-based');
 
-$('input#standard').change(function() {
-  var checkedOrNot = $(this).is(':checked');
+  $('input#show_intron_phase').change(function() {
+    var showOrNot = $(this).is(':checked');
 
-  if (checkedOrNot) {
-    $('div#graphical').html('')
-    $('div#graphical').append('<%= render_standard.html_safe %>');
+    if (showOrNot) {
+      $textBasedTable.html('<%= generate_text_based_output(intron_phase_path).html_safe %>');
+    } else {
+      $textBasedTable.html('<%= generate_text_based_output(std_path).html_safe %>');
+    }
 
-    $('input#focus_on_common_introns').prop('disabled', true);
-  } else {
-    $('input#focus_on_common_introns').removeAttr('disabled');
+    colorLastRow(colors);
+  });
+
+  // Populate graphical tab
+  <% convert_svg_to_pngs %>
+  $('img#placeholder').prop('src', '<%= "/tmp/#{controller.id}-selected-normal.png" %>?timestamp=' + new Date().getTime());
+  $('div#svg-merged').html('<%= render_svg("#{controller.id}-normal-merged.svg").delete!("\n").html_safe %>');
+
+  $('input#standard').change(function() {
+    var checkedOrNot = $(this).is(':checked');
+
+    if (checkedOrNot) {
+      $('img#placeholder').prop('src', '<%= "/tmp/#{controller.id}-selected-normal.png" %>?timestamp=' + new Date().getTime());
+      $('div#svg-merged').html('<%= render_svg("#{controller.id}-normal-merged.svg").delete!("\n").html_safe %>');
+
+      $('input#focus_on_common_introns').prop('disabled', true);
+    } else {
+      $('input#focus_on_common_introns').removeAttr('disabled');
+    }
+  });
+
+  $('input#focus_on_common_introns').change(function() {
+    var checkedOrNot = $(this).is(':checked');
+
+    if (checkedOrNot) {
+      $('img#placeholder').prop('src', '<%= "/tmp/#{controller.id}-selected-reduced.png" %>?timestamp=' + new Date().getTime());
+      $('div#svg-merged').html('<%= render_svg("#{controller.id}-reduced-merged.svg").delete!("\n").html_safe %>');
+
+      $('input#standard').prop('disabled', true);
+    } else {
+      $('input#standard').removeAttr('disabled');
+    }
+  });
+
+  if (_.filter($('input#view'), function(item) {
+    return ! $(item).is(':disabled');
+  }).length > 20) {
+    $('div#select_genes').css('display', 'inline');
+    $('div#placeholder').html('<%= populate_select_genes_modal.html_safe %>');
   }
-});
 
-$('input#focus_on_common_introns').change(function() {
-  var checkedOrNot = $(this).is(':checked');
+  
 
-  if (checkedOrNot) {
-    $('div#graphical').html('')
-    $('div#graphical').append('<%= render_reduced.html_safe %>');
+  $('div#b_aligned_gene_structures').toggle('slow');
 
-    $('input#standard').prop('disabled', true);
-  } else {
-    $('input#standard').removeAttr('disabled');
-  }
-});
-
-$('div#b_aligned_gene_structures').toggle('slow');
+<% end %>

@@ -47,6 +47,8 @@ class GenePainterController < ApplicationController
 
     Helper.mkdir_or_die(@@f_gene_structures)
 
+    expires_now()
+
   end
 
   def upload_sequence
@@ -223,30 +225,46 @@ class GenePainterController < ApplicationController
       logger.debug("Didn't find any fastaheaders2species files.")
 
       # Call gene_painter
-      system "ruby #{f_gene_painter} -i #{f_alignment} -p #{d_gene_structures} --outfile #{prefix} --path-to-output #{d_output} --intron-phase --phylo --spaces --alignment --svg --svg-format both --svg-merged --svg-nested --statistics"
+      @retVal = system "ruby #{f_gene_painter} -i #{f_alignment} -p #{d_gene_structures} --outfile #{prefix} --path-to-output #{d_output} --intron-phase --phylo --spaces --alignment --svg --svg-format both --svg-merged --svg-nested --statistics"
     else
-      system "ruby #{f_gene_painter} -i #{f_alignment} -p #{d_gene_structures} --outfile #{prefix} --path-to-output #{d_output} --intron-phase --phylo --spaces --alignment --svg --svg-format both --svg-merged --svg-nested --statistics --taxonomy-to-fasta #{f_species_to_fasta} --tree --taxonomy #{f_taxonomy_list}"
+      @retVal = system "ruby #{f_gene_painter} -i #{f_alignment} -p #{d_gene_structures} --outfile #{prefix} --path-to-output #{d_output} --intron-phase --phylo --spaces --alignment --svg --svg-format both --svg-merged --svg-nested --statistics --taxonomy-to-fasta #{f_species_to_fasta} --tree --taxonomy #{f_taxonomy_list}"
     end
 
-    if Dir[f_gene_structures + '/*.yaml'].length > 20
-      # Create images for selected genes only
-      build_svg_by_genestructs("#{Rails.root}/public/tmp/#{@@id}-normal.svg",
-        "#{Rails.root}/public/tmp/#{@@id}-selected-normal.svg",
-        selected_genes)
-      build_svg_by_genestructs("#{Rails.root}/public/tmp/#{@@id}-reduced.svg",
-        "#{Rails.root}/public/tmp/#{@@id}-selected-reduced.svg",
-        selected_genes)
-    else
-      File.rename("#{Rails.root}/public/tmp/#{@@id}-normal.svg",
-        "#{Rails.root}/public/tmp/#{@@id}-selected-normal.svg")
-      File.rename("#{Rails.root}/public/tmp/#{@@id}-reduced.svg",
-        "#{Rails.root}/public/tmp/#{@@id}-selected-reduced.svg")
+    logger.debug("Return from sys call: " + @retVal.to_s)
+
+    if @retVal
+      if Dir[f_gene_structures + '/*.yaml'].length > 20
+        # Create images for selected genes only
+        build_svg_by_genestructs("#{Rails.root}/public/tmp/#{@@id}-normal.svg",
+          "#{Rails.root}/public/tmp/#{@@id}-selected-normal.svg",
+          selected_genes)
+        build_svg_by_genestructs("#{Rails.root}/public/tmp/#{@@id}-reduced.svg",
+          "#{Rails.root}/public/tmp/#{@@id}-selected-reduced.svg",
+          selected_genes)
+      else
+        File.rename("#{Rails.root}/public/tmp/#{@@id}-normal.svg",
+          "#{Rails.root}/public/tmp/#{@@id}-selected-normal.svg")
+        File.rename("#{Rails.root}/public/tmp/#{@@id}-reduced.svg",
+          "#{Rails.root}/public/tmp/#{@@id}-selected-reduced.svg")
+      end
     end
 
     ensure
       respond_to do |format|
         format.js
       end
+  end
+
+  def build_svg
+    gene_structures = params[:data] == nil ? [] : params[:data]
+
+    # Create images for selected genes only
+    build_svg_by_genestructs("#{Rails.root}/public/tmp/#{@@id}-normal.svg",
+      "#{Rails.root}/public/tmp/#{@@id}-selected-normal.svg",
+      gene_structures)
+    build_svg_by_genestructs("#{Rails.root}/public/tmp/#{@@id}-reduced.svg",
+      "#{Rails.root}/public/tmp/#{@@id}-selected-reduced.svg",
+      gene_structures)
   end
 
 end
