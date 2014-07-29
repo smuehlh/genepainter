@@ -144,14 +144,25 @@
 <% end -%>
 
 <%= content_tag(:h1, "Data Center", :style => "margin-top: 10px;") %>
+<p class='default-text' id='t_data_center'>
+  No data provided.
+</p>
 <div id="b_data_center" style="display: none">
   <%= render :partial => "gene_painter/data_center"%>
 </div>
+
 <%= content_tag(:h1, "Aligned Gene Structures") %>
+<p class='default-text' id='t_aligned_gene_structures'>
+  No data provided.
+</p>
 <div id="b_aligned_gene_structures" style="display: none">
   <%= render :partial => "gene_painter/aligned_gene_structures/aligned_gene_structures"%>
 </div>
 
 <%= content_tag(:h1, "Phylogenetic Distribution of Intron Positions") %>
+<p class='default-text' id='t_phylotree'>
+  No data/species information provided.
+</p>
+
 
 <%= content_tag(:h1, "Download") %>
