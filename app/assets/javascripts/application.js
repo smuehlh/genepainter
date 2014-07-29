@@ -19,16 +19,11 @@
 //= require view_helpers
 //= require_tree .
 
-function cleanup() {
+$( window ).bind('beforeunload', function() {
   $.ajax({
     type: 'POST',
     url: '/clean_up'
   });
-}
-
-$( window ).bind('beforeunload', function() {
-
-  cleanup();
 });
 
 $(function () {

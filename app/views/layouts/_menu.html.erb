@@ -19,3 +19,14 @@
     <li<%=raw(selected)%>><%= link_to "Contact", contact_path %></li>
   </ul>
 </div>
+
+<%= javascript_tag defer: 'defer' do -%>
+  $.each($('div#menu').find('a'), function() {
+    $(this).click(function() {
+      $.ajax({
+        type: 'POST',
+        url: '/clean_up'
+      });
+    });
+  });
+<% end -%>
