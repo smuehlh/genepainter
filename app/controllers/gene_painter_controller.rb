@@ -208,6 +208,8 @@ class GenePainterController < ApplicationController
     f_species_to_fasta = Dir[@@f_dest + '/fastaheaders2species.txt'].first
     f_taxonomy_list = '/fab8/vbui/genepainter_resources/input/taxonomy_list.csv'
 
+    Helper.mkdir_or_die(d_output)
+
     # Prefix to all output files
     prefix = @@id
 

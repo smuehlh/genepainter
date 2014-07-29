@@ -19,17 +19,17 @@
 //= require view_helpers
 //= require_tree .
 
-$( window ).bind('beforeunload', function() {
-
-  //alert('test');
-
-  // /// uggly
+function cleanup() {
   $.ajax({
     type: 'POST',
     url: '/clean_up'
   });
-});
+}
 
+$( window ).bind('beforeunload', function() {
+
+  cleanup();
+});
 
 $(function () {
 
