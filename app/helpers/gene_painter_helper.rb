@@ -60,7 +60,7 @@ module GenePainterHelper
   # helpers for aligned gene structures section
   def generate_text_based_output(filename)
     data = ''
-    data += '<table id="text_based_output" style="display:inline-block; white-space: nowrap; margin: 5px; margin-right: 15px; border-spacing: 0; font-size: 13px;">'
+    data += '<table id="text_based_output" style="display:inline-block; white-space: nowrap; margin-right: 15px; border-spacing: 0; font-size: 13px;">'
 
     File.open(filename, "r").each_line do |line|
       tokens = line.gsub(/\s+/, ' ').strip.split(' ')

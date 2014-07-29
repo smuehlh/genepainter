@@ -36,6 +36,8 @@ class GenePainterController < ApplicationController
   # Render start page for GenePainter
   def gene_painter
 
+    clean_up
+
     # Generate a dir in tmp to store uploaded files
     id = Helper.make_new_tmp_dir(TMP_PATH)
 
