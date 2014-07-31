@@ -1,6 +1,35 @@
-<div id='text-based' style='font-family: Courier;'>
+<div id='text-based'>
+  <div id='left-column'>
+    <div id='all-left'>
+    </div>
+    <div id='merged'>
+      <table>
+        <tr>
+          <td>>Merged</td>
+        </tr>
+      </table>
+    </div>
+  </div>
 
-   <%= javascript_tag defer: 'defer' do -%>
+  <div id='right-column'>
+    <div id='all-right' style='padding-left: 10px'>
+
+    </div>
+    <div id='merged'>
+    </div>
+  </div>
+
+
+  <%= javascript_tag defer: 'defer' do -%>
+
+    $('div#all-right').on('scroll', function() {
+      $('div#all-left').scrollTop($(this).scrollTop());
+    });
+
+    $('div#all-left').on('scroll', function() {
+      $('div#all-right').scrollTop($(this).scrollTop());
+    });
+
      function colorLastRow(colors) {
        var numberOfCells = $($('div#text-based').find('tr')[0]).children().length;
        var tmpElement = '<tr id="lastRow">';
@@ -23,7 +52,8 @@
 
       tmpElement += '</tr>';
       $($('div#text-based').find('tbody')[0]).append(tmpElement);
-     }
+    } 
+
    <% end -%>
 </div>
 
@@ -37,14 +67,6 @@
           content_tag(:span, 'Highlight unique introns', :style => 'padding-left: 5px; padding-right: 20px')
           )
       %>
-
-      <%= javascript_tag defer: 'defer' do -%>
-        $('input#highlight_unique').change(function() {
-          var styleOrNot = $(this).is(':checked');
-
-          highlightUniqIntrons(styleOrNot);
-        });
-      <% end -%>
 
       <%=
         content_tag(:div,
@@ -85,12 +107,6 @@
           } else {
             $('input#highlight_common').removeAttr('disabled');
           }
-        });
-
-        $('input#highlight_common').change(function() {
-          var styleOrNot = $(this).is(':checked');
-
-          highlightIntrons(parseInt(spinner.spinner('value')), styleOrNot);
         });
 
       <% end -%>

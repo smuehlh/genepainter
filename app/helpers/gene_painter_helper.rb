@@ -79,6 +79,39 @@ module GenePainterHelper
     return data
   end
 
+  def get_sequence_names(filename)
+    sequence_names = "<table id='sequence_names'>"
+
+    File.open(filename, "r").each_line do |line|
+      tokens = line.gsub(/\s+/, ' ').strip.split(' ')
+      sequence_names << "<tr><td>#{tokens.first}</td></tr>"
+    end
+
+    # dummy row
+    sequence_names << "<tr><td>&nbsp;</td></tr>"
+
+    sequence_names << "</table>"
+    return sequence_names
+  end
+
+  def get_table(filename, table_name)
+    table = "<table id='#{table_name}'>"
+
+    File.open(filename, "r").each_line do |line|
+      table << "<tr>"
+
+      tokens = line.gsub(/\s+/, ' ').strip.split(' ')
+      tokens[1].split(//).each do |char|
+        table << "<td>#{char}</td>"
+      end
+
+      table << "</tr>"
+    end
+
+    table << "</table>"
+    return table
+  end
+
   # Converts a svg file to png.
   # @return {string} new_name
   def convert_svg_to_png(filepath)

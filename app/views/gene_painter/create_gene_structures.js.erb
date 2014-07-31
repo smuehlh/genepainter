@@ -25,41 +25,93 @@ hide_show_waiting('hide');
 
 <% if FileTest.exists?(std_path) %>
 
-  $('div#text-based').html('');
-  $('div#text-based').append('<%= generate_text_based_output(std_path).html_safe %>');
+  $('div#left-column').children().first().html("<%= get_sequence_names(std_path).html_safe %>");
+  $('div#right-column').children().first().html("<%= get_table(std_path, 'non_intron_phase').html_safe %>");
+  $('div#right-column').children().first().append("<%= get_table(intron_phase_path, 'intron_phase').html_safe %>");
 
-  var colors = intronCountsToColors();
-  colorLastRow(colors);
+  var $non_intron_phase_table = $('table#non_intron_phase'),
+  $intron_phase_table = $('table#intron_phase');
 
-  var $textBasedTable = $('div#text-based');
+  $intron_phase_table.toggle();
 
-  $('input#show_intron_phase').change(function() {
-    var showOrNot = $(this).is(':checked');
+  // number of rows
+  var n_rows = $non_intron_phase_table[0].rows.length;
 
-    if (showOrNot) {
-      $textBasedTable.html('<%= generate_text_based_output(intron_phase_path).html_safe %>');
-    } else {
-      $textBasedTable.html('<%= generate_text_based_output(std_path).html_safe %>');
-    }
+  // number of columns
+  var allCells = $non_intron_phase_table.find('td');
+  var n_cols = allCells.length / n_rows;
 
-    colorLastRow(colors);
-  });
+  // traverse column by column
+  function traverse(cells) {
+    var intron_col_order = 0;
 
-  // Set up table's cells with classnames
-  var allCells = $('table#text_based_output').find('td');
-  var rows = $('table#text_based_output').find('tr').length;
-  var cols = allCells.length / rows;
-  for(var x = 1; x < cols; x++){
-    for (var y = 0; y < rows-1; y++) {
-      if(allCells[cols*y + x].innerText != '-') {
-        for (var z = 0; z < rows-1; z++) {
-          $(allCells[cols*z + x]).addClass('intron-col-' + (x/2 - 1));
+    for (var x = 0; x < n_cols; x++) {
+      var n_introns = 0;
+
+      for (var y = 0; y < n_rows; y++) {
+        if (cells[n_cols*y + x].innerText != "-") {
+          n_introns += 1;
+        }
+      }
+
+      // class name based on number of introns in the column
+      var class_name = "col-" + n_introns;
+
+      for (var y = 0; y < n_rows; y++) {
+        $(cells[n_cols*y + x]).addClass(class_name);
+      }
+
+      // set class names to interact with phylo tree
+      if (n_introns > 0) {
+        var class_name = "intron-col-" + intron_col_order;
+        for (var y = 0; y < n_rows; y++) {
+          $(cells[n_cols*y + x]).addClass(class_name);
         }
 
-        break;
-      };
+        intron_col_order += 1;
+      }
     }
   }
+
+  traverse(allCells);
+  traverse($intron_phase_table.find('td'));
+
+  // bind event to check boxes
+  $('input#highlight_unique').change(function() {
+    var checked = $(this).is(':checked');
+
+    if (checked) {
+      // reset
+      allCells.removeClass('highlighted');
+
+      $('td.col-1').addClass('highlighted');
+      $('input#highlight_common').prop('checked', false);
+    } else {
+      $('td.col-1').removeClass('highlighted');
+    }
+  });
+
+  $('input#highlight_common').change(function() {
+    var checked = $(this).is(':checked');
+
+    if (checked) {
+      // reset
+      allCells.removeClass('highlighted');
+
+      $('input#highlight_unique').prop('checked', false);
+    } else {
+
+    }
+  });
+
+  // show intron phase
+  $('input#show_intron_phase').change(function() {
+    var checked = $(this).is(':checked');
+
+    $intron_phase_table.toggle();
+    $non_intron_phase_table.toggle();
+  });
+
 
   // Populate graphical tab
   <% convert_svg_to_pngs %>
@@ -97,6 +149,9 @@ hide_show_waiting('hide');
 
   $('div#b_aligned_gene_structures').toggle('slow');
   $('p#t_aligned_gene_structures').toggle('slow');
+
+
+
 
   <% if File.exist?("#{Rails.root}/public/tmp/#{controller.id}-taxonomy-intron-numbers.txt") %>
 

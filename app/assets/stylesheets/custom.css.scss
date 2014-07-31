@@ -198,7 +198,7 @@ h1, h2, h3, h4, h5 {
         border-width: 0px 0px 1px 0px;
     }
     div {
-        padding-left: 5px;
+        // padding-left: 5px;
     }
 }
 
@@ -558,9 +558,33 @@ div.add_species_input {
   font-weight: bold;
 }
 
-div#data_table, #text-based, #graphical {
+div#data_table, #graphical {
   max-height: 400px;
   overflow: auto;
+}
+
+div#text-based {
+  font-family: Courier;
+  height: 320px;
+}
+
+div#left-column {
+  float: left;
+  max-height: 400px;
+  width: 150px;
+}
+
+div#all-left, #all-right {
+  max-height: 300px;
+  overflow: auto;
+}
+
+table#non_intron_phase, #intron_phase, #sequence_names {
+  border-spacing: 0;
+}
+
+div#merged {
+  padding-top: 5px;
 }
 
 // Style for data center table
@@ -621,5 +645,5 @@ ul.ui-tabs-nav.ui-helper-reset.ui-helper-clearfix.ui-widget-header.ui-corner-all
 
 // color background table
 .highlighted {
-  background-color: orange !important; 
+  background-color: orange !important;
 }
