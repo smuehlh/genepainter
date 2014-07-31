@@ -45,6 +45,22 @@ hide_show_waiting('hide');
     colorLastRow(colors);
   });
 
+  // Set up table's cells with classnames
+  var allCells = $('table#text_based_output').find('td');
+  var rows = $('table#text_based_output').find('tr').length;
+  var cols = allCells.length / rows;
+  for(var x = 1; x < cols; x++){
+    for (var y = 0; y < rows-1; y++) {
+      if(allCells[cols*y + x].innerText != '-') {
+        for (var z = 0; z < rows-1; z++) {
+          $(allCells[cols*z + x]).addClass('intron-col-' + (x/2 - 1));
+        }
+
+        break;
+      };
+    }
+  }
+
   // Populate graphical tab
   <% convert_svg_to_pngs %>
   $('img#placeholder').prop('src', '<%= "/tmp/#{controller.id}-selected-normal.png" %>?timestamp=' + new Date().getTime());
@@ -57,9 +73,7 @@ hide_show_waiting('hide');
       $('img#placeholder').prop('src', '<%= "/tmp/#{controller.id}-selected-normal.png" %>?timestamp=' + new Date().getTime());
       $('div#svg-merged').html('<%= render_svg("#{controller.id}-normal-merged.svg").delete!("\n").html_safe %>');
 
-      $('input#focus_on_common_introns').prop('disabled', true);
-    } else {
-      $('input#focus_on_common_introns').removeAttr('disabled');
+      $('input#focus_on_common_introns').prop('checked', false);
     }
   });
 
@@ -70,9 +84,7 @@ hide_show_waiting('hide');
       $('img#placeholder').prop('src', '<%= "/tmp/#{controller.id}-selected-reduced.png" %>?timestamp=' + new Date().getTime());
       $('div#svg-merged').html('<%= render_svg("#{controller.id}-reduced-merged.svg").delete!("\n").html_safe %>');
 
-      $('input#standard').prop('disabled', true);
-    } else {
-      $('input#standard').removeAttr('disabled');
+      $('input#standard').prop('checked', false);
     }
   });
 
@@ -83,9 +95,61 @@ hide_show_waiting('hide');
     $('div#placeholder').html('<%= populate_select_genes_modal.html_safe %>');
   }
 
-
-
   $('div#b_aligned_gene_structures').toggle('slow');
   $('p#t_aligned_gene_structures').toggle('slow');
+
+  <% if File.exist?("#{Rails.root}/public/tmp/#{controller.id}-taxonomy-intron-numbers.txt") %>
+
+    // Display phylotree
+    $('p#t_phylotree').toggle('slow');
+    $('div#b_phylotree').toggle('slow');
+
+    $('div#svg_placeholder').html('<%= render_svg("#{controller.id}-tree.svg").delete!("\n").html_safe %>');
+
+    var intron_numbers = $('<div/>').html('<%= intron_numbers %>').text();
+    var obj = JSON.parse(intron_numbers.replace(/=>/g, ':'));
+
+    function colorize(cells) {
+      _.each(cells, function(cell) {
+        $(cell).addClass('highlighted');
+      });
+    }
+
+    function resetTable() {
+      $('.highlighted').removeClass('highlighted');
+    }
+
+    function resetPhylotree() {
+      $('.taxon').removeAttr('fill');
+      $('.taxon').removeAttr('style');
+    }
+
+
+    $('.taxon').click(function() {
+
+      resetPhylotree();
+      resetTable();
+
+      this.setAttribute('fill', 'blue');
+      this.setAttribute('style', 'font-size: 14px; font-weight: bold');
+
+      var textTokens = this.innerHTML.split(" ");
+
+      if (textTokens.length > 1) {
+        textTokens.pop();
+        textTokens.pop();
+        textTokens.pop();
+      }
+
+      var nodeName = textTokens.toString().replace(/,/g, " ");
+
+      _.each(obj[nodeName], function(element) {
+        colorize($("." + element));
+      });
+
+
+
+    });
+  <% end %>
 
 <% end %>

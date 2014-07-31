@@ -612,3 +612,14 @@ ul.ui-tabs-nav.ui-helper-reset.ui-helper-clearfix.ui-widget-header.ui-corner-all
     background: #ededed; /* to better keep track of the line the mouse is over */
     color:black;
 }
+
+.taxon:hover {
+  font-size: 15px !important;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+// color background table
+.highlighted {
+  background-color: orange !important; 
+}

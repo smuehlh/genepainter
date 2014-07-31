@@ -29,18 +29,27 @@
   var $selectAll = $('input#select_all'),
     $deselectAll = $('input#deselect_all');
 
+  $selectAll.prop('checked', true);
+
   $deselectAll.change(function() {
     var analyzeCheckBoxes = $('div#data_table').find('input#analyze'),
       viewCheckBoxes = $('div#data_table').find('input#view');
 
-    checkAll($.merge(analyzeCheckBoxes, viewCheckBoxes), false);
+    <!-- checkAll($.merge(analyzeCheckBoxes, viewCheckBoxes), false); -->
+
+    var checkedOrNot = $(this).is(':checked');
+    $selectAll.prop('checked', false);
+
   });
 
   $selectAll.change(function() {
     var analyzeCheckBoxes = $('div#data_table').find('input#analyze'),
       viewCheckBoxes = $('div#data_table').find('input#view');
 
-    checkAll($.merge(analyzeCheckBoxes, _.first(viewCheckBoxes, 20)), true);
+    <!-- checkAll($.merge(analyzeCheckBoxes, _.first(viewCheckBoxes, 20)), true); -->
+
+    var checkedOrNot = $(this).is(':checked');
+    $deselectAll.prop('checked', false);
   });
 
 <% end -%>

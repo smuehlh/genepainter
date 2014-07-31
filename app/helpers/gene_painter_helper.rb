@@ -122,4 +122,20 @@ module GenePainterHelper
     table << '</table>'
   end
 
+  def intron_numbers
+    map = {}
+    File.open("#{Rails.root}/public/tmp/#{controller.id}-taxonomy-intron-numbers.txt", "r").each_line do |line|
+      tokens = line.strip.split(':')
+
+      class_names = []
+      tokens[1].split(',').each do |number|
+        class_names.push("intron-col-#{number}")
+      end
+
+      map[tokens[0]] = class_names
+    end
+
+    return map
+  end
+
 end
