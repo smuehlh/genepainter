@@ -3,18 +3,6 @@ hide_show_waiting('hide');
 <% @new_genes.each do |gene| %>
   <% basename = gene.split('.').first%>
 
-  // Count number of checks in view column first,
-  // should be less than 20
-  var count = _.filter($('input#view'), function(item) {
-    return $(item).is(':checked');
-  }).length;
-
-  if (count < 20) {
-    $(_.filter($('input#view'), function(item) {
-      return $(item).attr('data') == '<%= basename %>';
-    })[0]).removeAttr('disabled').prop('checked', true);
-  }
-
   // Update gene status
   $('span#<%= basename %>').text('complete').css('color', 'green').css('font-weight', 'bold');
   $('span#<%= basename %>').parent().next().html('');
@@ -181,12 +169,12 @@ hide_show_waiting('hide');
     }
   });
 
-  if (_.filter($('input#view'), function(item) {
-    return ! $(item).is(':disabled');
-  }).length > 20) {
-    $('div#select_genes').css('display', 'inline');
-    $('div#placeholder').html('<%= populate_select_genes_modal.html_safe %>');
-  }
+  // if (_.filter($('input#view'), function(item) {
+  //   return ! $(item).is(':disabled');
+  // }).length > 20) {
+  //   $('div#select_genes').css('display', 'inline');
+  //   $('div#placeholder').html('<%= populate_select_genes_modal.html_safe %>');
+  // }
 
   $('div#b_aligned_gene_structures').toggle('slow');
   $('p#t_aligned_gene_structures').toggle('slow');

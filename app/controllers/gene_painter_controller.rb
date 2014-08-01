@@ -201,7 +201,6 @@ class GenePainterController < ApplicationController
 
   def create_gene_structures
     missing_gene_structures = params[:data] == nil ? [] : params[:data]
-    selected_genes = params[:data] = nil ? [] : params[:genes]
 
     f_alignment = Dir[@@f_dest + '/*.fas'].first
     d_gene_structures = File.join(@@f_dest, 'gene_structures')
@@ -234,6 +233,12 @@ class GenePainterController < ApplicationController
       @retVal = system "ruby #{f_gene_painter} -i #{f_alignment} -p #{d_gene_structures} --outfile #{prefix} --path-to-output #{d_output} --intron-phase --phylo --spaces --alignment --svg --svg-format both --svg-merged --svg-nested --statistics --intron-numbers-per-taxon --taxonomy-to-fasta #{f_species_to_fasta} --tree --taxonomy #{f_taxonomy_list}"
     end
 
+    genes_to_show = Dir["#{d_gene_structures}/*.yaml"].take(20)
+    genes_to_show.map! do |gene|
+      File.basename(gene, '.yaml')
+    end
+
+    logger.debug(genes_to_show.inspect)
     logger.debug("Return from sys call: " + @retVal.to_s)
 
     if @retVal
@@ -241,10 +246,10 @@ class GenePainterController < ApplicationController
         # Create images for selected genes only
         build_svg_by_genestructs("#{Rails.root}/public/tmp/#{@@id}-normal.svg",
           "#{Rails.root}/public/tmp/#{@@id}-selected-normal.svg",
-          selected_genes)
+          genes_to_show)
         build_svg_by_genestructs("#{Rails.root}/public/tmp/#{@@id}-reduced.svg",
           "#{Rails.root}/public/tmp/#{@@id}-selected-reduced.svg",
-          selected_genes)
+          genes_to_show)
       else
         File.rename("#{Rails.root}/public/tmp/#{@@id}-normal.svg",
           "#{Rails.root}/public/tmp/#{@@id}-selected-normal.svg")

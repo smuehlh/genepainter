@@ -3,7 +3,6 @@
     <thead>
       <tr>
         <th scope='col'>Analyze</th>
-        <th scope='col'>View</th>
         <th scope='col'>Sequence Name</th>
         <th scope='col'>Gene Structure</th>
         <th scope='col'>Generate Gene Structure</th>
@@ -32,21 +31,18 @@
   $selectAll.prop('checked', true);
 
   $deselectAll.change(function() {
-    var analyzeCheckBoxes = $('div#data_table').find('input#analyze'),
-      viewCheckBoxes = $('div#data_table').find('input#view');
+    var analyzeCheckBoxes = $('div#data_table').find('input#analyze');
 
-    <!-- checkAll($.merge(analyzeCheckBoxes, viewCheckBoxes), false); -->
+    checkAll(analyzeCheckBoxes, false);
 
     var checkedOrNot = $(this).is(':checked');
     $selectAll.prop('checked', false);
-
   });
 
   $selectAll.change(function() {
-    var analyzeCheckBoxes = $('div#data_table').find('input#analyze'),
-      viewCheckBoxes = $('div#data_table').find('input#view');
+    var analyzeCheckBoxes = $('div#data_table').find('input#analyze');
 
-    <!-- checkAll($.merge(analyzeCheckBoxes, _.first(viewCheckBoxes, 20)), true); -->
+    checkAll(analyzeCheckBoxes, true);
 
     var checkedOrNot = $(this).is(':checked');
     $deselectAll.prop('checked', false);
@@ -91,20 +87,6 @@
       }
     }
 
-    /** Returns genes that are checked to
-     * view in the graphical representation tab.
-     *
-     * This calls use underscorejs' filter() method to
-     * get all inputs that are checked, then pipe
-     * them to the map() method to extract the data
-     * attributes.
-     */
-    var selected_genes = _.filter($('div#data_table').find('input#view'), function(item) {
-        return $(item).is(':checked');
-      }).map(function(item) {
-          return $(item).attr('data');
-        });
-
     if (missingGeneStructures.length == 0 && $('span#uploaded_gene_structures').html() == 'No files uploaded') {
       showErrorModal();
     } else {
@@ -112,7 +94,7 @@
       $.ajax({
         type: 'POST',
         url: '/create_gene_structures',
-        data: {'data': missingGeneStructures, 'genes': selected_genes},
+        data: {'data': missingGeneStructures},
         dataType: 'script'
       });
 

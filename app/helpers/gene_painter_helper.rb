@@ -35,7 +35,6 @@ module GenePainterHelper
     seq_names.each { |name|
       table_body += '<tr>'
         table_body += '<td>' + check_box_tag("analyze", nil, true) + '</td>'
-        table_body += "<td>" + check_box_tag("view", nil, false, :data => name, :disabled => true) + '</td>'
         table_body += '<td style="text-align: left">' + name + '</td>'
 
         # All gene structures are missing if no files are uploaded
