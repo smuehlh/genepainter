@@ -26,7 +26,6 @@
   <%= javascript_tag defer: 'defer' do -%>
 
     // simultaneously scroll up/down, left/right
-
     $('div#all-right').on('scroll', function() {
       $('div#all-left').scrollTop($(this).scrollTop());
       $('div#merged').scrollLeft($(this).scrollLeft());
@@ -35,36 +34,6 @@
     $('div#all-left').on('scroll', function() {
       $('div#all-right').scrollTop($(this).scrollTop());
     });
-
-
-
-
-     /* function colorLastRow(colors) {
-       var numberOfCells = $($('div#text-based').find('tr')[0]).children().length;
-       var tmpElement = '<tr id="lastRow">';
-
-       for (var i = 0; i < numberOfCells; i++) {
-         if (i > 0) {
-           // build css color, e.g.: rgb(255, 255, 255);
-           var rgbVal;
-           if (colors[i-1].red == 0 && colors[i-1].green == 51 && colors[i-1].blue == 255) {
-             rgbVal = 'rgb(255, 255, 255)';
-           } else {
-             rgbVal = 'rgb(' + colors[i-1].red + ', ' + colors[i-1].green + ', ' + colors[i-1].blue + ')';
-           }
-
-           tmpElement += '<td style="background-color: ' + rgbVal + '">&nbsp;</td>';
-         } else {
-           tmpElement += '<td>&nbsp;Merged</td>';
-         }
-       }
-
-      tmpElement += '</tr>';
-      $($('div#text-based').find('tbody')[0]).append(tmpElement);
-    }  */
-
-
-
 
    <% end -%>
 </div>
