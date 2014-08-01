@@ -57,28 +57,6 @@ module GenePainterHelper
     return get_status_of_gene_structure(f_path).to_s
   end
 
-  # helpers for aligned gene structures section
-  def generate_text_based_output(filename)
-    data = ''
-    data += '<table id="text_based_output" style="display:inline-block; white-space: nowrap; margin-right: 15px; border-spacing: 0; font-size: 13px;">'
-
-    File.open(filename, "r").each_line do |line|
-      tokens = line.gsub(/\s+/, ' ').strip.split(' ')
-      data += '<tr>'
-      data += '<td>' + tokens[0] + '</td>'
-
-      tokens[1].split(//).each do |char|
-        data += '<td>' + char + '</td>'
-      end
-
-      data += '</tr>'
-    end
-
-    data += '</table>'
-
-    return data
-  end
-
   def get_sequence_names(filename)
     sequence_names = "<table id='sequence_names'>"
 

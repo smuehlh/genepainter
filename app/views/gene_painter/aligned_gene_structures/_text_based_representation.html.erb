@@ -15,22 +15,31 @@
     <div id='all-right' style='padding-left: 10px'>
 
     </div>
-    <div id='merged'>
+    <div id='merged' style='overflow: hidden; padding-left: 10px'>
+      <table id='merged'>
+
+      </table>
     </div>
   </div>
 
 
   <%= javascript_tag defer: 'defer' do -%>
 
+    // simultaneously scroll up/down, left/right
+
     $('div#all-right').on('scroll', function() {
       $('div#all-left').scrollTop($(this).scrollTop());
+      $('div#merged').scrollLeft($(this).scrollLeft());
     });
 
     $('div#all-left').on('scroll', function() {
       $('div#all-right').scrollTop($(this).scrollTop());
     });
 
-     function colorLastRow(colors) {
+
+
+
+     /* function colorLastRow(colors) {
        var numberOfCells = $($('div#text-based').find('tr')[0]).children().length;
        var tmpElement = '<tr id="lastRow">';
 
@@ -52,7 +61,10 @@
 
       tmpElement += '</tr>';
       $($('div#text-based').find('tbody')[0]).append(tmpElement);
-    } 
+    }  */
+
+
+
 
    <% end -%>
 </div>

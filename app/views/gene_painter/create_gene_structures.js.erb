@@ -112,6 +112,43 @@ hide_show_waiting('hide');
     $non_intron_phase_table.toggle();
   });
 
+  // merged
+  var tMerged = $('table#merged')[0];
+  var row, cell;
+
+  row = tMerged.insertRow(-1);
+
+  // Visible Spectrum
+  var start = 450, // nm blue
+    end = 780,   // nm red
+    total = end - start + 1;
+
+  var wavelength, color;
+
+  for (var i = 0; i < n_cols; i++) {
+    cell = row.insertCell(-1);
+
+    // set text of the cell based on number of introns in the column
+    var nIntrons = parseInt(allCells[i].className.split(' ')[0].split('-')[1])
+
+    //cell.setAttribute('class', allCells[i].className.split(' ')[0]);
+    cell.innerText = nIntrons > 0 ? '|' : '-';
+
+    if (nIntrons == 0) {
+      cell.setAttribute('style', 'background-color: #F5F5F5');
+    } else {
+      wavelength = (nIntrons * total) / n_rows + start;
+      color = Math.nmToRGB(wavelength);
+
+      cell.setAttribute('style', 'background-color: rgb(' +  color.red + ', ' + color.green + ', ' + color.blue + ')');
+    }
+  }
+
+  cell = row.insertCell(-1); // insert dummy cell
+  cell.innerHTML = "&nbsp;";
+
+  cell = row.insertCell(-1); // insert dummy cell
+  cell.innerHTML = "&nbsp;";
 
   // Populate graphical tab
   <% convert_svg_to_pngs %>
