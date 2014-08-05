@@ -2,12 +2,47 @@
 
 # this method builds a new SVG file containing only selected genestructures
 # @path_to_complete_svg [String] path to SVG file containing all data
-# @path_to_reduced_svg [String] path to new SVG file containing only selected genestructures
+# @path_to_reduced_svg_genenames [String] path to new SVG file containing only names of selected genes
+# @path_to_reduced_svg_genestructures [String] path to new SVG file containing only structures of selected genes; not starting at left -border!!
+# @path_to_reduced_svg_legend [String] path to new SVG file containing only legend
 # @selected_genestructs [Array] Fasta headers that should be included in new SVG
-def build_svg_by_genestructs(path_to_complete_svg, path_to_reduced_svg, selected_genestructs)
-	header, footer, all_genestruct_by_name = read_genestructure_svg(path_to_complete_svg)
-	reduced_svg = reduce_genestructure_svg(header, footer, all_genestruct_by_name, selected_genestructs)
-	write_genestructure_svg(reduced_svg, path_to_reduced_svg)
+# returns true if SVG files were generated, false otherwise
+def build_svg_by_genestructs(path_to_complete_svg, 
+		path_to_reduced_svg_genenames, path_to_reduced_svg_genestructures, path_to_reduced_svg_legend,
+		selected_genestructs
+		)
+
+	@svg_params = get_svg_parameters_from_genepainter
+
+	header, footer, all_genestruct_by_name, legend_genestruct = read_genestructure_svg(path_to_complete_svg)
+
+	selected_genestruct_by_name = reduce_genestruct_by_name_to_selected_ones(all_genestruct_by_name, selected_genestructs)
+
+	genenames, genestructures, legend = create_genestruct_names_legend_svg(
+		selected_genestruct_by_name, legend_genestruct, header, footer )
+
+	write_svg(genenames, path_to_reduced_svg_genenames)
+	write_svg(genestructures, path_to_reduced_svg_genestructures)
+	write_svg(legend, path_to_reduced_svg_legend)
+
+	return true
+
+rescue NoMethodError, TypeError, NameError, Errno::ENOENT => exp
+	return false
+end
+
+# this method gets the parameters used by genepainters'svg class
+# returns [Hash] Parameters describing values needed to redraw (and fix sizes and positions) SVG 
+def get_svg_parameters_from_genepainter
+
+	require "/fab8/server/db_scripts/gene_painter_new/gene_painter/lib/svg.rb"
+
+	return { 
+		x_pos_genename: Svg.parameters[:x_pos_genename],
+		x_pos_genestruct: Svg.parameters[:distance_genename_to_gene],
+		gene_height: Svg.parameters[:height_per_gene],
+		legend_height: Svg.parameters[:height_per_gene] * Svg.ratios[:legend_to_gene] 
+	}
 end
 
 # this method reads in a nested svg file and extracts the nested elements
@@ -15,9 +50,10 @@ end
 # returns [String] SVG header
 # returns [String] SVG footer
 # returns [Hash] Keys: first text in nested element, value: the complete nested element, as array
+# returns [Array]: SVG nested element of legend
 def read_genestructure_svg(path_to_svg)
 
-	genestruct_by_name = {}
+	genestruct_by_name, legend_genestruct = {}, []
 	current_name = ""
 	tmp = []
 	header, footer = "", ""
@@ -72,83 +108,96 @@ def read_genestructure_svg(path_to_svg)
 		end
 	end
 
-	return header, footer, genestruct_by_name
+	legend_genestruct = genestruct_by_name.delete("Legend") { |ele| [] } # returns empty array if no "legend" key found
+
+	return header, footer, genestruct_by_name, legend_genestruct
 end
 
-# this method creates an SVG as array consiting of selected (nested) elements only
-# @header [String] SVG header
-# @footer [String] SVG footer
-# @all_genestruct_by_name [Hash] nested SVG elements, keys: first text in nested element
-# @selected_names_for_output [Array] gene names (should be keys in all_genestruct_by_name)
-# returns [Array] SVG containing only selected_names_for_output
-def reduce_genestructure_svg(header, footer, all_genestruct_by_name, selected_names_for_output)
-	svg = []
+# this method reduces genestructures to selected ones
+# @all_genestruct_by_name [Hash] SVG elements associated with gene-names
+# @selected_names_for_output [Array] List of gene-names
+# returns [Hash] SVG elements associated with gene-names, reduced to @selected_names_for_output
+def reduce_genestruct_by_name_to_selected_ones(all_genestruct_by_name, selected_names_for_output)
+	all_genestruct_by_name.select { |name, svg_data| selected_names_for_output.include?(name) }
+end
 
-	height_per_genestruct = calc_height_per_genestructure(all_genestruct_by_name)
-	height_legend = calc_legend_height(all_genestruct_by_name["Legend"], header)
-	total_height = selected_names_for_output.size * height_per_genestruct + height_legend
+# this method splits genestructures reduced to selected ones (!) into svgs for gene-name, gene-structures, and legend
+# @genestructures_by_name [Hash] SVG elements associated with gene-names; not containing Legend
+# @legend [Array] SVG elements associated with legend
+# @header [String] SVG header (original file); height info needs to be adjusted
+# @footer [String] SVG footer (original file)
+# returns [Array] all SVG elements (including header and footer) for gene-names; starts at left border
+# returns [Array] all SVG elements (including header and footer) for gene-structures; does not start at left border
+# returns [Array] all SVG elemetns (including header and footer) for legend; starts at left border
+def create_genestruct_names_legend_svg(genestructures_by_name, legend, header, footer )
+	svg_names, svg_structs, svg_legend = [], [], []
 
-	svg.push( set_height(header, total_height) )
+	height_data = genestructures_by_name.size * @svg_params[:gene_height]
+	height_legend = @svg_params[:legend_height]
+
+	# split gene structures into names and structures, fix x- and y-positions
 	y_pos = 0.0
-	selected_names_for_output.each do |name|
-		svg_data = all_genestruct_by_name[name]
-		if svg_data then 
-			svg.push( set_y_pos(svg_data, y_pos) )
-			y_pos += height_per_genestruct
-		end
-	end
-	svg.push( set_y_pos(all_genestruct_by_name["Legend"], y_pos) )
-	svg.push( footer )
+	genestructures_by_name.each do |name, svg_data|
+		data_fixed_y_pos = set_y_pos( svg_data, y_pos)
 
-	return svg
+		# split svg_data into name and structure, fix x-position
+		data_fixed_y_pos.each do |svg_ele|
+
+			if svg_ele.start_with?("<svg") then 
+				# svg elements for nested structure: must go into names and structs SVG
+				name_ele_fixed_x_pos = set_x_pos(svg_ele, @svg_params[:x_pos_genename] * -1)
+				struct_ele_fixed_x_pos = set_x_pos(svg_ele, @svg_params[:x_pos_genestruct] * -1)
+				svg_names.push name_ele_fixed_x_pos
+				svg_structs.push struct_ele_fixed_x_pos
+
+			elsif svg_ele.start_with?("</svg")
+				svg_names.push svg_ele
+				svg_structs.push svg_ele
+
+			elsif svg_ele.start_with?("<text") 
+				# text element: goes only in names SVG; no need to fix x-pos; offset was already set in nested-svg header
+				svg_names.push svg_ele
+
+			else
+				# other element: goes only in structs SVG
+				# no need to fix x-position, because offset was already set in nested-SVG header
+				svg_structs.push svg_ele
+
+			end
+					
+		end
+
+		y_pos += @svg_params[:gene_height]
+	end
+
+	# legend, fix y-position
+	if legend.any? then 
+		y_pos = 0.0
+		svg_legend.push set_y_pos(legend, y_pos)
+	end
+
+	# add headers and footers to SVG arrays
+	data_header_fixed_height = set_height(header, height_data)
+	legend_header_fixed_height = set_height(header, height_legend)
+	svg_names.unshift( data_header_fixed_height )
+	svg_structs.unshift( data_header_fixed_height )
+	svg_legend.unshift( legend_header_fixed_height )
+
+	svg_names.push( footer )
+	svg_structs.push( footer )
+	svg_legend.push( footer )
+
+	return svg_names, svg_structs, svg_legend
+
 end
+
 # this method writes an array to file
 # @svg [Array] data to write
 # @output_path [String] Path to output file
-def write_genestructure_svg(svg, output_path)
+def write_svg(svg, output_path)
 	IO.write( output_path, svg.join("\n"), :mode => "w" )
 end
-# this method calculates the height (y-axis in SVG) per genestructure (i.e. per nested SVG element)
-# @genestruct_by_name [Hash] all nested elements
-# returns [FixNum] height per genestrucuture
-def calc_height_per_genestructure(genestruct_by_name)
-	first_svg_pos, second_svg_pos = nil, nil
-	legend_pos = nil
-	genestruct_by_name.each do |name, svg_data|
-		if name == "Legend" then 
-			# nothing to do
-		else
-			svg_pos = get_y_pos(svg_data)
-			if ! first_svg_pos then 
-				first_svg_pos = svg_pos
-			elsif first_svg_pos && ! second_svg_pos then 
-				second_svg_pos = svg_pos
-			elsif svg_pos < first_svg_pos then 
-				second_svg_pos = first_svg_pos
-				first_svg_pos = svg_pos
-			elsif  svg_pos > first_svg_pos && svg_pos < second_svg_pos then 
-				second_svg_pos = svg_pos
-			end	
-		end			
-	end
-	return second_svg_pos - first_svg_pos
-end
-# this method calculated the height of the legend by substracting the start height position from the total height
-# @svg_data [Array] a nested element, containing Legend data
-# @header [String] the SVG header
-# returns [FixNum] height of legend
-def calc_legend_height(svg_data, header)
-	start_heigth = get_y_pos(svg_data)
-	total_height = get_height(header)
-	return total_height - start_heigth
-end
-# this method returns the y-axis position of a nested SVG element
-# @svg_data [Array] nested svg element
-# returns [FixNum] y-axis position
-def get_y_pos(svg_data)
-	y_pos = svg_data.first.match(/y=\"([\.\d]+)\"/)[1] 
-	return y_pos.to_f
-end
+
 # this method changes the y-axis position of a nested SVG element
 # @svg_data [Array] nested svg element
 # @y_pos [FixNum] new y-axis position
@@ -158,12 +207,13 @@ def set_y_pos(svg_data, y_pos)
 	new_first_line = first_line.sub(/y=\"[\.\d]+\"/, "y=\"#{y_pos}\"")
 	return svg_data.unshift( new_first_line )
 end
-# this method returns the height of the SVG 
-# @header [String] SVG header element
-# returns [FixNum] height of SVG
-def get_height(header)
-	y_pos = header.match(/height=\"([\.\d]+)\"/)[1]
-	return y_pos.to_f
+# this method changes the x-axis position of a nested SVG element
+# @svg_ele [String] nested SVG element, should not have a x-value set
+# @x_pos [FixNum] new x-axis position
+# returns [String] nested SVG element with new x-axis position
+def set_x_pos(svg_ele, x_pos)
+	new_svg_ele = svg_ele.sub("<svg", "<svg x=\"#{x_pos}\"")
+	return new_svg_ele
 end
 # this method changes the height of the SVG, also in viewbox
 # @header [String] SVG header element
@@ -175,3 +225,5 @@ def set_height(header, y_pos)
 	new_viewbox = viewbox.sub(/\s[\.\d]+$/, " #{y_pos}")
 	return new_header.sub(viewbox, new_viewbox)
 end
+
+

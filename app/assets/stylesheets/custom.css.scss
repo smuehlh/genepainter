@@ -53,8 +53,8 @@ a {
     }
 }
 
-a.external { background: url("icons/link.png") no-repeat center right; text-decoration:underline; padding-right:18px; }
-a.internal { background: url("icons/anchor.png") no-repeat center right; text-decoration:underline; padding-right:18px; }
+a.external { background: image-url("icons/link.png") no-repeat center right; text-decoration:underline; padding-right:18px; }
+a.internal { background: image-url("icons/anchor.png") no-repeat center right; text-decoration:underline; padding-right:18px; }
 
 img.help {
   cursor: pointer;
@@ -79,7 +79,7 @@ h1, h2, h3, h4, h5 {
 #logo {
     height:70px;
     width: 900px;
-    background: url("layout/genepainter-banner-v3.png") no-repeat scroll right top transparent;
+    background: image-url("layout/genepainter-banner-v3.png") no-repeat scroll right top transparent;
 }
 
 #nav, ul{
@@ -574,7 +574,7 @@ div#left-column {
   width: 150px;
 }
 
-div#all-left, #all-right {
+div#all-left, #all-right, #genestructures, #genestructures-merged, #genenames, #genenames-merged {
   max-height: 300px;
   overflow: auto;
 }

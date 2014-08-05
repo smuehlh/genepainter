@@ -108,12 +108,22 @@ module GenePainterHelper
 
   def render_svg(filename)
     svg_path = File.join("#{Rails.root}/public/tmp", filename)
-    return File.open(svg_path, 'rb').read
+    return File.open(svg_path, 'rb').read.delete!("\n")
+  end
+
+  def render_img(filename, class_name)
+    return image_tag("/tmp/#{controller.id}-#{filename}", :class => class_name)
   end
 
   def convert_svg_to_pngs
-    convert_svg_to_png("#{Rails.root}/public/tmp/#{controller.id}-selected-normal.svg")
-    convert_svg_to_png("#{Rails.root}/public/tmp/#{controller.id}-selected-reduced.svg")
+    convert_svg_to_png("#{Rails.root}/public/tmp/#{controller.id}-genenames-normal.svg")
+    convert_svg_to_png("#{Rails.root}/public/tmp/#{controller.id}-genestructures-normal.svg")
+
+    convert_svg_to_png("#{Rails.root}/public/tmp/#{controller.id}-genenames-reduced.svg")
+    convert_svg_to_png("#{Rails.root}/public/tmp/#{controller.id}-genestructures-reduced.svg")
+
+    convert_svg_to_png("#{Rails.root}/public/tmp/#{controller.id}-legend-normal.svg")
+    convert_svg_to_png("#{Rails.root}/public/tmp/#{controller.id}-legend-reduced.svg")
   end
 
   def populate_select_genes_modal

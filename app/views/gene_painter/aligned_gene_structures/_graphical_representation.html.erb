@@ -1,11 +1,40 @@
 <div id='graphical'>
-  <img id='placeholder'>
-
-  </img>
-
-  <div id='svg-merged'>
-
+  <div id='left-column' style='width: 125px'>
+    <div id='genenames' style='overflow: hidden'>
+    </div>
   </div>
+
+  <div id='right-column'>
+    <div id='genestructures' style='overflow: hidden'>
+    </div>
+  </div>
+
+  <div id='legend' style='overflow: hidden'>
+  </div>
+
+  <div id='left-column' style='width: 125px'>
+    <div id='genenames-merged' style='overflow: hidden'>
+    </div>
+  </div>
+
+  <div id='right-column'>
+    <div id='genestructures-merged'>
+    </div>
+  </div>
+
+  <%= javascript_tag defer: 'defer' do -%>
+
+    // simultaneously scroll up/down, left/right
+    $('div#genestructures').on('scroll', function() {
+      $('div#genestructures-merged').scrollLeft($(this).scrollLeft());
+    });
+
+    $('div#genestructures-merged').on('scroll', function() {
+      $('div#genestructures').scrollLeft($(this).scrollLeft());
+    });
+
+   <% end -%>
+
 </div>
 
 <h4>View Options</h4>
