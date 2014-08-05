@@ -189,6 +189,11 @@ hide_show_waiting('hide');
     }
   })
 
+  <% if Dir["#{controller.f_gene_structures}/*.yaml"].length > 20 %>
+    $('div#select_genes').css('display', 'inline');
+    $('div#placeholder').html('<%= populate_select_genes_modal.html_safe %>');
+  <% end %>
+
   $('div#b_aligned_gene_structures').toggle('slow');
   $('p#t_aligned_gene_structures').toggle('slow');
 
@@ -199,7 +204,7 @@ hide_show_waiting('hide');
     $('p#t_phylotree').toggle('slow');
     $('div#b_phylotree').toggle('slow');
 
-    $('div#svg_placeholder').html('<%= render_svg("#{controller.id}-tree.svg").delete!("\n").html_safe %>');
+    $('div#svg_placeholder').html('<%= render_svg("#{controller.id}-tree.svg").html_safe %>');
 
     var intron_numbers = $('<div/>').html('<%= intron_numbers %>').text();
     var obj = JSON.parse(intron_numbers.replace(/=>/g, ':'));
@@ -214,7 +219,6 @@ hide_show_waiting('hide');
       $('.taxon').removeAttr('fill');
       $('.taxon').removeAttr('style');
     }
-
 
     $('.taxon').click(function() {
 
@@ -233,12 +237,27 @@ hide_show_waiting('hide');
       }
 
       var nodeName = textTokens.toString().replace(/,/g, " ");
+      var tmp = [];
 
       _.each(obj[nodeName], function(element) {
         colorize($("." + element));
+
+        tmp.push(_.last(element.split("-")));
       });
 
+      $('rect').removeClassSVG('fill-grey');
 
+      if (tmp.length) {
+
+        $('.background').addClassSVG('fill-grey');
+
+        _.each($("rect"), function(rect) {
+
+          if (!_.contains(tmp, rect.getAttribute('class').trim().split('_')[1])) {
+            $(rect).addClassSVG('fill-grey');
+          }
+        });
+      }
 
     });
   <% end %>
