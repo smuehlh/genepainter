@@ -1,3 +1,12 @@
 <% convert_svg_to_pngs %>
 
-$('img#placeholder').prop('src', '<%= "/tmp/#{controller.id}-selected-normal.png" %>?timestamp=' + new Date().getTime());
+$("div#graphical").find("div#genenames").html('');
+$("div#graphical").find("div#genenames").append('<%= render_img("genenames-normal.png?timestamp=#{Time.now.to_f}", "normal").html_safe %>');
+$("div#graphical").find("div#genenames").append('<%= render_img("genenames-reduced.png?timestamp=#{Time.now.to_f}", "reduced").html_safe %>');
+
+$("div#graphical").find("div#genestructures").html('');
+$("div#graphical").find("div#genestructures").append('<%= render_img("genestructures-normal.png?timestamp=#{Time.now.to_f}", "normal").html_safe %>');
+$("div#graphical").find("div#genestructures").append('<%= render_img("genestructures-reduced.png?timestamp=#{Time.now.to_f}", "reduced").html_safe %>');
+
+$($("img.reduced")[0]).toggle();
+$($("img.reduced")[1]).toggle();

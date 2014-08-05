@@ -137,6 +137,7 @@ def create_genestruct_names_legend_svg(genestructures_by_name, legend, header, f
 
 	# split gene structures into names and structures, fix x- and y-positions
 	y_pos = 0.0
+
 	genestructures_by_name.each do |name, svg_data|
 		data_fixed_y_pos = set_y_pos( svg_data, y_pos)
 
@@ -147,6 +148,7 @@ def create_genestruct_names_legend_svg(genestructures_by_name, legend, header, f
 				# svg elements for nested structure: must go into names and structs SVG
 				name_ele_fixed_x_pos = set_x_pos(svg_ele, @svg_params[:x_pos_genename] * -1)
 				struct_ele_fixed_x_pos = set_x_pos(svg_ele, @svg_params[:x_pos_genestruct] * -1)
+
 				svg_names.push name_ele_fixed_x_pos
 				svg_structs.push struct_ele_fixed_x_pos
 

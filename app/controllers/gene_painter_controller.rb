@@ -241,23 +241,6 @@ class GenePainterController < ApplicationController
     logger.debug(genes_to_show.inspect)
     logger.debug("Return from sys call: " + @retVal.to_s)
 
-    # if @retVal
-    #   if Dir[f_gene_structures + '/*.yaml'].length > 20
-    #     # Create images for selected genes only
-    #     build_svg_by_genestructs("#{Rails.root}/public/tmp/#{@@id}-normal.svg",
-    #       "#{Rails.root}/public/tmp/#{@@id}-selected-normal.svg",
-    #       genes_to_show)
-    #     build_svg_by_genestructs("#{Rails.root}/public/tmp/#{@@id}-reduced.svg",
-    #       "#{Rails.root}/public/tmp/#{@@id}-selected-reduced.svg",
-    #       genes_to_show)
-    #   else
-    #     File.rename("#{Rails.root}/public/tmp/#{@@id}-normal.svg",
-    #       "#{Rails.root}/public/tmp/#{@@id}-selected-normal.svg")
-    #     File.rename("#{Rails.root}/public/tmp/#{@@id}-reduced.svg",
-    #       "#{Rails.root}/public/tmp/#{@@id}-selected-reduced.svg")
-    #   end
-    # end
-
     build_svg_by_genestructs(build_output_path("normal.svg"),
         build_output_path("genenames-normal.svg"),
         build_output_path("genestructures-normal.svg"),
@@ -288,17 +271,23 @@ class GenePainterController < ApplicationController
       end
   end
 
-  # def build_svg
-  #   gene_structures = params[:data] == nil ? [] : params[:data]
-  #
-  #   # Create images for selected genes only
-  #   build_svg_by_genestructs("#{Rails.root}/public/tmp/#{@@id}-normal.svg",
-  #     "#{Rails.root}/public/tmp/#{@@id}-selected-normal.svg",
-  #     gene_structures)
-  #   build_svg_by_genestructs("#{Rails.root}/public/tmp/#{@@id}-reduced.svg",
-  #     "#{Rails.root}/public/tmp/#{@@id}-selected-reduced.svg",
-  #     gene_structures)
-  # end
+  def build_svg
+    genes_to_show = params[:data] == nil ? [] : params[:data]
+
+    # Create images for selected genes only
+    build_svg_by_genestructs(build_output_path("normal.svg"),
+        build_output_path("genenames-normal.svg"),
+        build_output_path("genestructures-normal.svg"),
+        build_output_path("legend-normal.svg"),
+        genes_to_show)
+
+    build_svg_by_genestructs(build_output_path("reduced.svg"),
+        build_output_path("genenames-reduced.svg"),
+        build_output_path("genestructures-reduced.svg"),
+        build_output_path("legend-reduced.svg"),
+        genes_to_show)
+
+  end
 
   def build_output_path(filename)
     return "#{Rails.root}/public/tmp/#{@@id}-#{filename}"

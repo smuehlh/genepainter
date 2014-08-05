@@ -145,10 +145,6 @@ hide_show_waiting('hide');
   // Populate graphical view
   <% convert_svg_to_pngs %>
 
-  function toggleImages() {
-    $('div#graphical').find('img').toggle();
-  }
-
   $("div#graphical").find("div#genenames").append('<%= render_img("genenames-normal.png", "normal").html_safe %>')
   $("div#graphical").find("div#genenames").append('<%= render_img("genenames-reduced.png", "reduced").html_safe %>')
 
