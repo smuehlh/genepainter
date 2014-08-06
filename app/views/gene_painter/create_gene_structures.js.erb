@@ -66,6 +66,7 @@ hide_show_waiting('hide');
 
   function resetTable() {
     $('.highlighted').removeClass('highlighted');
+    $('.common-highlighted').removeAttr('style');
   }
 
   // bind event to check boxes
@@ -83,6 +84,30 @@ hide_show_waiting('hide');
     }
   });
 
+  var spinner = $("input#spinner");
+
+  function spinnerEventHandler(spinnerValue) {
+    var threshold, class_name, background_color;
+
+    threshold = parseInt(spinnerValue*n_rows / 100);
+
+    var tmp = threshold;
+    while (!background_color && tmp <= n_rows) {
+      background_color = $("div#text-based").find("table#merged").find("." + tmp).css("background-color");
+      tmp += 1;
+    }
+
+    if (threshold > 0 && !_.isUndefined(background_color)) {
+
+      for (var i = threshold; i < n_rows; i++) {
+        class_name = "col-" + i;
+
+        $("." + class_name).addClass("common-highlighted");
+        $("." + class_name).css("background-color", background_color);
+      }
+    }
+  }
+
   $('input#highlight_common').change(function() {
     var checked = $(this).is(':checked');
 
@@ -90,11 +115,19 @@ hide_show_waiting('hide');
       // reset
       resetTable();
 
+      spinnerEventHandler(spinner.spinner("value"));
+
       $('input#highlight_unique').prop('checked', false);
     } else {
 
     }
   });
+
+  spinner.on( "spin", function( event, ui ) {
+    $('input#highlight_common').prop('checked', true);
+    resetTable();
+    spinnerEventHandler($(this).spinner('value'));
+  } );
 
   // show intron phase
   $('input#show_intron_phase').change(function() {
@@ -123,7 +156,7 @@ hide_show_waiting('hide');
     // set text of the cell based on number of introns in the column
     var nIntrons = parseInt(allCells[i].className.split(' ')[0].split('-')[1])
 
-    //cell.setAttribute('class', allCells[i].className.split(' ')[0]);
+    cell.setAttribute('class', nIntrons);
     cell.innerText = nIntrons > 0 ? '|' : '-';
 
     if (nIntrons == 0) {
