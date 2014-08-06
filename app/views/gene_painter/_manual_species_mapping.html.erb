@@ -1,0 +1,71 @@
+<div id="manual_mapping" style="max-height: 300px; overflow: auto">
+  <div style="width: 25%; max-height: 250px; float: left">
+
+      <input type="text" id="species" style="width: 150px"/>
+
+  </div>
+
+  <div id="headers" style="width: 25%; max-height: 250px; overflow: auto; float: left; margin-right: 20px;">
+
+
+  </div>
+
+  <div style="max-height: 250px; overflow: auto;">
+    <u>Mapped headers</u>
+
+    <div id="mapped_headers" style="padding-top: 10px;">
+
+    </div>
+  </div>
+
+</div>
+
+<div style="padding-top: 10px;">
+  <input id="map_to_another_species" type="button" value="Map to another species">
+</div>
+
+<script defer>
+  $("input#map_to_another_species").click(function() {
+
+    var selectedHeaders = _.filter($("div#headers").find("input"), function(input) {
+      return $(input).is(":checked");
+    });
+
+    var error_message = "";
+    var species_name = $("input#species")[0].value;
+
+    if (species_name.length) {
+      if (selectedHeaders.length) {
+
+        $("div#mapped_headers").append(species_name + " => ");
+
+        _.each(selectedHeaders, function(header) {
+          $("div#mapped_headers").append(header.value + " ");
+        });
+
+        $("div#mapped_headers").append("<br/><br/>");
+
+      } else {
+        error_message += "No headers are selected.\n";
+      }
+    } else {
+      error_message += "Species name is empty.\n";
+    }
+
+    if (error_message.length) {
+      alert(error_message);
+    } else {
+      $("input#species")[0].value = "";
+
+      var selectedLabels = _.filter($("div#headers").find("label"), function(label) {
+        return $($(label).children()[0]).is(":checked");
+      });
+
+      _.each(selectedLabels, function(label) {
+        $(label).next().remove();
+        $(label).remove();
+      });
+
+    }
+  });
+</script>

@@ -1,33 +1,19 @@
 <% require 'gene_painter_helper.rb' %>
 <% if @fatal_error.blank? then %>
   <% if @seq_names.length > 0 %>
+    // hide loading screen
+    hide_show_waiting('hide');
+
     // update name of uploaded file
     $('#uploaded_sequence').html('<%= @basename %>');
-
-    var $btnAddSpecies = $('#btnAddSpecies'),
-    $initialBlock = $('div.add_species_input');
 
     // enable button and uploaders
     $('#gene_structures_uploader').prop('disabled', false);
     $('#species_mapping_uploader').prop('disabled', false);
-    $btnAddSpecies.prop('disabled', false);
 
-    // hide loading screen
-    hide_show_waiting('hide');
-
-    $('.add_species_input').html('');
-    $('.add_species_input').append($('<%= add_species(@seq_names) %>'));
-
-    seq_names = $initialBlock.find('ul input');
-    seq_names.click(function() {
-      disable($btnAddSpecies, false);
-      if (getSelectedItems(seq_names).length == seq_names.length)  {
-        disable($btnAddSpecies, true);
-      }
-    });
-
-    // bind event to add species button
-    $btnAddSpecies.click(addSpeciesMappingBlock);
+    <% controller.seq_names.each do |name| %>
+      $("div#manual_mapping").find("div#headers").append("<label><input type='checkbox' name='<%= name %>' value='<%= name %>'><%= name %></label><br>");
+    <% end %>
 
     // Initial data center table
     var $dataTableBody = $($('div#data_table').find('tbody')[0]);
