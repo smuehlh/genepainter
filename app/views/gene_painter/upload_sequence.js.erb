@@ -10,6 +10,7 @@
     // enable button and uploaders
     $('#gene_structures_uploader').prop('disabled', false);
     $('#species_mapping_uploader').prop('disabled', false);
+    $('input#map_to_another_species').prop('disabled', false);
 
     <% controller.seq_names.each do |name| %>
       $("div#manual_mapping").find("div#headers").append("<label><input type='checkbox' name='<%= name %>' value='<%= name %>'><%= name %></label><br>");

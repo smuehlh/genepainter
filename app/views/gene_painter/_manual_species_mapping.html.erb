@@ -11,17 +11,17 @@
   </div>
 
   <div style="max-height: 250px; overflow: auto;">
-    <u>Mapped headers</u>
 
-    <div id="mapped_headers" style="padding-top: 10px;">
+    Unlink genes from species
 
-    </div>
+    <img id="unlink_genes_from_species" src="/assets/icons/popup_icon.png" style="margin-left: 10px; cursor: pointer">
+
   </div>
 
 </div>
 
 <div style="padding-top: 10px;">
-  <input id="map_to_another_species" type="button" value="Map to another species">
+  <input id="map_to_another_species" type="button" value="Map to another species" disabled="true">
 </div>
 
 <script defer>
@@ -37,13 +37,40 @@
     if (species_name.length) {
       if (selectedHeaders.length) {
 
-        $("div#mapped_headers").append(species_name + " => ");
+        // $("div#mapped_headers").append(species_name + " => ");
+        //
+        // _.each(selectedHeaders, function(header) {
+        //   $("div#mapped_headers").append(header.value + " ");
+        // });
+        //
+        // $("div#mapped_headers").append("<br/><br/>");
 
+
+        // Update data center
+        var $data_table = $("div#data_table");
+
+
+        var data = "";
         _.each(selectedHeaders, function(header) {
-          $("div#mapped_headers").append(header.value + " ");
+          data += header.value;
+
+          if (header === _.last(selectedHeaders)) {
+            data += ":";
+          } else {
+            data += ",";
+          }
+
         });
 
-        $("div#mapped_headers").append("<br/><br/>");
+        data += "\"" + species_name + "\"";
+
+        // Call genepainter controller
+        $.ajax({
+          type: 'POST',
+          url: '/insert_species_mapping',
+          data: {'new_mapping': data},
+          dataType: 'script'
+        });
 
       } else {
         error_message += "No headers are selected.\n";
@@ -52,8 +79,9 @@
       error_message += "Species name is empty.\n";
     }
 
+    // Update UI
     if (error_message.length) {
-      alert(error_message);
+      error(error_message);
     } else {
       $("input#species")[0].value = "";
 
@@ -67,5 +95,7 @@
       });
 
     }
+
+
   });
 </script>

@@ -44,3 +44,15 @@ function checkAll(inputs, checkOrNot) {
     inputs.removeAttr('checked');
   }
 }
+
+function error(message) {
+  $("div#error_dialog").html("<p>" + message + "</p>");
+  $("div#error_dialog").dialog({
+        modal: true,
+        buttons: {
+          Ok: function() {
+            $( this ).dialog( "close" );
+          }
+        }
+      });
+}

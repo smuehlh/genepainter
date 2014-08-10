@@ -165,6 +165,20 @@ class GenePainterController < ApplicationController
       end
   end
 
+  def insert_species_mapping
+    new_mapping = params[:new_mapping]
+
+    File.open("#{@@f_dest}/fastaheaders2species.txt", "a") { |f|
+      f.write(new_mapping)
+    }
+
+    logger.debug(@@f_dest)
+
+    respond_to do |format|
+      format.js
+    end
+  end
+
   def create_alignment_file
     sequence_string = params[:sequence]
     @errors = []

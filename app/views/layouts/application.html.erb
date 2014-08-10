@@ -22,6 +22,7 @@
       </div>
       <div>
         <div id="content">
+          <div id="error_dialog" title="Error" style="display: none;"></div>
           <%unless flash[:notice].nil? then%>
             <div id="notice" class="notice"><%=flash[:notice]%></div>
             <script type="text/javascript">setTimeout("$('#notice').slideUp(500);", 2000);</script>
