@@ -129,19 +129,15 @@ class GenePainterController < ApplicationController
   def upload_species_mapping
     @fatal_error = catch(:error) {
       file = params[:files][0]
-      @basename = file.original_filename
       path = file.path()
 
       # check file size
       Helper.filesize_below_limit(file.tempfile, MAX_FILESIZE)
 
-      # store file in place
-      Helper.mkdir_or_die(@@f_dest)
-      Helper.move_or_copy_file(path, @@f_dest, 'move')
-
-      # rename to original name
-      Helper.rename(File.join(@@f_dest, File.basename(path)),
-        File.join(@@f_dest, @basename))
+      tmp_file = File.open(path, "rb").read
+      File.open("#{@@f_dest}/fastaheaders2species.txt", "a") { |f|
+        f.write(tmp_file)
+      }
 
       # call fromdos
       is_sucess = system('fromdos',@@f_dest)
@@ -166,10 +162,10 @@ class GenePainterController < ApplicationController
   end
 
   def insert_species_mapping
-    new_mapping = params[:new_mapping]
+    @new_mapping = params[:new_mapping]
 
     File.open("#{@@f_dest}/fastaheaders2species.txt", "a") { |f|
-      f.write(new_mapping)
+      f.write("#{@new_mapping}\n")
     }
 
     logger.debug(@@f_dest)
