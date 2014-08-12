@@ -115,3 +115,31 @@ $.fn.removeClassSVG = function(className){
     });
     return this;
 };
+
+$.fn.sc_ExecuteAjaxQ = function (options) {
+  //? Executes a series of AJAX methods in dequence
+
+  var options = $.extend({
+
+      fx: [] //function1 () { }, function2 () { }, function3 () { }
+
+  }, options);
+
+  if (options.fx.length > 0) {
+
+      var i = 0;
+
+      $(this).unbind('ajaxComplete');
+      $(this).ajaxComplete(function () {
+
+          i++;
+          if (i < options.fx.length && (typeof options.fx[i] == "function")) { options.fx[i](); }
+          else { $(this).unbind('ajaxComplete'); }
+
+      });
+
+      //Execute first item in queue
+      if (typeof options.fx[i] == "function") { options.fx[i](); }
+      else { $(this).unbind('ajaxComplete'); }
+  }
+}

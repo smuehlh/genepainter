@@ -55,26 +55,39 @@ class GenePainterController < ApplicationController
 
   def upload_sequence
     @fatal_error = catch(:error) {
-      file = params[:files][0]
-      @basename = file.original_filename
-      path = file.path()
 
-      @seq_names = read_in_alignment(path)[0]
 
-      # check file size
-      Helper.filesize_below_limit(file.tempfile, MAX_FILESIZE)
+      if params[:is_example]
+        @basename = "coro_sel.fas"
+        path = "#{Rails.root}/public/sample/#{@basename}"
 
-      # store file in place
-      Helper.mkdir_or_die(@@f_dest)
-      Helper.move_or_copy_file(path, @@f_dest, 'move')
+        Helper.mkdir_or_die(@@f_dest)
+        Helper.move_or_copy_file(path, @@f_dest, 'copy')
 
-      # rename to original name
-      Helper.rename(File.join(@@f_dest, File.basename(path)),
-        File.join(@@f_dest, @basename))
+        @seq_names = read_in_alignment(path)[0]
 
-      # call fromdos
-      is_sucess = system('fromdos',@@f_dest)
-      throw :error, ['Cannot upload file', 'Please contact us.'] if ! is_sucess
+      else
+        file = params[:files][0]
+        @basename = file.original_filename
+        path = file.path()
+
+        @seq_names = read_in_alignment(path)[0]
+
+        # check file size
+        Helper.filesize_below_limit(file.tempfile, MAX_FILESIZE)
+
+        # store file in place
+        Helper.mkdir_or_die(@@f_dest)
+        Helper.move_or_copy_file(path, @@f_dest, 'move')
+
+        # rename to original name
+        Helper.rename(File.join(@@f_dest, File.basename(path)),
+          File.join(@@f_dest, @basename))
+
+        # call fromdos
+        is_sucess = system('fromdos',@@f_dest)
+        throw :error, ['Cannot upload file', 'Please contact us.'] if ! is_sucess
+      end
 
       [] # default for @fatal_error
     }
@@ -95,21 +108,37 @@ class GenePainterController < ApplicationController
 
   def upload_gene_structures
     @fatal_error = catch(:error) {
-      file = params[:files][0]
 
-      # check file size
-      Helper.filesize_below_limit(file.tempfile, MAX_FILESIZE)
-      Helper.move_or_copy_file(file.path(), @@f_gene_structures, 'move')
+      @is_example = params[:is_example]
 
-      # rename to original name
-      Helper.rename(File.join(@@f_gene_structures, File.basename(file.path())),
-        File.join(@@f_gene_structures, file.original_filename))
+      if @is_example
+        genes = Dir["#{Rails.root}/public/sample/gene_structures/*"]
 
-      @filename = file.original_filename
+        genes.each do |gene|
+          Helper.move_or_copy_file(gene, @@f_gene_structures, 'copy')
+        end
 
-			# call fromdos
-			is_sucess = system('fromdos',@@f_dest)
-			throw :error, ['Cannot upload file', 'Please contact us.'] if ! is_sucess
+        @gene_names = genes.collect! do |gene|
+          File.basename(gene, ".yaml")
+        end
+
+      else
+        file = params[:files][0]
+
+        # check file size
+        Helper.filesize_below_limit(file.tempfile, MAX_FILESIZE)
+        Helper.move_or_copy_file(file.path(), @@f_gene_structures, 'move')
+
+        # rename to original name
+        Helper.rename(File.join(@@f_gene_structures, File.basename(file.path())),
+          File.join(@@f_gene_structures, file.original_filename))
+
+        @filename = file.original_filename
+
+        # call fromdos
+        is_sucess = system('fromdos',@@f_dest)
+        throw :error, ['Cannot upload file', 'Please contact us.'] if ! is_sucess
+      end
 
       [] # default for @fatal_error
     }
@@ -128,20 +157,32 @@ class GenePainterController < ApplicationController
 
   def upload_species_mapping
     @fatal_error = catch(:error) {
-      file = params[:files][0]
-      path = file.path()
 
-      # check file size
-      Helper.filesize_below_limit(file.tempfile, MAX_FILESIZE)
+      @is_example = params[:is_example]
 
-      tmp_file = File.open(path, "rb").read
-      File.open("#{@@f_dest}/fastaheaders2species.txt", "a") { |f|
-        f.write(tmp_file)
-      }
+      if @is_example
+        @basename = "fastaheaders2species.txt"
+        path = "#{Rails.root}/public/sample/#{@basename}"
+        Helper.move_or_copy_file(path, @@f_dest, 'copy')
 
-      # call fromdos
-      is_sucess = system('fromdos',@@f_dest)
-      throw :error, ['Cannot upload file', 'Please contact us.'] if ! is_sucess
+      else
+        file = params[:files][0]
+        path = file.path()
+
+        @basename = file.original_filename
+
+        # check file size
+        Helper.filesize_below_limit(file.tempfile, MAX_FILESIZE)
+
+        tmp_file = File.open(path, "rb").read
+        File.open("#{@@f_dest}/fastaheaders2species.txt", "a") { |f|
+          f.write(tmp_file)
+        }
+
+        # call fromdos
+        is_sucess = system('fromdos',@@f_dest)
+        throw :error, ['Cannot upload file', 'Please contact us.'] if ! is_sucess
+      end
 
       [] # default for @fatal_error
     }
@@ -210,6 +251,7 @@ class GenePainterController < ApplicationController
   end
 
   def create_gene_structures
+    @is_example = params[:is_example]
     missing_gene_structures = params[:data] == nil ? [] : params[:data]
 
     f_alignment = Dir[@@f_dest + '/*.fas'].first

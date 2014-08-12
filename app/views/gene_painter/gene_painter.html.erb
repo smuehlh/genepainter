@@ -1,12 +1,47 @@
 <% provide(:title, 'GenePainter') %>
-<%= content_tag(:h1, "Data Upload") %>
+<div>
+  <%= content_tag(:h1, "Data Upload") %>
+  <u onclick="load_example()" style="position:absolute; right:15px; top:15px; z-index:1; cursor: pointer"><i>Load example</i></u>
+  <script defer>
+
+    function load_example() {
+      var AjaxQ = [load_sample_sequence_alignment, load_sample_gene_structures, load_species_mapping];
+
+      AjaxQ.push(function() {
+        $("u#sample_sequence").remove();
+        $("u#sample_gene_structures").remove();
+        $("u#sample_species_mapping").remove();
+
+        $.ajax({
+          type: 'POST',
+          url: '/create_gene_structures',
+          data: {'data': [], 'is_example': true}
+        });
+
+        hide_show_waiting('show');
+      });
+
+      $(document).sc_ExecuteAjaxQ({ fx: AjaxQ });
+    }
+  </script>
+</div>
 <%= content_tag(:h2, "Multiple Sequence Alignment") %>
 
-<%= content_tag(:b, "Enter accession number(s), gi(s), or FASTA sequence(s)") %>
+<div style="clear: both">
+  <div style="width: 50%; float: left">
+    <%= content_tag(:b, "Enter accession number(s), gi(s), or FASTA sequence(s)") %>
+  </div>
+  <div style="width: 25%; float: left">
+    <%= image_tag("icons/help.png", :class => "help text_seq_help") %>
+  </div>
+  <div>
+  </div>
+</div>
 
-<%= image_tag("icons/help.png", :class => "help text_seq_help") %>
 
-<%=render :partial => "gene_painter/text_seq_help"%>
+<div style="clear: both">
+  <%=render :partial => "gene_painter/text_seq_help"%>
+</div>
 
 <%= javascript_tag defer: 'defer' do -%>
   create_alignment_file_ajax();
@@ -34,26 +69,48 @@
 
 <%= content_tag(:textarea, nil, :id => "text_seq", :placeholder => "Enter FASTA sequence(s)", :cols => 80, :rows => 5, :style => "margin-top: 5px; width: 723px;") %>
 
-<%= tag(:br) %>
+<div style="clear: both">
+  <div style="width: 50%; float: left">
+    <%= content_tag(:label, content_tag(:b, "Or upload file")) %>
 
-<%= content_tag(:label, content_tag(:b, "Or upload file")) %>
+    <!-- TODO: Only accept some file extensions. bug??-->
+    <%= file_field_tag("sequence_uploader",
+      :name => "files[]",
+      # :multiple => true
+      :data => {url: post_upload_sequence_path}
+      )
+    %>
+  </div>
+  <div style="width: 25%; float: left">
+    <%= content_tag(:span,
+      "No file uploaded",
+      :class => "filename",
+      :id => "uploaded_sequence") %>
 
-<!-- TODO: Only accept some file extensions. bug??-->
-<%= file_field_tag("sequence_uploader",
-  :name => "files[]",
-  # :multiple => true
-  :data => {url: post_upload_sequence_path}
-  )
-%>
+    <%= image_tag("icons/help.png", :class => "help upload_seq_help") %>
+  </div>
+  <div>
+    <u onclick="load_sample_sequence_alignment()" id= "sample_sequence" style="float: right; cursor: pointer"><i>Load sample data</i></u>
+    <script defer>
+      function load_sample_sequence_alignment() {
+        hide_show_waiting('show');
 
-<%= content_tag(:span,
-  "No file uploaded",
-  :class => "filename",
-  :id => "uploaded_sequence") %>
+        $.ajax({
+          type: 'POST',
+          url: '/upload_sequence',
+          data: {'is_example': true},
+          success: function() {
+            // console.log('done 1');
+          }
+        });
+      }
+    </script>
+  </div>
+</div>
 
-<%= image_tag("icons/help.png", :class => "help upload_seq_help") %>
-
-<%=render :partial => "gene_painter/upload_seq_help"%>
+<div style="clear: both">
+  <%=render :partial => "gene_painter/upload_seq_help"%>
+</div>
 
 <%= javascript_tag defer: 'defer' do -%>
   set_up_fileupload("#sequence_uploader");
@@ -70,25 +127,50 @@
 <% end -%>
 
 <%= content_tag(:h2, "Gene Structures") %>
-<%= content_tag(:label, content_tag(:b, "Upload files")) %>
 
-<!-- TODO: Only accept some file extensions -->
-<%= file_field_tag("gene_structures_uploader",
-  :name => "files[]",
-  :multiple => true,
-  :disabled => "disabled",
-  :data => {url: post_upload_gene_structures_path}
-  )
-%>
+<div style="clear: both">
+  <div style="width: 50%; float: left">
+    <%= content_tag(:label, content_tag(:b, "Upload files")) %>
 
-<%= content_tag(:span,
-  "No files uploaded",
-  :class => "filename",
-  :id => "uploaded_gene_structures") %>
+    <!-- TODO: Only accept some file extensions -->
+    <%= file_field_tag("gene_structures_uploader",
+      :name => "files[]",
+      :multiple => true,
+      :disabled => "disabled",
+      :data => {url: post_upload_gene_structures_path}
+      )
+    %>
+  </div>
+  <div style="width: 25%; float: left">
+    <%= content_tag(:span,
+      "No files uploaded",
+      :class => "filename",
+      :id => "uploaded_gene_structures") %>
 
-<%= image_tag("icons/help.png", :class => "help upload_gene_struct_help") %>
+    <%= image_tag("icons/help.png", :class => "help upload_gene_struct_help") %>
+  </div>
+  <div>
+    <u onclick="load_sample_gene_structures()" id="sample_gene_structures" style="float: right; cursor: pointer"><i>Load sample data</i></u>
+    <script defer>
+      function load_sample_gene_structures() {
+        hide_show_waiting('show');
 
-<%= render :partial => "gene_painter/upload_gene_struct_help"%>
+        $.ajax({
+          type: 'POST',
+          url: '/upload_gene_structures',
+          data: {'is_example': true},
+          success: function() {
+            // console.log('done 2');
+          }
+        });
+      }
+    </script>
+  </div>
+</div>
+
+<div style="clear: both">
+  <%= render :partial => "gene_painter/upload_gene_struct_help"%>
+</div>
 
 <%= javascript_tag defer: 'defer' do -%>
   set_up_fileupload("#gene_structures_uploader");
@@ -102,30 +184,53 @@
   });
 <% end -%>
 
-<%= content_tag(:p,
-  content_tag(:b, "Or generate gene structures for selected sequences (Data Center)"))
-%>
+<p><b>Or generate gene structures for selected sequences (Data Center)</b></p>
 
 <%= content_tag(:h2, "Species Mapping", :class => "species_mapping_heading") %>
 
 <%= render :partial => "gene_painter/manual_species_mapping"%>
 
-<%= content_tag(:div,
-  content_tag(:label, content_tag(:b, "Or upload file")) +
-  file_field_tag("species_mapping_uploader",
-    :name => "files[]",
-    :multiple => true,
-    :data => {url: post_upload_species_mapping_path},
-    :disabled => true,
-    :style => "margin-top: 10px;"
-    ) +
-  content_tag(:span,
-    "No file uploaded",
-    :class => "filename",
-    :id => "uploaded_species_mapping") +
-  image_tag("icons/help.png", :class => "help upload_species_mapping_help")
-  )
-%>
+<div style="clear: both">
+  <div style="width: 75%; float: left">
+    <%= content_tag(:div,
+      content_tag(:label, content_tag(:b, "Or upload file")) +
+      file_field_tag("species_mapping_uploader",
+        :name => "files[]",
+        :multiple => true,
+        :data => {url: post_upload_species_mapping_path},
+        :disabled => true,
+        :style => "margin-top: 10px;"
+        ) +
+      content_tag(:span,
+        "No file uploaded",
+        :class => "filename",
+        :id => "uploaded_species_mapping") +
+      image_tag("icons/help.png", :class => "help upload_species_mapping_help")
+      )
+    %>
+  </div>
+  <div>
+    <u onclick="load_species_mapping()" id="sample_species_mapping" style="float: right; cursor: pointer"><i>Load sample data</i></u>
+    <script defer>
+      function load_species_mapping() {
+        hide_show_waiting('show');
+
+        $.ajax({
+          type: 'POST',
+          url: '/upload_species_mapping',
+          data: {'is_example': true},
+          success: function() {
+            // console.log('done 3');
+          }
+        });
+      }
+    </script>
+  </div>
+</div>
+
+<div style="clear: both">
+  <%= render :partial => "gene_painter/upload_species_mapping_help"%>
+</div>
 
 <%= render :partial => "gene_painter/upload_species_mapping_help"%>
 

@@ -1,30 +1,53 @@
 <% if @fatal_error.blank? then %>
+
   hide_show_waiting('hide');
 
-  // Update number of files uploaded
-  var $fileCount = $('span#uploaded_gene_structures');
+  <% if @is_example %>
 
-  if ($fileCount.text() == "No files uploaded") {
-    $fileCount.text('1 file uploaded');
-  } else {
-    var curTotal = parseInt($fileCount.text().split(' ')[0]);
-    curTotal += 1;
+      $('span#uploaded_gene_structures').text('<%= @gene_names.length %>' + ' gene structures');
 
-    $fileCount.text(curTotal + ' files uploaded');
-  }
+      <% @gene_names.each do |gene_name| %>
+        var $span = $('span#' + '<%= gene_name %>');
 
-  // Update gene structure status
-  var basename = _.first('<%= @filename %>'.split('.'));
-  var $span = $('span#' + basename);
+        if ($span.length) {
+          $span.html('<%= gene_structure_status("#{gene_name}.yaml") %>');
 
-  if ($span.length) {
-    $span.html('<%= gene_structure_status(@filename) %>');
+          // Give the user option to generate gene structure if missing
+          if ($span.html() != 'missing') {
+            $span.parent().next().html('');
+          }
+        }
+      <% end %>
 
-    // Give the user option to generate gene structure if missing
-    if ($span.html != 'missing') {
-      $span.parent().next().html('');
+  <% else %>
+
+    // Update number of files uploaded
+    var $fileCount = $('span#uploaded_gene_structures');
+
+    if ($fileCount.text() == "No files uploaded") {
+      $fileCount.text('1 file uploaded');
+    } else {
+      var curTotal = parseInt($fileCount.text().split(' ')[0]);
+      curTotal += 1;
+
+      $fileCount.text(curTotal + ' files uploaded');
     }
-  }
+
+    // Update gene structure status
+    var basename = _.first('<%= @filename %>'.split('.'));
+    var $span = $('span#' + basename);
+
+    if ($span.length) {
+      $span.html('<%= gene_structure_status(@filename) %>');
+
+      // Give the user option to generate gene structure if missing
+      if ($span.html() != 'missing') {
+        $span.parent().next().html('');
+      }
+    }
+  <% end %>
+
+
 
 <% else%>
   hide_show_waiting('hide');
