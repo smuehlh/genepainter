@@ -647,3 +647,11 @@ ul.ui-tabs-nav.ui-helper-reset.ui-helper-clearfix.ui-widget-header.ui-corner-all
 .fill-grey {
   fill: grey;
 }
+
+table.mapped_headers td {
+  text-align: left !important;
+}
+
+table.mapped_headers th {
+  padding: 5px 15px !important;
+}

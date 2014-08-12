@@ -16,6 +16,81 @@
 
     <img id="unlink_genes_from_species" src="/assets/icons/popup_icon.png" style="margin-left: 10px; cursor: pointer">
 
+    <div id="unlink_genes_modal" title="Unlink genes from species" style="display: none">
+      <table class="mapped_headers" id="one-column-emphasis" style="width: 100%;">
+        <thead>
+          <tr>
+            <th><b>Species</b></th>
+            <th><b>Genes</b></th>
+          </tr>
+        </thead>
+      </table>
+    </div>
+
+    <script defer>
+
+      $("img#unlink_genes_from_species").click(function() {
+
+        $("div#unlink_genes_modal").dialog({
+          modal: true,
+          buttons: {
+            Ok: function() {
+
+              var data = {},
+                $unlinkTable = $("table.mapped_headers");
+
+              $.ajax({
+                type: 'POST',
+                url: '/update_species_mapping',
+                data: {'data': data, 'task': 'update'},
+                dataType: 'script'
+              });
+
+              // update data center
+              $unlinkTable.find("input").filter(function(index, elem) {
+                return $(elem).is(":checked") == false;
+              }).map(function(index, elem) {
+
+                // species column
+                $("div#data_table").find("td#species").filter(function(index, species) {
+                  return species.getAttribute("data") == elem.value;
+                })[0].innerHTML = "";
+
+                // generate gene structures column
+                var inputs = $("div#data_table").find("input#generateGeneStructure").filter(function(index, input) {
+                  return input.getAttribute("value") == elem.value;
+                });
+
+                if (inputs.length) {
+                  inputs[0].setAttribute("disabled", true);
+                }
+
+                // update gene list in species mapping section
+                $("div#manual_mapping").find("div#headers").append('<label><input type="checkbox" value="' + elem.value + '">' + elem.value + '</label><br>');
+
+                // sort headers
+                var newLabels = $("div#manual_mapping").find("div#headers").find('label').map(function(index, elem){
+                                  return $(elem).find('input')[0].value;
+                                }).sort();
+
+                $("div#manual_mapping").find("div#headers").html("");
+                _.each(newLabels, function(label) {
+                  $("div#manual_mapping").find("div#headers").append('<label><input type="checkbox" value="' + label + '">' + label + '</label><br>');
+                });
+
+                // update popup modal
+                $(elem).parent().next().remove(); // remove breakline first
+                $(elem).parent().remove();        // remove label and checkbox
+              });
+
+              $( this ).dialog( "close" );
+            }
+          }
+        });
+      });
+
+    </script>
+
   </div>
 
 </div>
@@ -37,14 +112,21 @@
     if (species_name.length) {
       if (selectedHeaders.length) {
 
-        // $("div#mapped_headers").append(species_name + " => ");
-        //
-        // _.each(selectedHeaders, function(header) {
-        //   $("div#mapped_headers").append(header.value + " ");
-        // });
-        //
-        // $("div#mapped_headers").append("<br/><br/>");
+        var unlinkTable = $("table.mapped_headers")[0];
 
+        newRow = unlinkTable.insertRow();
+        cell1 = newRow.insertCell(0);
+        cell2 = newRow.insertCell(1);
+
+        cell1.innerHTML = species_name
+        cell1.setAttribute("id", "species");
+
+        var tmp = "";
+        _.each(selectedHeaders, function(header) {
+          tmp += '<label><input type="checkbox" checked="true" value="' + header.value + '">' + header.value + '</label><br>';
+        });
+
+        $(cell2).html(tmp);
 
         // Update data center
         var $data_table = $("div#data_table");
@@ -67,8 +149,8 @@
         // Call genepainter controller
         $.ajax({
           type: 'POST',
-          url: '/insert_species_mapping',
-          data: {'new_mapping': data},
+          url: '/update_species_mapping',
+          data: {'new_mapping': data, 'task': 'insert'},
           dataType: 'script'
         });
 

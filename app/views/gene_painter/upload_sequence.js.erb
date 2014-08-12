@@ -16,6 +16,16 @@
       $("div#manual_mapping").find("div#headers").append("<label><input type='checkbox' name='<%= name %>' value='<%= name %>'><%= name %></label><br>");
     <% end %>
 
+    // sort headers;
+    var newLabels = $("div#manual_mapping").find("div#headers").find('label').map(function(index, elem){
+                      return $(elem).find('input')[0].value;
+                    }).sort();
+
+    $("div#manual_mapping").find("div#headers").html("");
+    _.each(newLabels, function(label) {
+      $("div#manual_mapping").find("div#headers").append('<label><input type="checkbox" value="' + label + '">' + label + '</label><br>');
+    });
+
     // Initial data center table
     var $dataTableBody = $($('div#data_table').find('tbody')[0]);
     $dataTableBody.html('');

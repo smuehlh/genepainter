@@ -202,14 +202,22 @@ class GenePainterController < ApplicationController
       end
   end
 
-  def insert_species_mapping
-    @new_mapping = params[:new_mapping]
+  def update_species_mapping
+    @task = params[:task]
 
-    File.open("#{@@f_dest}/fastaheaders2species.txt", "a") { |f|
-      f.write("#{@new_mapping}\n")
-    }
+    logger.debug(@task)
 
-    logger.debug(@@f_dest)
+    if @task == "insert"
+      @new_mapping = params[:new_mapping]
+
+      File.open("#{@@f_dest}/fastaheaders2species.txt", "a") { |f|
+        f.write("#{@new_mapping}\n")
+      }
+    else
+
+      @updated_mapping = params[:data]
+
+    end
 
     respond_to do |format|
       format.js
