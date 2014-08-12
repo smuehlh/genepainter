@@ -60,11 +60,19 @@ function set_up_fileupload(btnSelector) {
 function hide_show_waiting(kind) {
 
     if (kind === 'show') {
+        var sec = 0;
+        function pad(val) { return val > 9 ? val : "0" + val; }
+        myInterval = setInterval(function () {
+            $("#seconds").html(pad(++sec % 60));
+            $("#minutes").html(pad(parseInt(sec / 60, 10) % 60));
+            $("#hours").html(pad(parseInt(sec / 3600, 10)));
+        }, 1000);
 
         $('#waiting').css({'height' : $(document).height()});
         $('#waiting').show();
     }
     else {
+        clearInterval(myInterval);
         $('#waiting').hide();
     }
 };

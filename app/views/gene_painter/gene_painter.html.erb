@@ -12,13 +12,14 @@
         $("u#sample_gene_structures").remove();
         $("u#sample_species_mapping").remove();
 
+        hide_show_waiting('show');
+
         $.ajax({
           type: 'POST',
           url: '/create_gene_structures',
           data: {'data': [], 'is_example': true}
         });
 
-        hide_show_waiting('show');
       });
 
       $(document).sc_ExecuteAjaxQ({ fx: AjaxQ });

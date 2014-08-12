@@ -5,7 +5,11 @@
         <td align="center" style="width: 100%; vertical-align:middle;">
           <div id="waiting_infobox">
             <p><%=image_tag("icons/progress_dog_neg.gif")%></p>
-            <p>Please wait ...</p>
+            <!-- <p>Please wait ...</p> -->
+            <span>Elapsed Time: </span>
+            <div id="timerContainter" style="padding-top: 5px;">
+              <span id="hours">00</span>:<span id="minutes">00</span>:<span id="seconds">00</span>
+            </div>
             <p>This process might take a few minutes.</p>
             <!-- <div id="waiting_text" style="display:none"></div> -->
           </div>
