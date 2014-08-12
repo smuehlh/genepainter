@@ -260,9 +260,11 @@
 </div>
 
 <%= content_tag(:h1, "Phylogenetic Distribution of Intron Positions") %>
-<p class='default-text' id='t_phylotree'>
-  No data/species information provided.
-</p>
-<%= render :partial => "gene_painter/phylotree"%>
+<div style="overflow: auto; max-height: 300px;">
+  <p class='default-text' id='t_phylotree'>
+    No data/species information provided.
+  </p>
+  <%= render :partial => "gene_painter/phylotree"%>
+</div>
 
 <%= content_tag(:h1, "Download") %>
