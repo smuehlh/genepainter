@@ -262,6 +262,17 @@ class GenePainterController < ApplicationController
     @is_example = params[:is_example]
     missing_gene_structures = params[:data] == nil ? [] : params[:data]
 
+    # regenerate fastaheaders2species.txt file with data from data center
+    new_mapping_str = params[:new_mapping] == nil ? "" : params[:new_mapping]
+    if new_mapping_str.length > 0
+      # delete old file
+      File.delete("#{@@f_dest}/fastaheaders2species.txt")
+      # write to a new one
+      File.open("#{@@f_dest}/fastaheaders2species.txt", "w") { |file|
+        file.write(new_mapping_str)
+      }
+    end
+
     f_alignment = Dir[@@f_dest + '/*.fas'].first
     d_gene_structures = File.join(@@f_dest, 'gene_structures')
     f_gene_painter = '/fab8/server/db_scripts/gene_painter_new/gene_painter/gene_painter.rb'

@@ -87,6 +87,30 @@
       }
     }
 
+    var $dataTable = $("div#data_table");
+    var species = _.uniq($dataTable.find("td#species").map(function(index, elem) {
+          return elem.innerHTML;
+        }).filter(function(index, elem) {
+          return elem.length !== 0;
+        })
+      );
+
+    var new_mapping = {};
+    _.each($dataTable.find("td#species"),function(element, index, array) {
+      if (new_mapping[element.innerHTML] == undefined) {
+        new_mapping[element.innerHTML] = [element.getAttribute("data")];
+      } else {
+        new_mapping[element.innerHTML].push(element.getAttribute("data"));
+      }
+    });
+
+    var new_mapping_str = "";
+    _.each(_.keys(new_mapping), function(key) {
+      if (key.length) {
+        new_mapping_str += new_mapping[key].toString() + ':"' + key + '"\n';
+      }
+    });
+
     if (missingGeneStructures.length == 0 && $('span#uploaded_gene_structures').html() == 'No files uploaded') {
       showErrorModal();
     } else {
@@ -94,7 +118,7 @@
       $.ajax({
         type: 'POST',
         url: '/create_gene_structures',
-        data: {'data': missingGeneStructures},
+        data: {'data': missingGeneStructures, 'new_mapping': new_mapping_str},
         dataType: 'script'
       });
 
