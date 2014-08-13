@@ -28,6 +28,8 @@ GEM
       thread_safe (~> 0.1)
       tzinfo (~> 1.1)
     arel (5.0.1.20140414130214)
+    bson (2.3.0)
+    bson_ext (1.5.1)
     builder (3.2.2)
     coffee-rails (4.0.1)
       coffee-script (>= 2.2.0)
@@ -36,6 +38,7 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.7.0)
+    connection_pool (2.0.0)
     erubis (2.7.0)
     execjs (2.2.0)
     hike (1.2.3)
@@ -58,7 +61,20 @@ GEM
       treetop (~> 1.4.8)
     mime-types (1.25.1)
     minitest (5.3.5)
+    mongoid (4.0.0.alpha2)
+      activemodel (>= 4.0.0)
+      moped (~> 2.0.beta5)
+      origin (~> 2.1)
+      tzinfo (>= 0.3.37)
+    mongoid-tree (1.1.0)
+      mongoid (>= 3.0, < 4.0)
+    moped (2.0.0)
+      bson (~> 2.2)
+      connection_pool (~> 2.0)
+      optionable (~> 0.2.0)
     multi_json (1.10.1)
+    optionable (0.2.0)
+    origin (2.1.1)
     polyglot (0.3.5)
     rack (1.5.2)
     rack-test (0.6.2)
@@ -124,12 +140,15 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  bson_ext
   coffee-rails (~> 4.0.0)
   execjs
   jbuilder (~> 2.0)
   jquery-fileupload-rails
   jquery-rails
   jquery-ui-rails
+  mongoid (= 4.0.0.alpha2)
+  mongoid-tree
   rails (= 4.1.1)
   sass-rails (~> 4.0.3)
   sdoc (~> 0.4.0)

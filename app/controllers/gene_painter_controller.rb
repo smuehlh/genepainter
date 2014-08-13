@@ -262,6 +262,40 @@ class GenePainterController < ApplicationController
     @is_example = params[:is_example]
     missing_gene_structures = params[:data] == nil ? [] : params[:data]
 
+    # build taxonomy lists
+    all_species = params[:all_species] == nil ? [] : params[:all_species]
+    taxonomy_list = ""
+
+    if all_species.length > 0
+      all_species.each do |s|
+
+        if Node.any_of({ scientific_name: "#{s}"}).length > 0
+          species = Node.any_of({ scientific_name: "#{s}"}).first
+          # logger.debug("species test: #{species.inspect}")
+
+          lineage = []
+          current_taxon = species
+          while not current_taxon.root?
+            lineage << current_taxon
+            current_taxon = current_taxon.parent
+          end
+          lineage  << current_taxon
+
+          path = lineage.map do |node|
+            node.scientific_name
+          end
+
+          taxonomy_list << path.reverse.join(";") << "\n"
+        end
+      end
+    end
+
+    filename = "taxonomy_list.csv"
+
+    File.open("#{@@f_dest}/#{filename}", "w") { |file|
+      file.write(taxonomy_list)
+    }
+
     # regenerate fastaheaders2species.txt file with data from data center
     new_mapping_str = params[:new_mapping] == nil ? "" : params[:new_mapping]
     if new_mapping_str.length > 0
@@ -278,7 +312,7 @@ class GenePainterController < ApplicationController
     f_gene_painter = '/fab8/server/db_scripts/gene_painter_new/gene_painter/gene_painter.rb'
     d_output = "#{Rails.root}/public/tmp"
     f_species_to_fasta = Dir[@@f_dest + '/fastaheaders2species.txt'].first
-    f_taxonomy_list = '/fab8/vbui/genepainter_resources/input/taxonomy_list.csv'
+    f_taxonomy_list = "#{@@f_dest}/taxonomy_list.csv"
 
     Helper.mkdir_or_die(d_output)
 
