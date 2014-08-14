@@ -655,3 +655,7 @@ table.mapped_headers td {
 table.mapped_headers th {
   padding: 5px 15px !important;
 }
+
+.ui-autocomplete-loading {
+    background: white url("images/jquery_ui/ui-anim_basic_16x16.gif") right center no-repeat;
+  }

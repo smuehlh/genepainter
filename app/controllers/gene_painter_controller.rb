@@ -53,6 +53,17 @@ class GenePainterController < ApplicationController
 
   end
 
+  def get_species
+    q = params[:q] == nil ? "" : params[:q]
+    result = {}
+
+    result["data"] = Node.all_of(scientific_name: /^#{q}/i).map do |node|
+      node.scientific_name
+    end
+
+    render :json => result
+  end
+
   def upload_sequence
     @fatal_error = catch(:error) {
 
@@ -209,10 +220,17 @@ class GenePainterController < ApplicationController
 
     if @task == "insert"
       @new_mapping = params[:new_mapping]
+      species = params[:species] == nil ? "" : params[:species]
 
-      File.open("#{@@f_dest}/fastaheaders2species.txt", "a") { |f|
-        f.write("#{@new_mapping}\n")
-      }
+      # if find a species
+      @error_message = nil
+      if Node.any_of(scientific_name: "#{species}").length > 0
+        File.open("#{@@f_dest}/fastaheaders2species.txt", "a") { |f|
+          f.write("#{@new_mapping}\n")
+        }
+      else
+        @error_message = "Species not found."
+      end
     else
 
       @updated_mapping = params[:data]
@@ -270,6 +288,7 @@ class GenePainterController < ApplicationController
       all_species.each do |s|
 
         if Node.any_of({ scientific_name: "#{s}"}).length > 0
+
           species = Node.any_of({ scientific_name: "#{s}"}).first
           # logger.debug("species test: #{species.inspect}")
 

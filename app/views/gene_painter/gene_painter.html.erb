@@ -14,10 +14,14 @@
 
         hide_show_waiting('show');
 
+        var all_species = _.uniq($("div#data_table").find("td#species").map(function(index, elem) {
+                            return elem.innerHTML;
+                          }));
+
         $.ajax({
           type: 'POST',
           url: '/create_gene_structures',
-          data: {'data': [], 'is_example': true}
+          data: {'data': [], 'is_example': true, 'all_species': all_species}
         });
 
       });

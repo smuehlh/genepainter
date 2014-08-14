@@ -1,7 +1,36 @@
 <div id="manual_mapping" style="max-height: 300px; overflow: auto">
   <div style="width: 25%; max-height: 250px; float: left">
-
+    <div class="ui-widget">
       <input type="text" id="species" style="width: 150px"/>
+    </div>
+
+    <script defer>
+      $(function() {
+
+        $("input#species" ).autocomplete({
+          source: function( request, response ) {
+            $.ajax({
+              type: 'POST',
+              url: "/get_species",
+              data: {"q": request.term},
+              success: function(response_data) {
+                response(_.first(response_data["data"], 20));
+              }
+            });
+          },
+          minLength: 3,
+          select: function( event, ui ) {
+
+          },
+          open: function() {
+            $( this ).removeClass( "ui-corner-all" ).addClass( "ui-corner-top" );
+          },
+          close: function() {
+            $( this ).removeClass( "ui-corner-top" ).addClass( "ui-corner-all" );
+          }
+        });
+      });
+    </script>
 
   </div>
 
@@ -112,25 +141,21 @@
     if (species_name.length) {
       if (selectedHeaders.length) {
 
-        var unlinkTable = $("table.mapped_headers")[0];
-
-        newRow = unlinkTable.insertRow();
-        cell1 = newRow.insertCell(0);
-        cell2 = newRow.insertCell(1);
-
-        cell1.innerHTML = species_name
-        cell1.setAttribute("id", "species");
-
-        var tmp = "";
-        _.each(selectedHeaders, function(header) {
-          tmp += '<label><input type="checkbox" checked="true" value="' + header.value + '">' + header.value + '</label><br>';
-        });
-
-        $(cell2).html(tmp);
-
-        // Update data center
-        var $data_table = $("div#data_table");
-
+        // var unlinkTable = $("table.mapped_headers")[0];
+        //
+        // newRow = unlinkTable.insertRow();
+        // cell1 = newRow.insertCell(0);
+        // cell2 = newRow.insertCell(1);
+        //
+        // cell1.innerHTML = species_name
+        // cell1.setAttribute("id", "species");
+        //
+        // var tmp = "";
+        // _.each(selectedHeaders, function(header) {
+        //   tmp += '<label><input type="checkbox" checked="true" value="' + header.value + '">' + header.value + '</label><br>';
+        // });
+        //
+        // $(cell2).html(tmp);
 
         var data = "";
         _.each(selectedHeaders, function(header) {
@@ -150,7 +175,7 @@
         $.ajax({
           type: 'POST',
           url: '/update_species_mapping',
-          data: {'new_mapping': data, 'task': 'insert'},
+          data: {'new_mapping': data, 'task': 'insert', 'species': species_name},
           dataType: 'script'
         });
 
@@ -165,16 +190,16 @@
     if (error_message.length) {
       error(error_message);
     } else {
-      $("input#species")[0].value = "";
-
-      var selectedLabels = _.filter($("div#headers").find("label"), function(label) {
-        return $($(label).children()[0]).is(":checked");
-      });
-
-      _.each(selectedLabels, function(label) {
-        $(label).next().remove();
-        $(label).remove();
-      });
+      // $("input#species")[0].value = "";
+      //
+      // var selectedLabels = _.filter($("div#headers").find("label"), function(label) {
+      //   return $($(label).children()[0]).is(":checked");
+      // });
+      //
+      // _.each(selectedLabels, function(label) {
+      //   $(label).next().remove();
+      //   $(label).remove();
+      // });
 
     }
 

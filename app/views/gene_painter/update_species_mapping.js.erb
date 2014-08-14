@@ -1,14 +1,56 @@
 <% if @task == "insert" %>
 
-  var genes = "<%= @new_mapping %>".split(":")[0].split(",");
-  var species = "<%= @new_mapping %>".split(":")[1];
+  <% if @error_message.nil? %>
 
-  _.each(genes, function(gene) {
+    var genes = "<%= @new_mapping %>".split(":")[0].split(",");
+    var species = "<%= @new_mapping %>".split(":")[1];
 
-    _.filter($("td#species"), function(item) {
-      return $(item).attr("data") == gene;
-    })[0].innerHTML = $('<div />').html(species).text().replace(/"/g, ""); // ugly trick to unescape html entities
-  });
+    _.each(genes, function(gene) {
+
+      _.filter($("td#species"), function(item) {
+        return $(item).attr("data") == gene;
+      })[0].innerHTML = $('<div />').html(species).text().replace(/"/g, ""); // ugly trick to unescape html entities
+    });
+
+    // Need refactor
+    var selectedHeaders = _.filter($("div#headers").find("input"), function(input) {
+      return $(input).is(":checked");
+    });
+
+    var species_name = $("input#species")[0].value;
+
+    var unlinkTable = $("table.mapped_headers")[0];
+
+    newRow = unlinkTable.insertRow();
+    cell1 = newRow.insertCell(0);
+    cell2 = newRow.insertCell(1);
+
+    cell1.innerHTML = species_name
+    cell1.setAttribute("id", "species");
+
+    var tmp = "";
+    _.each(selectedHeaders, function(header) {
+      tmp += '<label><input type="checkbox" checked="true" value="' + header.value + '">' + header.value + '</label><br>';
+    });
+
+    $(cell2).html(tmp);
+
+    $("input#species")[0].value = "";
+
+    var selectedLabels = _.filter($("div#headers").find("label"), function(label) {
+      return $($(label).children()[0]).is(":checked");
+    });
+
+    _.each(selectedLabels, function(label) {
+      $(label).next().remove();
+      $(label).remove();
+    });
+
+  <% else %>
+
+    error("<%= @error_message %>");
+
+  <% end %>
 
 <% else %>
 
