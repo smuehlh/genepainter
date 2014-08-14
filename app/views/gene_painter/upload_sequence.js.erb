@@ -32,13 +32,16 @@
     $dataTableBody.append('<%= create_data_center_table(controller.seq_names).html_safe %>');
 
     // Show data center
-    $('div#b_data_center').toggle("slow");
-    $('p#t_data_center').toggle("slow");
+    $('div#b_data_center').show("slow");
+    $('p#t_data_center').hide("slow");
+
+    $("input#species").removeAttr("disabled");
+    $("div#unlink_genes").show();
 
   <% end %>
 <% else%>
   hide_show_waiting('hide');
-  alert('Error occurred.');
+  error('Cannot upload sequence alignment file.');
 
   // toggle help
   $("div#upload_seq_help").show('slow');

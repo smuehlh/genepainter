@@ -1,7 +1,7 @@
 <% provide(:title, 'GenePainter') %>
 <div>
   <%= content_tag(:h1, "Data Upload") %>
-  <u onclick="load_example()" style="position:absolute; right:15px; top:15px; z-index:1; cursor: pointer"><i>Load example</i></u>
+  <u onclick="load_example()" id="load_example" style="position:absolute; right:15px; top:15px; z-index:1; cursor: pointer"><i>Load example</i></u>
   <script defer>
 
     function load_example() {
@@ -21,7 +21,12 @@
         $.ajax({
           type: 'POST',
           url: '/create_gene_structures',
-          data: {'data': [], 'is_example': true, 'all_species': all_species}
+          data: {'data': [], 'is_example': true, 'all_species': all_species},
+          success: function() {
+            $("u#load_example").html("Example loaded");
+            $("u#load_example").removeAttr("onclick");
+            $("u#load_example")[0].setAttribute("style", "position:absolute; right:15px; top:15px; z-index:1; color: grey");
+          }
         });
 
       });
@@ -105,7 +110,9 @@
           url: '/upload_sequence',
           data: {'is_example': true},
           success: function() {
-            // console.log('done 1');
+            $("u#sample_sequence").html("Sample data loaded");
+            $("u#sample_sequence").removeAttr("onclick");
+            $("u#sample_sequence")[0].setAttribute("style", "float: right; cursor: auto; color: grey");
           }
         });
       }
@@ -165,7 +172,9 @@
           url: '/upload_gene_structures',
           data: {'is_example': true},
           success: function() {
-            // console.log('done 2');
+            $("u#sample_gene_structures").html("Sample data loaded");
+            $("u#sample_gene_structures").removeAttr("onclick");
+            $("u#sample_gene_structures")[0].setAttribute("style", "float: right; cursor: auto; color: grey");
           }
         });
       }
@@ -225,7 +234,9 @@
           url: '/upload_species_mapping',
           data: {'is_example': true},
           success: function() {
-            // console.log('done 3');
+            $("u#sample_species_mapping").html("Sample data loaded");
+            $("u#sample_species_mapping").removeAttr("onclick");
+            $("u#sample_species_mapping")[0].setAttribute("style", "float: right; cursor: auto; color: grey");
           }
         });
       }

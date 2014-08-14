@@ -221,15 +221,15 @@
     $('div#placeholder').html('<%= populate_select_genes_modal.html_safe %>');
   <% end %>
 
-  $('div#b_aligned_gene_structures').toggle('slow');
-  $('p#t_aligned_gene_structures').toggle('slow');
+  $('div#b_aligned_gene_structures').show('slow');
+  $('p#t_aligned_gene_structures').hide('slow');
 
 
   <% if File.exist?("#{Rails.root}/public/tmp/#{controller.id}-taxonomy-intron-numbers.txt") %>
 
     // Display phylotree
-    $('p#t_phylotree').toggle('slow');
-    $('div#b_phylotree').toggle('slow');
+    $('p#t_phylotree').hide('slow');
+    $('div#b_phylotree').show('slow');
 
     $('div#svg_placeholder').html('<%= render_svg("#{controller.id}-tree.svg").html_safe %>');
 

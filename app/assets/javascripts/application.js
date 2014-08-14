@@ -48,7 +48,7 @@ function set_up_fileupload(btnSelector) {
             data.submit();
           } else {
             // TODO: nicer error modal
-            alert('File must be less than 50 MB. <br /> Please contact us to upload larger files.');
+            error('File must be less than 50 MB. <br /> Please contact us to upload larger files.');
           }
       },
       submit: function() {
