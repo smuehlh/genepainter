@@ -1,0 +1,146 @@
+--- 
+- matchings: 
+  - mismatchlist: []
+
+    type: exon
+    nucl_end: 15
+    translation: MTNTQ
+    prot_end: 5
+    dna_end: 47221143
+    dna_start: 47221128
+    nucl_start: 0
+    seq: atgaccaatacacag
+    seqshifts: []
+
+    prot_start: 0
+  - type: intron
+    dna_end: 47221400
+    dna_start: 47221143
+    nucl_start: 15
+    seq: gtaatctcaactcaacgagagagtgaacgtctaatccgcggactacttctactactaatacacccgatgtgatgccgagagtcttcagtagttttgactaacttccaaccgtagctccgtgtgtggggtggcaacttaattaacctttcaactcggaatatctaacctacaggagcggagcaacagtgatatcattccgatcgatgactaacaacacgcttgtgtttcttccctaccattcctcccgttttgtacag
+  - mismatchlist: []
+
+    type: exon
+    nucl_end: 318
+    translation: LWFRGVRPSKFRHVYGLPTRKECCYTDINVVRSGNDGNFCAVNPTFLAIVADTTFVVIPIATTGRIDFQCCKVIGHAGQILDLKWNPFDDHTIASASDDCT
+    prot_end: 106
+    dna_end: 47221703
+    dna_start: 47221400
+    nucl_start: 15
+    seq: ctctggttccgtggcgtccggccatccaagttccggcacgtgtacggtttgccgacgcgcaaggagtgctgctacaccgacatcaacgtggtgcgcagcggcaacgatggtaacttctgtgcggtgaacccaacgttcctcgcgatcgtggccgacacgacgttcgtggtcatcccaatcgcgacgaccgggcggatcgatttccagtgctgcaaggtgattggtcatgcgggtcagatactcgatctgaagtggaacccgttcgacgatcacaccattgcgtccgcctcggacgattgtacg
+    seqshifts: []
+
+    prot_start: 5
+  - type: intron
+    dna_end: 47221788
+    dna_start: 47221703
+    nucl_start: 318
+    seq: gtatgtgtgtgtgtgtgtgtgtgtgtgtgattgatgaagagcttaattctcctaataaccaactcgttgacattatcgttttcag
+  - mismatchlist: []
+
+    type: exon
+    nucl_end: 639
+    translation: IKIWNIPEGGLVNNLTNYVTELVGHKRKVLHIEWHPTASNVLLSAGFDHTVCVWDTGNTERPLLNVIDCHVDMIYSLAINRDGSMIATTSKDKKLRVIEPRSGIVVS
+    prot_end: 213
+    dna_end: 47222109
+    dna_start: 47221788
+    nucl_start: 318
+    seq: atcaaaatttggaacattcccgagggaggattggtcaacaacctcaccaactacgtgacggagttggtcggccacaagcgcaaggtgctgcacatcgaatggcacccaacggcgtcgaatgtgttgctgagtgccgggttcgatcacaccgtgtgcgtgtgggacacgggcaataccgagcgtccgctgctgaacgttatcgactgccacgtggacatgatctacagtcttgcgatcaaccgggacgggtcgatgattgccaccacgtccaaggacaagaagctgcgtgtgatcgaaccacgcagcggtattgtcgtttcg
+    seqshifts: []
+
+    prot_start: 106
+  - type: intron
+    dna_end: 47222176
+    dna_start: 47222109
+    nucl_start: 639
+    seq: gtaagagcgagcccttgtttactttccggtcaagcatcgtcctaatactgttccctttcgtctccag
+  - mismatchlist: []
+
+    type: exon
+    nucl_end: 1189
+    translation: EGICHLGTKCSKAVFLDNGRILTTGFSRHSDRQYAVWDQHDLRKPLTQEVIDSSSGIVTPYYDCDTRMVYLAGKGDGNIRYYEVVDEPPYVHYLNQFLSGQPQKALGFMPKRGLNVHQCEVFRFYKLHAAGNICEPISMIVPRKSTLFQSDLYPDTLANLPAIGAKEWFQGRNVSPILMSMKT
+    prot_end: 396
+    dna_end: 47222726
+    dna_start: 47222176
+    nucl_start: 639
+    seq: gagggcatctgtcatctgggtaccaagtgttcgaaggccgtgttcctggacaatgggcgcatcctgacgacgggcttttcgcgccactccgaccgtcagtatgccgtgtgggatcagcacgatctgaggaaaccgctcacgcaggaggtgattgacagctcgagcggcatcgtcacgccgtactacgactgcgacacgcgcatggtgtacctggcgggcaagggcgacggcaacatccggtactacgaggtggtggacgagccgccgtacgtccactatctgaaccagtttctgtccggccagccgcagaaggcgctcggcttcatgccgaagcgtggcctcaacgtgcaccagtgcgaagtgttccgcttctacaagctgcacgcggccggcaacatctgcgagcccatctcgatgatagtgccgcgcaagtcgaccctgttccagagcgatctctacccggacacgctcgcgaacctgccggcgatcggggcgaaggaatggttccagggtcgcaacgtttcaccgatcctgatgtccatgaagacgg
+    seqshifts: []
+
+    prot_start: 213
+  - type: intron
+    dna_end: 47222796
+    dna_start: 47222726
+    nucl_start: 1189
+    seq: gtaagggtgtggtggtggatgtgaaagatatgatcagtactaacaacggggttttttgttgttgttgtag
+  - mismatchlist: []
+
+    type: exon
+    nucl_end: 1581
+    translation: GESIMEVSNGKSNRNSIESKIQRTHSIHLANGNQTNGGTNTNGHTVSISNGTDKNHQQQQQQQQQQQNGGNYGSNLTNGNINNNNHSISVKQQHNSLNKENEQLDNRKSDNNTKKFAFLSQPTIPDYRPQT
+    prot_end: 527
+    dna_end: 47223188
+    dna_start: 47222796
+    nucl_start: 1189
+    seq: gtgaatccatcatggaggtgtcgaatggcaaatcgaaccgtaacagtatcgagtccaaaatccagcgaacacattccatccatcttgccaacggaaatcaaacgaacggaggcaccaacaccaacggtcacaccgtgtcaatttcaaacggaaccgataagaaccaccagcaacagcagcagcaacagcagcagcagcagaatggtggaaactatggatcgaatttgaccaacggcaacatcaacaacaacaatcattccatcagcgtgaagcagcaacacaactcgctgaacaaagagaacgaacagctcgacaaccgcaagagcgataacaatacgaagaagtttgccttcctttcgcaaccgaccattccggactaccgaccacaaacg
+    seqshifts: []
+
+    prot_start: 396
+  - type: intron
+    dna_end: 47223261
+    dna_start: 47223188
+    nucl_start: 1581
+    seq: gtaagtgaagagggttggattttaaggattttgattgttaattccaaccatttctctccattcccatttgcag
+  - mismatchlist: []
+
+    type: exon
+    nucl_end: 1773
+    translation: IIEKSQKTSTNQSTKFHQLQAIFGQQTTNHKDIANLQNNLLSNSRNSSRNSSLENINLLNSENE
+    prot_end: 591
+    dna_end: 47223453
+    dna_start: 47223261
+    nucl_start: 1581
+    seq: attatcgagaaaagccagaaaacgtccaccaaccagagtacaaagtttcaccagctgcaggcaatctttgggcagcagacgaccaaccacaaggacattgccaacctgcagaacaatctgctcagcaactcgcgcaacagctcccgcaacagctcgctggaaaacattaacctgctaaactcggaaaatgag
+    seqshifts: []
+
+    prot_start: 527
+  - type: intron
+    dna_end: 47223553
+    dna_start: 47223453
+    nucl_start: 1773
+    seq: gtaagcgatcgtgatcgtagtggggcgctctaccaaaaagggcgagttccttcttttacgtatatttgtaatcctttgcttttatttaccttttttttag
+  - mismatchlist: []
+
+    type: exon
+    nucl_end: 1905
+    translation: LRKAFNKQADEIKSLRKTLNVSEKRVRELEAEVKRLQQQLKQHQ
+    prot_end: 635
+    dna_end: 47223685
+    dna_start: 47223553
+    nucl_start: 1773
+    seq: ctccgaaaggcatttaacaagcaggcggacgaaatcaagagcctgcgcaaaacgctcaacgtgtcggagaagcgtgtccgcgagctggaggcggaagtgaagcggctgcagcagcaactgaagcaacaccag
+    seqshifts: []
+
+    prot_start: 591
+  score: 1.0
+  unmatched: 0
+  prot_seq: MTNTQLWFRGVRPSKFRHVYGLPTRKECCYTDINVVRSGNDGNFCAVNPTFLAIVADTTFVVIPIATTGRIDFQCCKVIGHAGQILDLKWNPFDDHTIASASDDCTIKIWNIPEGGLVNNLTNYVTELVGHKRKVLHIEWHPTASNVLLSAGFDHTVCVWDTGNTERPLLNVIDCHVDMIYSLAINRDGSMIATTSKDKKLRVIEPRSGIVVSEGICHLGTKCSKAVFLDNGRILTTGFSRHSDRQYAVWDQHDLRKPLTQEVIDSSSGIVTPYYDCDTRMVYLAGKGDGNIRYYEVVDEPPYVHYLNQFLSGQPQKALGFMPKRGLNVHQCEVFRFYKLHAAGNICEPISMIVPRKSTLFQSDLYPDTLANLPAIGAKEWFQGRNVSPILMSMKTGESIMEVSNGKSNRNSIESKIQRTHSIHLANGNQTNGGTNTNGHTVSISNGTDKNHQQQQQQQQQQQNGGNYGSNLTNGNINNNNHSISVKQQHNSLNKENEQLDNRKSDNNTKKFAFLSQPTIPDYRPQTIIEKSQKTSTNQSTKFHQLQAIFGQQTTNHKDIANLQNNLLSNSRNSSRNSSLENINLLNSENELRKAFNKQADEIKSLRKTLNVSEKRVRELEAEVKRLQQQLKQHQ
+  prot_len: 635
+  status: auto
+  matches: 635
+  downstream: tagagtagccaacacggaaggggcatacaacaccggaaacattgtgatttgggatatgtgattgtttcggaaaaggagagttttatgtgtttctttgtttgtgttggttggtttggttggttcggctctctcgcgtgtgtgcgcgaagaagcagcgtataatgaatttgcgtatgtgttttgcgtatgtgcgtggtttgtgcattttgtcaagcatcaaacgcatgacgttacgatgatgtatgtcgtatttgtgtctgtgtacgcttggtccgtgagtgtgcgtgtgtgatcgtatatgtgtagagaagggaagataggacaacaaacacgtgacaaatatcgaaaatgtaaggaatgtaaggaacacgggaaataggggagaggtacacgagagtagttaccaatacctccccccatcgtcccacgaaacagtagagagagagagagagagagagagaggatcggtatgatttataagcacaatagaacgattaggttaaccagctggtcggcgtaatcggctttaggagataggtggacgaggacgaggtttttgtggcgtaatttttgcgctctgctaaacgcttctactactggcggggggatggtactaacctcccgcagaatgtactaccgctgctgccgccaacccttattacactatatacttacttacctgtgtgtatatgcgaaacaagatttgcttttaacgttgacttacgcaacaacaacaaatgaacgaacgaacgaacgaaacgagcgtgtgtttgctgccggggaaaatgggaaagcagcaatatgcagatgagcttgcgggctgcacaaacgggaatagacgctacaaccactgcttacaaccaccattccctttcatattctcccatgctacaggaggagacaagaaaagacacagcttttttgccacagttgggcttactaatgctaaatacgataataatgccacctaaatgtagctcttagtattctccctcccccct
+  stopcodon: tag
+  ID: 145
+  downstream_gap: 
+  upstream_gap: 
+  additional: 0
+  target_len: 49364325
+  prot_end: 635
+  dna_end: 47223685
+  dna_start: 47221128
+  reason: 
+  upstream: gaattagagaaacctgagctgcccgaaaactgcacaacccaacacacacacatcccacaggcaccttgacgcagaagaaggggagaggggtagattaacgggaaagtcccacggtggcactgcagggcaatgcctaaaggtccgcgcccatcagcatctcatcatcatcatcatcatcatcaccatcttcatcaaagccatcaacgccagttagcgaaaagccgttggtcggctgtcggaagtaaagcaactcgcacctgtgctgcgttccacccttaggcatcgtcaggcccactgccagaaggccatcgtagtgtcgggcgagggcgaaaattgtgcggtcaatcaaagtcaagcgtgtgttgctgctgcgggtttgctactactaatagccgctgctgagtgtgtttaatcggaagccgcacacatcactaatcatttaatggcggctcggttttgttgacgtcacgtttccctgtcacgttcacgtggaacatccctgtgggagaaagtgttctccgtttccctttcttctcctccaatcccactacacctattcgtggattgtttgttaaactttgaatgacgccttgaagaaaccttccgattcgcggtcgttgtttgacgtttaacagcaaccaaatatcctcaaacatcctgttgcttttgcacacacacaatttcaaaaccctttggagacgttcttcctaacatttgtgaatatattctctttcttttgcgtgtaaatctatatactaaaaacggcaatgtattgttccaaacacggcgtttcctataattgaacaaacctccctaatagttcggcggaactcgcagcgagtttgtcggcaaactgcgcgccctctgtgaagcgggcggtgtaacaggcctcgccggcagcggaggaggaggaggtggtggtggtggagcaggtggaggcgtcgaagaaaagcgcatcagcaaaagcaccgacgacattgcggatagcgacgagcgcgac
+  undetermined: 0
+  mismatches: 0
+  strand: +
+  target: gi|116234584|gb|CM000356.1| Anopheles gambiae str. PEST chromosome 2L, whole genome shotgun sequence
+  prot_start: 0

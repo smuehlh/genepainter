@@ -15,5 +15,5 @@
 /log/*.log
 /tmp
 /public/tmp
-/public/sample
+#/public/sample
 /public/assets
