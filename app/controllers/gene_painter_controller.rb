@@ -328,7 +328,6 @@ class GenePainterController < ApplicationController
 
     f_alignment = Dir[@@f_dest + '/*.fas'].first
     d_gene_structures = File.join(@@f_dest, 'gene_structures')
-    f_gene_painter = '/fab8/server/db_scripts/gene_painter_new/gene_painter/gene_painter.rb'
     d_output = "#{Rails.root}/public/tmp"
     f_species_to_fasta = Dir[@@f_dest + '/fastaheaders2species.txt'].first
     f_taxonomy_list = "#{@@f_dest}/taxonomy_list.csv"
@@ -352,9 +351,9 @@ class GenePainterController < ApplicationController
       logger.debug("Didn't find any fastaheaders2species files.")
 
       # Call gene_painter
-      @retVal = system "ruby #{f_gene_painter} -i #{f_alignment} -p #{d_gene_structures} --outfile #{prefix} --path-to-output #{d_output} --intron-phase --phylo --spaces --alignment --svg --svg-format both --svg-merged --svg-nested --statistics"
+      @retVal = system "ruby #{F_gene_painter} -i #{f_alignment} -p #{d_gene_structures} --outfile #{prefix} --path-to-output #{d_output} --intron-phase --phylo --spaces --alignment --svg --svg-format both --svg-merged --svg-nested --statistics"
     else
-      @retVal = system "ruby #{f_gene_painter} -i #{f_alignment} -p #{d_gene_structures} --outfile #{prefix} --path-to-output #{d_output} --intron-phase --phylo --spaces --alignment --svg --svg-format both --svg-merged --svg-nested --statistics --intron-numbers-per-taxon --taxonomy-to-fasta #{f_species_to_fasta} --tree --taxonomy #{f_taxonomy_list}"
+      @retVal = system "ruby #{F_gene_painter} -i #{f_alignment} -p #{d_gene_structures} --outfile #{prefix} --path-to-output #{d_output} --intron-phase --phylo --spaces --alignment --svg --svg-format both --svg-merged --svg-nested --statistics --intron-numbers-per-taxon --taxonomy-to-fasta #{f_species_to_fasta} --tree --taxonomy #{f_taxonomy_list}"
     end
 
     genes_to_show = Dir["#{d_gene_structures}/*.yaml"].take(20)

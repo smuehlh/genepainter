@@ -79,6 +79,18 @@ module GenePainterHelper
     end
   end
 
+  def copy_alignment_for_lucullus(file_src)
+    file_id = "genepainter" + rand(1000000000).to_s
+    file_dest = File.join(Dir::tmpdir, "cymobase_alignment_#{file_id}.fasta")
+    FileUtils.cp(file_src, file_dest)
+    return file_id
+  end
+  def render_lucullus_iframe(fileid)
+      iframe_src = Lucullus_url + "?source=#{fileid}"
+      return content_tag(:iframe, "Loading ...", :src => iframe_src, 
+        :width => "675px", :height => "200px", :id => "lucullus_alignment_frame")
+  end
+
   def render_svg(filename)
     svg_path = File.join("#{Rails.root}/public/tmp", filename)
     return File.open(svg_path, 'rb').read.delete!("\n")

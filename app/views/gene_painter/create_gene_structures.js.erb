@@ -225,6 +225,13 @@
   $('p#t_aligned_gene_structures').hide('slow');
 
 
+  // Populate Alignment
+  <% alignment_path = "#{Rails.root}/public/tmp/#{controller.id}-alignment.fas" %>
+  <% if File.exist?(alignment_path) %>
+    <% iframe_src_id = copy_alignment_for_lucullus(alignment_path) %>
+    $('#alignment').html('<%= render_lucullus_iframe(iframe_src_id) %>');
+  <% end %>
+
   <% if File.exist?("#{Rails.root}/public/tmp/#{controller.id}-taxonomy-intron-numbers.txt") %>
 
     // Display phylotree
