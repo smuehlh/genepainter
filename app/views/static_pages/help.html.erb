@@ -1,60 +1,63 @@
 <% provide(:title, 'Help') %>
 <%= content_tag(:h1, "Help") %>
 <%= content_tag(:h2, "Contents") %>
+<div id="help_page">
 
-<a name="top" class="anker"></a>
-<ul style="padding-left: 5%">
-	<li><a class = "internal" href="#general">General</a></li>
-	<li><a class = "internal" href="#entering">Entering the data</a></li>
-	<li><a class = "internal" href="#settings">Using GenePainter's options</a></li>
-	<li><a class = "internal" href="#viewing">Viewing the results</a></li>
-</ul>
+	<%= javascript_tag defer: 'defer' do -%>
+		<!-- show all help-partials that have the class 'help' -->
+		$("div#help_page").find(".help").show().removeClass()
+	<% end -%>
 
-<h2>
-	<table width=100%>
-		<tr>
-			<td align="left"><a name="general" style="font-style: normal">General</a></td>
-			<td align="right"><a class="internal" href="#" style="font-size: 12px">Back to top</td>
-		</tr>
-	</table>
-</h2>
-	<p>
-		The conservation of intron positions comprises information useful for de novo gene prediction as well as for analyzing the origin of introns. Here, we present GenePainter, a standalone tool for mapping gene structures onto protein multiple sequence alignments (MSA). Gene structures, as provided by WebScipio, are aligned with respect to the exact positions of the introns (down to nucleotide level) and intron phase. Output can be viewed in various formats, ranging from plain text to graphical output formats.</p>
+	<a name="top" class="anker"></a>
+	<ul style="padding-left: 5%">
+		<li><a class = "internal" href="#general">General</a></li>
+		<li><a class = "internal" href="#entering">Entering the data</a></li>
+		<li><a class = "internal" href="#settings">Using GenePainter's options</a></li>
+		<li><a class = "internal" href="#viewing">Viewing the results</a></li>
+	</ul>
 
-<h2>
-	<table width=100%>
-		<tr>
-			<td align="left"><a name="entering" style="font-style: normal">Entering the data</a></td>
-			<td align="right"><a class="internal" href="#" style="font-size: 12px">Back to top</td>
-		</tr>
-	</table>
-</h2>
+	<h2>
+		<table width=100%>
+			<tr>
+				<td align="left"><a name="general" style="font-style: normal">General</a></td>
+				<td align="right"><a class="internal" href="#" style="font-size: 12px">Back to top</td>
+			</tr>
+		</table>
+	</h2>
+		<p>
+			The conservation of intron positions comprises information useful for de novo gene prediction as well as for analyzing the origin of introns. Here, we present GenePainter, a standalone tool for mapping gene structures onto protein multiple sequence alignments (MSA). Gene structures, as provided by WebScipio, are aligned with respect to the exact positions of the introns (down to nucleotide level) and intron phase. Output can be viewed in various formats, ranging from plain text to graphical output formats.</p>
 
-	<h3>Data upload</h3>
-		<h4>Multiple sequence alignment</h4>
-			<%=render :partial => "/gene_painter/help/text_seq_help"%>
-			<%= javascript_tag defer: 'defer' do -%>
-				$("div#text_seq_help").show().removeClass();
-			<% end -%>
-		<h4>Gene structures</h4>
-		<h4>Species Mapping</h4>
-	<h3>Data center</h3>
-<h2>
-	<table width=100%>
-		<tr>
-			<td align="left"><a name="settings" style="font-style: normal">Using GenePainter's options</a></td>
-			<td align="right"><a class="internal" href="#" style="font-size: 12px">Back to top</td>
-		</tr>
-	</table>
-</h2>
+	<h2>
+		<table width=100%>
+			<tr>
+				<td align="left"><a name="entering" style="font-style: normal">Entering the data</a></td>
+				<td align="right"><a class="internal" href="#" style="font-size: 12px">Back to top</td>
+			</tr>
+		</table>
+	</h2>
 
-<h2>
-	<table width=100%>
-		<tr>
-			<td align="left"><a name="viewing" style="font-style: normal">Viewing the results</a></td>
-			<td align="right"><a class="internal" href="#" style="font-size: 12px">Back to top</td>
-		</tr>
-	</table>
-</h2>
+		<h3>Data upload</h3>
+			<h4>Multiple sequence alignment</h4>
+				<%=render :partial => "/gene_painter/help/text_seq_help"%>
+			<h4>Gene structures</h4>
+			<h4>Species Mapping</h4>
+		<h3>Data center</h3>
+	<h2>
+		<table width=100%>
+			<tr>
+				<td align="left"><a name="settings" style="font-style: normal">Using GenePainter's options</a></td>
+				<td align="right"><a class="internal" href="#" style="font-size: 12px">Back to top</td>
+			</tr>
+		</table>
+	</h2>
 
+	<h2>
+		<table width=100%>
+			<tr>
+				<td align="left"><a name="viewing" style="font-style: normal">Viewing the results</a></td>
+				<td align="right"><a class="internal" href="#" style="font-size: 12px">Back to top</td>
+			</tr>
+		</table>
+	</h2>
 
+<div>
