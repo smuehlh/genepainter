@@ -79,9 +79,9 @@ module Helper
 		true
 	end
 
-  def rename(oldname, newname)
-    File.rename(oldname, newname)
-  end
+	def rename(oldname, newname)
+		File.rename(oldname, newname)
+	end
 
 	def make_new_tmp_dir(base_path)
 		id = rand(1000000000).to_s
