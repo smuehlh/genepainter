@@ -1,0 +1,100 @@
+<div style="clear: both">
+	<div style="width: 50%; float: left">
+		<%= content_tag(:b, "Enter FASTA sequences") %>
+	</div>
+	<div style="width: 25%; float: left">
+		<%= image_tag("icons/help.png", :class => "help text_seq_help") %>
+	</div>
+	<div>
+	</div>
+</div>
+
+
+<div style="clear: both">
+	<%=render :partial => "gene_painter/help/text_seq_help"%>
+</div>
+
+<%= javascript_tag defer: 'defer' do -%>
+	create_alignment_file_ajax();
+
+	$("img.text_seq_help").click(function() {
+		 $("div#text_seq_help").toggle("slow");
+	});
+
+	var $textArea = $('textarea#text_seq');
+
+	// This is to disable upload button when there is input
+	// in textarea which also has to have the correct format
+	$textArea.blur(function(){
+		var helpIsVisible = $('div#text_seq_help').is(':visible');
+
+		if (! helpIsVisible) {
+			if (this.value.length > 0) {
+				$('input#sequence_uploader').prop('disabled', ! helpIsVisible);
+			}
+		} else {
+			$('input#sequence_uploader').removeAttr('disabled');
+		}
+	});
+<% end -%>
+
+<%= content_tag(:textarea, nil, :id => "text_seq", :placeholder => "Enter FASTA sequence(s)", :cols => 80, :rows => 5, :style => "margin-top: 5px; width: 723px;") %>
+
+<div style="clear: both">
+	<div style="width: 50%; float: left">
+		<%= content_tag(:label, content_tag(:b, "Or upload file")) %>
+
+		<!-- TODO: Only accept some file extensions. bug??-->
+		<%= file_field_tag("sequence_uploader",
+			:name => "files[]",
+			# :multiple => true
+			:data => {url: post_upload_sequence_path}
+			)
+		%>
+	</div>
+	<div style="width: 25%; float: left">
+		<%= content_tag(:span,
+			"No file uploaded",
+			:class => "filename",
+			:id => "uploaded_sequence") %>
+
+		<%= image_tag("icons/help.png", :class => "help upload_seq_help") %>
+	</div>
+	<div>
+		<u onclick="load_sample_sequence_alignment()" id= "sample_sequence" style="float: right; cursor: pointer"><i>Load sample data</i></u>
+		<script defer>
+			function load_sample_sequence_alignment() {
+				hide_show_waiting('show');
+
+				$.ajax({
+					type: 'POST',
+					url: '/upload_sequence',
+					data: {'is_example': true},
+					success: function() {
+						$("u#sample_sequence").html("Sample data loaded");
+						$("u#sample_sequence").removeAttr("onclick");
+						$("u#sample_sequence")[0].setAttribute("style", "float: right; cursor: auto; color: grey");
+					}
+				});
+			}
+		</script>
+	</div>
+</div>
+
+<div style="clear: both">
+	<%=render :partial => "gene_painter/help/upload_seq_help"%>
+</div>
+
+<%= javascript_tag defer: 'defer' do -%>
+	set_up_fileupload("#sequence_uploader");
+
+	$("img.upload_seq_help").click(function() {
+		 $("div#upload_seq_help").toggle("slow");
+	});
+
+	var $inputSequenceUploader = $('input#sequence_uploader'),
+		$textArea = $('textarea#text_seq');
+	$inputSequenceUploader.change(function(){
+		$textArea.prop('disabled', true);
+	});
+<% end -%>

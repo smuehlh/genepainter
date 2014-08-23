@@ -1,0 +1,59 @@
+<div style="clear: both">
+	<div style="width: 50%; float: left">
+		<%= content_tag(:label, content_tag(:b, "Upload files")) %>
+
+		<!-- TODO: Only accept some file extensions -->
+		<%= file_field_tag("gene_structures_uploader",
+			:name => "files[]",
+			:multiple => true,
+			:disabled => "disabled",
+			:data => {url: post_upload_gene_structures_path}
+			)
+		%>
+	</div>
+	<div style="width: 25%; float: left">
+		<%= content_tag(:span,
+			"No files uploaded",
+			:class => "filename",
+			:id => "uploaded_gene_structures") %>
+
+		<%= image_tag("icons/help.png", :class => "help upload_gene_struct_help") %>
+	</div>
+	<div>
+		<u onclick="load_sample_gene_structures()" id="sample_gene_structures" style="float: right; cursor: pointer"><i>Load sample data</i></u>
+		<script defer>
+			function load_sample_gene_structures() {
+				hide_show_waiting('show');
+
+				$.ajax({
+					type: 'POST',
+					url: '/upload_gene_structures',
+					data: {'is_example': true},
+					success: function() {
+						$("u#sample_gene_structures").html("Sample data loaded");
+						$("u#sample_gene_structures").removeAttr("onclick");
+						$("u#sample_gene_structures")[0].setAttribute("style", "float: right; cursor: auto; color: grey");
+					}
+				});
+			}
+		</script>
+	</div>
+</div>
+
+<div style="clear: both">
+	<%= render :partial => "gene_painter/help/upload_gene_struct_help"%>
+</div>
+
+<%= javascript_tag defer: 'defer' do -%>
+	set_up_fileupload("#gene_structures_uploader");
+
+	$('input#gene_structures_uploader').click(function() {
+		$('span#uploaded_gene_structures').text('No files uploaded');
+	});
+
+	$("img.upload_gene_struct_help").click(function() {
+		 $("div#upload_gene_struct_help").toggle("slow");
+	});
+<% end -%>
+
+<p><b>Or generate gene structures for selected sequences (Data Center)</b></p>

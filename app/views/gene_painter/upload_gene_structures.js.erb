@@ -52,7 +52,7 @@
 <% else%>
   hide_show_waiting('hide');
   error('Cannot upload gene structure files.');
-
+  // error('<%=raw(@fatal_error)%>');
   // toggle help
   $("div#upload_gene_structures_help").show("slow");
 <% end %>

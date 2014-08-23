@@ -83,44 +83,11 @@ module Helper
     File.rename(oldname, newname)
   end
 
-	# load reference data from file alignment_gene_structure.json
-	# @return [Hash] reference data
-	# @return [Array] Errors occured during file load
-	def load_ref_data
-		path = File.join( ProteinFamily.class_variable_get(:@@ref_data_path), REF_DATA)
-		file_exist_or_die(path)
-		return JSON.load(File.read(path))
-	end
-
-	def provide_trna_ref_data_path
-		path = File.join( BASE_PATH_TRNA, TRNA_REF_DATA)
-		file_exist_or_die(path)
-		return path
-	end
-
-	def get_tmp_file(extension="fasta")
-		rand(1000000).to_s + "." + extension
-	end
-
 	def make_new_tmp_dir(base_path)
 		id = rand(1000000000).to_s
 		path = File.join(base_path, id)
 		mkdir_or_die(path)
 		return id
-	end
-
-	# remove all files from specified path
-	# exept files with file_basename allowed_filebasename
-	def clean_up_tmp_dir(base_path, allowed_files)
-		Dir.glob(File.join(base_path, "*")) do |file|
-			if allowed_files.include?(file) then
-				next
-			end
-			if FileTest.file?(file) then
-				# delete only files, no directories
-				File.delete(file)
-			end
-		end
 	end
 
 end

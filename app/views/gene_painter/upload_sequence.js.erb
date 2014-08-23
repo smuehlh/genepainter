@@ -1,9 +1,8 @@
+// hide loading screen
+hide_show_waiting('hide');
 <% require 'gene_painter_helper.rb' %>
 <% if @fatal_error.blank? then %>
   <% if @seq_names.length > 0 %>
-    // hide loading screen
-    hide_show_waiting('hide');
-
     // update name of uploaded file
     $('#uploaded_sequence').html('<%= @basename %>');
 
@@ -32,15 +31,14 @@
     $dataTableBody.append('<%= create_data_center_table(controller.seq_names).html_safe %>');
 
     // Show data center
-    $('div#b_data_center').show("slow");
     $('p#t_data_center').hide("slow");
+    $('div#b_data_center').show("show");
 
     $("input#species").removeAttr("disabled");
     $("div#unlink_genes").show();
 
   <% end %>
 <% else%>
-  hide_show_waiting('hide');
   error('Cannot upload sequence alignment file.');
 
   // toggle help

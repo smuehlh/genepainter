@@ -1,0 +1,53 @@
+<%= render :partial => "gene_painter/upload/manual_species_mapping"%>
+
+<div style="clear: both">
+	<div style="width: 75%; float: left">
+		<%= content_tag(:div,
+			content_tag(:label, content_tag(:b, "Or upload file")) +
+			file_field_tag("species_mapping_uploader",
+				:name => "files[]",
+				:multiple => true,
+				:data => {url: post_upload_species_mapping_path},
+				:disabled => true,
+				:style => "margin-top: 10px;"
+				) +
+			content_tag(:span,
+				"No file uploaded",
+				:class => "filename",
+				:id => "uploaded_species_mapping") +
+			image_tag("icons/help.png", :class => "help upload_species_mapping_help")
+			)
+		%>
+	</div>
+	<div>
+		<u onclick="load_species_mapping()" id="sample_species_mapping" style="float: right; cursor: pointer"><i>Load sample data</i></u>
+		<script defer>
+			function load_species_mapping() {
+				hide_show_waiting('show');
+
+				$.ajax({
+					type: 'POST',
+					url: '/upload_species_mapping',
+					data: {'is_example': true},
+					success: function() {
+						$("u#sample_species_mapping").html("Sample data loaded");
+						$("u#sample_species_mapping").removeAttr("onclick");
+						$("u#sample_species_mapping")[0].setAttribute("style", "float: right; cursor: auto; color: grey");
+					}
+				});
+			}
+		</script>
+	</div>
+</div>
+
+<div style="clear: both">
+	<%= render :partial => "gene_painter/help/upload_species_mapping_help"%>
+</div>
+
+<%= javascript_tag defer: 'defer' do -%>
+	set_up_fileupload("#species_mapping_uploader");
+
+	$("img.upload_species_mapping_help").click(function() {
+		 $("div#upload_species_mapping_help").toggle("slow");
+	});
+<% end -%>

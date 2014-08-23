@@ -1,0 +1,33 @@
+<u onclick="load_example()" id="load_example" class="filename" style="position:absolute; right:15px; top:15px; z-index:1; cursor: pointer"><i>Load and submit example</i></u>
+<script defer>
+
+	function load_example() {
+		var AjaxQ = [load_sample_sequence_alignment, load_sample_gene_structures, load_species_mapping];
+
+		AjaxQ.push(function() {
+			$("u#sample_sequence").remove();
+			$("u#sample_gene_structures").remove();
+			$("u#sample_species_mapping").remove();
+
+			hide_show_waiting('show');
+
+			var all_species = _.uniq($("div#data_table").find("td#species").map(function(index, elem) {
+													return elem.innerHTML;
+												}));
+
+			$.ajax({
+				type: 'POST',
+				url: '/create_gene_structures',
+				data: {'data': [], 'is_example': true, 'all_species': all_species},
+				success: function() {
+					$("u#load_example").html("Example loaded");
+					$("u#load_example").removeAttr("onclick");
+					$("u#load_example")[0].setAttribute("style", "position:absolute; right:15px; top:15px; z-index:1; color: grey");
+				}
+			});
+
+		});
+
+		$(document).sc_ExecuteAjaxQ({ fx: AjaxQ });
+	}
+</script>

@@ -15,6 +15,9 @@
   $("div#unlink_genes").show();
 
 <% else %>
+  <% if ! @errors.blank? then  %>
+      error('<%=raw(@errors)%>');
+  <% end %>
   var $helpBlock = $('div#text_seq_help');
 
   // Show help block unless the user provides correct format alignment

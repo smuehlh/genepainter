@@ -6,7 +6,7 @@ require 'helper.rb'
 class GenePainterController < ApplicationController
 
   @@id = ''
-  @@f_dest = ''
+  @@f_dest = '' # Helper.make_new_tmp_dir(TMP_PATH)
   @@f_gene_structures = ''
   @@default_fname = ''
 
@@ -50,7 +50,6 @@ class GenePainterController < ApplicationController
     Helper.mkdir_or_die(@@f_gene_structures)
 
     expires_now()
-
   end
 
   def get_species
@@ -60,13 +59,14 @@ class GenePainterController < ApplicationController
     result["data"] = Node.all_of(scientific_name: /^#{q}/i).map do |node|
       node.scientific_name
     end
+  rescue RuntimeError, NoMethodError, TypeError, NameError, Errno::ENOENT => exp
 
+  ensure
     render :json => result
   end
 
   def upload_sequence
     @fatal_error = catch(:error) {
-
 
       if params[:is_example]
         @basename = "coro_sel.fas"
@@ -97,24 +97,21 @@ class GenePainterController < ApplicationController
 
         # call fromdos
         is_sucess = system('fromdos',@@f_dest)
-        throw :error, ['Cannot upload file', 'Please contact us.'] if ! is_sucess
+        throw :error, 'Cannot upload file. Please contact us.' if ! is_sucess
       end
 
-      [] # default for @fatal_error
+      "" # default for @fatal_error
     }
 
     rescue RuntimeError => exp
-      @fatal_error = [exp.message]
+      @fatal_error = exp.message
 
     rescue NoMethodError, TypeError, NameError, Errno::ENOENT => exp
-      @fatal_error = ['Cannot load file.', 'Please contact us.']
+      @fatal_error = 'Cannot upload file. Please contact us.'
 
     ensure
       @@seq_names = @seq_names
-
-      respond_to do |format|
-        format.js
-      end
+      render :upload_sequence, formats: [:js]
   end
 
   def upload_gene_structures
@@ -148,17 +145,17 @@ class GenePainterController < ApplicationController
 
         # call fromdos
         is_sucess = system('fromdos',@@f_dest)
-        throw :error, ['Cannot upload file', 'Please contact us.'] if ! is_sucess
+        throw :error, 'Cannot upload files. Please contact us.' if ! is_sucess
       end
 
-      [] # default for @fatal_error
+      "" # default for @fatal_error
     }
 
     rescue RuntimeError => exp
-      @fatal_error = [exp.message]
+      @fatal_error = exp.message
 
     rescue NoMethodError, TypeError, NameError, Errno::ENOENT => exp
-      @fatal_error = ['Cannot load file.', 'Please contact us.']
+      @fatal_error = 'Cannot upload files. Please contact us.'
 
     ensure
       respond_to do |format|
@@ -192,18 +189,17 @@ class GenePainterController < ApplicationController
 
         # call fromdos
         is_sucess = system('fromdos',@@f_dest)
-        throw :error, ['Cannot upload file', 'Please contact us.'] if ! is_sucess
+        throw :error, 'Cannot upload file. Please contact us.' if ! is_sucess
       end
 
       [] # default for @fatal_error
     }
 
     rescue RuntimeError => exp
-      @fatal_error = [exp.message]
+      @fatal_error = exp.message
 
     rescue NoMethodError, TypeError, NameError, Errno::ENOENT => exp
-      @fatal_error = ['Cannot load file.', 'Please contact us.']
-      # @fatal_error = [exp.message]
+      @fatal_error = 'Cannot load file. Please contact us.'
 
     ensure
       map_sequence_name_to_species
@@ -236,7 +232,13 @@ class GenePainterController < ApplicationController
       @updated_mapping = params[:data]
 
     end
+  rescue RuntimeError => exp
+    @error_message = exp.message
 
+  rescue NoMethodError, TypeError, NameError, Errno::ENOENT => exp
+    @error_message = 'Cannot update species mapping.'
+
+  ensure
     respond_to do |format|
       format.js
     end
@@ -244,39 +246,41 @@ class GenePainterController < ApplicationController
 
   def create_alignment_file
     sequence_string = params[:sequence]
-    @errors = []
+    @errors = ""
 
-    begin
-      # Use default filename
-      if File.exist?(@@default_fname)
-        f = File.open(@@default_fname, 'w+')
-      else
-        f = File.new(@@default_fname, 'w+')
-      end
-
-      if File.writable?(f)
-        f.write(sequence_string)
-      end
-      f.close
-
-      @seq_names = read_in_alignment(@@default_fname)[0]
-    rescue  NoMethodError => ex
-      @errors << 'Error parsing sequence alignment'
-    rescue RuntimeError, Errno::ENOENT, NameError => ex
-      @errors << ex.message
-    ensure
-      respond_to do |format|
-        format.js
-      end
+    # Use default filename
+    if File.exist?(@@default_fname)
+      f = File.open(@@default_fname, 'w+')
+    else
+      f = File.new(@@default_fname, 'w+')
     end
 
+    if File.writable?(f)
+      f.write(sequence_string)
+    end
+    f.close
+
+    @seq_names = read_in_alignment(@@default_fname)[0]
+  rescue  NoMethodError => ex
+    @errors = 'Error parsing sequence alignment'
+  rescue RuntimeError, Errno::ENOENT, NameError => ex
+    @errors = ex.message
+  ensure
+    respond_to do |format|
+      format.js
+    end
   end
 
   def map_sequence_name_to_species
     @@name_species_map = map_genenames_to_speciesnames(@@f_dest + '/fastaheaders2species.txt')
   end
 
+
+# TODO
+# check return values of system calls
+# if false: render error! 
   def create_gene_structures
+    @errors = ""
     @is_example = params[:is_example]
     missing_gene_structures = params[:data] == nil ? [] : params[:data]
 
@@ -340,7 +344,7 @@ class GenePainterController < ApplicationController
     # Creates missing gene structures
     if !missing_gene_structures.blank?
       @retVal, @new_genes = generate_gene_structures(missing_gene_structures, f_species_to_fasta, f_alignment, d_gene_structures)
-
+logger.debug("*********")
       logger.debug(@retVal)
       logger.debug(@new_genes.inspect)
     else
@@ -355,7 +359,8 @@ class GenePainterController < ApplicationController
     else
       @retVal = system "ruby #{F_gene_painter} -i #{f_alignment} -p #{d_gene_structures} --outfile #{prefix} --path-to-output #{d_output} --intron-phase --phylo --spaces --alignment --svg --svg-format both --svg-merged --svg-nested --statistics --intron-numbers-per-taxon --taxonomy-to-fasta #{f_species_to_fasta} --tree --taxonomy #{f_taxonomy_list}"
     end
-
+logger.debug("***********")
+logger.debug @retVal
     genes_to_show = Dir["#{d_gene_structures}/*.yaml"].take(20)
     genes_to_show.map! do |gene|
       File.basename(gene, '.yaml')
@@ -387,11 +392,14 @@ class GenePainterController < ApplicationController
         build_output_path("genestructures-reduced-merged.svg"),
         build_output_path("legend-reduced-merged.svg"),
         ["Merged"])
-
-    ensure
-      respond_to do |format|
-        format.js
-      end
+  rescue  NoMethodError => ex
+    @errors = 'Error parsing sequence alignment'
+  rescue RuntimeError, Errno::ENOENT, NameError => ex
+    @errors = ex.message
+  ensure
+    respond_to do |format|
+      format.js
+    end
   end
 
   def build_svg
@@ -420,14 +428,15 @@ class GenePainterController < ApplicationController
     files_to_remove = Dir["#{Rails.root}/public/tmp/#{@@id}*"]
 
     if files_to_remove.blank?
-      logger.debug "nothing to remove."
     else
       files_to_remove.each do |file|
         File.delete(file)
-        logger.debug "removed #{file}"
       end
     end
-
+    rescue  NoMethodError => ex
+      @errors = 'Error cleaning up old data'
+    rescue RuntimeError, Errno::ENOENT, NameError => ex
+      @errors = ex.message
   end
 
 end

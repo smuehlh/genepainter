@@ -1,283 +1,36 @@
 <% provide(:title, 'GenePainter') %>
-<div>
-  <%= content_tag(:h1, "Data Upload") %>
-  <u onclick="load_example()" id="load_example" style="position:absolute; right:15px; top:15px; z-index:1; cursor: pointer"><i>Load example</i></u>
-  <script defer>
 
-    function load_example() {
-      var AjaxQ = [load_sample_sequence_alignment, load_sample_gene_structures, load_species_mapping];
+<%= content_tag(:h1, "Data Upload") %>
+<%= render :partial => "gene_painter/upload/load_and_submit_example" %>
 
-      AjaxQ.push(function() {
-        $("u#sample_sequence").remove();
-        $("u#sample_gene_structures").remove();
-        $("u#sample_species_mapping").remove();
-
-        hide_show_waiting('show');
-
-        var all_species = _.uniq($("div#data_table").find("td#species").map(function(index, elem) {
-                            return elem.innerHTML;
-                          }));
-
-        $.ajax({
-          type: 'POST',
-          url: '/create_gene_structures',
-          data: {'data': [], 'is_example': true, 'all_species': all_species},
-          success: function() {
-            $("u#load_example").html("Example loaded");
-            $("u#load_example").removeAttr("onclick");
-            $("u#load_example")[0].setAttribute("style", "position:absolute; right:15px; top:15px; z-index:1; color: grey");
-          }
-        });
-
-      });
-
-      $(document).sc_ExecuteAjaxQ({ fx: AjaxQ });
-    }
-  </script>
-</div>
 <%= content_tag(:h2, "Multiple Sequence Alignment") %>
-
-<div style="clear: both">
-  <div style="width: 50%; float: left">
-    <%= content_tag(:b, "Enter accession number(s), gi(s), or FASTA sequence(s)") %>
-  </div>
-  <div style="width: 25%; float: left">
-    <%= image_tag("icons/help.png", :class => "help text_seq_help") %>
-  </div>
-  <div>
-  </div>
-</div>
-
-
-<div style="clear: both">
-  <%=render :partial => "gene_painter/help/text_seq_help"%>
-</div>
-
-<%= javascript_tag defer: 'defer' do -%>
-  create_alignment_file_ajax();
-
-  $("img.text_seq_help").click(function() {
-     $("div#text_seq_help").toggle("slow");
-  });
-
-  var $textArea = $('textarea#text_seq');
-
-  // This is to disable upload button when there is input
-  // in textarea which also has to have the correct format
-  $textArea.blur(function(){
-    var helpIsVisible = $('div#text_seq_help').is(':visible');
-
-    if (! helpIsVisible) {
-      if (this.value.length > 0) {
-        $('input#sequence_uploader').prop('disabled', ! helpIsVisible);
-      }
-    } else {
-      $('input#sequence_uploader').removeAttr('disabled');
-    }
-  });
-<% end -%>
-
-<%= content_tag(:textarea, nil, :id => "text_seq", :placeholder => "Enter FASTA sequence(s)", :cols => 80, :rows => 5, :style => "margin-top: 5px; width: 723px;") %>
-
-<div style="clear: both">
-  <div style="width: 50%; float: left">
-    <%= content_tag(:label, content_tag(:b, "Or upload file")) %>
-
-    <!-- TODO: Only accept some file extensions. bug??-->
-    <%= file_field_tag("sequence_uploader",
-      :name => "files[]",
-      # :multiple => true
-      :data => {url: post_upload_sequence_path}
-      )
-    %>
-  </div>
-  <div style="width: 25%; float: left">
-    <%= content_tag(:span,
-      "No file uploaded",
-      :class => "filename",
-      :id => "uploaded_sequence") %>
-
-    <%= image_tag("icons/help.png", :class => "help upload_seq_help") %>
-  </div>
-  <div>
-    <u onclick="load_sample_sequence_alignment()" id= "sample_sequence" style="float: right; cursor: pointer"><i>Load sample data</i></u>
-    <script defer>
-      function load_sample_sequence_alignment() {
-        hide_show_waiting('show');
-
-        $.ajax({
-          type: 'POST',
-          url: '/upload_sequence',
-          data: {'is_example': true},
-          success: function() {
-            $("u#sample_sequence").html("Sample data loaded");
-            $("u#sample_sequence").removeAttr("onclick");
-            $("u#sample_sequence")[0].setAttribute("style", "float: right; cursor: auto; color: grey");
-          }
-        });
-      }
-    </script>
-  </div>
-</div>
-
-<div style="clear: both">
-  <%=render :partial => "gene_painter/help/upload_seq_help"%>
-</div>
-
-<%= javascript_tag defer: 'defer' do -%>
-  set_up_fileupload("#sequence_uploader");
-
-  $("img.upload_seq_help").click(function() {
-     $("div#upload_seq_help").toggle("slow");
-  });
-
-  var $inputSequenceUploader = $('input#sequence_uploader'),
-    $textArea = $('textarea#text_seq');
-  $inputSequenceUploader.change(function(){
-    $textArea.prop('disabled', true);
-  });
-<% end -%>
+<%= render :partial => "gene_painter/upload/multiple_sequence_alignment" %>
 
 <%= content_tag(:h2, "Gene Structures") %>
-
-<div style="clear: both">
-  <div style="width: 50%; float: left">
-    <%= content_tag(:label, content_tag(:b, "Upload files")) %>
-
-    <!-- TODO: Only accept some file extensions -->
-    <%= file_field_tag("gene_structures_uploader",
-      :name => "files[]",
-      :multiple => true,
-      :disabled => "disabled",
-      :data => {url: post_upload_gene_structures_path}
-      )
-    %>
-  </div>
-  <div style="width: 25%; float: left">
-    <%= content_tag(:span,
-      "No files uploaded",
-      :class => "filename",
-      :id => "uploaded_gene_structures") %>
-
-    <%= image_tag("icons/help.png", :class => "help upload_gene_struct_help") %>
-  </div>
-  <div>
-    <u onclick="load_sample_gene_structures()" id="sample_gene_structures" style="float: right; cursor: pointer"><i>Load sample data</i></u>
-    <script defer>
-      function load_sample_gene_structures() {
-        hide_show_waiting('show');
-
-        $.ajax({
-          type: 'POST',
-          url: '/upload_gene_structures',
-          data: {'is_example': true},
-          success: function() {
-            $("u#sample_gene_structures").html("Sample data loaded");
-            $("u#sample_gene_structures").removeAttr("onclick");
-            $("u#sample_gene_structures")[0].setAttribute("style", "float: right; cursor: auto; color: grey");
-          }
-        });
-      }
-    </script>
-  </div>
-</div>
-
-<div style="clear: both">
-  <%= render :partial => "gene_painter/help/upload_gene_struct_help"%>
-</div>
-
-<%= javascript_tag defer: 'defer' do -%>
-  set_up_fileupload("#gene_structures_uploader");
-
-  $('input#gene_structures_uploader').click(function() {
-    $('span#uploaded_gene_structures').text('No files uploaded');
-  });
-
-  $("img.upload_gene_struct_help").click(function() {
-     $("div#upload_gene_struct_help").toggle("slow");
-  });
-<% end -%>
-
-<p><b>Or generate gene structures for selected sequences (Data Center)</b></p>
+<%= render :partial => "gene_painter/upload/gene_structures" %>
 
 <%= content_tag(:h2, "Species Mapping", :class => "species_mapping_heading") %>
-
-<%= render :partial => "gene_painter/manual_species_mapping"%>
-
-<div style="clear: both">
-  <div style="width: 75%; float: left">
-    <%= content_tag(:div,
-      content_tag(:label, content_tag(:b, "Or upload file")) +
-      file_field_tag("species_mapping_uploader",
-        :name => "files[]",
-        :multiple => true,
-        :data => {url: post_upload_species_mapping_path},
-        :disabled => true,
-        :style => "margin-top: 10px;"
-        ) +
-      content_tag(:span,
-        "No file uploaded",
-        :class => "filename",
-        :id => "uploaded_species_mapping") +
-      image_tag("icons/help.png", :class => "help upload_species_mapping_help")
-      )
-    %>
-  </div>
-  <div>
-    <u onclick="load_species_mapping()" id="sample_species_mapping" style="float: right; cursor: pointer"><i>Load sample data</i></u>
-    <script defer>
-      function load_species_mapping() {
-        hide_show_waiting('show');
-
-        $.ajax({
-          type: 'POST',
-          url: '/upload_species_mapping',
-          data: {'is_example': true},
-          success: function() {
-            $("u#sample_species_mapping").html("Sample data loaded");
-            $("u#sample_species_mapping").removeAttr("onclick");
-            $("u#sample_species_mapping")[0].setAttribute("style", "float: right; cursor: auto; color: grey");
-          }
-        });
-      }
-    </script>
-  </div>
-</div>
-
-<div style="clear: both">
-  <%= render :partial => "gene_painter/help/upload_species_mapping_help"%>
-</div>
-
-<%= javascript_tag defer: 'defer' do -%>
-  set_up_fileupload("#species_mapping_uploader");
-
-  $("img.upload_species_mapping_help").click(function() {
-     $("div#upload_species_mapping_help").toggle("slow");
-  });
-<% end -%>
+<%= render :partial => "gene_painter/upload/species_mapping" %>
 
 <%= content_tag(:h1, "Data Center", :style => "margin-top: 10px;") %>
 <p class='default-text' id='t_data_center'>
-  No data provided.
+	No data provided.
 </p>
 <div id="b_data_center" style="display: none">
-  <%= render :partial => "gene_painter/data_center"%>
+	<%= render(partial: "gene_painter/upload/data_center") %>
 </div>
 
 <%= content_tag(:h1, "Aligned Gene Structures") %>
 <p class='default-text' id='t_aligned_gene_structures'>
-  No data provided.
+	No data provided.
 </p>
-<div id="b_aligned_gene_structures" style="display: none">
-  <%= render :partial => "gene_painter/aligned_gene_structures/aligned_gene_structures"%>
-</div>
 
 <%= content_tag(:h1, "Phylogenetic Distribution of Intron Positions") %>
-<div style="overflow: auto; max-height: 300px;">
-  <p class='default-text' id='t_phylotree'>
-    No data/species information provided.
-  </p>
-  <%= render :partial => "gene_painter/phylotree"%>
-</div>
+<p class='default-text' id='t_phylotree'>
+	No data/species information provided.
+</p>
 
 <%= content_tag(:h1, "Download") %>
+<p class='default-text' id="t_download">
+	No data provided.
+</p>
