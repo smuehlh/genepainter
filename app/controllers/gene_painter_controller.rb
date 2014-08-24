@@ -35,6 +35,10 @@ class GenePainterController < ApplicationController
     @@name_species_map
   end
 
+  def new_gene_structures
+    @@new_gene_structures
+  end
+
   # Render start page for GenePainter
   def gene_painter
 
@@ -416,6 +420,7 @@ class GenePainterController < ApplicationController
   end
 
   def build_svg
+    @error = ""
     genes_to_show = params[:data] == nil ? [] : params[:data]
 
     # Create images for selected genes only
@@ -431,6 +436,14 @@ class GenePainterController < ApplicationController
         build_output_path("legend-reduced.svg"),
         genes_to_show)
 
+  rescue RuntimeError => ex
+    @error = ex.message
+  rescue NoMethodError, Errno::ENOENT, Errno::EACCES, ArgumentError, NameError, TypeError => ex
+    @error = "Cannot show selected genes."
+  ensure
+    respond_to do |format|
+      format.js
+    end
   end
 
   def build_output_path(filename)

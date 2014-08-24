@@ -101,3 +101,54 @@
 <%= javascript_tag defer: 'defer' do -%>
   $('input#standard').prop('checked', true);
 <% end -%>
+
+<script>
+  <% convert_svg_to_pngs %>
+
+  $("div#graphical").find("div#genenames").append('<%= render_img("genenames-normal.png", "normal").html_safe %>')
+  $("div#graphical").find("div#genenames").append('<%= render_img("genenames-reduced.png", "reduced").html_safe %>')
+
+  $("div#graphical").find("div#genestructures").append('<%= render_img("genestructures-normal.png", "normal").html_safe %>')
+  $("div#graphical").find("div#genestructures").append('<%= render_img("genestructures-reduced.png", "reduced").html_safe %>')
+
+  $("div#graphical").find("div#legend").append('<%= render_img("legend-normal.png", "normal").html_safe %>')
+  $("div#graphical").find("div#legend").append('<%= render_img("legend-reduced.png", "reduced").html_safe %>')
+
+  function render_svg_normal_merged() {
+    $("div#graphical").find("div#genenames-merged").html('<%= render_svg("#{controller.id}-genenames-normal-merged.svg").html_safe %>')
+    $("div#graphical").find("div#genestructures-merged").html('<%= render_svg("#{controller.id}-genestructures-normal-merged.svg").html_safe %>')
+  }
+
+  render_svg_normal_merged();
+
+  $("input#standard").prop("checked", true);
+  $("img.reduced").toggle();
+
+  $("input#standard").change(function() {
+    if ($(this).is(":checked")) {
+      $("input#focus_on_common_introns").prop("checked", false);
+      $("img.reduced").toggle(false);
+      $("img.normal").toggle(true);
+
+      render_svg_normal_merged();
+    }
+  })
+
+  $("input#focus_on_common_introns").change(function() {
+    if ($(this).is(":checked")) {
+      $("input#standard").prop("checked", false);
+      $("img.normal").toggle(false);
+      $("img.reduced").toggle(true);
+
+      $("div#graphical").find("div#genenames-merged").html('<%= render_svg("#{controller.id}-genenames-reduced-merged.svg").html_safe %>')
+      $("div#graphical").find("div#genestructures-merged").html('<%= render_svg("#{controller.id}-genestructures-reduced-merged.svg").html_safe %>')
+    }
+  })
+
+  <% if Dir["#{controller.f_gene_structures}/*.yaml"].length > 20 %>
+    $('div#select_genes').css('display', 'inline');
+    $('div#placeholder').html('<%= populate_select_genes_modal.html_safe %>');
+  <% end %>
+
+  $('div#b_aligned_gene_structures').show('slow');
+</script>

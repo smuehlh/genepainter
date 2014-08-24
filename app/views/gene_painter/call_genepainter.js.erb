@@ -1,14 +1,32 @@
-// @fatal_error: keep default texts, and show fatal_error
-// warning: show error??? but do not keep default texts
-
-// update data centre based on controller.new_gene_structures
 hide_show_waiting('hide');
+
 <% if @fatal_error.blank? then %>
 	<% ! if @warning.blank? then %>
-		// for simplicity, just use error method to display warning. nothing more than an pop-up box will happen.
-		$("#notice").html('<%=raw(@warning)%>')
+		$("#notice").html('<%=raw(@warning)%>');
 	<% end %>
-	alert("Hurra");
+
+	<% controller.new_gene_structures.each do |gene| %>
+	  <% basename = gene.split('.').first%>
+	  // Update gene status
+	  $('span#<%= basename %>').text('complete').css('color', 'green').css('font-weight', 'bold');
+	  $('span#<%= basename %>').parent().next().html('');
+	<% end %>
+
+	$("#t_aligned_gene_structures").removeClass("default-text");
+	$("#t_aligned_gene_structures").show();
+	<% new_content = escape_javascript(render(partial: "gene_painter/results/aligned_gene_structures"))%>
+	$("#t_aligned_gene_structures").html("<%= new_content %>");
+
+	$("#t_phylotree").removeClass("default-text");
+	$("#t_phylotree").show();
+	<% new_content = escape_javascript(render(partial: "gene_painter/results/phylotree"))%>
+	$("#t_phylotree").html("<%= new_content %>");
+
+	$("#t_download").removeClass("default-text");
+	$("#t_download").show();
+	<% new_content = escape_javascript(render(partial: "gene_painter/results/download"))%>
+	$("#t_download").html("<%= new_content %>");
+
 <% else %>
-	error('<%=raw(@fatal_error)%>')
+	error('<%=raw(@fatal_error)%>');
 <% end %>

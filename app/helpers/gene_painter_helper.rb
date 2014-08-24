@@ -57,7 +57,7 @@ module GenePainterHelper
 
       table << "</tr>"
     end
-
+    
     table << "</table>"
     return table
   end

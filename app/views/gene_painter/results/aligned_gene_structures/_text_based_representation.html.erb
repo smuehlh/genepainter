@@ -1,0 +1,270 @@
+<div id='text-based'>
+  <div id='left-column'>
+    <div id='all-left'>
+    </div>
+    <div id='merged'>
+      <table>
+        <tr>
+          <td>>Merged</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <div id='right-column'>
+    <div id='all-right' style='padding-left: 10px'>
+
+    </div>
+    <div id='merged' style='overflow: hidden; padding-left: 10px'>
+      <table id='merged'>
+
+      </table>
+    </div>
+  </div>
+
+
+  <%= javascript_tag defer: 'defer' do -%>
+
+    // simultaneously scroll up/down, left/right
+    $('div#all-right').on('scroll', function() {
+      $('div#all-left').scrollTop($(this).scrollTop());
+      $('div#merged').scrollLeft($(this).scrollLeft());
+    });
+
+    $('div#all-left').on('scroll', function() {
+      $('div#all-right').scrollTop($(this).scrollTop());
+    });
+
+   <% end -%>
+</div>
+
+<h4>View Options</h4>
+<table>
+  <tr>
+    <td>
+      <%=
+        content_tag(:div,
+          check_box_tag('highlight_unique') +
+          content_tag(:span, 'Highlight unique introns', :style => 'padding-left: 5px; padding-right: 20px')
+          )
+      %>
+
+      <%=
+        content_tag(:div,
+          check_box_tag('highlight_common') +
+          content_tag(:span, 'Highlight introns with at least ', :style => 'padding-left: 5px;') +
+          '<input id="spinner" name="value" style="width: 25px;">'.html_safe + ' % in common.'
+          )
+      %>
+
+      <%= javascript_tag defer: 'defer' do -%>
+        var spinner = $('#spinner');
+
+        $(function() {
+          spinner.spinner({
+            spin: function( event, ui ) {
+              // Remove disabled attribute if applicable
+              $('input#highlight_common').removeAttr('disabled');
+
+              if ( ui.value > 100 ) {
+                $( this ).spinner( 'value',  1);
+                return false;
+              } else if ( ui.value < 1 ) {
+                $( this ).spinner( 'value', 100 );
+                return false;
+              }
+            }
+          });
+
+          // Set spinner default value
+          spinner.spinner( 'value', 1 );
+        });
+
+        spinner.on('input', function() {
+          if ( isNaN( parseInt(this.value) ) ) {
+            $('input#highlight_common').prop('disabled', true);
+          } else if ( parseInt(this.value) > 100 || parseInt(this.value) < 1 ) {
+            $('input#highlight_common').prop('disabled', true);
+          } else {
+            $('input#highlight_common').removeAttr('disabled');
+          }
+        });
+
+      <% end -%>
+    </td>
+    <td style='padding-left: 30px;'>
+      <%=
+        content_tag(:div,
+          check_box_tag('show_intron_phase') +
+          content_tag(:span, 'Show intron phase', :style => 'padding-left: 5px; padding-right: 20px')
+          )
+      %>
+    </td>
+  <tr>
+</table>
+
+<% std_path = "#{Rails.root}/public/tmp/#{controller.id}-std.txt" %>
+<% intron_phase_path = "#{Rails.root}/public/tmp/#{controller.id}-intron-phase.txt" %>
+<script>
+  $('div#left-column').children().first().html("<%= get_sequence_names(std_path).html_safe %>");
+  $('div#right-column').children().first().html("<%= get_table(std_path, 'non_intron_phase').html_safe %>");
+  $('div#right-column').children().first().append("<%= get_table(intron_phase_path, 'intron_phase').html_safe %>");
+
+  var $non_intron_phase_table = $('table#non_intron_phase'),
+  $intron_phase_table = $('table#intron_phase');
+
+  $intron_phase_table.toggle();
+
+  // number of rows
+  var n_rows = $non_intron_phase_table[0].rows.length;
+
+  // number of columns
+  var allCells = $non_intron_phase_table.find('td');
+  var n_cols = allCells.length / n_rows;
+
+  // traverse column by column
+  function traverse(cells) {
+    var intron_col_order = 0;
+
+    for (var x = 0; x < n_cols; x++) {
+      var n_introns = 0;
+
+      for (var y = 0; y < n_rows; y++) {
+        if (cells[n_cols*y + x].innerText != "-") {
+          n_introns += 1;
+        }
+      }
+
+      // class name based on number of introns in the column
+      var class_name = "col-" + n_introns;
+
+      for (var y = 0; y < n_rows; y++) {
+        $(cells[n_cols*y + x]).addClass(class_name);
+      }
+
+      // set class names to interact with phylo tree
+      if (n_introns > 0) {
+        var class_name = "intron-col-" + intron_col_order;
+        for (var y = 0; y < n_rows; y++) {
+          $(cells[n_cols*y + x]).addClass(class_name);
+        }
+
+        intron_col_order += 1;
+      }
+    }
+  }
+
+  traverse(allCells);
+  traverse($intron_phase_table.find('td'));
+
+  function resetTable() {
+    $('.highlighted').removeClass('highlighted');
+    $('.common-highlighted').removeAttr('style');
+  }
+
+  // bind event to check boxes
+  $('input#highlight_unique').change(function() {
+    var checked = $(this).is(':checked');
+
+    if (checked) {
+      // reset
+      resetTable();
+
+      $('td.col-1').addClass('highlighted');
+      $('input#highlight_common').prop('checked', false);
+    } else {
+      $('td.col-1').removeClass('highlighted');
+    }
+  });
+
+  var spinner = $("input#spinner");
+
+  function spinnerEventHandler(spinnerValue) {
+    var threshold, class_name, background_color;
+
+    threshold = parseInt(spinnerValue*n_rows / 100);
+
+    var tmp = threshold;
+    while (!background_color && tmp <= n_rows) {
+      background_color = $("div#text-based").find("table#merged").find("." + tmp).css("background-color");
+      tmp += 1;
+    }
+
+    if (threshold > 0 && !_.isUndefined(background_color)) {
+
+      for (var i = threshold; i < n_rows; i++) {
+        class_name = "col-" + i;
+
+        $("." + class_name).addClass("common-highlighted");
+        $("." + class_name).css("background-color", background_color);
+      }
+    }
+  }
+
+  $('input#highlight_common').change(function() {
+    var checked = $(this).is(':checked');
+
+    if (checked) {
+      // reset
+      resetTable();
+
+      spinnerEventHandler(spinner.spinner("value"));
+
+      $('input#highlight_unique').prop('checked', false);
+    } else {
+
+    }
+  });
+
+  spinner.on( "spin", function( event, ui ) {
+    $('input#highlight_common').prop('checked', true);
+    resetTable();
+    spinnerEventHandler($(this).spinner('value'));
+  } );
+
+  // show intron phase
+  $('input#show_intron_phase').change(function() {
+    var checked = $(this).is(':checked');
+
+    $intron_phase_table.toggle();
+    $non_intron_phase_table.toggle();
+  });
+
+  // merged
+  var tMerged = $('table#merged')[0];
+  var row, cell;
+
+  row = tMerged.insertRow(-1);
+
+  // Visible Spectrum
+  var start = 450, // nm blue
+    end = 780,   // nm red
+    total = end - start + 1;
+
+  var wavelength, color;
+
+  for (var i = 0; i < n_cols; i++) {
+    cell = row.insertCell(-1);
+
+    // set text of the cell based on number of introns in the column
+    var nIntrons = parseInt(allCells[i].className.split(' ')[0].split('-')[1])
+
+    cell.setAttribute('class', nIntrons);
+    cell.innerText = nIntrons > 0 ? '|' : '-';
+
+    if (nIntrons == 0) {
+      cell.setAttribute('style', 'background-color: #F5F5F5');
+    } else {
+      wavelength = (nIntrons * total) / n_rows + start;
+      color = Math.nmToRGB(wavelength);
+
+      cell.setAttribute('style', 'background-color: rgb(' +  color.red + ', ' + color.green + ', ' + color.blue + ')');
+    }
+  }
+
+  cell = row.insertCell(-1); // insert dummy cell
+  cell.innerHTML = "&nbsp;";
+
+  cell = row.insertCell(-1); // insert dummy cell
+  cell.innerHTML = "&nbsp;";
+</script>
