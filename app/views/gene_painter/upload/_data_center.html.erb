@@ -121,7 +121,7 @@
 
       $.ajax({
         type: 'POST',
-        url: '/create_gene_structures',
+        url: '/call_genepainter',
         data: {'data': missingGeneStructures, 'new_mapping': new_mapping_str, 'all_species': all_species},
         dataType: 'script'
       });

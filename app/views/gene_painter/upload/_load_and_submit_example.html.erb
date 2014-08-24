@@ -17,7 +17,7 @@
 
 			$.ajax({
 				type: 'POST',
-				url: '/create_gene_structures',
+				url: '/call_genepainter',
 				data: {'data': [], 'is_example': true, 'all_species': all_species},
 				success: function() {
 					$("u#load_example").html("Example loaded");

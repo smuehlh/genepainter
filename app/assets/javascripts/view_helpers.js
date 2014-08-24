@@ -56,3 +56,14 @@ function error(message) {
         }
       });
 }
+// function warning(message) {
+//   $("div#warning_dialog").html("<p>" + message + "</p>");
+//   $("div#warning_dialog").dialog({
+//         modal: true,
+//         buttons: {
+//           Ok: function() {
+//             $( this ).dialog( "close" );
+//           }
+//         }
+//       });
+// }

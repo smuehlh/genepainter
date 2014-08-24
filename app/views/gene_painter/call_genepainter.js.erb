@@ -1,0 +1,14 @@
+// @fatal_error: keep default texts, and show fatal_error
+// warning: show error??? but do not keep default texts
+
+// update data centre based on controller.new_gene_structures
+hide_show_waiting('hide');
+<% if @fatal_error.blank? then %>
+	<% ! if @warning.blank? then %>
+		// for simplicity, just use error method to display warning. nothing more than an pop-up box will happen.
+		$("#notice").html('<%=raw(@warning)%>')
+	<% end %>
+	alert("Hurra");
+<% else %>
+	error('<%=raw(@fatal_error)%>')
+<% end %>

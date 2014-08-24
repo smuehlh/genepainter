@@ -13,6 +13,8 @@ class GenePainterController < ApplicationController
   @@seq_names = []
   @@name_species_map = {}
 
+  @@new_gene_structures = []
+
   def id
     @@id
   end
@@ -59,7 +61,7 @@ class GenePainterController < ApplicationController
     result["data"] = Node.all_of(scientific_name: /^#{q}/i).map do |node|
       node.scientific_name
     end
-  rescue RuntimeError, NoMethodError, TypeError, NameError, Errno::ENOENT => exp
+  rescue RuntimeError, NoMethodError, TypeError, NameError, Errno::ENOENT, ArgumentError, Errno::EACCES => exp
 
   ensure
     render :json => result
@@ -106,7 +108,7 @@ class GenePainterController < ApplicationController
     rescue RuntimeError => exp
       @fatal_error = exp.message
 
-    rescue NoMethodError, TypeError, NameError, Errno::ENOENT => exp
+    rescue NoMethodError, TypeError, NameError, Errno::ENOENT, Errno::EACCES, ArgumentError => exp
       @fatal_error = 'Cannot upload file. Please contact us.'
 
     ensure
@@ -154,7 +156,7 @@ class GenePainterController < ApplicationController
     rescue RuntimeError => exp
       @fatal_error = exp.message
 
-    rescue NoMethodError, TypeError, NameError, Errno::ENOENT => exp
+    rescue NoMethodError, TypeError, NameError, Errno::ENOENT, Errno::EACCES, ArgumentError => exp
       @fatal_error = 'Cannot upload files. Please contact us.'
 
     ensure
@@ -194,14 +196,11 @@ class GenePainterController < ApplicationController
 
       [] # default for @fatal_error
     }
-
-    rescue RuntimeError => exp
-      @fatal_error = exp.message
-
-    rescue NoMethodError, TypeError, NameError, Errno::ENOENT => exp
-      @fatal_error = 'Cannot load file. Please contact us.'
-
-    ensure
+  rescue RuntimeError => ex
+    @fatal_error = ex.message
+  rescue NoMethodError, Errno::ENOENT, Errno::EACCES, ArgumentError, NameError, TypeError => ex
+    @fatal_error = 'Cannot load file. Please contact us.'
+  ensure
       map_sequence_name_to_species
 
       respond_to do |format|
@@ -232,12 +231,11 @@ class GenePainterController < ApplicationController
       @updated_mapping = params[:data]
 
     end
-  rescue RuntimeError => exp
-    @error_message = exp.message
 
-  rescue NoMethodError, TypeError, NameError, Errno::ENOENT => exp
-    @error_message = 'Cannot update species mapping.'
-
+  rescue RuntimeError => ex
+    @fatal_error = ex.message
+  rescue NoMethodError, Errno::ENOENT, Errno::EACCES, ArgumentError, NameError => ex
+    @fatal_error = 'Cannot update species mapping.'
   ensure
     respond_to do |format|
       format.js
@@ -261,10 +259,11 @@ class GenePainterController < ApplicationController
     f.close
 
     @seq_names = read_in_alignment(@@default_fname)[0]
-  rescue  NoMethodError => ex
-    @errors = 'Error parsing sequence alignment'
-  rescue RuntimeError, Errno::ENOENT, NameError => ex
-    @errors = ex.message
+
+  rescue RuntimeError => ex
+    @fatal_error = ex.message
+  rescue NoMethodError, Errno::ENOENT, Errno::EACCES, ArgumentError, NameError => ex
+    @fatal_error = 'Error parsing sequence alignment'
   ensure
     respond_to do |format|
       format.js
@@ -275,12 +274,10 @@ class GenePainterController < ApplicationController
     @@name_species_map = map_genenames_to_speciesnames(@@f_dest + '/fastaheaders2species.txt')
   end
 
+  def call_genepainter
+    @fatal_error = "" # fatal, not output generated
+    @warning = "" # non-fatal error, maybe still output generated
 
-# TODO
-# check return values of system calls
-# if false: render error! 
-  def create_gene_structures
-    @errors = ""
     @is_example = params[:is_example]
     missing_gene_structures = params[:data] == nil ? [] : params[:data]
 
@@ -294,7 +291,6 @@ class GenePainterController < ApplicationController
         if Node.any_of({ scientific_name: "#{s}"}).length > 0
 
           species = Node.any_of({ scientific_name: "#{s}"}).first
-          # logger.debug("species test: #{species.inspect}")
 
           lineage = []
           current_taxon = species
@@ -343,31 +339,47 @@ class GenePainterController < ApplicationController
 
     # Creates missing gene structures
     if !missing_gene_structures.blank?
-      @retVal, @new_genes = generate_gene_structures(missing_gene_structures, f_species_to_fasta, f_alignment, d_gene_structures)
-logger.debug("*********")
-      logger.debug(@retVal)
-      logger.debug(@new_genes.inspect)
-    else
-      @new_genes = []
+      @warning = catch(:error) do 
+        is_sucess, new_gene_structures = generate_gene_structures(
+          missing_gene_structures, f_species_to_fasta, f_alignment, d_gene_structures
+        )
+        if is_sucess then 
+          @@new_gene_structures = new_gene_structures
+        else
+          throw :error, "Could not generated requested gene structures."
+        end
+        "" # default error-message
+      end
     end
 
+
+    # call genepainter
+    options_io = "-i #{f_alignment} -p #{d_gene_structures} --outfile #{prefix} --path-to-output #{d_output}"
+    options_text_output = "--intron-phase --phylo --spaces --alignment --statistics"
+    options_graphical_output = "--svg --svg-format both --svg-merged --svg-nested"
+    options_taxonomic_output = "--intron-numbers-per-taxon --taxonomy-to-fasta #{f_species_to_fasta} --tree --taxonomy #{f_taxonomy_list}"
+    is_sucess = nil
     if f_species_to_fasta.blank?
-      logger.debug("Didn't find any fastaheaders2species files.")
-
-      # Call gene_painter
-      @retVal = system "ruby #{F_gene_painter} -i #{f_alignment} -p #{d_gene_structures} --outfile #{prefix} --path-to-output #{d_output} --intron-phase --phylo --spaces --alignment --svg --svg-format both --svg-merged --svg-nested --statistics"
+       # Call gene_painter
+      is_sucess = system "ruby #{F_gene_painter} #{options_io} #{options_text_output} #{options_graphical_output}"
     else
-      @retVal = system "ruby #{F_gene_painter} -i #{f_alignment} -p #{d_gene_structures} --outfile #{prefix} --path-to-output #{d_output} --intron-phase --phylo --spaces --alignment --svg --svg-format both --svg-merged --svg-nested --statistics --intron-numbers-per-taxon --taxonomy-to-fasta #{f_species_to_fasta} --tree --taxonomy #{f_taxonomy_list}"
+      is_sucess = system "ruby #{F_gene_painter} #{options_io} #{options_text_output} #{options_graphical_output} #{options_taxonomic_output}"
     end
-logger.debug("***********")
-logger.debug @retVal
+    if is_sucess then 
+      is_output_written = Helper.does_file_exist( File.join(d_output, "#{prefix}-std.txt") )
+      if ! is_output_written then 
+        # stand-alone genepainter failed
+        Helper.raise_runtime_error "Cannot execute GenePainter."
+      end
+    else
+      # stand-alone genepainter failed
+      Helper.raise_runtime_error "Cannot execute GenePainter."
+    end
+
     genes_to_show = Dir["#{d_gene_structures}/*.yaml"].take(20)
     genes_to_show.map! do |gene|
       File.basename(gene, '.yaml')
     end
-
-    logger.debug(genes_to_show.inspect)
-    logger.debug("Return from sys call: " + @retVal.to_s)
 
     build_svg_by_genestructs(build_output_path("normal.svg"),
         build_output_path("genenames-normal.svg"),
@@ -392,10 +404,11 @@ logger.debug @retVal
         build_output_path("genestructures-reduced-merged.svg"),
         build_output_path("legend-reduced-merged.svg"),
         ["Merged"])
-  rescue  NoMethodError => ex
-    @errors = 'Error parsing sequence alignment'
-  rescue RuntimeError, Errno::ENOENT, NameError => ex
-    @errors = ex.message
+
+  rescue RuntimeError => ex
+    @fatal_error = ex.message
+  rescue NoMethodError, Errno::ENOENT, Errno::EACCES, ArgumentError, NameError, TypeError => ex
+    @fatal_error = "Cannot execute GenePainter."
   ensure
     respond_to do |format|
       format.js
@@ -433,10 +446,9 @@ logger.debug @retVal
         File.delete(file)
       end
     end
-    rescue  NoMethodError => ex
+
+  rescue RuntimeError, NoMethodError, Errno::ENOENT, Errno::EACCES, ArgumentError, NameError => ex
       @errors = 'Error cleaning up old data'
-    rescue RuntimeError, Errno::ENOENT, NameError => ex
-      @errors = ex.message
   end
 
 end
