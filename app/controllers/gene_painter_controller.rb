@@ -6,7 +6,7 @@ require 'helper.rb'
 class GenePainterController < ApplicationController
 
   @@id = ''
-  @@f_dest = '' # Helper.make_new_tmp_dir(TMP_PATH)
+  @@f_dest = '' 
   @@f_gene_structures = ''
   @@default_fname = ''
 
@@ -54,8 +54,11 @@ class GenePainterController < ApplicationController
     @@id = @@f_dest.split('/').last
 
     Helper.mkdir_or_die(@@f_gene_structures)
-  rescue RuntimeError, NoMethodError, TypeError, NameError, Errno::ENOENT, ArgumentError, Errno::EACCES => exp
+
     expires_now()
+
+  rescue RuntimeError, NoMethodError, TypeError, NameError, Errno::ENOENT, ArgumentError, Errno::EACCES => exp
+  
   end
 
   def get_species
