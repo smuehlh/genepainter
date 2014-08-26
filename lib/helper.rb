@@ -90,4 +90,9 @@ module Helper
 		return id
 	end
 
+	def zip_folder_or_die(p_scr, p_dest)
+		is_success = system("zip -jr #{p_dest} #{p_scr}")
+		worked_or_die(is_success, "Cannot compress folder #{p_scr}.")
+	end
+
 end

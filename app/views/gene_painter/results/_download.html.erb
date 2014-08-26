@@ -1,4 +1,60 @@
-links:
-- neue berechnete genestrukturen
-- genepainter dateien
-- nicht: die merged-etc bilder, die nur zur darstellung erzeugt
+<% 
+	# all files that can be downloaded in principle
+	files_with_desc = {
+		"std.txt" => { alt_name: "Standard", desc: "Exon-intron pattern"},
+		"intron-phase.txt" => { alt_name: "Intron phase", desc: "Exon-intron pattern"},
+		"spaces.txt" => { alt_name: "Spaces", desc: "Exon-intron pattern" },
+		"phylo.fas" => { alt_name: "Phylo", desc: "Exon-intron pattern"},
+		"alignment.fas" => { alt_name: "Alignment", desc: "Alignment with intron positions"},
+		"stats.txt" => { alt_name: "Statistics", desc: "Commonness of intron positions"},
+		"normal.svg" => { alt_name: "Standard SVG", desc: "Graphical representation of genes"},
+		"reduced.svg" => { alt_name: "Reduced SVG", desc: "Graphical representation of genes"},
+		"tree.svg" => { alt_name: "Phylogenetic tree SVG", desc: "Phylogenetic tree (graphical representation)"},
+		"tree.phb" => { alt_name: "Phylogenetic tree PHB", desc: "Phylogenetic tree (Newick tree format)"},
+	} 
+	basepath = "tmp/#{controller.id}-"
+
+	# delete all files that do not exist
+	files_with_desc.delete_if do |f_name, desc|
+		! Helper.does_file_exist( controller.build_output_path(f_name) )
+	end
+%>
+
+<% if controller.new_gene_structures.any? then %>
+	<table id="download">
+		<colgroup>
+			<col class="first_col">
+			<col>
+		</colgroup>
+		<tr>
+			<th>Archive</th>
+			<th>Content</th>
+		</tr>
+		<tr>
+			<td><%= link_to( "Gene structures", get_download_genestructs_path, :class => "external", :target => "_blank" ) %></td>
+			<td>Newly generated gene structures</td>
+		</tr>
+	</table>
+	<p></p>
+<% end %>
+
+<table id="download">
+	<colgroup>
+		<col class="first_col">
+		<col>
+	</colgroup>
+	<tr>
+		<th>File</th>
+		<th>Content</th>
+	</tr>
+	<% files_with_desc.each do |f_name, desc| %>
+		<tr>
+			<td><%= link_to( desc[:alt_name], "#{basepath}#{f_name}", :class => "external" ) %></td>
+			<td><%= desc[:desc] %></td>
+		</tr>
+	<% end %>
+</table>
+<%= content_tag(:p, 
+	"Right click & and \"save target as/ link as\" to download files.", :class => "filename"
+	)
+%>

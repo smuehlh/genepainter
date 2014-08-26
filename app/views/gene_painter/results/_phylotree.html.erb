@@ -1,72 +1,73 @@
-<% if File.exist?("#{Rails.root}/public/tmp/#{controller.id}-taxonomy-intron-numbers.txt") %>
+<% if File.exist?("#{Rails.root}/public/tmp/#{controller.id}-taxonomy-intron-numbers.txt") &&
+      File.exist?("#{Rails.root}/public/tmp/#{controller.id}-tree.svg") then %>
   <div id='svg_placeholder' style='padding: 10px 0px 10px 0px'>
-
   </div>
+
+  <script>
+
+      // Display phylotree
+      // $('div#b_phylotree').show('slow');
+
+      $('div#svg_placeholder').html('<%= render_svg("#{controller.id}-tree.svg").html_safe %>');
+
+      var intron_numbers = $('<div/>').html('<%= intron_numbers %>').text();
+      var obj = JSON.parse(intron_numbers.replace(/=>/g, ':'));
+
+      function colorize(cells) {
+        _.each(cells, function(cell) {
+          $(cell).addClass('highlighted');
+        });
+      }
+
+      function resetPhylotree() {
+        $('.taxon').removeAttr('fill');
+        $('.taxon').removeAttr('style');
+      }
+
+      $('.taxon').click(function() {
+
+        resetPhylotree();
+        resetTable();
+
+        this.setAttribute('fill', 'blue');
+        this.setAttribute('style', 'font-size: 14px; font-weight: bold');
+
+        var textTokens = this.innerHTML.split(" ");
+
+        if (textTokens.length > 1) {
+          textTokens.pop();
+          textTokens.pop();
+          textTokens.pop();
+        }
+
+        var nodeName = textTokens.toString().replace(/,/g, " ");
+        var tmp = [];
+
+        _.each(obj[nodeName], function(element) {
+          colorize($("." + element));
+
+          tmp.push(_.last(element.split("-")));
+        });
+
+        $('rect').removeClassSVG('fill-grey');
+
+        if (tmp.length) {
+
+          $('.background').addClassSVG('fill-grey');
+
+          _.each($("rect"), function(rect) {
+
+            if (!_.contains(tmp, rect.getAttribute('class').trim().split('_')[1])) {
+              $(rect).addClassSVG('fill-grey');
+            }
+          });
+        }
+
+      });
+  </script>
+
 <% else %>
 	<%= content_tag(:i, 
 		"Cannot display phylogenetic tree."
 	)%>
 <% end %>
-
-<script>
-
-    // Display phylotree
-    // $('div#b_phylotree').show('slow');
-
-    $('div#svg_placeholder').html('<%= render_svg("#{controller.id}-tree.svg").html_safe %>');
-
-    var intron_numbers = $('<div/>').html('<%= intron_numbers %>').text();
-    var obj = JSON.parse(intron_numbers.replace(/=>/g, ':'));
-
-    function colorize(cells) {
-      _.each(cells, function(cell) {
-        $(cell).addClass('highlighted');
-      });
-    }
-
-    function resetPhylotree() {
-      $('.taxon').removeAttr('fill');
-      $('.taxon').removeAttr('style');
-    }
-
-    $('.taxon').click(function() {
-
-      resetPhylotree();
-      resetTable();
-
-      this.setAttribute('fill', 'blue');
-      this.setAttribute('style', 'font-size: 14px; font-weight: bold');
-
-      var textTokens = this.innerHTML.split(" ");
-
-      if (textTokens.length > 1) {
-        textTokens.pop();
-        textTokens.pop();
-        textTokens.pop();
-      }
-
-      var nodeName = textTokens.toString().replace(/,/g, " ");
-      var tmp = [];
-
-      _.each(obj[nodeName], function(element) {
-        colorize($("." + element));
-
-        tmp.push(_.last(element.split("-")));
-      });
-
-      $('rect').removeClassSVG('fill-grey');
-
-      if (tmp.length) {
-
-        $('.background').addClassSVG('fill-grey');
-
-        _.each($("rect"), function(rect) {
-
-          if (!_.contains(tmp, rect.getAttribute('class').trim().split('_')[1])) {
-            $(rect).addClassSVG('fill-grey');
-          }
-        });
-      }
-
-    });
-</script>

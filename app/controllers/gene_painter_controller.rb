@@ -54,7 +54,7 @@ class GenePainterController < ApplicationController
     @@id = @@f_dest.split('/').last
 
     Helper.mkdir_or_die(@@f_gene_structures)
-
+  rescue RuntimeError, NoMethodError, TypeError, NameError, Errno::ENOENT, ArgumentError, Errno::EACCES => exp
     expires_now()
   end
 
@@ -446,10 +446,33 @@ class GenePainterController < ApplicationController
     end
   end
 
+  def download_new_genestructs
+    @error = ""
+    p_src_all = File.join(@@f_dest, 'gene_structures')
+    p_src_only_new = File.join(@@f_dest, 'newly_gen_gene_structures')
+    Helper.mkdir_or_die(p_src_only_new)
+
+    @@new_gene_structures.each do |f_name|
+      f_path_src = File.join(p_src_all, f_name)
+      f_path_dest = File.join(p_src_only_new, f_name)
+      Helper.move_or_copy_file(f_path_src, f_path_dest, "copy")
+    end
+
+    p_dest = build_output_path("genestucts.zip")
+    Helper.zip_folder_or_die(p_src_only_new, p_dest)
+
+    send_file p_dest, :x_sendfile => true
+  rescue RuntimeError, NoMethodError, Errno::ENOENT, Errno::EACCES, ArgumentError, NameError => ex
+    @error = "Cannot prepare gene structures for download."
+  ensure 
+    render plain: 'Cannot prepare gene structures for download'
+  end
+
   def build_output_path(filename)
     return "#{Rails.root}/public/tmp/#{@@id}-#{filename}"
   end
-
+# TODO
+# probiere fehler in cleanup aus; ist render nothing oder so noetig??
   def clean_up
     files_to_remove = Dir["#{Rails.root}/public/tmp/#{@@id}*"]
 

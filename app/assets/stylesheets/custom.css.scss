@@ -659,3 +659,26 @@ table.mapped_headers th {
 .ui-autocomplete-loading {
     background: white url("images/jquery_ui/ui-anim_basic_16x16.gif") right center no-repeat;
   }
+
+// style for download table
+#download
+{
+  // font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+  // font-size: 12px;
+  text-align: left;
+}
+#download th
+{
+  // text-align: left;
+  // font-size: 13px;
+  // font-weight: normal;
+  color: #039;
+}
+#download tr:hover td
+{
+  color: #339;
+  background: #eff2ff;
+}
+#download .first_col {
+  width: 150px;
+}
