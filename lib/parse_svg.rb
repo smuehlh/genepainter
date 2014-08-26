@@ -35,7 +35,7 @@ end
 # returns [Hash] Parameters describing values needed to redraw (and fix sizes and positions) SVG 
 def get_svg_parameters_from_genepainter
 
-	require "/fab8/server/db_scripts/gene_painter_new/gene_painter/lib/svg.rb"
+	require File.join(Dir_gene_painter, "lib/svg.rb")
 
 	return { 
 		x_pos_genename: Svg.parameters[:x_pos_genename],

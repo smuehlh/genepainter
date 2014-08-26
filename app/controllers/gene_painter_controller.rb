@@ -471,8 +471,7 @@ class GenePainterController < ApplicationController
   def build_output_path(filename)
     return "#{Rails.root}/public/tmp/#{@@id}-#{filename}"
   end
-# TODO
-# probiere fehler in cleanup aus; ist render nothing oder so noetig??
+
   def clean_up
     files_to_remove = Dir["#{Rails.root}/public/tmp/#{@@id}*"]
 
@@ -482,9 +481,7 @@ class GenePainterController < ApplicationController
         File.delete(file)
       end
     end
-
   rescue RuntimeError, NoMethodError, Errno::ENOENT, Errno::EACCES, ArgumentError, NameError => ex
-      @errors = 'Error cleaning up old data'
   end
 
 end

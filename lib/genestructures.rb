@@ -44,8 +44,7 @@ def generate_gene_structures( list_of_genes_to_process, path_to_species_to_fasta
 	path_to_genes_list = File.join(output_path, "genes_whitelist_#{rand(1000)}.txt")
 	IO.write( path_to_genes_list, list_of_genes_to_process.join("\n"), :mode => "w" )
 
-	path_to_genepainter = "/fab8/server/db_scripts/gene_painter_new/gene_painter" # FIXME adjust path to genepainter standalone, best createa an constant with switch for fab8/cymo server
-	path_to_yaml_genenerator = File.join( path_to_genepainter, "tools", "generate_yaml_for_multiple_species.rb" )
+	path_to_yaml_genenerator = File.join( Dir_gene_painter, "tools", "generate_yaml_for_multiple_species.rb" )
 
 	is_success = system("ruby #{path_to_yaml_genenerator} -s #{path_to_species_to_fasta} -i #{path_to_fasta} -w #{path_to_genes_list} -p #{output_path}")
 

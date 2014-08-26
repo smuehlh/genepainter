@@ -3,8 +3,7 @@ class ApplicationController < ActionController::Base
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
 
-# FIXME
- #  	rescue_from ActionView::Template::Error do |exception|
-	# 	render "error", formats: [:js]
-	# end
+ 	rescue_from ActionView::Template::Error do |exception|
+		render "error", formats: [:js]
+	end
 end
