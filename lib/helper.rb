@@ -47,6 +47,7 @@ module Helper
 			rescue
 				raise_runtime_error "Fatal: Cannot create directory #{path}"
 			end
+		else
 		end
 	end
 

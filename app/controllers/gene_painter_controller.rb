@@ -6,9 +6,9 @@ require 'helper.rb'
 class GenePainterController < ApplicationController
 
   @@id = ''
-  @@f_dest = '' 
-  @@f_gene_structures = ''
-  @@default_fname = ''
+  @@basepath_data = '' # basepath input data
+  @@p_alignment = '' # input data: alignment file
+  @@p_gene_structures = '' # input data: folder with gene structures
 
   @@seq_names = []
   @@name_species_map = {}
@@ -19,12 +19,8 @@ class GenePainterController < ApplicationController
     @@id
   end
 
-  def f_dest
-    @@f_dest
-  end
-
-  def f_gene_structures
-    @@f_gene_structures
+  def p_gene_structures
+    @@p_gene_structures
   end
 
   def seq_names
@@ -45,15 +41,13 @@ class GenePainterController < ApplicationController
     clean_up
 
     # Generate a dir in tmp to store uploaded files
-    id = Helper.make_new_tmp_dir(TMP_PATH)
+    @@id = Helper.make_new_tmp_dir(TMP_PATH)
 
-    @@f_dest = File.join(TMP_PATH, id)
-    @@default_fname = File.join(@@f_dest, 'alignment')
-    @@f_gene_structures = File.join(@@f_dest, 'gene_structures')
+    @@basepath_data = File.join(TMP_PATH, id)
+    @@p_alignment = File.join(@@basepath_data, 'input.fas')
+    @@p_gene_structures = File.join(@@basepath_data, 'gene_structures')
 
-    @@id = @@f_dest.split('/').last
-
-    Helper.mkdir_or_die(@@f_gene_structures)
+    Helper.mkdir_or_die(@@p_gene_structures)
 
     expires_now()
 
@@ -75,37 +69,34 @@ class GenePainterController < ApplicationController
   end
 
   def upload_sequence
+
     @fatal_error = catch(:error) {
+      # save file as @@p_alignment
 
       if params[:is_example]
         @basename = "coro_sel.fas"
-        path = "#{Rails.root}/public/sample/#{@basename}"
+        f_src = "#{Rails.root}/public/sample/#{@basename}"
 
-        Helper.mkdir_or_die(@@f_dest)
-        Helper.move_or_copy_file(path, @@f_dest, 'copy')
+        Helper.move_or_copy_file(f_src, @@p_alignment, 'copy')
 
-        @seq_names = read_in_alignment(path)[0]
+        @seq_names = read_in_alignment(@@p_alignment)[0]
 
       else
-        file = params[:files][0]
+        file = params[:file]
         @basename = file.original_filename
-        path = file.path()
-
-        @seq_names = read_in_alignment(path)[0]
 
         # check file size
-        Helper.filesize_below_limit(file.tempfile, MAX_FILESIZE)
+        Helper.filesize_below_limit(file.tempfile, MAX_FILESIZE) 
 
         # store file in place
-        Helper.mkdir_or_die(@@f_dest)
-        Helper.move_or_copy_file(path, @@f_dest, 'move')
+        Helper.move_or_copy_file(file.tempfile, @@p_alignment, "move")
 
-        # rename to original name
-        Helper.rename(File.join(@@f_dest, File.basename(path)),
-          File.join(@@f_dest, @basename))
+        # call fromdos 
+        is_sucess = system("fromdos", @@p_alignment)
 
-        # call fromdos
-        is_sucess = system('fromdos',@@f_dest)
+        # read in data
+        @seq_names = read_in_alignment(@@p_alignment)[0]
+
         throw :error, 'Cannot upload file. Please contact us.' if ! is_sucess
       end
 
@@ -132,7 +123,7 @@ class GenePainterController < ApplicationController
         genes = Dir["#{Rails.root}/public/sample/gene_structures/*"]
 
         genes.each do |gene|
-          Helper.move_or_copy_file(gene, @@f_gene_structures, 'copy')
+          Helper.move_or_copy_file(gene, @@p_gene_structures, 'copy')
         end
 
         @gene_names = genes.collect! do |gene|
@@ -144,16 +135,16 @@ class GenePainterController < ApplicationController
 
         # check file size
         Helper.filesize_below_limit(file.tempfile, MAX_FILESIZE)
-        Helper.move_or_copy_file(file.path(), @@f_gene_structures, 'move')
+        Helper.move_or_copy_file(file.path(), @@p_gene_structures, 'move')
 
         # rename to original name
-        Helper.rename(File.join(@@f_gene_structures, File.basename(file.path())),
-          File.join(@@f_gene_structures, file.original_filename))
+        Helper.rename(File.join(@@p_gene_structures, File.basename(file.path())),
+          File.join(@@p_gene_structures, file.original_filename))
 
         @filename = file.original_filename
 
         # call fromdos
-        is_sucess = system('fromdos',@@f_dest)
+        is_sucess = system('fromdos', File.join(@@p_gene_structures, file.original_filename))
         throw :error, 'Cannot upload files. Please contact us.' if ! is_sucess
       end
 
@@ -180,7 +171,7 @@ class GenePainterController < ApplicationController
       if @is_example
         @basename = "fastaheaders2species.txt"
         path = "#{Rails.root}/public/sample/#{@basename}"
-        Helper.move_or_copy_file(path, @@f_dest, 'copy')
+        Helper.move_or_copy_file(path, @@basepath_data, 'copy')
 
       else
         file = params[:files][0]
@@ -192,12 +183,12 @@ class GenePainterController < ApplicationController
         Helper.filesize_below_limit(file.tempfile, MAX_FILESIZE)
 
         tmp_file = File.open(path, "rb").read
-        File.open("#{@@f_dest}/fastaheaders2species.txt", "a") { |f|
+        File.open("#{@@basepath_data}/fastaheaders2species.txt", "a") { |f|
           f.write(tmp_file)
         }
 
         # call fromdos
-        is_sucess = system('fromdos',@@f_dest)
+        is_sucess = system('fromdos', "#{@@basepath_data}/fastaheaders2species.txt")
         throw :error, 'Cannot upload file. Please contact us.' if ! is_sucess
       end
 
@@ -227,7 +218,7 @@ class GenePainterController < ApplicationController
       # if find a species
       @error_message = nil
       if Node.any_of(scientific_name: "#{species}").length > 0
-        File.open("#{@@f_dest}/fastaheaders2species.txt", "a") { |f|
+        File.open("#{@@basepath_data}/fastaheaders2species.txt", "a") { |f|
           f.write("#{@new_mapping}\n")
         }
       else
@@ -254,10 +245,10 @@ class GenePainterController < ApplicationController
     @errors = ""
 
     # Use default filename
-    if File.exist?(@@default_fname)
-      f = File.open(@@default_fname, 'w+')
+    if File.exist?(@@p_alignment)
+      f = File.open(@@p_alignment, 'w+')
     else
-      f = File.new(@@default_fname, 'w+')
+      f = File.new(@@p_alignment, 'w+')
     end
 
     if File.writable?(f)
@@ -265,7 +256,7 @@ class GenePainterController < ApplicationController
     end
     f.close
 
-    @seq_names = read_in_alignment(@@default_fname)[0]
+    @seq_names = read_in_alignment(@@p_alignment)[0]
 
   rescue RuntimeError => ex
     @fatal_error = ex.message
@@ -278,7 +269,7 @@ class GenePainterController < ApplicationController
   end
 
   def map_sequence_name_to_species
-    @@name_species_map = map_genenames_to_speciesnames(@@f_dest + '/fastaheaders2species.txt')
+    @@name_species_map = map_genenames_to_speciesnames(@@basepath_data + '/fastaheaders2species.txt')
   end
 
   def call_genepainter
@@ -318,7 +309,7 @@ class GenePainterController < ApplicationController
 
     filename = "taxonomy_list.csv"
 
-    File.open("#{@@f_dest}/#{filename}", "w") { |file|
+    File.open("#{@@basepath_data}/#{filename}", "w") { |file|
       file.write(taxonomy_list)
     }
 
@@ -326,18 +317,18 @@ class GenePainterController < ApplicationController
     new_mapping_str = params[:new_mapping] == nil ? "" : params[:new_mapping]
     if new_mapping_str.length > 0
       # delete old file
-      File.delete("#{@@f_dest}/fastaheaders2species.txt")
+      File.delete("#{@@basepath_data}/fastaheaders2species.txt")
       # write to a new one
-      File.open("#{@@f_dest}/fastaheaders2species.txt", "w") { |file|
+      File.open("#{@@basepath_data}/fastaheaders2species.txt", "w") { |file|
         file.write(new_mapping_str)
       }
     end
 
-    f_alignment = Dir[@@f_dest + '/*.fas'].first
-    d_gene_structures = File.join(@@f_dest, 'gene_structures')
+    f_alignment = @@p_alignment
+    d_gene_structures = @@p_gene_structures
     d_output = "#{Rails.root}/public/tmp"
-    f_species_to_fasta = Dir[@@f_dest + '/fastaheaders2species.txt'].first
-    f_taxonomy_list = "#{@@f_dest}/taxonomy_list.csv"
+    f_species_to_fasta = Dir[@@basepath_data + '/fastaheaders2species.txt'].first
+    f_taxonomy_list = "#{@@basepath_data}/taxonomy_list.csv"
 
     Helper.mkdir_or_die(d_output)
 
@@ -451,8 +442,8 @@ class GenePainterController < ApplicationController
 
   def download_new_genestructs
     @error = ""
-    p_src_all = File.join(@@f_dest, 'gene_structures')
-    p_src_only_new = File.join(@@f_dest, 'newly_gen_gene_structures')
+    p_src_all = File.join(@@basepath_data, 'gene_structures')
+    p_src_only_new = File.join(@@basepath_data, 'newly_gen_gene_structures')
     Helper.mkdir_or_die(p_src_only_new)
 
     @@new_gene_structures.each do |f_name|

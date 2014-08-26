@@ -46,8 +46,7 @@
 
 		<!-- TODO: Only accept some file extensions. bug??-->
 		<%= file_field_tag("sequence_uploader",
-			:name => "files[]",
-			# :multiple => true
+			:name => "file",
 			:data => {url: post_upload_sequence_path}
 			)
 		%>

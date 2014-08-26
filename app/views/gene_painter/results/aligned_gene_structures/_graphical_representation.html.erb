@@ -145,7 +145,7 @@
     }
   })
 
-  <% if Dir["#{controller.f_gene_structures}/*.yaml"].length > 20 %>
+  <% if Dir["#{controller.p_gene_structures}/*.yaml"].length > 20 %>
     $('div#select_genes').css('display', 'inline');
     $('div#placeholder').html('<%= populate_select_genes_modal.html_safe %>');
   <% end %>

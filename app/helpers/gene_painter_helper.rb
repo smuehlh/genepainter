@@ -25,7 +25,7 @@ module GenePainterHelper
 
   # Returns gene structure status
   def gene_structure_status(filename)
-    f_path = "#{controller.f_dest}/gene_structures/#{filename}"
+    f_path = File.join( controller.p_gene_structures, filename)
     return get_status_of_gene_structure(f_path).to_s
   end
 
@@ -114,7 +114,7 @@ module GenePainterHelper
   def populate_select_genes_modal
     table = '<table>'
 
-    all_gene_structures = Dir["#{controller.f_dest}/gene_structures/*.yaml"]
+    all_gene_structures = Dir["#{controller.p_gene_structures}/*.yaml"]
     all_gene_structures.map! { |gene_structure|
       File.basename(gene_structure, '.yaml')
     }
