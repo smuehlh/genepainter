@@ -346,8 +346,22 @@ class GenePainterController < ApplicationController
       }
     end
 
+    # apply data selection for analysis
+    selected_genes = params[:analyse]
+    d_gene_structures = File.join(session[:basepath_data], 'selected_gene_structures')
+    Helper.mkdir_or_die(d_gene_structures)
+
+    all_genes = Dir[ File.join( session[:p_gene_structures], "*" ) ]
+    all_genes.each do |f_src|
+      f_src_basename = File.basename(f_src, ".*")
+      if selected_genes.include?( f_src_basename ) then 
+        Helper.move_or_copy_file(f_src, d_gene_structures, 'copy')
+      end
+    end
+
+    # do NOT use session[:p_gene_structures], as this contains _all_ genestructures
+    # use d_gene_structures instead, which contains _selected_ genestructures only
     f_alignment = session[:p_alignment]
-    d_gene_structures = session[:p_gene_structures]
     d_output = "#{Rails.root}/public/tmp"
     f_species_to_fasta = Dir[session[:basepath_data] + '/fastaheaders2species.txt'].first
     f_taxonomy_list = "#{session[:basepath_data]}/taxonomy_list.csv"

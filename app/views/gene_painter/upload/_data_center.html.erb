@@ -87,6 +87,15 @@
       }
     }
 
+    var selected_for_analysis = [];
+    var boxes = $('div#data_table').find('input#analyze');
+
+    for (var i = 0; i < boxes.length; i++) {
+      if ( $(boxes[i]).is(':checked') ) {
+        selected_for_analysis.push(boxes[i].value);
+      }
+    }
+
     var $dataTable = $("div#data_table");
     var species = _.uniq($dataTable.find("td#species").map(function(index, elem) {
           return elem.innerHTML;
@@ -122,7 +131,12 @@
       $.ajax({
         type: 'POST',
         url: '/call_genepainter',
-        data: {'data': missingGeneStructures, 'new_mapping': new_mapping_str, 'all_species': all_species},
+        data: {
+          'data': missingGeneStructures, 
+          'new_mapping': new_mapping_str, 
+          'all_species': all_species, 
+          'analyse': selected_for_analysis
+        },
         dataType: 'script'
       });
 
