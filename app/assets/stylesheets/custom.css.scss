@@ -559,23 +559,23 @@ div#data_table, #graphical {
   overflow: auto;
 }
 
-div#text-based {
+div#text-based, #stats {
   font-family: Courier;
   height: 320px;
 }
 
-div#left-column {
+div#left-column, #stats-left-column {
   float: left;
   max-height: 400px;
   width: 150px;
 }
 
-div#all-left, #all-right, #genestructures, #genestructures-merged, #genenames, #genenames-merged {
+div#all-left, #all-right, #genestructures, #genestructures-merged, #genenames, #genenames-merged, #stats-right, #stats-left {
   max-height: 300px;
   overflow: auto;
 }
 
-table#non_intron_phase, #intron_phase, #sequence_names, #merged {
+table#non_intron_phase, #intron_phase, #sequence_names, #merged, #intron_pos, #stats_non_intron_phase {
   border-spacing: 0;
 }
 

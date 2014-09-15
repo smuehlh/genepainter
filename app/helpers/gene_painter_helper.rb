@@ -1,5 +1,5 @@
 require 'genestructures.rb'
-
+require File.join(Dir_gene_painter, "lib/geneAlignment.rb")
 module GenePainterHelper
 
   def create_data_center_table(seq_names)
@@ -33,8 +33,9 @@ module GenePainterHelper
     sequence_names = "<table id='sequence_names'>"
 
     File.open(filename, "r").each_line do |line|
-      tokens = line.gsub(/\s+/, ' ').strip.split(' ')
-      sequence_names << "<tr><td>#{tokens.first}</td></tr>"
+
+      name = line[0...GeneAlignment.max_length_gene_name].strip
+      sequence_names << "<tr><td>#{name}</td></tr>"
     end
 
     # dummy row
@@ -44,23 +45,99 @@ module GenePainterHelper
     return sequence_names
   end
 
-  def get_table(filename, table_name)
+  def get_statistics_table( filename, stats_table_id)
+
+    stats_table = ["<table id=#{stats_table_id}>"]
+
+    first_char_pattern_line = ">" # each line of exon-intron patterns should start with ">"
+    is_first_stats_line = true
+    IO.foreach(filename) do |line|
+      line = line.chomp
+      next if line.empty?
+
+      if line.start_with?(first_char_pattern_line) then 
+        # exon-intron pattern
+
+      else
+        # data statistics
+
+        parts = line.split("\t")
+        stats_table.push "<tr>"
+        if is_first_stats_line then 
+          # use table head element
+          data = parts.map{ |ele| "<th>#{ele}</th>"}
+          is_first_stats_line = false
+        else
+          # use table data element
+          data = parts.map{ |ele| "<td>#{ele}</td>" }
+        end
+        stats_table.push data
+        stats_table.push "</tr>"
+      end
+    end
+
+    stats_table.push("</table>")
+    return stats_table.join.html_safe
+  end
+
+  def get_table(filename, table_name, opts={})
     table = "<table id='#{table_name}'>"
+    is_first_line = true
+    n_cols = 0
 
     File.open(filename, "r").each_line do |line|
+
       table << "<tr>"
 
-      tokens = line.gsub(/\s+/, ' ').strip.split(' ')
-      tokens[1].split(//).each do |char|
+      pattern = line[GeneAlignment.max_length_gene_name..-1].strip
+      pattern.split(//).each do |char|
         table << "<td>#{char}</td>"
+      end
+      if is_first_line then
+        # count number of columns in first line
+        n_cols = pattern.size
+        is_first_line = false
       end
 
       table << "</tr>"
     end
-    
+
+    if opts[:col_group_class] then 
+      # add colgroup with class opts[:col_group_class]
+      puts "++++++"
+      puts "use colgroup"
+      table << "<colgroup>"
+      0.upto(n_cols) do 
+        table << "<col class=\"#{opts[:col_group_class]}\">"
+      end
+      table << "</colgroup>"
+    end
+
     table << "</table>"
-    return table
+
+    if ! opts[:intron_numbers_table] then
+      # don't generate additional table
+      
+      return table
+
+    else
+      # generate additional table with intron numbers, return both!
+      intron_num_table = "<table id='#{opts[:intron_numbers_table]}'>"
+      if opts[:col_group_class] then 
+        # add colgroup
+        intron_num_table << "<colgroup>"
+        0.upto(n_cols) do 
+          intron_num_table << "<col class=\"#{opts[:col_group_class]}\">"
+        end
+        intron_num_table << "</colgroup>"
+      end
+      intron_num_table << "</table>"
+
+      return table, intron_num_table
+
+    end
   end
+
 
   # Converts a svg file to png.
   # @return {string} new_name
