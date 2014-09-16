@@ -37,7 +37,8 @@ $h1_accent_color: #FF8D66 ; // #FFA666;
 /*** Allgemeine Regeln ***/
 
 body, html {
-    font-family: Arial, sans-serif;
+    // font-family: Arial, sans-serif;
+    font-family: Verdana,Arial,sans-serif; // same as jquery-ui
     background-color: $grau;
     margin-top: -3px;
     font-size: 12px;
@@ -362,6 +363,9 @@ ul.ui-tabs-nav.ui-helper-reset.ui-helper-clearfix.ui-widget-header.ui-corner-all
 
 .ui-tabs .ui-tabs-panel {
 	padding: 1em 0.4em !important;
+  /* apply changes to fit jquery-ui to default layout; OR adjust default layout */
+  // font-family: Arial, sans-serif; 
+  // font-size: 12px;
 }
 
 #text-based tr:hover td {
