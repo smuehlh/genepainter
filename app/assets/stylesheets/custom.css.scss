@@ -208,288 +208,9 @@ h1, h2, h3, h4, h5 {
     padding-left: 0px !important;
 }
 
-.nice_button{
-    width: 120px;
-    height: 25px;
-    padding: 2px 16px 2px;
-    -webkit-border-radius: 16px;
-    -moz-border-radius: 16px;
-    border-radius: 16px;
-    border: 1px solid #ccc;
-    margin: 1em 0 0.3em;
-    position: relative;
-
-    /* Label */
-    font-family: Lucida Sans, Helvetica, Verdana, sans-serif;
-    font-weight: 600;
-    font-style: italic;
-    color: #fff;
-    text-shadow: rgba(10, 10, 10, 0.5) 1px 2px 2px;
-    text-align: center;
-    vertical-align: middle;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    background-color: $nice_button_bg;
-    background-image: -webkit-gradient(linear, 0% 0%, 0% 85%, from($nice_button_bg), to(#BC75A7));
-    background-image: -moz-linear-gradient($nice_button_bg 0%, #BC75A7 85%);
-    border-top-color: $h1_color;
-    border-right-color: $h1_color;
-    border-bottom-color: $h1_color;
-    border-left-color: $h1_color;
-    font-size: 14px;
-    cursor: pointer;
-}
-
-.nice_button:hover {
-        text-shadow: rgb(255, 255, 255) 0px 0px 5px;
-    }
-
-.nice_button.glare {
-        position: absolute;
-        top: 0;
-        left: 5px;
-        -webkit-border-radius: 8px;
-        -moz-border-radius: 8px;
-        border-radius: 8px;
-        height: 1px;
-        width: 142px;
-        padding: 8px 0;
-        background-color: $nice_button_bg;
-        background-image: -webkit-gradient(linear, 0% 0%, 0% 95%, from($nice_button_bg), to(#BC75A7));
-        background-image: -moz-linear-gradient($nice_button_bg 0%, #BC75A7 95%);
-    }
-
-
-input.defaulttext, textarea.defaulttext {
-    background-color: #DFEEFF;
-}
-
-#distribution {
-    height: 25px;
-    position: relative;
-    font-size: 20px;
-    font-weight: bold;
-    color: #ffffff;
-    #percent_a {
-        display: block;
-        height: 100%;
-           -webkit-border-top-right-radius: 0px;
-        -webkit-border-bottom-right-radius: 0px;
-               -moz-border-radius-topright: 0px;
-            -moz-border-radius-bottomright: 0px;
-                   border-top-right-radius: 0px;
-                border-bottom-right-radius: 0px;
-           -webkit-border-top-left-radius: 20px;
-        -webkit-border-bottom-left-radius: 20px;
-               -moz-border-radius-topleft: 20px;
-            -moz-border-radius-bottomleft: 20px;
-                   border-top-left-radius: 20px;
-                border-bottom-left-radius: 20px;
-        background-color: rgb(43,194,83);
-        background-image: -webkit-gradient(
-          linear,
-          left bottom,
-          left top,
-          color-stop(0, rgb(43,194,83)),
-          color-stop(1, rgb(84,240,84))
-         );
-        background-image: -moz-linear-gradient(
-          center bottom,
-          rgb(43,194,83) 37%,
-          rgb(84,240,84) 69%
-         );
-        -webkit-box-shadow:
-          inset 0 2px 9px  rgba(255,255,255,0.3),
-          inset 0 -2px 6px rgba(0,0,0,0.4);
-        -moz-box-shadow:
-          inset 0 2px 9px  rgba(255,255,255,0.3),
-          inset 0 -2px 6px rgba(0,0,0,0.4);
-        position: absolute;
-        overflow: hidden;
-    }
-    #percent_b {
-        display: block;
-        height: 100%;
-           -webkit-border-top-right-radius: 20px;
-        -webkit-border-bottom-right-radius: 20px;
-               -moz-border-radius-topright: 20px;
-            -moz-border-radius-bottomright: 20px;
-                   border-top-right-radius: 20px;
-                border-bottom-right-radius: 20px;
-            -webkit-border-top-left-radius: 0px;
-         -webkit-border-bottom-left-radius: 0px;
-                -moz-border-radius-topleft: 0px;
-             -moz-border-radius-bottomleft: 0px;
-                    border-top-left-radius: 0px;
-                 border-bottom-left-radius: 0px;
-        background-color: #f42323;
-        background-image: -webkit-gradient(
-          linear,
-          left bottom,
-          left top,
-          color-stop(0, #f42323),
-          color-stop(1, #f0a3a3)
-         );
-        background-image: -moz-linear-gradient(
-          center bottom,
-          #f42323 37%,
-          #f0a3a3 69%
-         );
-        -webkit-box-shadow:
-          inset 0 2px 9px  rgba(255,255,255,0.3),
-          inset 0 -2px 6px rgba(0,0,0,0.4);
-        -moz-box-shadow:
-          inset 0 2px 9px  rgba(255,255,255,0.3),
-          inset 0 -2px 6px rgba(0,0,0,0.4);
-        position: absolute;
-        overflow: hidden;
-  }
-}
-
-#file_upload_field {
-    position: relative;
-    float: left;
-    // width: 220px; /* do not use this in order to avoid display mess in firefox*/
-}
-
-#uploaded_files {
-    position: relative;
-    float: left;
-    margin-top: 5px;
-}
-
 form.disabled {
     color: $dunkelgrau;
 }
-/* display results */
-.pred_nothing {
-    font-style: italic;
-}
-
-.wrapper {
-    margin-left: auto;
-    margin-right: auto;
-    width: 720px;
-    overflow: auto;
-}
-
-.predTable {
-    width: 720px;
-    table-layout:auto;
-    overflow: visible;
-    font-family: monospace;
-}
-.predTable th {
-    font-family: Arial, sans-serif;
-    font-size: 12px;
-}
-.predTable td {
-    font-family: monospace;
-    font-size: 13px;
-}
-
-.predTable tr.grey {
-    color: $dunkelgrau;
-}
-.predTable tr.orange {
-    color: $h1_accent_color;
-}
-.predTable tr.purple {
-    color: $h1_color;
-}
-.predTable .first_col {
-    width: 120px;
-}
-.predTable .last_col {
-    width: 180px;
-}
-tr.highlight {
-    color: $h1_color;
-}
-tr:hover td {
-    // background: #ededed; /* to better keep track of the line the mouse is over */
-    // color:black;
-}
-
-/*.predTable td .normal_text {
-    font-family: Arial, sans-serif;
-    font-size: 12px;
-    margin-bottom: 10px;
-}*/
-
-
-/* style of sequence/ CTG position table, not needed if seq. is splited after 80 chars*/
-/*
-.leftcol {
-    width: 650px;
-}
-
-.rightcol {
-}
-*/
-
-.highlight_aa {
-    border: 1px solid $h1_color;
-    background-color: $h1_color;
-    -moz-opacity:0.8; -webkit-opacity:0.8;
-    font-weight: bold;
-    color: white;
-}
-
-.highlight_res {
-    border: 1px solid $grau;
-    background-color: $grau;
-    -moz-opacity:0.8; -webkit-opacity:0.8;
-}
-
-/*// div.pred_data_more {
-//     padding-left: 0px;
-//     background-color: $h1_color;
-// }*/
-
-.line {
-    border: 1px solid #aaa;
-    border-width: 1px 0px 0px 0px;
-    padding-top: 5px; // distance between line and text underneath
-}
-
-// .format_ctg_stats {
-//     width: 720px;
-//     table-layout: auto;
-//     overflow: visible;
-// }
-
-/*.stats {
-}*/
-
-// .param_table td,th {
-//     width: 720px;
-//     vertical-align: middle;
-// }
-// .param_table .first_col {
-//     width: 40%;
-// }
-
-.param_table {
-    td, th {
-        vertical-align: middle;
-    }
-    width: 720px;
-}
-.param_table .first_col{
-    width: 40%;
-}
-.stats_table {
-    width: 720px;
-}
-.stats_table .first_col {
-    width: 5%;
-    text-align: right;
-}
-
-
-/* end display results */
 
 
 .notice {
@@ -554,32 +275,44 @@ div.help {
   font-weight: bold;
 }
 
-div#data_table, #graphical {
+div.large_div {
   max-height: 400px;
   overflow: auto;
 }
 
-div#text-based, #stats {
+div.pattern {
   font-family: Courier;
   height: 320px;
 }
 
-div#left-column, #stats-left-column {
+div.res_left_col {
   float: left;
   max-height: 400px;
   width: 150px;
 }
 
-div#all-left, #all-right, #genestructures, #genestructures-merged, #genenames, #genenames-merged, #stats-right, #stats-left {
+div.res_height {
   max-height: 300px;
   overflow: auto;
 }
 
-table#non_intron_phase, #intron_phase, #sequence_names, #merged, #intron_pos, #stats_non_intron_phase {
+div.pattern table {
   border-spacing: 0;
 }
 
-div#merged {
+table.fixed_layout td {
+  text-align: right;
+}
+// div.pattern table.fixed_layout {
+//   table-layout: fixed;
+// }
+// colgroup.broad_col {
+//   width: 10em;
+//   text-align: center;
+// }
+
+
+div.additional_pattern {
   padding-top: 5px;
 }
 

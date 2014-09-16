@@ -1,9 +1,13 @@
-<div id='text-based'>
-  <div id='left-column'>
-    <div id='all-left'>
+<% std_path = "#{Rails.root}/public/tmp/#{controller.id}-std.txt" %>
+<% intron_phase_path = "#{Rails.root}/public/tmp/#{controller.id}-intron-phase.txt" %>
+
+<div id='text-based' class="pattern">
+  <div id='left-column' class="res_left_col">
+    <div id='all-left' class="res_height">
+      <%= get_sequence_names(std_path).html_safe %>
     </div>
-    <div id='merged'>
-      <table>
+    <div id='merged_tab'>
+      <table class="additional_pattern">
         <tr>
           <td>>Merged</td>
         </tr>
@@ -12,11 +16,12 @@
   </div>
 
   <div id='right-column'>
-    <div id='all-right' style='padding-left: 10px'>
-
+    <div id='all-right' class="res_height" style='padding-left: 10px'>
+      <%= get_table(std_path, { table_id: 'non_intron_phase' }).html_safe %>
+      <%= get_table(intron_phase_path, { table_id: 'intron_phase' }).html_safe %>
     </div>
     <div id='merged' style='overflow: hidden; padding-left: 10px'>
-      <table id='merged'>
+      <table id='merged' class="additional_pattern">
 
       </table>
     </div>
@@ -103,12 +108,7 @@
   <tr>
 </table>
 
-<% std_path = "#{Rails.root}/public/tmp/#{controller.id}-std.txt" %>
-<% intron_phase_path = "#{Rails.root}/public/tmp/#{controller.id}-intron-phase.txt" %>
 <script>
-  $('div#left-column').children().first().html("<%= get_sequence_names(std_path).html_safe %>");
-  $('div#right-column').children().first().html("<%= get_table(std_path, 'non_intron_phase').html_safe %>");
-  $('div#right-column').children().first().append("<%= get_table(intron_phase_path, 'intron_phase').html_safe %>");
 
   var $non_intron_phase_table = $('table#non_intron_phase'),
   $intron_phase_table = $('table#intron_phase');

@@ -1,35 +1,40 @@
 <% 
   std_path = "#{Rails.root}/public/tmp/#{controller.id}-std.txt"
   names_table = get_sequence_names(std_path)
-  patterns_table, intron_num_table = get_table(std_path, 'stats_non_intron_phase', 
-    {
-      col_group_class: "intron_num_pattern_column",
-      intron_numbers_table: "intron_pos",
-    })
+  patterns_table = get_table(std_path,  
+    { colgroup_class: "broad_col",
+      table_class: "fixed_layout",
+     }
+  )
 
   stats_path = "#{Rails.root}/public/tmp/#{controller.id}-stats.txt"
-  stats_table = get_statistics_table(stats_path, "stats_info")
+  stats_table, intron_num_table = get_statistics_table(stats_path, 
+    {
+      colgroup_intron_pos: "broad_col",
+      id_stats: "stats_info_table",
+      id_intron_pos: "intron_pos_table",
+      class_intron_pos: "fixed_layout",
+    }
+  )
  %>
 
-<div id='stats'>
-  <div id='stats-left-column'>
-    <div id='stats-left'>
+<div class="pattern">
+  <div class="res_left_col">
+    <div id='stats-left' class="res_height">
       <%= names_table.html_safe %>
     </div>
-    <div id='intron_pos'>
-      <table>
-        <tr>
-          <td>>Intron number</td>
-        </tr>
-      </table>
-    </div>
+    <table class="additional_pattern">
+      <tr>
+        <td>>Intron number</td>
+      </tr>
+    </table>
   </div>
 
-  <div id='stats-right-column'>
-    <div id='stats-right' style='padding-left: 10px'>
+  <div>
+    <div id='stats-right' class="res_height" style='padding-left: 10px'>
       <%= patterns_table.html_safe %>
     </div>
-    <div id='intron_pos' style='overflow: hidden; padding-left: 10px'>
+    <div id='intron_pos' class="additional_pattern" style='overflow: hidden; padding-left: 10px'>
       <%= intron_num_table.html_safe %>
     </div>
   </div>
@@ -50,52 +55,30 @@
    <% end -%>
 </div>
 <br style="clear:both" />
-<div id="stats_table" class="clear-fix">
+<div id="stats_table" class="clear-fix res_height">
   <%= stats_table.html_safe %>
 </div>
 
 <script type="text/javascript">
+// TODO: what is this needed for???
 
-  var tIntronpos = $('table#intron_pos')[0];
-  var tPattern = $('table#stats_non_intron_phase')[0];
-  var rowIntronpos, rowPattern, cellIntronpos, cellPattern;
-  var intron_num = 1;
+  // var tIntronpos = $('table#intron_pos')[0];
+  // var tPattern = $('table#stats_non_intron_phase')[0];
+  // var rowIntronpos, rowPattern, cellIntronpos, cellPattern;
 
-  rowIntronpos = tIntronpos.insertRow(-1);
-  rowPattern = tPattern.insertRow(-1);
+  // cellIntronpos = rowIntronpos.insertCell(-1); // insert dummy cell
+  // cellIntronpos.innerHTML = "&nbsp;";
 
-  for (var i = 0; i < n_cols; i++) {
-    cellIntronpos = rowIntronpos.insertCell(-1);
-    cellPattern = rowPattern.insertCell(-1);
+  // cellIntronpos = rowIntronpos.insertCell(-1); // insert dummy cell
+  // cellIntronpos.innerHTML = "&nbsp;";
 
-    // set text of the cell based on number of introns in the column
-    var nIntrons = parseInt(allCells[i].className.split(' ')[0].split('-')[1]);
+  // cellPattern = rowPattern.insertCell(-1); // insert dummy cell
+  // cellPattern.innerHTML = "&nbsp;";
 
-    cellIntronpos.setAttribute('class', nIntrons);
+  // cellPattern = rowPattern.insertCell(-1); // insert dummy cell
+  // cellPattern.innerHTML = "&nbsp;";
 
-    if (nIntrons == 0) {
-      cellIntronpos.innerText = '-';
-      cellPattern.innerText = '-';
-    } else {
-      cellIntronpos.innerText = intron_num.toString();
-      cellPattern.innerText = intron_num.toString();
-      intron_num += 1;
-    }
-  }
-
-  cellIntronpos = rowIntronpos.insertCell(-1); // insert dummy cell
-  cellIntronpos.innerHTML = "&nbsp;";
-
-  cellIntronpos = rowIntronpos.insertCell(-1); // insert dummy cell
-  cellIntronpos.innerHTML = "&nbsp;";
-
-  cellPattern = rowPattern.insertCell(-1); // insert dummy cell
-  cellPattern.innerHTML = "&nbsp;";
-
-  cellPattern = rowPattern.insertCell(-1); // insert dummy cell
-  cellPattern.innerHTML = "&nbsp;";
-
-  rowPattern.setAttribute("style", "display:none;");
+  // rowPattern.setAttribute("style", "display:none;");
 
 
 </script>

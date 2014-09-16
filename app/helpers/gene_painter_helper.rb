@@ -45,18 +45,41 @@ module GenePainterHelper
     return sequence_names
   end
 
-  def get_statistics_table( filename, stats_table_id)
+  def get_statistics_table( filename, opts={} )
 
-    stats_table = ["<table id=#{stats_table_id}>"]
+    table_head_str = "<table"
+    table_head_str << " class='#{opts[:class_intron_pos]}'" if opts[:class_intron_pos]
+    table_head_str << " id='#{opts[:id_intron_pos]}'" if opts[:id_intron_pos]
+    table_head_str << ">"
+    intronpos_table = [ table_head_str ]
+
+    table_head_str = "<table"
+    # table_head_str << " class='#{opts[:class_intron_pos]}'" if opts[:class_intron_pos]
+    table_head_str << " id='#{opts[:id_stats]}'" if opts[:id_stats]
+    table_head_str << ">"
+    stats_table = [ table_head_str ]
 
     first_char_pattern_line = ">" # each line of exon-intron patterns should start with ">"
     is_first_stats_line = true
+
     IO.foreach(filename) do |line|
       line = line.chomp
       next if line.empty?
 
       if line.start_with?(first_char_pattern_line) then 
         # exon-intron pattern
+
+        name = line[0...GeneAlignment.max_length_gene_name].strip
+        pattern = line[GeneAlignment.max_length_gene_name..-1].strip
+
+        if name.start_with?(">Merged") then 
+          # use only merged pattern to generate colgroup and to get intron positions
+
+          pattern = pattern.gsub(" ", "") # remove all blanks, they are just added to keep intron numbers separate
+          intronpos_table.push pattern_to_colgroup(pattern, opts[:colgroup_intron_pos])
+          intronpos_table.push merged_pattern_to_intronpos(pattern)
+
+        end
 
       else
         # data statistics
@@ -77,65 +100,34 @@ module GenePainterHelper
     end
 
     stats_table.push("</table>")
-    return stats_table.join.html_safe
+    intronpos_table.push("</table>")
+
+    return stats_table.join.html_safe, intronpos_table.join.html_safe
   end
 
-  def get_table(filename, table_name, opts={})
-    table = "<table id='#{table_name}'>"
+  def get_table(filename, opts={})
+    table_head_str = "<table"
+    table_head_str << " class='#{opts[:table_class]}'" if opts[:table_class]
+    table_head_str << " id='#{opts[:table_id]}'" if opts[:table_id]
+    table_head_str << ">"
+    table = [ table_head_str ]
+
     is_first_line = true
-    n_cols = 0
 
     File.open(filename, "r").each_line do |line|
 
-      table << "<tr>"
-
       pattern = line[GeneAlignment.max_length_gene_name..-1].strip
-      pattern.split(//).each do |char|
-        table << "<td>#{char}</td>"
-      end
-      if is_first_line then
-        # count number of columns in first line
-        n_cols = pattern.size
+
+      if is_first_line && opts[:colgroup_class] then 
+        # get table row and generate colgroup
+        table << pattern_to_colgroup( pattern, opts[:colgroup_class] )
         is_first_line = false
       end
-
-      table << "</tr>"
-    end
-
-    if opts[:col_group_class] then 
-      # add colgroup with class opts[:col_group_class]
-      puts "++++++"
-      puts "use colgroup"
-      table << "<colgroup>"
-      0.upto(n_cols) do 
-        table << "<col class=\"#{opts[:col_group_class]}\">"
-      end
-      table << "</colgroup>"
+      table << pattern_to_tr(pattern)
     end
 
     table << "</table>"
-
-    if ! opts[:intron_numbers_table] then
-      # don't generate additional table
-      
-      return table
-
-    else
-      # generate additional table with intron numbers, return both!
-      intron_num_table = "<table id='#{opts[:intron_numbers_table]}'>"
-      if opts[:col_group_class] then 
-        # add colgroup
-        intron_num_table << "<colgroup>"
-        0.upto(n_cols) do 
-          intron_num_table << "<col class=\"#{opts[:col_group_class]}\">"
-        end
-        intron_num_table << "</colgroup>"
-      end
-      intron_num_table << "</table>"
-
-      return table, intron_num_table
-
-    end
+    return table.join.html_safe
   end
 
 
@@ -220,4 +212,37 @@ module GenePainterHelper
     return map
   end
 
+  ### helper methods for converting exon-intron pattern to table rows
+  def pattern_to_tr(pattern)
+    data = ["<tr>"]
+    pattern.each_char do |char|
+      data.push "<td>#{char}</td>"
+    end
+    data.push "</tr>"
+    return data
+  end
+  def pattern_to_colgroup(pattern, colgroup_class)
+    data = ["<colgroup class='#{colgroup_class}'>"]
+    pattern.each_char do |char|
+      data.push "<col/>"
+    end
+    data.push "</colgroup>"
+    return data
+  end
+  def merged_pattern_to_intronpos(pattern)
+    n_introns = 1
+    data = ["<tr>"]
+
+    pattern.each_char do |char|
+      if char == "-" then 
+        # exon
+        data.push "<td> </td>"
+      else
+        data.push "<td>#{n_introns}</td>"
+        n_introns += 1
+      end
+    end
+    data.push "</tr>"
+    return data
+  end
 end
