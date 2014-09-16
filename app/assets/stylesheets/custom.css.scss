@@ -292,29 +292,6 @@ div.res_height {
   overflow: auto;
 }
 
-div.pattern table, div.pattern th, div.pattern td {
-  border-spacing: 0;
-  color: black;
-  font-weight: normal;
-}
-
-table.fixed_layout td {
-  text-align: right;
-}
-// div.pattern table.fixed_layout {
-//   table-layout: fixed;
-// }
-// colgroup.broad_col {
-//   width: 10em;
-//   text-align: center;
-// }
-
-
-div.additional_pattern {
-  padding-top: 5px;
-}
-
-
 // Style for data center and download table
 table {
   text-align: left;
@@ -398,5 +375,32 @@ table.mapped_headers th {
 
 .ui-autocomplete-loading {
     background: white url("images/jquery_ui/ui-anim_basic_16x16.gif") right center no-repeat;
-  }
+}
+
+div.pattern table, div.pattern th, div.pattern td {
+  border-spacing: 0;
+  color: black;
+  font-weight: normal;
+}
+
+div.pattern table.fixed_layout {
+   table-layout: fixed;
+   display: -moz-box;
+   display: -webkit-box;
+   display: box;
+}
+colgroup.broad_col {
+   width: 3em; // allows for 999 intron positions
+   text-align: center;
+}
+table.fixed_layout td {
+  text-align: center;
+  display: table-cell;
+}
+
+div.additional_pattern {
+  padding-top: 5px;
+}
+
+
 
