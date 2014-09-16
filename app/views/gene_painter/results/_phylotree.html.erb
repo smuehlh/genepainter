@@ -2,6 +2,10 @@
       File.exist?("#{Rails.root}/public/tmp/#{controller.id}-tree.svg") then %>
   <div id='svg_placeholder' style='padding: 10px 0px 10px 0px'>
   </div>
+  <%= content_tag(:p, 
+    "Click on taxa to highlight gained introns in text-based and graphical representation.", :class => "filename"
+    )
+  %>
 
   <script>
 
@@ -29,8 +33,8 @@
         resetPhylotree();
         resetTable();
 
-        this.setAttribute('fill', 'blue');
-        this.setAttribute('style', 'font-size: 14px; font-weight: bold');
+        this.setAttribute('fill', '#336699');
+        this.setAttribute('style', 'font-size: 15px; font-weight: bold');
 
         var textTokens = this.innerHTML.split(" ");
 

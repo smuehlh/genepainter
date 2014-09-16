@@ -270,11 +270,6 @@ div.help {
   padding-bottom: 10px
 }
 
-.filename {
-  color: #336699;
-  font-weight: bold;
-}
-
 div.large_div {
   max-height: 400px;
   overflow: auto;
@@ -296,8 +291,10 @@ div.res_height {
   overflow: auto;
 }
 
-div.pattern table {
+div.pattern table, div.pattern th, div.pattern td {
   border-spacing: 0;
+  color: black;
+  font-weight: normal;
 }
 
 table.fixed_layout td {
@@ -316,23 +313,29 @@ div.additional_pattern {
   padding-top: 5px;
 }
 
-// Style for data center table
-#one-column-emphasis
-{
-	font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
-	font-size: 12px;
-	// margin: 45px;
-	// width: 480px;
-	text-align: left;
-	border-collapse: collapse;
+
+// Style for data center and download table
+table {
+  text-align: left;
+  border-collapse: collapse;
 }
+tr:hover td {
+  color: #339;
+  background: #eff2ff;
+}
+#download .first_col {
+  width: 150px;
+}
+
+.filename, th {
+  color: #336699; //#039
+  font-weight: bold;
+}
+
 #one-column-emphasis th
 {
   text-align: center;
-	font-size: 13px;
-	font-weight: normal;
 	padding: 12px 15px;
-	color: #039;
 }
 #one-column-emphasis td
 {
@@ -393,25 +396,3 @@ table.mapped_headers th {
     background: white url("images/jquery_ui/ui-anim_basic_16x16.gif") right center no-repeat;
   }
 
-// style for download table
-#download
-{
-  // font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
-  // font-size: 12px;
-  text-align: left;
-}
-#download th
-{
-  // text-align: left;
-  // font-size: 13px;
-  // font-weight: normal;
-  color: #039;
-}
-#download tr:hover td
-{
-  color: #339;
-  background: #eff2ff;
-}
-#download .first_col {
-  width: 150px;
-}
