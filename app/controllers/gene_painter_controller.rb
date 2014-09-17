@@ -439,12 +439,12 @@ class GenePainterController < ApplicationController
         build_output_path("legend-reduced-merged.svg"),
         ["Merged"])
 
-# FIXME
-  # rescue RuntimeError => ex
-  #   @fatal_error = ex.message
-  # rescue NoMethodError, Errno::ENOENT, Errno::EACCES, ArgumentError, NameError, TypeError => ex
-  #   @fatal_error = "Cannot execute GenePainter."
-  # ensure
+
+  rescue RuntimeError => ex
+    @fatal_error = ex.message
+  rescue NoMethodError, Errno::ENOENT, Errno::EACCES, ArgumentError, NameError, TypeError => ex
+    @fatal_error = "Cannot execute GenePainter."
+  ensure
     respond_to do |format|
       format.js
     end
