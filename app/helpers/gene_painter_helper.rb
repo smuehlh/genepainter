@@ -157,7 +157,7 @@ module GenePainterHelper
   def render_lucullus_iframe(fileid)
       iframe_src = Lucullus_url + "?source=#{fileid}"
       return content_tag(:iframe, "Loading ...", :src => iframe_src, 
-        :width => "675px", :height => "200px", :id => "lucullus_alignment_frame")
+        :width => "700px", :height => "400px", :id => "lucullus_alignment_frame")
   end
 
   def render_svg(filename)
