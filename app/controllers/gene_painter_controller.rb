@@ -558,6 +558,11 @@ class GenePainterController < ApplicationController
     render plain: 'Cannot prepare gene structures for download'
   end
 
+  def download_resultfiles
+    f_path = build_output_path( params[:file] )
+    send_file f_path, :x_sendfile => true
+  end
+
   def build_output_path(filename)
     return "#{Rails.root}/public/tmp/#{session[:id]}-#{filename}"
   end

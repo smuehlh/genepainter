@@ -51,12 +51,14 @@
 	</tr>
 	<% files_with_desc.each do |f_name, desc| %>
 		<tr>
-			<td><%= link_to( desc[:alt_name], "#{basepath}#{f_name}", :class => "external" ) %></td>
+			<td>
+				<%= link_to( desc[:alt_name], get_download_resultfiles_path( file: f_name ), :class => "external", :target => "_blank" ) %>
+			</td>
 			<td><%= desc[:desc] %></td>
 		</tr>
 	<% end %>
 </table>
 <%= content_tag(:p, 
-	"Right click & and \"save target as/ link as\" to download files.", :class => "filename"
+	"Click on files to download.", :class => "filename"
 	)
 %>
