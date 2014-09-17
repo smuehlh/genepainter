@@ -53,6 +53,7 @@ class GenePainterController < ApplicationController
     session[:p_alignment] = "" # path to file containing input alignment
     session[:p_gene_structures] = "" # path to folder containing gene structures
     session[:p_species_map] = "" # path to file mapping fasta header to species
+    session[:p_pdb] = "" # path to PDB file
     session[:new_gene_structures] = [] # newly generated gene structures
   end
 
@@ -69,6 +70,7 @@ class GenePainterController < ApplicationController
     session[:basepath_data] = File.join(TMP_PATH, id)
     session[:p_alignment] = File.join(session[:basepath_data], 'input.fas')
     session[:p_gene_structures] = File.join(session[:basepath_data], 'gene_structures')
+    session[:p_pdb] = File.join(session[:basepath_data], 'pdb.pdb')
 
     Helper.mkdir_or_die(session[:p_gene_structures])
 
@@ -97,7 +99,7 @@ class GenePainterController < ApplicationController
       # save file as session[:p_alignment]
 
       if params[:is_example]
-        @basename = "coro_sel.fas"
+        @basename = "coronin.fas"
         f_src = "#{Rails.root}/public/sample/#{@basename}"
 
         Helper.move_or_copy_file(f_src, session[:p_alignment], 'copy')
@@ -226,6 +228,47 @@ class GenePainterController < ApplicationController
       respond_to do |format|
         format.js
       end
+  end
+
+  def upload_pdb
+
+    @fatal_error = catch(:error) {
+      # save file as session[:p_pdb]
+
+      if params[:is_example]
+        @basename = "2AQ5.pdb"
+        f_src = "#{Rails.root}/public/sample/#{@basename}"
+
+        Helper.move_or_copy_file(f_src, session[:p_pdb], 'copy')
+
+      else
+        file = params[:file]
+        @basename = file.original_filename
+
+        # check file size
+        Helper.filesize_below_limit(file.tempfile, MAX_FILESIZE) 
+
+        # store file in place
+        Helper.move_or_copy_file(file.tempfile, session[:p_pdb], "move")
+
+        # call fromdos 
+        is_sucess = system("fromdos", session[:p_pdb])
+
+        throw :error, 'Cannot upload file. Please contact us.' if ! is_sucess
+      end
+
+      "" # default for @fatal_error
+    }
+
+  rescue RuntimeError => ex
+    @fatal_error = ex.message
+  rescue NoMethodError, Errno::ENOENT, Errno::EACCES, ArgumentError, NameError, TypeError => ex
+    @fatal_error = 'Cannot load file. Please contact us.'
+  ensure
+      respond_to do |format|
+        format.js
+      end
+
   end
 
   def update_species_mapping
@@ -364,6 +407,7 @@ class GenePainterController < ApplicationController
     f_alignment = session[:p_alignment]
     d_output = "#{Rails.root}/public/tmp"
     f_species_to_fasta = Dir[session[:basepath_data] + '/fastaheaders2species.txt'].first
+    f_pdb = session[:p_pdb]
     f_taxonomy_list = "#{session[:basepath_data]}/taxonomy_list.csv"
 
     Helper.mkdir_or_die(d_output)
@@ -374,6 +418,9 @@ class GenePainterController < ApplicationController
     # Creates missing gene structures
     if !missing_gene_structures.blank?
       @warning = catch(:error) do 
+        # TODO 
+        # remove all names from missing_gene_structures, that are not part of analysis
+
         is_sucess, new_gene_structures = generate_gene_structures(
           missing_gene_structures, f_species_to_fasta, f_alignment, d_gene_structures
         )
@@ -392,13 +439,25 @@ class GenePainterController < ApplicationController
     options_text_output = "--intron-phase --phylo --spaces --alignment --statistics"
     options_graphical_output = "--svg --svg-format both --svg-merged --svg-nested"
     options_taxonomic_output = "--intron-numbers-per-taxon --taxonomy-to-fasta #{f_species_to_fasta} --tree --taxonomy #{f_taxonomy_list}"
+    options_pdb_output = "--pdb #{f_pdb} --consensus 0.8"
+
     is_sucess = nil
-    if f_species_to_fasta.blank?
-       # Call gene_painter
-      is_sucess = system "ruby #{F_gene_painter} #{options_io} #{options_text_output} #{options_graphical_output}"
-    else
-      is_sucess = system "ruby #{F_gene_painter} #{options_io} #{options_text_output} #{options_graphical_output} #{options_taxonomic_output}"
+    # the default options for gene painter call
+    all_options = "#{options_io} #{options_text_output} #{options_graphical_output}"
+
+    if ! f_species_to_fasta.blank?
+      # add options for tax. output
+      all_options += " #{options_taxonomic_output}"
     end
+
+    if Helper.does_file_exist(f_pdb) then 
+      # add options for pdb output
+      all_options += " #{options_pdb_output}"
+    end
+
+    # Call gene_painter
+    is_sucess = system "ruby #{F_gene_painter} #{all_options}"
+
     if is_sucess then 
       is_output_written = Helper.does_file_exist( File.join(d_output, "#{prefix}-std.txt") )
       if ! is_output_written then 

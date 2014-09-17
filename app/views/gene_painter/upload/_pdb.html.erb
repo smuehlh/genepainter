@@ -1,0 +1,56 @@
+<div style="clear: both">
+	<div style="width: 50%; float: left">
+		<%= content_tag(:label, content_tag(:b, "Upload file")) %>
+
+		<%= file_field_tag("pdb_uploader",
+			:name => "file",
+			:multiple => false,
+			:disabled => "disabled",
+			:data => {url: post_upload_pdb_path}
+			)
+		%>
+	</div>
+	<div style="width: 25%; float: left">
+		<%= content_tag(:span,
+			"No file uploaded",
+			:class => "filename",
+			:id => "uploaded_pdb") %>
+
+		<%= image_tag("icons/help.png", :class => "help upload_pdb_help") %>
+	</div>
+	<div>
+		<u onclick="load_sample_pdb()" id="sample_pdb" style="float: right; cursor: pointer"><i>Load sample data</i></u>
+		<script defer>
+			function load_sample_pdb() {
+				hide_show_waiting('show');
+
+				$.ajax({
+					type: 'POST',
+					url: '/upload_pdb',
+					data: {'is_example': true},
+					success: function() {
+						$("u#sample_pdb").html("Sample data loaded");
+						$("u#sample_pdb").removeAttr("onclick");
+						$("u#sample_pdb")[0].setAttribute("style", "float: right; cursor: auto; color: grey");
+					}
+				});
+			}
+		</script>
+	</div>
+</div>
+
+<div style="clear: both">
+	<%= render :partial => "gene_painter/help/upload_pdb_help"%>
+</div>
+
+<%= javascript_tag defer: 'defer' do -%>
+	set_up_fileupload("#pdb_uploader");
+
+	$('input#pdb_uploader').click(function() {
+		$('span#uploaded_pdb').text('No file uploaded');
+	});
+
+	$("img.upload_pdb_help").click(function() {
+		 $("div#upload_pdb_help").toggle("slow");
+	});
+<% end -%>

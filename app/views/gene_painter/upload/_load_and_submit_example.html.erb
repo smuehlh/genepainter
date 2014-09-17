@@ -2,12 +2,13 @@
 <script defer>
 
 	function load_example() {
-		var AjaxQ = [load_sample_sequence_alignment, load_sample_gene_structures, load_species_mapping];
+		var AjaxQ = [load_sample_sequence_alignment, load_sample_gene_structures, load_species_mapping, load_sample_pdb];
 
 		AjaxQ.push(function() {
 			$("u#sample_sequence").remove();
 			$("u#sample_gene_structures").remove();
 			$("u#sample_species_mapping").remove();
+			$("u#sample_pdb").remove();
 
 			hide_show_waiting('show');
 
