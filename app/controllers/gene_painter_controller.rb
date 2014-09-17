@@ -354,7 +354,7 @@ class GenePainterController < ApplicationController
     all_genes = Dir[ File.join( session[:p_gene_structures], "*" ) ]
     all_genes.each do |f_src|
       f_src_basename = File.basename(f_src, ".*")
-      if selected_genes.include?( f_src_basename ) then 
+      if @is_example || selected_genes.include?( f_src_basename ) then 
         Helper.move_or_copy_file(f_src, d_gene_structures, 'copy')
       end
     end
@@ -439,11 +439,12 @@ class GenePainterController < ApplicationController
         build_output_path("legend-reduced-merged.svg"),
         ["Merged"])
 
-  rescue RuntimeError => ex
-    @fatal_error = ex.message
-  rescue NoMethodError, Errno::ENOENT, Errno::EACCES, ArgumentError, NameError, TypeError => ex
-    @fatal_error = "Cannot execute GenePainter."
-  ensure
+# FIXME
+  # rescue RuntimeError => ex
+  #   @fatal_error = ex.message
+  # rescue NoMethodError, Errno::ENOENT, Errno::EACCES, ArgumentError, NameError, TypeError => ex
+  #   @fatal_error = "Cannot execute GenePainter."
+  # ensure
     respond_to do |format|
       format.js
     end
