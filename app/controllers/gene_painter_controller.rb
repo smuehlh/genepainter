@@ -433,7 +433,6 @@ class GenePainterController < ApplicationController
       end
     end
 
-
     # call genepainter
     options_io = "-i #{f_alignment} -p #{d_gene_structures} --outfile #{prefix} --path-to-output #{d_output}"
     options_text_output = "--intron-phase --phylo --spaces --alignment --statistics"
@@ -538,7 +537,7 @@ class GenePainterController < ApplicationController
 
   def download_new_genestructs
     @error = ""
-    p_src_all = File.join(session[:basepath_data], 'gene_structures')
+    p_src_all = File.join(session[:basepath_data], 'selected_gene_structures')
     p_src_only_new = File.join(session[:basepath_data], 'newly_gen_gene_structures')
     Helper.mkdir_or_die(p_src_only_new)
 
@@ -552,6 +551,7 @@ class GenePainterController < ApplicationController
     Helper.zip_folder_or_die(p_src_only_new, p_dest)
 
     send_file p_dest, :x_sendfile => true
+
   rescue RuntimeError, NoMethodError, Errno::ENOENT, Errno::EACCES, ArgumentError, NameError => ex
     @error = "Cannot prepare gene structures for download."
   ensure 
