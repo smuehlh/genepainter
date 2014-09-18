@@ -310,12 +310,14 @@ tr:hover td {
   font-weight: bold;
 }
 
-#one-column-emphasis th
+table.one-column-emphasis th
 {
-  text-align: center;
+  text-align: left;
 	padding: 12px 15px;
+  // font-weight: normal;
+  // color: #039;
 }
-#one-column-emphasis td
+table.one-column-emphasis td
 {
   text-align: center;
 	padding: 5px 10px;
@@ -328,6 +330,16 @@ tr:hover td {
 	border-right: 10px solid transparent;
 	border-left: 10px solid transparent;
 }
+.oce-analyse-col {
+  width: 12%;
+}
+.oce-seq-col {
+  width: 16%;
+}
+.oce-species-column {
+  width: 35%;
+}
+
 #one-column-emphasis tr:hover td
 {
 	color: #339;
