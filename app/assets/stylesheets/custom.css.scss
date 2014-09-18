@@ -394,20 +394,9 @@ div.pattern table, div.pattern th, div.pattern td {
   color: black;
   font-weight: normal;
 }
-
-div.pattern table.fixed_layout {
-   table-layout: fixed;
-   display: -moz-box;
-   display: -webkit-box;
-   display: box;
-}
-colgroup.broad_col {
-   width: 3em; // allows for 999 intron positions
-   text-align: center;
-}
-table.fixed_layout td {
+div.pattern table.with_border td {
+  border-left: 1px solid white;
   text-align: center;
-  display: table-cell;
 }
 
 div.additional_pattern {

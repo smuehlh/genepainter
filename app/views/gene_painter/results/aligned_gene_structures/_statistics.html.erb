@@ -1,22 +1,9 @@
 <% 
-  std_path = "#{Rails.root}/public/tmp/#{controller.id}-std.txt"
-  names_table = get_sequence_names(std_path)
-  patterns_table = get_table(std_path,  
-    { colgroup_class: "broad_col",
-      table_class: "fixed_layout",
-      table_id: "stats_patterns_table"
-     }
+  stats_path = "#{Rails.root}/public/tmp/#{controller.id}-stats.txt"
+  names_table, patterns_table, stats_table, intron_num_table = get_statistics_table(
+    stats_path, "stats_patterns_table"
   )
 
-  stats_path = "#{Rails.root}/public/tmp/#{controller.id}-stats.txt"
-  stats_table, intron_num_table = get_statistics_table(stats_path, 
-    {
-      colgroup_intron_pos: "broad_col",
-      id_stats: "stats_info_table",
-      id_intron_pos: "intron_pos_table",
-      class_intron_pos: "fixed_layout",
-    }
-  )
  %>
 
 <div class="pattern">
@@ -26,7 +13,7 @@
     </div>
     <table class="additional_pattern">
       <tr>
-        <td>>Intron number</td>
+        <td>&gt;Intron number</td>
       </tr>
     </table>
   </div>

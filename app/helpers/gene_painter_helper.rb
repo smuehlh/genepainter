@@ -49,21 +49,18 @@ module GenePainterHelper
     return sequence_names
   end
 
-  def get_statistics_table( filename, opts={} )
+  def get_statistics_table(filename, id_patterns_table)
 
-    table_head_str = "<table"
-    table_head_str << " class='#{opts[:class_intron_pos]}'" if opts[:class_intron_pos]
-    table_head_str << " id='#{opts[:id_intron_pos]}'" if opts[:id_intron_pos]
-    table_head_str << ">"
-    intronpos_table = [ table_head_str ]
+    names_table, pattern_table, stats_table, intronpos_table = [], [], [], []
 
-    table_head_str = "<table"
-    # table_head_str << " class='#{opts[:class_intron_pos]}'" if opts[:class_intron_pos]
-    table_head_str << " id='#{opts[:id_stats]}'" if opts[:id_stats]
-    table_head_str << ">"
-    stats_table = [ table_head_str ]
+    names_table << "<table>"
+    pattern_table << "<table id=#{id_patterns_table} class='with_border'>"
+    stats_table << "<table>"
+    intronpos_table << "<table class='with_border'>"
 
     first_char_pattern_line = ">" # each line of exon-intron patterns should start with ">"
+    first_chars_intronpos_line = ">Intron number" # line containing intron numbers
+    first_chars_merged_line = ">Merged" # line containing merged pattern
     is_first_stats_line = true
 
     IO.foreach(filename) do |line|
@@ -74,15 +71,23 @@ module GenePainterHelper
         # exon-intron pattern
 
         name = line[0...GeneAlignment.max_length_gene_name].strip
-        pattern = line[GeneAlignment.max_length_gene_name..-1].strip
+        pattern = line[GeneAlignment.max_length_gene_name..-1] # important: do not strip pattern
+        striped_pattern = pattern.gsub(" ", "")
 
-        if name.start_with?(">Merged") then 
-          # use only merged pattern to generate colgroup and to get intron positions
+        if name.start_with?(first_chars_merged_line) then 
 
-          pattern = pattern.gsub(" ", "") # remove all blanks, they are just added to keep intron numbers separate
-          intronpos_table.push pattern_to_colgroup(pattern, opts[:colgroup_intron_pos])
-          intronpos_table.push merged_pattern_to_intronpos(pattern)
+          intronpos_table << merged_pattern_to_intronpos( striped_pattern )
 
+          # make intron numbers first pattern in names and patterns table 
+          names_table.insert( 1, "<tr><td>&gt;Intron number</td></tr>" )
+          pattern_table.insert( 1, merged_pattern_to_intronpos(striped_pattern )  )
+
+        elsif name.start_with?(first_chars_intronpos_line)
+
+        else
+          # "normal pattern" line
+          names_table << "<tr><td>#{name}</td></tr>"
+          pattern_table << pattern_to_tr(striped_pattern) # important: use pattern without white-spaces
         end
 
       else
@@ -103,10 +108,15 @@ module GenePainterHelper
       end
     end
 
-    stats_table.push("</table>")
-    intronpos_table.push("</table>")
+    pattern_table << "</table>"
+    # dummy row
+    names_table << "<tr><td>&nbsp;</td></tr>"
+    names_table << "</table>"
+    stats_table << "</table>"
+    intronpos_table << "</table>"
 
-    return stats_table.join.html_safe, intronpos_table.join.html_safe
+    return names_table.join.html_safe, pattern_table.join.html_safe, stats_table.join.html_safe, intronpos_table.join.html_safe
+
   end
 
   def get_table(filename, opts={})
@@ -233,19 +243,31 @@ module GenePainterHelper
     data.push "</colgroup>"
     return data
   end
-  def merged_pattern_to_intronpos(pattern)
+  def merged_pattern_to_intronpos(pattern, opts={})
     n_introns = 1
-    data = ["<tr>"]
+    data = []
+
+    # if opts[:is_displaynone] then 
+    #   data << "<tr style='display:none;'>"
+    # else
+    #   data << "<tr>"
+    # end
 
     pattern.each_char do |char|
       if char == "-" then 
         # exon
-        data.push "<td> </td>"
+        data.push "<td>&nbsp;</td>"
       else
         data.push "<td>#{n_introns}</td>"
         n_introns += 1
       end
     end
+    
+    # if opts[:is_insert_dummy_cells] then 
+    #   data << "<td>&nbsp;</td>"
+    #   data << "<td>&nbsp;</td>"
+    # end
+
     data.push "</tr>"
     return data
   end
