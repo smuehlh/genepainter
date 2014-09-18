@@ -130,7 +130,7 @@
       var n_introns = 0;
 
       for (var y = 0; y < n_rows; y++) {
-        if (cells[n_cols*y + x].innerText != "-") {
+        if (cells[n_cols*y + x].innerHTML != "-") {
           n_introns += 1;
         }
       }
@@ -250,7 +250,7 @@
     var nIntrons = parseInt(allCells[i].className.split(' ')[0].split('-')[1])
 
     cell.setAttribute('class', nIntrons);
-    cell.innerText = nIntrons > 0 ? '|' : '-';
+    cell.innerHTML = nIntrons > 0 ? '|' : '-';
 
     if (nIntrons == 0) {
       cell.setAttribute('style', 'background-color: #F5F5F5');
@@ -263,7 +263,7 @@
   }
 
   cell = row.insertCell(-1); // insert dummy cell
-  cell.innerHTML = "&nbsp;";
+  cell.innerHTML = "&nbsp;"; 
 
   cell = row.insertCell(-1); // insert dummy cell
   cell.innerHTML = "&nbsp;";

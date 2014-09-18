@@ -78,7 +78,7 @@
       var n_introns = 0;
 
       for (var y = 0; y < n_rows; y++) {
-        if (cells[n_cols*y + x].innerText != "-") {
+        if (cells[n_cols*y + x].innerHTML != "-") {
           n_introns += 1;
         }
       }
