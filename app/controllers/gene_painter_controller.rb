@@ -38,7 +38,7 @@ class GenePainterController < ApplicationController
   end
 
   def name_species_map
-    session[:p_species_map]
+    session[:genes_to_species_map]
   end
 
   def new_gene_structures
@@ -52,7 +52,7 @@ class GenePainterController < ApplicationController
     session[:basepath_data] = "" # path to folder containing input data 
     session[:p_alignment] = "" # path to file containing input alignment
     session[:p_gene_structures] = "" # path to folder containing gene structures
-    session[:p_species_map] = "" # path to file mapping fasta header to species
+    session[:genes_to_species_map] = "" # hash with genes and corresponding species
     session[:p_pdb] = "" # path to PDB file
     session[:new_gene_structures] = [] # newly generated gene structures
   end
@@ -334,7 +334,7 @@ class GenePainterController < ApplicationController
   end
 
   def map_sequence_name_to_species
-    session[:p_species_map] = map_genenames_to_speciesnames(session[:basepath_data] + '/fastaheaders2species.txt')
+    session[:genes_to_species_map] = map_genenames_to_speciesnames(session[:basepath_data] + '/fastaheaders2species.txt')
   end
 
   def call_genepainter
@@ -416,11 +416,10 @@ class GenePainterController < ApplicationController
     prefix = session[:id]
 
     # Creates missing gene structures
+    # generate gene structures only for those genes that are part of the analysis
+    missing_gene_structures = missing_gene_structures & selected_genes
     if !missing_gene_structures.blank?
       @warning = catch(:error) do 
-        # TODO 
-        # remove all names from missing_gene_structures, that are not part of analysis
-
         is_sucess, new_gene_structures = generate_gene_structures(
           missing_gene_structures, f_species_to_fasta, f_alignment, d_gene_structures
         )
