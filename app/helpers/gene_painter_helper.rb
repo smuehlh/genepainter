@@ -1,5 +1,3 @@
-require 'genestructures.rb'
-require File.join(Dir_gene_painter, "lib/geneAlignment.rb")
 module GenePainterHelper
 
   def create_data_center_table(seq_names)
@@ -30,7 +28,7 @@ module GenePainterHelper
   # Returns gene structure status
   def gene_structure_status(filename)
     f_path = File.join( controller.p_gene_structures, filename)
-    return get_status_of_gene_structure(f_path).to_s
+    return GenestructureHelper.get_status_of_gene_structure(f_path).to_s
   end
 
   def get_sequence_names(filename)

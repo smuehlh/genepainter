@@ -1,7 +1,8 @@
-require 'parse_data.rb'
-require 'genestructures.rb'
-require 'parse_svg.rb'
-require 'helper.rb'
+# require 'parse_data.rb'
+# require 'genestructures.rb'
+# require 'parse_svg.rb'
+# # require 'helper.rb'
+# require 'formatChecker.rb'
 
 class GenePainterController < ApplicationController
 
@@ -104,7 +105,7 @@ class GenePainterController < ApplicationController
 
         Helper.move_or_copy_file(f_src, session[:p_alignment], 'copy')
 
-        @seq_names = read_in_alignment(session[:p_alignment])[0]
+        @seq_names = SequenceHelper.read_in_alignment(session[:p_alignment])
 
       else
         file = params[:file]
@@ -120,7 +121,7 @@ class GenePainterController < ApplicationController
         is_sucess = system("fromdos", session[:p_alignment])
 
         # read in data
-        @seq_names = read_in_alignment(session[:p_alignment])[0]
+        @seq_names = SequenceHelper.read_in_alignment(session[:p_alignment])
 
         throw :error, 'Cannot upload file. Please contact us.' if ! is_sucess
       end
@@ -308,6 +309,9 @@ class GenePainterController < ApplicationController
   def create_alignment_file
     sequence_string = params[:sequence]
     @errors = ""
+# TODO
+# get format-checker working ... 
+    # FormatChecker.validate_fasta(sequence_string)
 
     # Use default filename
     if File.exist?(session[:p_alignment])
@@ -321,12 +325,11 @@ class GenePainterController < ApplicationController
     end
     f.close
 
-    @seq_names = read_in_alignment(session[:p_alignment])[0]
-
+    @seq_names = SequenceHelper.read_in_alignment(session[:p_alignment])
   rescue RuntimeError => ex
-    @fatal_error = ex.message
+    @errors = ex.message
   rescue NoMethodError, Errno::ENOENT, Errno::EACCES, ArgumentError, NameError => ex
-    @fatal_error = 'Error parsing sequence alignment'
+    @errors = 'Error parsing sequence alignment'
   ensure
     respond_to do |format|
       format.js
@@ -334,7 +337,7 @@ class GenePainterController < ApplicationController
   end
 
   def map_sequence_name_to_species
-    session[:genes_to_species_map] = map_genenames_to_speciesnames(session[:basepath_data] + '/fastaheaders2species.txt')
+    session[:genes_to_species_map] = SequenceHelper.map_genenames_to_speciesnames(session[:basepath_data] + '/fastaheaders2species.txt')
   end
 
   def call_genepainter
@@ -420,7 +423,7 @@ class GenePainterController < ApplicationController
     missing_gene_structures = missing_gene_structures & selected_genes
     if !missing_gene_structures.blank?
       @warning = catch(:error) do 
-        is_sucess, new_gene_structures = generate_gene_structures(
+        is_sucess, new_gene_structures = GenestructureHelper.generate_gene_structures(
           missing_gene_structures, f_species_to_fasta, f_alignment, d_gene_structures
         )
         if is_sucess then 
@@ -478,25 +481,25 @@ class GenePainterController < ApplicationController
       File.basename(gene, '.yaml')
     end
 
-    build_svg_by_genestructs(build_output_path("normal.svg"),
+    SvgParser.build_svg_by_genestructs(build_output_path("normal.svg"),
         build_output_path("genenames-normal.svg"),
         build_output_path("genestructures-normal.svg"),
         build_output_path("legend-normal.svg"),
         genes_to_show)
 
-    build_svg_by_genestructs(build_output_path("normal-merged.svg"),
+    SvgParser.build_svg_by_genestructs(build_output_path("normal-merged.svg"),
         build_output_path("genenames-normal-merged.svg"),
         build_output_path("genestructures-normal-merged.svg"),
         build_output_path("legend-normal-merged.svg"),
         ["Merged"])
 
-    build_svg_by_genestructs(build_output_path("reduced.svg"),
+    SvgParser.build_svg_by_genestructs(build_output_path("reduced.svg"),
         build_output_path("genenames-reduced.svg"),
         build_output_path("genestructures-reduced.svg"),
         build_output_path("legend-reduced.svg"),
         genes_to_show)
 
-    build_svg_by_genestructs(build_output_path("reduced-merged.svg"),
+    SvgParser.build_svg_by_genestructs(build_output_path("reduced-merged.svg"),
         build_output_path("genenames-reduced-merged.svg"),
         build_output_path("genestructures-reduced-merged.svg"),
         build_output_path("legend-reduced-merged.svg"),
@@ -518,13 +521,13 @@ class GenePainterController < ApplicationController
     genes_to_show = params[:data] == nil ? [] : params[:data]
 
     # Create images for selected genes only
-    build_svg_by_genestructs(build_output_path("normal.svg"),
+    SvgParser.build_svg_by_genestructs(build_output_path("normal.svg"),
         build_output_path("genenames-normal.svg"),
         build_output_path("genestructures-normal.svg"),
         build_output_path("legend-normal.svg"),
         genes_to_show)
 
-    build_svg_by_genestructs(build_output_path("reduced.svg"),
+    SvgParser.build_svg_by_genestructs(build_output_path("reduced.svg"),
         build_output_path("genenames-reduced.svg"),
         build_output_path("genestructures-reduced.svg"),
         build_output_path("legend-reduced.svg"),
