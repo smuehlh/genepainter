@@ -390,7 +390,7 @@ class GenePainterController < ApplicationController
     end
 
     # apply data selection for analysis
-    selected_genes = params[:analyse]
+    selected_genes = params[:analyse] == nil ? [] : params[:analyse] 
     d_gene_structures = File.join(session[:basepath_data], 'selected_gene_structures')
     Helper.mkdir_or_die(d_gene_structures)
 
@@ -430,6 +430,12 @@ class GenePainterController < ApplicationController
         end
         "" # default error-message
       end
+    end
+
+    # re-check if there are gene structures at all
+    # (this is neccessary, as there might have been no upload at all, but just request to generate them - which might have failed)
+    if Helper.is_dir_empty(d_gene_structures) then 
+      Helper.raise_runtime_error "Cannot execute GenePainter. No gene structures found."
     end
 
     # call genepainter

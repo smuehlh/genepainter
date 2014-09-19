@@ -33,6 +33,13 @@ module Helper
 		true
 	end
 
+	def is_dir_empty(path)
+		if Dir[File.join(path, "*")].empty? then 
+			return true
+		end
+		false
+	end
+
 	def dir_exist_or_die(path)
 		if ! FileTest.directory?(path) then
 			raise_runtime_error "Fatal: Directory #{path} does not exist."
