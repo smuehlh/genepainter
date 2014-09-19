@@ -308,10 +308,9 @@ class GenePainterController < ApplicationController
 
   def create_alignment_file
     sequence_string = params[:sequence]
-    @errors = ""
-# TODO
-# get format-checker working ... 
-    # FormatChecker.validate_fasta(sequence_string)
+    @fatal_error = ""
+
+    FormatChecker.validate_fasta(sequence_string)
 
     # Use default filename
     if File.exist?(session[:p_alignment])
@@ -326,14 +325,13 @@ class GenePainterController < ApplicationController
     f.close
 
     @seq_names = SequenceHelper.read_in_alignment(session[:p_alignment])
+
   rescue RuntimeError => ex
-    @errors = ex.message
+    @fatal_error = ex.message
   rescue NoMethodError, Errno::ENOENT, Errno::EACCES, ArgumentError, NameError => ex
-    @errors = 'Error parsing sequence alignment'
+    @fatal_error = 'Error parsing sequence alignment'
   ensure
-    respond_to do |format|
-      format.js
-    end
+    render :upload_sequence, formats: [:js]
   end
 
   def map_sequence_name_to_species

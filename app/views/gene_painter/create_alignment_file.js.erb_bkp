@@ -1,0 +1,57 @@
+// hide loading screen
+hide_show_waiting('show');
+hide_show_waiting('hide');
+<% if @fatal_error.blank? and !@seq_names.blank? then %>
+  var $helpBlock = $('div#text_seq_help');
+
+  // The user inputs the right format text, hide the help text
+  if ($helpBlock.is(':visible')) {
+    $helpBlock.hide('slow');
+  }
+
+  // disable upload button
+  disable($('#sequence_uploader'), true);
+
+  // enable button and uploaders
+  disable($('#gene_structures_uploader'), false);
+  disable($('#species_mapping_uploader'), false);
+  disable($('input#map_to_another_species'), false);
+  disable($('#pdb_uploader'), false);
+
+    <% @seq_names.each do |name| %>
+      $("div#manual_mapping").find("div#headers").append("<label><input type='checkbox' name='<%= name %>' value='<%= name %>'><%= name %></label><br>");
+    <% end %>
+
+    // sort headers;
+    var newLabels = $("div#manual_mapping").find("div#headers").find('label').map(function(index, elem){
+                      return $(elem).find('input')[0].value;
+                    }).sort();
+
+    $("div#manual_mapping").find("div#headers").html("");
+    _.each(newLabels, function(label) {
+      $("div#manual_mapping").find("div#headers").append('<label><input type="checkbox" value="' + label + '">' + label + '</label><br>');
+    });
+
+    // Initial data center table
+    var $dataTableBody = $($('div#data_table').find('tbody')[0]);
+    $dataTableBody.html('');
+    $dataTableBody.append('<%= create_data_center_table(@seq_names).html_safe %>');
+
+    // Show data center
+    $('p#t_data_center').hide("slow");
+    $('div#b_data_center').show("show");
+
+    $("input#species").removeAttr("disabled");
+    $("div#unlink_genes").show();
+
+<% else %>
+  <% if ! @fatal_error.blank? then  %>
+      error('<%=raw(@fatal_error)%>');
+  <% end %>
+  var $helpBlock = $('div#text_seq_help');
+
+  // Show help block unless the user provides correct format alignment
+  if (!$helpBlock.is(':visible')) {
+    $helpBlock.show('slow');
+  }
+<% end %>

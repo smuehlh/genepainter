@@ -59,7 +59,9 @@ function set_up_fileupload(btnSelector) {
 }
 
 function hide_show_waiting(kind) {
-
+// TODO
+// if you call hide_show_waiting('hide') without having called hide_show_waiting('show') first, you get an error
+// var myInterval needs to be defined outside if/else loop 
     if (kind === 'show') {
         var sec = 0;
         function pad(val) { return val > 9 ? val : "0" + val; }
@@ -79,7 +81,7 @@ function hide_show_waiting(kind) {
 };
 
 function create_alignment_file_ajax() {
-  $('textarea#text_seq').first().on('input', function() {
+  $('textarea#text_seq').first().on('blur', function() {
     if (this.value.length) {
       var that = this;
 
