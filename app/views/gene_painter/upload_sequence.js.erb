@@ -46,9 +46,8 @@ hide_show_waiting('hide');
   });
 
   // Initial data center table
-  var $dataTableBody = $($('div#data_table').find('tbody')[0]);
-  $dataTableBody.html('');
-  $dataTableBody.append('<%= create_data_center_table(@seq_names).html_safe %>');
+  var $dataTableBody = $($('table#one-column-emphasis').find('tbody')[0]);
+  $dataTableBody.html('<%= create_data_center_table(@seq_names).html_safe %>');
 
   // Show data center
   $('p#t_data_center').hide("slow");

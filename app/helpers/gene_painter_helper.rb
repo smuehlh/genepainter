@@ -5,19 +5,19 @@ module GenePainterHelper
 
     seq_names.each { |name|
       table_body += '<tr>'
-        table_body += '<td>' + check_box_tag("analyze", name, true) + '</td>'
-        table_body += '<td style="text-align: left">' + name + '</td>'
+        table_body += '<td class="oce-checkbox-col">' + check_box_tag("analyze", name, true) + '</td>'
+        table_body += '<td class="oce-small-text-col">' + name + '</td>'
 
         # All gene structures are missing if no files are uploaded
-        table_body += '<td><span id="' + name + '">missing</span></td>'
-        table_body += '<td>' + 
+        table_body += '<td class="oce-small-text-col"><span id="' + name + '">missing</span></td>'
+        table_body += '<td class="oce-checkbox-col">' + 
             check_box_tag("generateGeneStructure", name, nil, :disabled => true, 
               :title => "Provide species mapping to enable checkbox.",
             ) +
           '</td>'
 
         # table_body += '<td style="text-align: left">' + map[name].to_s  + '</td>'
-        table_body += "<td style=\"text-align: left\" data=\"#{name}\" id=\"species\"></td>"
+        table_body += "<td data=\"#{name}\" id=\"species\" class=\"oce-species-col\"></td>"
 
       table_body += '</tr>'
     }

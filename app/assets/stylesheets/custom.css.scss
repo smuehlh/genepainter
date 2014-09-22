@@ -297,6 +297,11 @@ table {
   text-align: left;
   border-collapse: collapse;
 }
+table.one-column-emphasis td
+{
+  color: #669;
+  border-top: 1px solid #e8edff;
+}
 tr:hover td {
   color: #339;
   background: #eff2ff;
@@ -304,48 +309,20 @@ tr:hover td {
 #download .first_col {
   width: 180px;
 }
-
 .filename, th {
   color: #336699; //#039
   font-weight: bold;
 }
-
-table.one-column-emphasis th
-{
-  text-align: left;
-	padding: 12px 15px;
-  // font-weight: normal;
-  // color: #039;
+.oce-checkbox-col {
+  width: 100px;
+  padding-left: 10px
 }
-table.one-column-emphasis td
-{
-  text-align: center;
-	padding: 5px 10px;
-	color: #669;
-	border-top: 1px solid #e8edff;
+.oce-small-text-col {
+  width: 120px;
 }
-.oce-first
-{
-	background: #d0dafd;
-	border-right: 10px solid transparent;
-	border-left: 10px solid transparent;
+.oce-species-col {
+  width: 225px;
 }
-.oce-analyse-col {
-  width: 12%;
-}
-.oce-seq-col {
-  width: 16%;
-}
-.oce-species-column {
-  width: 35%;
-}
-
-#one-column-emphasis tr:hover td
-{
-	color: #339;
-	background: #eff2ff;
-}
-
 ul.ui-tabs-nav.ui-helper-reset.ui-helper-clearfix.ui-widget-header.ui-corner-all {
   border: 1px solid #aaaaaa;
 }
