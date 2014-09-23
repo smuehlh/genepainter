@@ -8,19 +8,18 @@
       $(function() {
 
         $("input#species" ).autocomplete({
-          source: function( request, response ) {
+          minLength: 3,
+          source: function(request, response) {
             $.ajax({
-              type: 'POST',
-              url: "/get_species",
+              type: 'GET',
+              url: "/autocomplete",
               data: {"q": request.term},
-              success: function(response_data) {
-                response(_.first(response_data["data"], 20));
+              success: function(result) {
+                response(result);
               }
             });
           },
-          minLength: 3,
           select: function( event, ui ) {
-
           },
           open: function() {
             $( this ).removeClass( "ui-corner-all" ).addClass( "ui-corner-top" );

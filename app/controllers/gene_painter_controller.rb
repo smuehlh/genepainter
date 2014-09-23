@@ -75,17 +75,16 @@ class GenePainterController < ApplicationController
   
   end
 
-  def get_species
-    q = params[:q] == nil ? "" : params[:q]
-    result = {}
-
-    result["data"] = Node.all_of(scientific_name: /^#{q}/i).map do |node|
-      node.scientific_name
+  def autocomplete
+    list = Autocomplete.search( params[:q] )
+    # convert to array of hashes to satisfy jquery ui autocomplete plugin
+    list = list.map do |species|
+      { value: species.scientific_name }
     end
-  rescue RuntimeError, NoMethodError, TypeError, NameError, Errno::ENOENT, ArgumentError, Errno::EACCES => exp
 
+  rescue RuntimeError, NoMethodError, TypeError, NameError, Errno::ENOENT, ArgumentError, Errno::EACCES => exp
   ensure
-    render :json => result
+    render json: list
   end
 
   def upload_sequence
