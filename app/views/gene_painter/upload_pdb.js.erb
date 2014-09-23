@@ -1,11 +1,14 @@
 hide_show_waiting('hide');
 
 <% if @fatal_error.blank? then %>
+	// toggle help
+	$("div#upload_pdb_help").hide("slow");
+
   // update uploaded filename
   $('#uploaded_pdb').html('<%= @basename %>');
 
 <% else%>
-  error('Cannot upload PDB file.');
+  error(' <%= raw(@fatal_error) %> ');
 
   // toggle help
   $("div#upload_pdb_help").show("slow");

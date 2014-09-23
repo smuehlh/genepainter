@@ -1,9 +1,3 @@
-# require 'parse_data.rb'
-# require 'genestructures.rb'
-# require 'parse_svg.rb'
-# # require 'helper.rb'
-# require 'formatChecker.rb'
-
 class GenePainterController < ApplicationController
 
   # @@id = ''
@@ -158,6 +152,9 @@ class GenePainterController < ApplicationController
       else
         file = params[:files][0]
 
+        # validate file
+        FormatChecker.validate_genestructure( file.path, file.original_filename )
+
         # check file size
         Helper.filesize_below_limit(file.tempfile, MAX_FILESIZE)
         Helper.move_or_copy_file(file.path(), session[:p_gene_structures], 'move')
@@ -189,43 +186,39 @@ class GenePainterController < ApplicationController
   end
 
   def upload_species_mapping
-    @fatal_error = catch(:error) {
 
-      @is_example = params[:is_example]
+    @is_example = params[:is_example]
 
-      if @is_example
-        @basename = "fastaheaders2species.txt"
-        path = "#{Rails.root}/public/sample/#{@basename}"
-        Helper.move_or_copy_file(path, session[:basepath_data], 'copy')
+    if @is_example
+      @basename = "fastaheaders2species.txt"
+      path = "#{Rails.root}/public/sample/#{@basename}"
+      Helper.move_or_copy_file(path, session[:basepath_data], 'copy')
 
-      else
-        file = params[:files][0]
-        path = file.path()
+    else
+      file = params[:files][0]
+      path = file.path()
 
-        @basename = file.original_filename
+      @basename = file.original_filename
 
-        # check file size
-        Helper.filesize_below_limit(file.tempfile, MAX_FILESIZE)
+      # validate file
+      FormatChecker.validate_speciesmapping(path)
 
-        tmp_file = File.open(path, "rb").read
-        File.open("#{session[:basepath_data]}/fastaheaders2species.txt", "a") { |f|
-          f.write(tmp_file)
-        }
+      # check file size
+      Helper.filesize_below_limit(file.tempfile, MAX_FILESIZE)
 
-        # call fromdos
-        is_sucess = system('fromdos', "#{session[:basepath_data]}/fastaheaders2species.txt")
-        throw :error, 'Cannot upload file. Please contact us.' if ! is_sucess
-      end
+      Helper.move_or_copy_file(path, "#{session[:basepath_data]}/fastaheaders2species.txt", 'copy')
 
-      [] # default for @fatal_error
-    }
+      # call fromdos
+      is_sucess = system('fromdos', "#{session[:basepath_data]}/fastaheaders2species.txt")
+      Helper.raise_runtime_error 'Cannot upload file. Please contact us.' if ! is_sucess
+    end
+    map_sequence_name_to_species
+
   rescue RuntimeError => ex
     @fatal_error = ex.message
   rescue NoMethodError, Errno::ENOENT, Errno::EACCES, ArgumentError, NameError, TypeError => ex
     @fatal_error = 'Cannot load file. Please contact us.'
   ensure
-      map_sequence_name_to_species
-
       respond_to do |format|
         format.js
       end
@@ -245,6 +238,9 @@ class GenePainterController < ApplicationController
       else
         file = params[:file]
         @basename = file.original_filename
+
+        # validate file
+        FormatChecker.validate_pdb(file.path, @basename)
 
         # check file size
         Helper.filesize_below_limit(file.tempfile, MAX_FILESIZE) 

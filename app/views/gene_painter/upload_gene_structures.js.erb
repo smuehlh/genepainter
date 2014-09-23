@@ -1,6 +1,8 @@
 <% if @fatal_error.blank? then %>
 
   hide_show_waiting('hide');
+  // toggle help
+  $('div#upload_gene_struct_help').hide('slow');
 
   <% if @is_example %>
 
@@ -51,8 +53,7 @@
 
 <% else%>
   hide_show_waiting('hide');
-  error('Cannot upload gene structure files.');
-  // error('<%=raw(@fatal_error)%>');
+  error('<%=raw(@fatal_error)%>');
   // toggle help
-  $("div#upload_gene_structures_help").show("slow");
+  $('div#upload_gene_struct_help').show('slow');
 <% end %>

@@ -46,7 +46,8 @@ module SequenceHelper
 			parts = line.split(/:/x) # ignore white spaces surrounding ":"
 			genes = parts.shift
 			species = parts.join(":")
-			if genes.nil? || species.nil? then
+
+			if genes.nil? || species.nil? || genes.blank? || species.blank? then
 				raise "Error while parsing mapping between species and genes. Expecting \':\'-separated list of genes and species"
 			end
 			species = species.strip # remove leading & trailing white spaces
