@@ -9,6 +9,7 @@
 
         $("input#species" ).autocomplete({
           minLength: 3,
+          delay: 300,
           source: function(request, response) {
             $.ajax({
               type: 'GET',
