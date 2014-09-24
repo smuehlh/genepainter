@@ -19,7 +19,7 @@
 		<%= image_tag("icons/help.png", :class => "help upload_pdb_help") %>
 	</div>
 	<div>
-		<u onclick="load_sample_pdb()" id="sample_pdb" style="float: right; cursor: pointer"><i>Load sample data</i></u>
+		<u onclick="load_sample_pdb()" id="sample_pdb" style="float: right; cursor: pointer; display:none"><i>Load sample data</i></u>
 		<script defer>
 			function load_sample_pdb() {
 				hide_show_waiting('show');
