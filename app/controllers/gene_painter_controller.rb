@@ -344,27 +344,29 @@ class GenePainterController < ApplicationController
     all_species = params[:all_species] == nil ? [] : params[:all_species]
     taxonomy_list = ""
 
-    if all_species.length > 0
-      all_species.each do |s|
+    all_species.each do |provided_species|
 
-        if Node.any_of({ scientific_name: "#{s}"}).length > 0
+      if found_species = Node.any_of( { scientific_name: provided_species} , { common_names: provided_species } ).first then 
 
-          species = Node.any_of({ scientific_name: "#{s}"}).first
-
-          lineage = []
-          current_taxon = species
-          while not current_taxon.root?
-            lineage << current_taxon
-            current_taxon = current_taxon.parent
-          end
-          lineage  << current_taxon
-
-          path = lineage.map do |node|
-            node.scientific_name
-          end
-
-          taxonomy_list << path.reverse.join(";") << "\n"
+        lineage = []
+        current_taxon = found_species
+        while not current_taxon.root?
+          lineage << current_taxon
+          current_taxon = current_taxon.parent
         end
+        lineage  << current_taxon
+
+        path = lineage.map do |node|
+          node.scientific_name
+        end
+
+        # change species name to user-provided one
+        # this is neccessary for gene painter to establish connection
+        if path[0] != provided_species then 
+          path[0] = provided_species
+        end
+
+        taxonomy_list << path.reverse.join(";") << "\n"
       end
     end
 
