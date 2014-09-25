@@ -10,7 +10,6 @@
   <script>
 
       // Display phylotree
-      // $('div#b_phylotree').show('slow');
 
       $('div#svg_placeholder').html('<%= render_svg("#{controller.id}-tree.svg").html_safe %>');
 
@@ -24,8 +23,8 @@
       }
 
       function resetPhylotree() {
-        $('.taxon').removeAttr('fill');
-        $('.taxon').removeAttr('style');
+        // apparently, jquery-ui broke removeClass, so use this instead
+        $(".taxon-highlight").attr("class", "taxon")
       }
 
       $('.taxon').click(function() {
@@ -33,8 +32,7 @@
         resetPhylotree();
         resetTable();
 
-        this.setAttribute('fill', '#336699');
-        this.setAttribute('style', 'font-size: 15px; font-weight: bold');
+        this.setAttribute('class', 'taxon taxon-highlight'); // taxon-highlight CSS for styling 
 
         var textTokens = this.innerHTML.split(" ");
 
