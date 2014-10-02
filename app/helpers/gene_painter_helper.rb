@@ -37,6 +37,11 @@ module GenePainterHelper
     File.open(filename, "r").each_line do |line|
 
       name = line[0...GeneAlignment.max_length_gene_name].strip
+      if name =~ /^>Merged/ || name =~ /^>Consensus/ then 
+        # special pattern, do not include in text-based output!
+        next
+      end
+
       sequence_names << "<tr><td>#{name}</td></tr>"
     end
 
@@ -128,8 +133,13 @@ module GenePainterHelper
 
     File.open(filename, "r").each_line do |line|
 
-      pattern = line[GeneAlignment.max_length_gene_name..-1].strip
+      name = line[0...GeneAlignment.max_length_gene_name].strip
+      if name =~ /^>Merged/ || name =~ /^>Consensus/ then 
+        # this is a special pattern, do not include it in text-based output!
+        next
+      end
 
+      pattern = line[GeneAlignment.max_length_gene_name..-1].strip
       if is_first_line && opts[:colgroup_class] then 
         # get table row and generate colgroup
         table << pattern_to_colgroup( pattern, opts[:colgroup_class] )
