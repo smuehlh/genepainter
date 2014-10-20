@@ -1,10 +1,21 @@
 <% provide(:title, 'Download') %>
 <h1>Download</h1>
 <p>
-        <a href="downloads/gene_painter.tgz" class="external">tgz compressed archive</a><span style="font-size:smaller"> (click to download archive)</span><br>
-        <a href="downloads/gene_painter.zip" class="external">zip compressed archive</a><span style="font-size:smaller"> (click to download archive)</span>
-        <br>
-        <a href="downloads/Documentation.pdf" class="external">Documentation</a><span style="font-size:smaller"> (click to download pdf)</span>
+        <p>
+        <%= link_to( "tgz compressed archive", get_download_sources_path( file: "gene_painter.tgz" ), :class => "external", :target => "_blank" ) %>
+        <%= tag(:br) %>
+
+        <%= link_to( "zip compressed archive", get_download_sources_path( file: "gene_painter.zip" ), :class => "external", :target => "_blank" ) %>
+        <%= tag(:br) %>
+
+        <%= link_to( "Documentation", get_download_sources_path( file: "Documentation.pdf" ), :class => "external", :target => "_blank" ) %>
+        <%= tag(:br) %>
+
+        <%= content_tag(:p, 
+                "Click on files to download.", :class => "filename"
+                )
+        %>
+</p>
 </p>
 <h2>Archive content</h2>
 <p>

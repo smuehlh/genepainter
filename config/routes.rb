@@ -20,6 +20,7 @@ Rails.application.routes.draw do
   match 'autocomplete', to: 'gene_painter#autocomplete', as: 'get/autocomplete', :via => [:get]
   match 'download_genestructs', to: 'gene_painter#download_new_genestructs', as: 'get/download_genestructs', :via => [:get]
   match 'download_resultfiles', to: 'gene_painter#download_resultfiles', as: 'get/download_resultfiles', :via => [:get]
+  match 'download_sources', to: 'static_pages#download_sources', as: 'get/download_sources', :via => [:get]
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
