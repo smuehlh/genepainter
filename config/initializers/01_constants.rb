@@ -7,6 +7,7 @@ if ENV && ENV["PWD"] && ENV["PWD"].include?("fab8") then
 	Dir_gene_painter = '/fab8/server/db_scripts/gene_painter_new/gene_painter'
 else
     Lucullus_url = "http://www.motorprotein.de/tpl_os"
+	Dir_gene_painter = ''
 end
 
 # host-independent
