@@ -6,7 +6,7 @@
     <% if controller.action_name == "genepainter" then selected = " class='selected'" else selected = "" end%>
     <li<%=raw(selected)%>><%= link_to "GenePainter", gene_painter_path %></li>
 
-    <% if controller.action_name == "help" then selected = " class='selected'" else selected = "" end%>
+    <% if controller.action_name.start_with?("help") then selected = " class='selected'" else selected = "" end%>
     <li<%=raw(selected)%>><%= link_to "Help", help_path %></li>
 
     <% if controller.action_name == "download" then selected = " class='selected'" else selected = "" end%>
@@ -23,7 +23,7 @@
 <% if controller.action_name.start_with?("help") then %>
     <ul id="submenu">
 
-        <% if controller.action_name == "help_general" then selected = " class='selected'" else selected = "" end%>
+        <% if controller.action_name == "help" then selected = " class='selected'" else selected = "" end%>
         <li<%=raw(selected)%>><%= link_to "General Information", help_path %></li>
 
         <% if controller.action_name == "help_commandline" then selected = " class='selected'" else selected = "" end%>
