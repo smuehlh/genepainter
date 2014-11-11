@@ -1,42 +1,49 @@
 <% provide(:title, 'Download') %>
 <h1>Download</h1>
 <p>
-        <p>
-        <%= link_to( "tgz compressed archive", get_download_sources_path( file: "gene_painter.tgz" ), :class => "external", :target => "_blank" ) %>
-        <%= tag(:br) %>
+		<p>
+		<%= link_to( "tgz compressed archive", get_download_sources_path( file: "gene_painter.tgz" ), :class => "external", :target => "_blank" ) %>
+		<%= tag(:br) %>
 
-        <%= link_to( "zip compressed archive", get_download_sources_path( file: "gene_painter.zip" ), :class => "external", :target => "_blank" ) %>
-        <%= tag(:br) %>
+		<%= link_to( "zip compressed archive", get_download_sources_path( file: "gene_painter.zip" ), :class => "external", :target => "_blank" ) %>
+		<%= tag(:br) %>
 
-        <%= link_to( "Documentation", get_download_sources_path( file: "Documentation.pdf" ), :class => "external", :target => "_blank" ) %>
-        <%= tag(:br) %>
+		<%= link_to( "Documentation", get_download_sources_path( file: "Documentation.pdf" ), :class => "external", :target => "_blank" ) %>
+		<%= tag(:br) %>
 
-        <%= content_tag(:p, 
-                "Click on files to download.", :class => "filename"
-                )
-        %>
+		<%= content_tag(:p, 
+				"Click on files to download.", :class => "filename"
+				)
+		%>
 </p>
 </p>
 <h2>Archive content</h2>
 <p>
-        <table>
-                <tr>
-                        <td>gene_painter.rb</td><td>Main script</td>
-                </tr>
-                <tr>
-                        <td>lib/</td><td>Folder containing library</td>
-                </tr>
-                <tr>
-                        <td>example/</td><td>Folder containing test data</td>
-                </tr>
-                <tr>
-                        <td>tools/</td><td>Folder containing additional scripts, i.e. to obtain NCBI taxonomy dump and YAML files</td>
-                </tr>
-                <tr>
-                        <td>Documentation.pdf</td><td>Exhaustive documentation</td>
-                </tr>
-                <tr>
-                        <td>README</td><td>Information about installation and usage of GenePainter</td>
-                </tr>
-        </table>
+		<table>
+				<tr>
+						<td>gene_painter.rb</td><td>Main script</td>
+				</tr>
+				<tr>
+						<td>lib/</td><td>Folder containing library</td>
+				</tr>
+				<tr>
+						<td>example/</td><td>Folder containing test data</td>
+				</tr>
+				<tr>
+						<td>tools/</td><td>Folder containing additional scripts, i.e. to obtain NCBI taxonomy dump and YAML files</td>
+				</tr>
+				<tr>
+						<td>Documentation.pdf</td><td>Exhaustive documentation</td>
+				</tr>
+				<tr>
+						<td>README</td><td>Information about installation and usage of GenePainter</td>
+				</tr>
+		</table>
+</p>
+<h2>Old version</h2>
+<p>
+	<%= link_to( "GenePainter v.1.0", get_download_sources_path( file: "gene_painter_v1.zip" ), :class => "external", :target => "_blank" ) %>
+	<%= tag(:br) %>
+	<%= link_to( "Documentation v.1.0", get_download_sources_path( file: "Documentation_v1.png" ), :class => "external", :target => "_blank" ) %>
+	<%= tag(:br) %>
 </p>

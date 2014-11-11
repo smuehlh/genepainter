@@ -1,0 +1,276 @@
+<% provide(:title, 'Help') %>
+<%= content_tag(:h1, "Help") %>
+<%= content_tag(:h2, "Contents") %>
+
+<a name="top" class="anker"></a>
+<ul style="padding-left: 5%">
+	<li><a class = "internal" href="#usage">Usage</a></li>
+	<li><a class = "internal" href="#options">Options</a></li>
+	<li><a class = "internal" href="#changes">Changes between versions</a></li>
+</ul>
+
+<h2>
+	<table width=100%>
+		<tr>
+			<td align="left"><a name="usage" style="font-style: normal">Usage</a></td>
+			<td align="right"><a class="internal" href="#" style="font-size: 12px">Back to top</a></td>
+		</tr>
+	</table>
+</h2>
+	<p>
+		<span style="font-family: monospace">$ ruby gene_painter.rb -i <i>&#60;alignment&#62;</i> -p <i>&#60;yaml_files&#62;</i> [<i>&#60;options&#62;</i>]</span>
+		<table>
+			<colgroup>
+				<col style="width:240px">
+			</colgroup> 
+			<tr>
+				<td><span style="font-family: monospace">-i </span><i> or </i><span style="font-family: monospace"> --input</span></td><td>Path to fasta-formatted multiple sequence alignment</td>
+			</tr>
+			<tr>
+				<td><span style="font-family: monospace">-p </span><i> or </i><span style="font-family: monospace"> --path</span></td><td>Path to folder containing gene structures in YAML or GFF format</td>
+			</tr>
+			<tr>
+				<td>Standard output format</td><td>Mark exons by '-' and introns by '|'</td>
+			</tr>
+		</table>
+	</p>
+
+<h2>
+	<table width=100%>
+		<tr>
+			<td align="left"><a name="options" style="font-style: normal">Options</a></td>
+			<td align="right"><a class="internal" href="#" style="font-size: 12px">Back to top</a></td>
+		</tr>
+	</table>
+</h2>
+	<h3>Text-based output format</h3>
+		<p>
+			<table>
+				<colgroup>
+					<col style="width:240px">
+				</colgroup> 
+				<tr>
+					<td><span style="font-family: monospace">--intron-phase</span></td><td>Mark introns by their phase instead of '|'</td>
+				</tr>
+				<tr>
+					<td><span style="font-family: monospace">--phylo</span></td><td>Mark exons by '0' and introns by '1'</td>
+				</tr>
+				<tr>
+					<td><span style="font-family: monospace">--spaces</span></td><td>Mark exons by space (' ') instead of '-'</td>
+				</tr>
+				<tr>
+					<td><span style="font-family: monospace">--no-standard-output</span></td><td>Specify to skip standard output format.</td>
+				</tr>
+				<tr>
+					<td><span style="font-family: monospace">--alignment</span></td><td>Output the alignment file with additional lines containing intron phases</td>
+				</tr>
+			</table>
+		</p>
+	<h3>Graphical output format</h3>
+		<p>             
+			<table>
+				<colgroup>
+					<col style="width:240px">
+				</colgroup> 
+				<tr>
+					<td><span style="font-family: monospace">--svg</span></td><td>Drawn a graphical representation of genes in SVG format.</td>
+				</tr>
+				<tr>
+					<td><span style="font-family: monospace">--svg-format FORMAT</span></td><td>Switch between different formats.<br>FORMAT must be one of &quot;normal&quot;, &quot;reduced&quot; or &quot;both&quot;]<br>&quot;normal&quot; draws details of aligned exons and introns [default]<br>&quot;reduced&quot; focuses on common introns only<br>&quot;both&quot; draws both formats</td>
+				</tr>
+				<tr></tr>
+				<tr>
+					<td><span style="font-family: monospace">--pdb FILE</span></td><td>Mark consensus or merged gene structure in pdb FILE<br>Consenus gene structure contains introns conserved in N % of all genes<br>Specify N with option --consensus N; [default: 80%]<br>Two scripts for execution in PyMol are provided:<br>'color_exons.py' to mark consensus exons<br>'color_splicesites.py' to mark splice junctions of consensus exons</td>
+				</tr>
+				<tr>
+					<td><span style="font-family: monospace">--pdb-chain CHAIN</span></td><td>Mark gene structures for chain CHAIN. [default: Use chain A]</td>
+				</tr>
+				<tr>
+					<td><span style="font-family: monospace">--pdb-ref-prot PROT</span></td><td>Use protein PROT as reference for alignment with pdb sequence. [default: First protein in alignment]</td>
+				</tr>
+				<tr>
+					<td><span style="font-family: monospace">--pdb-ref-prot-struct</span></td><td>Color only intron positions occuring in the reference protein structure.</td>
+				</tr>
+				<tr></tr>
+				<tr>
+					<td><span style="font-family: monospace">--tree</span></td><td>Generate newick tree file and SVG representation</td>
+				</tr>
+			</table>
+		</p>
+	<h3>Meta information and statistics</h3>
+		<p>                             
+			<table>
+				<colgroup>
+					<col style="width:240px">
+				</colgroup> 
+				<tr>
+					<td><span style="font-family: monospace">--consensus N</span></td><td>Mark all introns conserved in N % genes.Specify N as decimal number between 0 and 1</td>
+				</tr>
+				<tr>
+					<td><span style="font-family: monospace">--merge</span></td><td>Merge all introns into a single exon intron pattern</td>
+				</tr>
+				<tr>
+					<td><span style="font-family: monospace">--statistics</span></td><td>Output additional file with statistics about common introns.<br>To include information about taxomony, specify '--taxomony' and '--taxonomy-to-fasta' options</td>
+				</tr>
+			</table>
+		</p>
+   <h3>Taxonomy</h3>
+		<p>
+			<table>
+				<colgroup>
+					<col style="width:240px">
+				</colgroup> 
+				<tr>
+					<td><span style="font-family: monospace">--taxonomy FILE</span></td><td>Use this option to mark introns by taxonomy.<br>NCBI taxonomy database dump file FILE<br>OR Excerpt of NCBI taxonomy. Lineage must be semicolon-separated list of taxa from root to species.</td>
+				</tr>
+				<tr>
+					<td><span style="font-family: monospace">--taxonomy-to-fasta FILE</span></td><td>Text-based file mapping gene structure file names to species names.<br>One or more genes given as semicolon-separated list and species name.<br>Delimiter between gene list and species name must be a colon. The species name itself must be enclosed by double quotes like this &quot;SPECIES&quot;</td>
+				</tr>
+				<tr>
+					<td><span style="font-family: monospace">--taxonomy-common-to X,Y,Z</span></td><td>Mark introns common to taxa X,Y,Z. List must consist of at least one NCBI taxon (scientific name)</td>
+				</tr>
+				<tr>
+					<td><span style="font-family: monospace">--[no-]exclusively-in-taxa</span></td><td>Mark introns occuring (not) exclusively in listed taxa.<br>[default: not exclusively]</td>
+				</tr>
+			</table>
+		</p>
+	<h3>Analysis and output of all or subset of data</h3>
+		<p>
+			<table>
+				<colgroup>
+					<col style="width:240px">
+				</colgroup> 
+				<tr>
+					<td><span style="font-family: monospace">--analyse-all-output-all</span></td><td>Analyse all data and provide full output [default]</td>
+				</tr>
+				<tr>
+					<td><span style="font-family: monospace">--analyse-all-output-selection</span></td><td>Analyse all data and provide text-based and graphical output for selection only. All introns are analysed, including those not present in selection</td>
+				</tr>
+				<tr>
+					<td><span style="font-family: monospace">--analyse-selection-output-selection</span></td><td>Analyse selected data and provide output for selection only</td>
+				</tr>
+				<tr>
+					<td><span style="font-family: monospace">--analyse-selection-on-all-data-output-selection</span></td><td>Analyse intron positions of selected data in all data and provide output for selection only. Introns present in selection are analysed in all data</td>
+				</tr>
+			</table>     
+		</p>     
+	<h3>Selection criteria for data and output selection</h3>         
+		<p>                     
+			<table>
+				<colgroup>
+					<col style="width:240px">
+				</colgroup>            
+				<tr>
+					<td><span style="font-family: monospace">--select-all</span></td><td>No selection applied (default)</td>
+				</tr>
+				<tr>
+					<td><span style="font-family: monospace">--selection-based-on-regex &quot;REGEX&quot;</span></td><td>Regular expression applied on gene structure file names. Regex must be enclosed by double quotes</td>
+				</tr>
+				<tr>
+					<td><span style="font-family: monospace">--selection-based-on-list X,Y,Z</span></td><td>List of gene structures to be used</td>
+				</tr>
+				<tr>
+					<td><span style="font-family: monospace">--selection-based-on-species SPECIES</span></td><td>Use all gene structures associated with species. Specify also <span style="font-family: monospace">--taxonomy-to-fasta</span> to map gene structure file names to species names</td>
+				</tr>
+			</table>
+		</p>
+
+	<h3>General options</h3>
+		<p>
+			<table>
+				<colgroup>
+					<col style="width:240px">
+				</colgroup> 
+				<tr>
+					<td><span style="font-family: monospace">-o </span><i> or </i><span style="font-family: monospace"> --outfile FILENAME</span></td><td>Prefix of the output files.</td>
+				</tr>
+				<tr>
+					<td><span style="font-family: monospace">--path-to-output PATH</span></td><td>Path to the location where output files should be stored.</td>
+				</tr>
+				<tr>
+					<td><span style="font-family: monospace">--range START,STOP</span></td><td>Restrict genes to range START-STOP in alignment</td>
+				</tr>
+				<tr>
+					<td><span style="font-family: monospace">--[no-]delete-range</span></td><td>(Not) Delete specified range</td>
+				</tr>
+				<tr>
+					<td><span style="font-family: monospace">--keep-common-gaps</span></td><td>Keep common gaps in alignment. This option effects only output of <span style="font-family: monospace">--alignment</span></td>
+				</tr>
+				<tr>
+					<td><span style="font-family: monospace">--no-best-position-introns</span></td><td>Plot introns always onto beginning of a gap.<br>Default: Align introns if their position differs by alignment gaps only</td>
+				</tr>
+				<tr>
+					<td><span style="font-family: monospace">--[no-]separate-introns-in-textbased-output</span></td><td>(Not) Separate each consecutive pair of introns by an exon placeholder in text-based output formats.<br>Default: Separate introns unless the output lines get too long.</td>
+				</tr>
+				<tr>
+					<td><span style="font-family: monospace">-h </span><i> or </i><span style="font-family: monospace"> --help</span></td><td>List all options available.</td>
+				</tr>
+			</table>
+		</p>
+	
+	<b>For a complete list of all options available, please refer to the documentation.</b>`
+</p>
+
+
+<h2>
+	<table width=100%>
+		<tr>
+			<td align="left"><a name="changes" style="font-style: normal">Changes in command line parameters from v.1.0 to v.2.0</a></td>
+			<td align="right"><a class="internal" href="#" style="font-size: 12px">Back to top</a></td>
+		</tr>
+	</table>
+</h2>
+<p>
+	<table>
+		<colgroup>
+			<col style="width:240px">
+		</colgroup> 
+		<tr>
+			<td><b>v.1.0 parameter</b></td><td><b>v.2.0 parameter</b></td>
+		</tr>
+		<tr>
+			<td><span style="font-family: monospace">-a</span></td>
+			<td><span style="font-family: monospace">--alignment</span></td>
+		</tr>
+		<tr>
+			<td><span style="font-family: monospace">-n</span></td>
+			<td><span style="font-family: monospace">--intron-phase</span></td>
+		</tr>
+		<tr>
+			<td><span style="font-family: monospace">-phylo</span></td>
+			<td><span style="font-family: monospace">--phylo</span></td>
+		</tr>
+		<tr>
+			<td><span style="font-family: monospace">-s</span></td>
+			<td><span style="font-family: monospace">--spaces</span></td>
+		</tr>
+		<tr>
+			<td><span style="font-family: monospace">-svg WIDTH,HEIGHT FORMAT</span></td>
+			<td><span style="font-family: monospace">--svg </span><i>and</i> <span style="font-family: monospace">--svg-format</span> </td>
+		</tr>
+		<tr>
+			<td><span style="font-family: monospace">-start START </span><i>and</i> <span style="font-family: monospace">-stop STOP</span></td>
+			<td><span style="font-family: monospace">--range START,STOP</span></td>
+		</tr>
+		<tr>
+			<td><span style="font-family: monospace">-pdb</span></td>
+			<td><span style="font-family: monospace">--pdb</span></td>
+		</tr>
+		<tr>
+			<td><span style="font-family: monospace">-pdb_prot</span></td>
+			<td><span style="font-family: monospace">--pdb-ref-prot</span></td>
+		</tr>
+		<tr>
+			<td><span style="font-family: monospace">-ref_prot_struct</span></td>
+			<td><span style="font-family: monospace">--pdb-ref-prot-struct</span></td>
+		</tr>
+		<tr>
+			<td><span style="font-family: monospace">-consensus</span></td>
+			<td><span style="font-family: monospace">--consensus</span><i>, no longer restricted to combination with <span style="font-family: monospace">-pdb</span></i></td>
+		</tr>
+		<tr>
+			<td><span style="font-family: monospace">-f </span><i>and </i> <span style="font-family: monospace">-penalize_endgaps</span></td>
+			<td><i>obsolete</i></td>
+		</tr>
+	</table>
+</p>

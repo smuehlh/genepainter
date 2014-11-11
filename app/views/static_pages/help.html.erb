@@ -5,55 +5,105 @@
 <a name="top" class="anker"></a>
 <ul style="padding-left: 5%">
 	<li><a class = "internal" href="#general">General</a></li>
-	<li><a class = "internal" href="#entering">Entering the data</a></li>
-	<li><a class = "internal" href="#settings">Using GenePainter's options</a></li>
-	<li><a class = "internal" href="#viewing">Viewing the results</a></li>
+	<li><a class = "internal" href="#commandline">Command Line Tool</a></li>
+	<li><a class = "internal" href="#licence">Licence</a></li>
 </ul>
 
 <h2>
 	<table width=100%>
 		<tr>
 			<td align="left"><a name="general" style="font-style: normal">General</a></td>
-			<td align="right"><a class="internal" href="#" style="font-size: 12px">Back to top</td>
+			<td align="right"><a class="internal" href="#" style="font-size: 12px">Back to top</a></td>
 		</tr>
 	</table>
 </h2>
 	<p>
-		The conservation of intron positions comprises information useful for de novo gene prediction as well as for analyzing the origin of introns. Here, we present GenePainter, a standalone tool for mapping gene structures onto protein multiple sequence alignments (MSA). Gene structures, as provided by WebScipio, are aligned with respect to the exact positions of the introns (down to nucleotide level) and intron phase. Output can be viewed in various formats, ranging from plain text to graphical output formats.</p>
+		The conservation of intron positions comprises information useful for de novo gene prediction as well as for analyzing the origin of introns. Here, we present GenePainter, a standalone tool for mapping gene structures onto protein multiple sequence alignments (MSA). Gene structures, as provided by <a class="external" href="http://www.webscipio.org" style="font-size: 12px">WebScipio</a>, are aligned with respect to the exact positions of the introns (down to nucleotide level) and intron phase. Output can be viewed in various formats, ranging from plain text to graphical output formats.</p>
+		
+	<p>Detailed descriptions of the intron mapping algorithm, the analysis strategies and the various output options can be found in the following publications:</p>
+	<p>
+		<div style="font-weight:bold; padding: 10px 0px 0px 10px;">
+			S. Mühlhausen, M. Hellkamp &amp; M. Kollmar (2014)</div>
+		<div style="padding-left:20px;">
+			<a style="font-style:normal" class="external" href="" target="GenePainter_v2">GenePainter 2.0 resolves the taxonomic distribution of intron positions.</a>
+		</div>
+		<div style="padding:0px 0px 10px 20px;">
+			unpublished.
+		</div>  
+	</p>	
+	<p>
+		<div style="font-weight:bold; padding: 10px 0px 0px 10px;">
+			B. Hammesfahr, F. Odronitz, S. Mühlhausen, S. Waack &amp; M. Kollmar (2013) 
+			<%= link_to(image_tag("layout/openaccess.gif", :alt=>"Open Access", :style => "float:right; padding-left:5px"), "http://www.biomedcentral.com/info/about/openaccess", :target => "_blank") %>
+			<%= link_to(image_tag("layout/highlyaccessed.gif", :alt=>"Highly Accessed", :style => "float:right; padding-left:5px"), "http://www.biomedcentral.com/info/about/mostviewed#highlyaccessed", :target => "_blank") %>
+		</div>
+		<div style="padding-left:20px;">
+			<a style="font-style:normal" class="external" href="http://www.biomedcentral.com/1471-2105/14/77" target="GenePainter_v1">GenePainter: a fast tool for aligning gene structures of eukaryotic protein families, visualizing the alignments and mapping gene structures onto protein structures.</a>
+		</div>
+		<div style="padding:0px 0px 10px 20px;"><i>BMC Bioinformatics</i><b> 14</b>, 77.
+		</div>  
+	</p>
 
 <h2>
 	<table width=100%>
 		<tr>
-			<td align="left"><a name="entering" style="font-style: normal">Entering the data</a></td>
-			<td align="right"><a class="internal" href="#" style="font-size: 12px">Back to top</td>
+			<td align="left"><a name="commandline" style="font-style: normal">Command Line Tool</a></td>
+			<td align="right"><a class="internal" href="#" style="font-size: 12px">Back to top</a></td>
 		</tr>
 	</table>
 </h2>
 
-	<h3>Data upload</h3>
-		<h4>Multiple sequence alignment</h4>
-			<%=render :partial => "/gene_painter/help/text_seq_help"%>
-		<h4>Gene structures</h4>
-		<h4>Species Mapping</h4>
-	<h3>Data center</h3>
+	<h3>Installation</h3>
+		<p>GenePainter has been tested and is running under Linux, MaxOS and Windows.</p>
+		
+		<h4>Unpack</h4>
+			<p>Use one of the following methods, depending on the archive file type:</p>
+			<p><span style="font-family: monospace">$ unzip gene_painter.zip</span></p>
+			<p><span style="font-family: monospace">$ tar  xzf gene_painter.tgz</span></p>
+		<h4>Compilation</h4>
+			<p>No compilation required.</p>
+		<h4>Ruby version</h4>
+			<p>Ruby version 2.0 or higher is required. If necessary, consider using the <a class="external" href="https://rvm.io/">Ruby Version Manager (RVM)</a> to install and work with multiple ruby environments on your machine.</p>
+	<h3>Usage</h3>
+		<p>
+			<span style="font-family: monospace">$ ruby gene_painter.rb -i <i>&#60;alignment&#62;</i> -p <i>&#60;yaml_files&#62;</i> [<i>&#60;options&#62;</i>]</span>
+		</p>
+
+		<p>The options are described in more detail <a class="internal" href="help_commandline">here</a> and in the accompanying documentation.</p>
+
+		<h4>Ruby interpreter</h4>
+			<p>Invoke GenePainter via one of the following options:</p>
+			<ol>
+				<li>
+					As a script 
+					<p>
+						<span style="font-family: monospace">ruby gene_painter.rb</span>
+					</p>
+				</li>
+				<li>
+					As a program
+					<p>
+						<span style="font-family: monospace">$ ./gene_painter.rb</span>
+					</p>					
+				</li>
+			</ol>
+
+			<p><b>Important note</b></br>
+			GenePainter assumes that <span style="font-family: monospace">/usr/bin/env</span> ruby points to the RVM ruby interpreter. While this will work on most UNIX systems, it might not work on windows machines. In case you encounter any <span style="font-family: monospace">“/usr/bin/env ruby: No such file or directory“</span> errors, please edit the very first line of script gene_painter.rb and change the specified path to the correct one. For example, with the Ruby interpreter located at <span style="font-family: monospace">/usr/bin/ruby</span>, the Shebang should look like this: <span style="font-family: monospace">#!/usr/bin/ruby</span>.</p>
+
+		<h4>Using GenePainter under windows</h4>
+			<p>GenePainter was developed for UNIX and Mac. To use GenePainter under Windows, you might consider installing Cygwin, which comes with a bash and appropriate GNU tools. Please make sure to have GNU tools <span style="font-family: monospace">grep</span> and <span style="font-family: monospace">tar</span> installed and in your executable path when using GenePainter with its taxonomy options. If not, you should unpack the NCBI taxonomy dump yourself and add the parameter <span style="font-family: monospace">--no-grep</span> to read the taxonomy dump into memory instead of grepping its content. In order to use GenePainter with the parameter <span style="font-family: monospace">--tree</span>, please make sure to have <span style="font-family: monospace">python</span> installed and in your executable path.</p>
+
 <h2>
 	<table width=100%>
 		<tr>
-			<td align="left"><a name="settings" style="font-style: normal">Using GenePainter's options</a></td>
-			<td align="right"><a class="internal" href="#" style="font-size: 12px">Back to top</td>
+			<td align="left"><a name="licence" style="font-style: normal">Licence</a></td>
+			<td align="right"><a class="internal" href="#" style="font-size: 12px">Back to top</a></td>
 		</tr>
 	</table>
 </h2>
-
-<h2>
-	<table width=100%>
-		<tr>
-			<td align="left"><a name="viewing" style="font-style: normal">Viewing the results</a></td>
-			<td align="right"><a class="internal" href="#" style="font-size: 12px">Back to top</td>
-		</tr>
-	</table>
-</h2>
-
+	<p>GenePainter can be downloaded and used under a GNU General Public License.</p>
+	<p>Using GenePainter by non-academics requires permission.</p>
 
 
 <%= javascript_tag defer: 'defer' do -%>

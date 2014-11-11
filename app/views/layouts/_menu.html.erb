@@ -19,6 +19,27 @@
     <li<%=raw(selected)%>><%= link_to "Contact", contact_path %></li>
   </ul>
 </div>
+<div class="clearfix"></div>
+<% if controller.action_name.start_with?("help") then %>
+    <ul id="submenu">
+
+        <% if controller.action_name == "help_general" then selected = " class='selected'" else selected = "" end%>
+        <li<%=raw(selected)%>><%= link_to "General Information", help_path %></li>
+
+        <% if controller.action_name == "help_commandline" then selected = " class='selected'" else selected = "" end%>
+        <li<%=raw(selected)%>><%= link_to "Command Line Tool", help_commandline_path %></li>
+
+        <% if controller.action_name == "help_input" then selected = " class='selected'" else selected = "" end%>
+        <li<%=raw(selected)%>><%= link_to "Input Files", help_input_path %></li>
+
+        <% if controller.action_name == "help_result" then selected = " class='selected'" else selected = "" end%>
+        <li<%=raw(selected)%>><%= link_to "Result Files", help_result_path %></li>
+
+        <% if controller.action_name == "help_strategy" then selected = " class='selected'" else selected = "" end%>
+        <li<%=raw(selected)%>><%= link_to "Analysis Strategies", help_strategy_path %></li>
+
+    </ul>
+<% end %>
 
 <%= javascript_tag defer: 'defer' do -%>
   $.each($('div#menu').find('a'), function() {

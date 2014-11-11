@@ -1,0 +1,28 @@
+<% provide(:title, 'Help') %>
+<%= content_tag(:h1, "Help") %>
+<%= content_tag(:h2, "Contents") %>
+
+<a name="top" class="anker"></a>
+<ul style="padding-left: 5%">
+	<li><a class = "internal" href="#general">General</a></li>
+</ul>
+
+
+<h2>
+	<table width=100%>
+		<tr>
+			<td align="left"><a name="general" style="font-style: normal">General</a></td>
+			<td align="right"><a class="internal" href="#" style="font-size: 12px">Back to top</a></td>
+		</tr>
+	</table>
+</h2>
+	<p>GenePainter includes all genes in its analysis, for which both an aligned protein sequence and the gene structure are present. Assuming that your multiple sequence alignment contains all sequences of your dataset, the easiest way to analyse only a subset of all data is to copy the corresponding gene structure files to a new folder and specify that folder. Another way to accomplish this task is to use the various data and output selection options GenePainter offers. This option allows you to specify the subset of data to use or analyse in various ways. First, you can provide a list of gene names (corresponding to gene structure file names and fasta headers in the multiple sequence alignment; option <span style="font-family: monospace">--selection-based-on-list</span>). Second, you can specify one species name by using parameter <span style="font-family: monospace">--selection-based-on-species</span>. You must combine this parameter with <span style="font-family: monospace">--taxonomy-to-fasta</span> to associate genes with that species. Those genes associated with the given species are then used. Third, your selection can be based on a regular expression, which is then applied on gene names (parameter <span style="font-family: monospace">--selection-based-on-regex</span>). Please enclose the regular expression by quotation marks and specify only the regular expression itself, not the surrounding (&quot;/&quot;). No modifiers (such as &quot;i&quot; for case insensitivity) can be specified. You can easily check your regular expression on online platforms such as <a class="external" href="http://rubular.com/" style="font-size: 12px">rubular</a>.</p>
+
+	<p>The selection can be applied as data or as output selection by specifying one of <span style="font-family: monospace">--analyse-all-output-selection</span>, <span style="font-family: monospace">--analyse-selection-output-selection</span>, <span style="font-family: monospace">--analyse-selection-on-all-data-output-selection</span> or <span style="font-family: monospace">--analyse-all-output-all</span> to apply no selection at all. For <span style="font-family: monospace">--analyse-all-output-selection</span>, the complete dataset, i.e. introns occurring in all data, is analysed, but only gene structures of selected data are included in output. For an analysis of those introns present in selected data in full dataset, specify <span style="font-family: monospace">--analyse-selection-on-all-data-output-selection</span>. In order to analyse a subset of data only and to include this subset into output, specify <span style="font-family: monospace">--analyse-selection-output-selection</span>.</p>
+	
+
+	
+<%= javascript_tag defer: 'defer' do -%>
+	<!-- show all help-partials included _above_ that have the class 'help' -->
+	$("div#content").find(".help").show().removeClass()
+<% end -%>

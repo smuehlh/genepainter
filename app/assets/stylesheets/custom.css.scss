@@ -72,7 +72,7 @@ h1, h2, h3, h4, h5 {
 }
 
 #header {
-    background-color: white;
+    background-color: $grau;
     height: 95px;
     width: 900px;
 }
@@ -118,7 +118,37 @@ h1, h2, h3, h4, h5 {
         color: black;
     }
 }
+#submenu {
+    background-color: $menu_links_selected;
+    font-size: 12px;
+    height: 25px;
+    margin: 0;
+    padding: 0;
+    width: 900px;
 
+    li {
+        float: left;
+        list-style: none outside none;
+        text-align: center;
+        a {
+            color: $menu_links_inactiv;
+            display: block;
+            font-style: normal;
+            line-height: 25px;
+            padding: 0 7px;
+        }
+
+        a:hover {
+            background-color: $grau;
+            color: black;
+        }
+    }
+
+    li.selected a {
+        background-color: $grau;
+        color: black;
+    }
+}
 
 #rightside {
     margin-top: 15px;
@@ -256,7 +286,11 @@ td, th {
     vertical-align: top;
 }
 .img_help {
-    float: right;
+    float: left;
+}
+.clearfix {
+    overflow: auto;
+    zoom: 1;
 }
 
 label {

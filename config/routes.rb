@@ -6,6 +6,11 @@ Rails.application.routes.draw do
   match '/download', to: 'static_pages#download', as: 'download', :via => [:get]
   match '/team', to: 'static_pages#team', as: 'team', :via => [:get]
   match '/contact', to: 'static_pages#contact', as: 'contact', :via => [:get]
+  match '/help_general', to: 'static_pages#help_general', as: 'help_general', :via => [:get]
+  match '/help_commandline', to: 'static_pages#help_commandline', as: 'help_commandline', :via => [:get]
+  match '/help_input', to: 'static_pages#help_input', as: 'help_input', :via => [:get]
+  match '/help_result', to: 'static_pages#help_result', as: 'help_result', :via => [:get]
+  match '/help_strategy', to: 'static_pages#help_strategy', as: 'help_strategy', :via => [:get]
 
   match 'upload_sequence', to: 'gene_painter#upload_sequence', as: 'post/upload_sequence', :via => [:post]
   # match 'upload_sequence', to: 'gene_painter#upload_sequence', as: 'get/upload_sequence',:via => [:get]

@@ -4,6 +4,17 @@ class StaticPagesController < ApplicationController
 
   def help
   end
+  def help_general
+    render :action => "help"
+  end
+  def help_commandline
+  end
+  def help_input
+  end
+  def help_result
+  end
+  def help_strategy
+  end
 
   def download
   end
