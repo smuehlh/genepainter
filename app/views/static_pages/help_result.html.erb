@@ -1,5 +1,5 @@
-<% provide(:title, 'Help') %>
-<%= content_tag(:h1, "Help") %>
+<% provide(:title, 'Result Files') %>
+<%= content_tag(:h1, "Result Files") %>
 <%= content_tag(:h2, "Contents") %>
 
 <a name="top" class="anker"></a>
@@ -8,8 +8,8 @@
 	<li><a class = "internal" href="#text">Text-based Output</a></li>
 	<li><a class = "internal" href="#graphics">Graphical Output</a></li>
 	<li><a class = "internal" href="#protein_structures">Gene Structures Mapped to Protein Structures</a></li>
-	<li><a class = "internal" href="#intron_gain">Intron Gain and Loss Over Taxonomy</a></li>
-	<li><a class = "internal" href="#statistics">Taxonomy and Statistics</a></li>
+	<li><a class = "internal" href="#intron_gain">History of Intron Gain and Loss Events</a></li>
+	<li><a class = "internal" href="#statistics">Statistics</a></li>
 </ul>
 
 
@@ -32,33 +32,44 @@
 		</tr>
 	</table>
 </h2>
+	<h3>Basic intron pattern representations</h3>
+	<p>The basic output format is a plain text file where exons are represented as minus signs and introns as vertical bars (Figure 1A). Using the <span style="font-family: monospace">--spaces</span> option (Figure 1B) shows only introns. A more detailed output including intron phases can be obtained by using the <span style="font-family: monospace">--intron-phase</span> option (Figure 1C). Options <span style="font-family: monospace">--merge</span> and <span style="font-family: monospace">--consensus</span> are applied to all generated output.
+	</p>
 
-	<p>The basic output format is a plain text file where exons are represented as minus signs and introns as vertical bars (Figure 1A). Using the <span style="font-family: monospace">--spaces</span> option (Figure 1B), shows only introns. A more detailed output including intron phases can be obtained by using the <span style="font-family: monospace">--intron-phase</span> option (Figure 1C). Options <span style="font-family: monospace">--merge</span> and <span style="font-family: monospace">--consensus</span> are applied to all generated output.<br />
-
-	<%= image_tag("help/help_fig3.png", :alt=>"fig 3", :class => "img_help, clearfix") %>
+	<%= image_tag("help/results_fig1.png", :alt=>"results 1", width: "700px", :class => "img_help") +
+		tag(:br, :class => "clearfix")
+	%>
 		
 	<p style="font-size: 10px"><b>Figure 1</b> Basic output formats.</p>
 	
-	In all text based output formats, consecutive introns are by default (or by setting <span style="font-family: monospace">--separate-introns-in-textbased-output</span>) separated by exon placeholders (&quot;-&quot;). By setting the option <span style="font-family: monospace">--no-separate-introns-in-textbased-output</span>, delimiters between consecutive introns are omitted (Figure 2).<br />
+	<p>In all text based output formats, consecutive introns are by default (or by setting <span style="font-family: monospace">--separate-introns-in-textbased-output</span>) separated by exon placeholders (&quot;-&quot;). By setting the option <span style="font-family: monospace">--no-separate-introns-in-textbased-output</span>, delimiters between consecutive introns are omitted (Figure 2).</p>
 
-	<%= image_tag("help/help_fig4.png", :alt=>"fig 4", :class => "img_help, clearfix") %>
+	<%= image_tag("help/results_fig2.png", :alt=>"results 2", width: "700px", :class => "img_help") +
+		tag(:br, :class => "clearfix")
+	%>
 		
 	<p style="font-size: 10px"><b>Figure 2</b> Effect of <span style="font-family: monospace">--no-separate-introns-in-textbased-output</span></p>
+	
+	<h3>Introns next to alignment gaps</h3>
+	<p>A special case arises when intron positions map between amino acids that are separated by alignment gaps. In this case, the intron could be positioned on both sites of the alignment gap. This becomes relevant when introns are mapped to other sequences in the same region. By default, GenePainter assumes that these regions represent less conserved parts of the proteins as they appear in loop regions, and aligns the intron located in the alignment gap to the first respective intron of the other sequences (Figure 3A).</p><p>However, this alignment might be wrong, if the alignment gap is not caused by natural sequence length variation but by a sequence gap caused by e.g. a gap in the respective genome assembly. In this case, the intron alignment can be turned of by setting <span style="font-family: monospace">--no-best-position-intron</span> (Figure 3B).</p>
 
-	When plotting intron positions onto aligned protein sequences, introns of different sequences might be at same position except for gaps present in one of the sequences. By default, such introns are aligned. Set <span style="font-family: monospace">--no-best-position-intron</span> to turn this behaviour off (Figure 3).<br />
 
-
-	<%= image_tag("help/help_fig5.png", :alt=>"fig 5", :class => "img_help, clearfix") %>
+	<%= image_tag("help/results_fig3.png", :alt=>"results 3", width:"700px", :class => "img_help") +
+		tag(:br, :class => "clearfix")
+	%>
 		
 	<p style="font-size: 10px"><b>Figure 3</b> Effect of <span style="font-family: monospace">--no-best-position-intron</span> option.</p>
 	
-
-	Moreover, intron phases can be included as additional lines in the given alignment (option <span style="font-family: monospace">--alignment</span>). Common gaps are removed by default. To keep them, please specify <span style="font-family: monospace">-–keep-common-gaps</span> (Figures 4A and 4B). If two or three distinct introns are at the same amino acid alignment position, the will be displayed as &quot;?&quot; instead of listing their intron phase (because of space limitations; figure not shown). Option <span style="font-family: monospace">–-phylo</span> generates an alignment based on the presence (1) and absence (0) of introns for further phylogenetic analyses (Figure 4C).<br />
+	<h3>Enhancing multiple sequence alignments, output for phylogenetic analyses</h3>
+	<p>
+	Moreover, intron phases can be included as additional lines in the given alignment (option <span style="font-family: monospace">--alignment</span>). Common alignment gaps are removed by default. To keep them, use the option <span style="font-family: monospace">-–keep-common-gaps</span> (Figures 4A and 4B). If two or three distinct introns are at the same amino acid alignment position, the will be displayed as &quot;?&quot; instead of listing their intron phase (because of space limitations). Option <span style="font-family: monospace">–-phylo</span> generates an alignment based on the presence (1) and absence (0) of introns for further phylogenetic analyses (Figure 4C).</p>
 
 	
-	<%= image_tag("help/help_fig6.png", :alt=>"fig 6", :class => "img_help, clearfix") %>
+	<%= image_tag("help/results_fig4.png", :alt=>"results 4", :class => "img_help") +
+		tag(:br, :class => "clearfix")
+	%>
 		
-	<p style="font-size: 10px"><b>Figure 4</b> Fasta formatted output formats.</p>
+	<p style="font-size: 10px"><b>Figure 4</b> Excerpt of Fasta formatted output formats.</p>
 	
 
 	
@@ -73,10 +84,12 @@
 		</tr>
 	</table>
 </h2>
-	<p>Apart from text based output formats, a graphical output can be generated. To this end, SVG parameters need to be set with <span style="font-family: monospace">--svg</span>. The SVG can be drawn in two formats, <span style="font-family: monospace">normal</span> and <span style="font-family: monospace">reduced</span> (set option with <span style="font-family: monospace">-–svg-format</span>). In each format, common introns are drawn underneath each other. While exons and introns are both drawn to scale with format <span style="font-family: monospace">normal</span>, intron length is fixed within format <span style="font-family: monospace">reduced</span> (Figure 5). Both formats can be requested at the same time by specifying <span style="font-family: monospace">both</span>.</p>
+	<p>Apart from text based output formats, graphical outputs can be generated. To this end, the SVG parameter needs to be set with <span style="font-family: monospace">--svg</span>. The SVG can be drawn in two formats, <span style="font-family: monospace">normal</span> (default) and <span style="font-family: monospace">reduced</span> (set option with <span style="font-family: monospace">-–svg-format</span>). In each format, common introns are drawn underneath each other. While exons and introns are both drawn to scale with format <span style="font-family: monospace">normal</span> (Figure 5A), intron length is fixed within format <span style="font-family: monospace">reduced</span> (Figure 5B). Both formats can be requested at the same time by specifying <span style="font-family: monospace">both</span>.</p>
 
 
-	<%= image_tag("help/help_fig7.png", :alt=>"fig 7", :class => "img_help, clearfix") %>
+	<%= image_tag("help/results_fig5.png", :alt=>"results 5", width: "700px", :class => "img_help") +
+		tag(:br, :class => "clearfix")
+	%>
 		
 	<p style="font-size: 10px"><b>Figure 5</b> Graphical output options.</p>
 	
@@ -89,12 +102,14 @@
 		</tr>
 	</table>
 </h2>
-	<p>Additionally, if a pdb file is specified via <span style="font-family: monospace">-–pdb example/2Aq5.pdb</span>, intron positions and phases are mapped onto protein structure. Figure 6A demonstrates mapping of the exons of the human coronin HsCoro1A gene (<span style="font-family: monospace">--pdb-ref-prot HsCoro1A</span>) onto the protein structure of mouse coronin MmCoro1A gene (the pdb file is part of the test data set). While for this figure all exons that are conserved in at least 80% of all proteins are considered (default), Figure 6B displays all exons present in the reference sequence (<span style="font-family: monospace">--pdb-ref-prot-struct</span>). Accordingly, splice sites are shown in Figure 6C and Figure 6D. In this output, attention is drawn to intron phases. A three color scheme and numbers denote phases.<br />
+	<p>If a pdb file is specified via <span style="font-family: monospace">-–pdb</span> (for example <span style="font-family: monospace">-–pdb example/2Aq5.pdb</span>), intron positions and phases are mapped onto a protein structure. Figure 6A demonstrates mapping of the exons of the human coronin HsCoro1A gene (<span style="font-family: monospace">--pdb-ref-prot HsCoro1A</span>) onto the protein structure of mouse coronin MmCoro1A (the pdb file is part of the test data set). While in this figure all exons present in the reference sequence (<span style="font-family: monospace">--pdb-ref-prot-struct</span>) are considered, Figure 6B displays all exons that are conserved in at least 80% of all proteins (default). Accordingly, splice sites are shown in Figure 6C and Figure 6D. In this output, attention is drawn to intron phases, which are denoted by three colors and numbers, respectively.<br />
 	
-	Part of the underlying algorithm is the calculation of a global alignment between reference and pdb sequence. The implementation of the Needleman Wunsch algorithm was adapted from Michael Ryan, Copyright (c) 2011 (part of the ruby gem <span style="font-family: monospace">align</span>, downloaded from <a class="external" href="https://rubygems.org/gems/align">https://rubygems.org/gems/align</a> at 01 15 2014).</p>
+	Part of the underlying algorithm is the calculation of a global alignment between reference and pdb sequence. The implementation of the Needleman Wunsch algorithm was adapted from Michael Ryan, Copyright (c) 2011 (part of the ruby gem <span style="font-family: monospace">align</span>, downloaded from <a class="external" href="https://rubygems.org/gems/align">https://rubygems.org/gems/align</a>).</p>
 
 
-	<%= image_tag("help/help_fig8.png", :alt=>"fig 8", :class => "img_help, clearfix") %>
+	<%= image_tag("help/results_fig6.png", :alt=>"results 6", :width => "700px", :class => "img_help") +
+		tag(:br, :class => "clearfix")
+	%>
 		
 	<p style="font-size: 10px"><b>Figure 6</b> Mapping of conserved exons (A, B) and intron position and phase (C, D) onto protein structure.</p>
 	
@@ -102,63 +117,59 @@
 <h2>
 	<table width=100%>
 		<tr>
-			<td align="left"><a name="intron_gain" style="font-style: normal">Intron Gain and Loss Over Taxonomy</a></td>
+			<td align="left"><a name="intron_gain" style="font-style: normal">History of Intron Gain and Loss Events</a></td>
 			<td align="right"><a class="internal" href="#" style="font-size: 12px">Back to top</a></td>
 		</tr>
 	</table>
 </h2>
-	<p>Specifying parameter <span style="font-family: monospace">--tree</span> in combination with taxonomy options <span style="font-family: monospace">--taxonomy</span> and <span style="font-family: monospace">--taxonomy-to-fasta</span> can generate a phylogenetic tree of the species analysed. Taxonomic relations of the species named in <span style="font-family: monospace">--taxonomy-to-fasta</span> as defined by NCBI taxonomy are converted to a phylogenetic tree in newick file format and printed in an additional SVG file. The python script <span style="font-family: monospace">phb2svg.py</span> does the conversion of newick tree to SVG. To use <span style="font-family: monospace">--tree</span> option, the python interpreter needs to be in your executable path.<br />
+	<h3>Adding common intron patterns to the standard output</h3>
+	<p>To project intron positions onto the species they occur in, the path to the NCBI taxonomy database dump as well as the mapping between fasta headers and NCBI species names must be specified with parameters <span style="font-family: monospace">--taxonomy</span> and <span style="font-family: monospace">--taxonomy-to-fasta</span>. In addition, one of the taxonomic output formats needs to be specified: Option <span style="font-family: monospace">--taxonomy-common-to <x,y,z></span> adds a merged exon-intron pattern to the standard output, containing all introns occurring in any of the species belonging to the specified taxa x,y,z (Figure 7A). By default, introns need not be exclusive for the specified taxa. To display only those introns occurring exclusively in the specified taxa, add parameter <span style="font-family: monospace">--exclusively-in-taxa</span> (Figure 7B). </p>
+	
+	<%= image_tag("help/results_fig7.png", :alt=>"results 7", :width => "700px", :class => "img_help") +
+		tag(:br, :class => "clearfix")
+	%>
+		
+	<p style="font-size: 10px"><b>Figure 7</b> A) Introns common to fungi are included in the bottom-most exon-intron pattern. B) Only those introns, that are exclusive for fungi, are included in the bottom-most exon-intron pattern.</p>
+	
+	
+	<p>The parameter <span style="font-family: monospace">--introns-per-taxon</span> creates an additional exon-intron pattern of all taxa with assigned introns. The file extension is <span style="font-family: monospace">-taxonomy</span> (Figure 8).</p>
+	
+	<%= image_tag("help/results_fig8.png", :alt=>"results 8", :width => "700px", :class => "img_help") +
+		tag(:br, :class => "clearfix")
+	%>
+		
+	<p style="font-size: 10px"><b>Figure 8</b> A) Each intron is assigned to the last common ancestor of those species it occurs in. The introns are then combined to exon-intron patterns for each taxon.</p>
+	
+	<h3>Plotting intron gain and loss patterns onto a phylogentic tree</h3>
+	<p>Specifying parameter <span style="font-family: monospace">--tree</span> in combination with taxonomy options <span style="font-family: monospace">--taxonomy</span> and <span style="font-family: monospace">--taxonomy-to-fasta</span> reconstructs a phylogenetic tree of the species analysed. Taxonomic relations of the species named in <span style="font-family: monospace">--taxonomy-to-fasta</span> as defined by NCBI taxonomy or the user-provided species list are converted to a phylogenetic tree (in newick file format) and printed in an additional SVG file. The python script <span style="font-family: monospace">phb2svg.py</span> does the conversion of newick tree to SVG. To use the<span style="font-family: monospace">--tree</span> option, the python interpreter needs to be in the executable path.<br />
 
-	The generated phylogenetic tree focuses on gain and loss of intron positions. The generated tree file can be viewed using standard tree viewer software. Branch labels contain the branch name and the number of intron positions that were gained (first number) and lost (second number) at this node. Leafs are annotated with the number of intron positions occurring in that taxon (first number) and the number of genes analysed (second number). If introns were gained or lost in a leaf, these numbers are included in the leaf name (separated by an underscore). In addition, an SVG representation of the tree is generated (Figure 7). In the SVG file, branches are annotated with taxon name (written above the branch) and number of intron losses and (coloured in red and green).
+	The generated phylogenetic tree focuses on gains and losses of intron positions. The generated tree file can be viewed using standard tree viewer software. Branch labels contain the branch name and the number of intron positions that were gained (first number) and lost (second number) at the respective node. Leafs are annotated with the number of intron positions occurring in that taxon (first number) and the number of genes analysed (second number). If introns were gained or lost in a leaf, these numbers are included in the leaf name (separated by an underscore). In addition, an SVG representation of the tree is generated (Figure 9). In the SVG file, branches are annotated with taxon name (written above the branch) and number of intron losses and gains (coloured in red and green, respectively).
 </p>
 
 
-	<%= image_tag("help/help_fig9.png", :alt=>"fig 9", :class => "img_help, clearfix") %>
+	<%= image_tag("help/results_fig9.png", :alt=>"results 9", width: "700px", :class => "img_help") +
+		tag(:br, :class => "clearfix")
+	%>
 		
-	<p style="font-size: 10px"><b>Figure 7</b> Phylogenetic tree of those braches, at which introns were lost (coloured red) or gained (coloured in green). The numbers displayed behind the species comprise the total number of genes (first number) and intron positions present in these genes (second number).</p>
+	<p style="font-size: 10px"><b>Figure 9</b> Phylogenetic tree of those branches, at which introns were lost (coloured red) or gained (coloured in green). The numbers displayed behind the species comprise the total number of genes (first number) and intron positions present in these genes (second number).</p>
 
 	
 <h2>
 	<table width=100%>
 		<tr>
-			<td align="left"><a name="statistics" style="font-style: normal">Taxonomy and Statistics</a></td>
+			<td align="left"><a name="statistics" style="font-style: normal">Statistics</a></td>
 			<td align="right"><a class="internal" href="#" style="font-size: 12px">Back to top</a></td>
 		</tr>
 	</table>
-</h2>
-	<p>To project intron positions onto the species they occur in, the path to NCBI taxonomy database dump as well as the mapping between fasta headers and NCBI species names must be specified with parameters <span style="font-family: monospace">--taxonomy</span> and <span style="font-family: monospace">--taxonomy-to-fasta</span>.<br /> 
-
-	GenePainter can extract the taxonomic lineages from NCBI taxonomy database dump or from a user-provided text-file containing taxonomic lineages. In this file, one lineage should be given per line. Taxa should be ordered from root to species and be separated from each other by semicolons. Optionally, a blank may follow the semicolon.<br />
- 
-	The file containing the mapping of fasta headers and species names must be in a specific format: Exactly one pair of fasta header and species name per line, which is separated by &quot;:&quot;. The species name must be enclosed by double quotes. Blanks immediately before and after &quot;;&quot; are permitted, they are ignored by the program. More than one fasta header belonging to the same species might be given in one line, the list of fasta headers needs to be comma-separated or semicolon-separated (Figure 8).
-
-</p>
-
-
-	<%= image_tag("help/help_fig10.png", :alt=>"fig 10", :class => "img_help, clearfix") %>
+</h2>	
+	
+	<p>Detailed statistics about each intron position are obtained by using the <span style="font-family: monospace">--statistics</span> option. These statistics include the total number of introns at each position as well as the last common ancestor of all species harbouring the respective intron. In addition, the distribution of intron counts onto direct descendants of that last common ancestor is given. In the example, only intron positions occurring in human coronin genes were included in the figure (Figure 10). </p>
+	
+	<%= image_tag("help/results_fig10.png", :alt=>"results 10", width: "700px", :class => "img_help") +
+		tag(:br, :class => "clearfix")
+	%>
 		
-	<p style="font-size: 10px"><b>Figure 8</b> Excerpt of file providing mapping between gene names (fasta header) and NCBI species names.</p>
-	
-	<p>In addition, one of the taxonomic output formats needs to be specified: Parameter <span style="font-family: monospace">--taxonomy-common-to <x,y,z></span> adds a merged exon-intron pattern to standard output containing all introns occurring in any of the species belonging to the specified taxa (Figure 9A). By default, introns need not be exclusively for the specified taxa. To change this behaviour and see only those introns occurring only in the specified taxa, add parameter <span style="font-family: monospace">--exclusively-in-taxa</span> (Figure 9B). </p>
-	
-	<%= image_tag("help/help_fig11.png", :alt=>"fig 11", :class => "img_help, clearfix") %>
-		
-	<p style="font-size: 10px"><b>Figure 9</b> A) Introns, which are common to fungi are included in the bottom-most exon-intron pattern. B) Only those introns that are exclusive for fungi are included in the bottom-most exon-intron pattern.</p>
-	
-	
-	<p>In order to assign each intron the last common ancestor of all species it occurs in, parameter <span style="font-family: monospace">--introns-per-taxon</span> must be specified. The output is an additional file (extension <span style="font-family: monospace">-taxonomy</span>; Figure 10).
-	
-	<%= image_tag("help/help_fig12.png", :alt=>"fig 12", :class => "img_help, clearfix") %>
-		
-	<p style="font-size: 10px"><b>Figure 10</b> A) Each intron is assigned to the last common ancestor of those species it occurs in. The introns are then combined to exon-intron patterns for each taxon.</p>
-	
-	
-	
-	<p>Adding <span style="font-family: monospace">--statistics</span> generates statistics about each intron position. These statistics include the total number of introns at each position as well as the last common ancestor of all species harbouring the respective intron. In addition, the distribution of intron counts onto direct descendants of that last common ancestor is given. For a better overview, only intron positions occurring in human coronin genes were included in the figure (Figure 11). </p>
-	
-	<%= image_tag("help/help_fig13.png", :alt=>"fig 13", :class => "img_help, clearfix") %>
-		
-	<p style="font-size: 10px"><b>Figure 11</b>  Statistics per intron position, including the last common ancestor of all species encoding that intron.</p>
+	<p style="font-size: 10px"><b>Figure 10</b> Statistics per intron position, including the last common ancestor of all species encoding that intron.</p>
 	
 
 	

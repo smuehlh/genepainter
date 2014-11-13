@@ -1,10 +1,13 @@
-<% provide(:title, 'Help') %>
-<%= content_tag(:h1, "Help") %>
+<% provide(:title, 'Analysis Strategies') %>
+<%= content_tag(:h1, "Analysis Strategies") %>
 <%= content_tag(:h2, "Contents") %>
 
 <a name="top" class="anker"></a>
 <ul style="padding-left: 5%">
 	<li><a class = "internal" href="#general">General</a></li>
+	<li><a class = "internal" href="#all_data">Analysing All Data, Visualizing All Data</a></li>
+	<li><a class = "internal" href="#visualising_subset">Analysing All Data, Visualizing a Subset</a></li>
+	<li><a class = "internal" href="#analysing_subset">Analysing a Subset, Visualizing a Subset</a></li>
 </ul>
 
 
@@ -16,10 +19,70 @@
 		</tr>
 	</table>
 </h2>
-	<p>GenePainter includes all genes in its analysis, for which both an aligned protein sequence and the gene structure are present. Assuming that your multiple sequence alignment contains all sequences of your dataset, the easiest way to analyse only a subset of all data is to copy the corresponding gene structure files to a new folder and specify that folder. Another way to accomplish this task is to use the various data and output selection options GenePainter offers. This option allows you to specify the subset of data to use or analyse in various ways. First, you can provide a list of gene names (corresponding to gene structure file names and fasta headers in the multiple sequence alignment; option <span style="font-family: monospace">--selection-based-on-list</span>). Second, you can specify one species name by using parameter <span style="font-family: monospace">--selection-based-on-species</span>. You must combine this parameter with <span style="font-family: monospace">--taxonomy-to-fasta</span> to associate genes with that species. Those genes associated with the given species are then used. Third, your selection can be based on a regular expression, which is then applied on gene names (parameter <span style="font-family: monospace">--selection-based-on-regex</span>). Please enclose the regular expression by quotation marks and specify only the regular expression itself, not the surrounding (&quot;/&quot;). No modifiers (such as &quot;i&quot; for case insensitivity) can be specified. You can easily check your regular expression on online platforms such as <a class="external" href="http://rubular.com/" style="font-size: 12px">rubular</a>.</p>
-
-	<p>The selection can be applied as data or as output selection by specifying one of <span style="font-family: monospace">--analyse-all-output-selection</span>, <span style="font-family: monospace">--analyse-selection-output-selection</span>, <span style="font-family: monospace">--analyse-selection-on-all-data-output-selection</span> or <span style="font-family: monospace">--analyse-all-output-all</span> to apply no selection at all. For <span style="font-family: monospace">--analyse-all-output-selection</span>, the complete dataset, i.e. introns occurring in all data, is analysed, but only gene structures of selected data are included in output. For an analysis of those introns present in selected data in full dataset, specify <span style="font-family: monospace">--analyse-selection-on-all-data-output-selection</span>. In order to analyse a subset of data only and to include this subset into output, specify <span style="font-family: monospace">--analyse-selection-output-selection</span>.</p>
+	<p>GenePainter includes all genes in its analysis, for which both an aligned protein sequence and the gene structure are present. Assuming that the multiple sequence alignment contains all sequences of the dataset, the easiest way to analyse only a subset of all data is to copy the corresponding gene structure files to a new folder and specify that folder. A more elegant way to accomplish this task is to use the various data and output selection options GenePainter offers.
+	</p>
+	<p>Subsets of data for analyse and visualization can be specified in various ways: </p>
 	
+	<ul style="padding-left: 5%">
+		<li>A list of gene names corresponding to gene structure file names and fasta headers in the multiple sequence alignment (option <span style="font-family: monospace">--selection-based-on-list</span>).
+		</li>
+		<li>Specifying a species name by using option <span style="font-family: monospace">--selection-based-on-species</span>. This option is only possible together with <span style="font-family: monospace">--taxonomy-to-fasta</span> to correctly associate genes with the selected species.  
+		</li>
+		<li>A regular expression, which is then applied on gene names (option <span style="font-family: monospace">--selection-based-on-regex</span>). The regular expression needs to be enclosed by quotation marks and specify only the regular expression itself, not the surrounding (&quot;/&quot;). Modifiers such as &quot;i&quot (for case insensitivity) are not allowed. The validity of the regular expression can be checked on online platforms such as <a class="external" href="http://rubular.com/" style="font-size: 12px">rubular</a>.
+		</li>
+	</ul>
+	
+<h2>
+	<table width=100%>
+		<tr>
+			<td align="left"><a name="all_data" style="font-style: normal">Analysing All Data, Visualizing All Data</a></td>
+			<td align="right"><a class="internal" href="#" style="font-size: 12px">Back to top</a></td>
+		</tr>
+	</table>
+</h2>
+	<p>This is the default. However, you can also explicitly set <span style="font-family: monospace">--analyse-all-output-all</span>.</p>
+	
+<h2>
+	<table width=100%>
+		<tr>
+			<td align="left"><a name="visualising_subset" style="font-style: normal">Analysing All Data, Visualizing a Subset</a></td>
+			<td align="right"><a class="internal" href="#" style="font-size: 12px">Back to top</a></td>
+		</tr>
+	</table>
+</h2>
+	<p>For many purposes it is useful to focus the visualization on a specific subset of the data while all data is analysed. This is done by setting <span style="font-family: monospace">--analyse-all-output-selection</span>. For <span style="font-family: monospace">--analyse-all-output-selection</span>, the complete dataset, i.e. introns occurring in all data, is analysed, but only gene structures of selected data are included in the output. For example, the dataset contains hundreds of genes from species all across the eukaryotic tree of life. Here, it might be better to focus the visualization on only the human or mammalian genes.
+	</p>
+	<%= image_tag("help/strategy_fig1.png", :alt=>"stategy 1", width: "700px", :class => "img_help") +
+		tag(:br, :class => "clearfix")
+	%>
+		
+	<p style="font-size: 10px"><b>Figure 1</b> Statistics for intron positions occuring in the complete dataset (lower part). Only those intron positions occuring in the human dataset will be included in exon-intron patterns (upper part).</p>
+
+	
+<h2>
+	<table width=100%>
+		<tr>
+			<td align="left"><a name="analysing_subset" style="font-style: normal">Analysing a Subset, Visualizing a Subset</a></td>
+			<td align="right"><a class="internal" href="#" style="font-size: 12px">Back to top</a></td>
+		</tr>
+	</table>
+</h2>
+	<p>In might be important to focus the analysis on the introns of a single species or a subset of species. For example, it might be interesting to analyse the evolution of the introns present in certain human genes, while the introns conserved in plants but not present in humans should be ignored. In this case, only the conservation of the introns present in this selection will be determined and visualized (option <span style="font-family: monospace">--analyse-selection-on-all-data-output-selection</span>). 
+	</p>
+	
+	<%= image_tag("help/strategy_fig3.png", :alt=>"stategy 3", width: "700px", :class => "img_help") +
+		tag(:br, :class => "clearfix")
+	%>
+	<p style="font-size: 10px"><b>Figure 2</b> Statistics for intron position occuring in human coronin genes. Statistics correspond to all data.</p>
+
+	<p>To analyse and visualize only a selection of the data, use <span style="font-family: monospace">--analyse-selection-output-selection</span>.</p>
+
+	<%= image_tag("help/results_fig10.png", :alt=>"results 10", width: "700px", :class => "img_help") +
+		tag(:br, :class => "clearfix")
+	%>	
+	<p style="font-size: 10px"><b>Figure 3</b> Statistics for intron position occuring in human coronin genes.</p>
+
+
 
 	
 <%= javascript_tag defer: 'defer' do -%>

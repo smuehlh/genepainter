@@ -1,4 +1,4 @@
-<% provide(:title, 'Help') %>
+<% provide(:title, 'General Information') %>
 <%= content_tag(:h1, "Help") %>
 <%= content_tag(:h2, "Contents") %>
 
@@ -23,7 +23,7 @@
 	<p>Detailed descriptions of the intron mapping algorithm, the analysis strategies and the various output options can be found in the following publications:</p>
 	<p>
 		<div style="font-weight:bold; padding: 10px 0px 0px 10px;">
-			S. Mühlhausen, M. Hellkamp &amp; M. Kollmar (2014)</div>
+			S. M&uuml;hlhausen, M. Hellkamp &amp; M. Kollmar (2014)</div>
 		<div style="padding-left:20px;">
 			<a style="font-style:normal" class="external" href="" target="GenePainter_v2">GenePainter 2.0 resolves the taxonomic distribution of intron positions.</a>
 		</div>
@@ -33,7 +33,7 @@
 	</p>	
 	<p>
 		<div style="font-weight:bold; padding: 10px 0px 0px 10px;">
-			B. Hammesfahr, F. Odronitz, S. Mühlhausen, S. Waack &amp; M. Kollmar (2013) 
+			B. Hammesfahr, F. Odronitz, S. M&uuml;hlhausen, S. Waack &amp; M. Kollmar (2013) 
 			<%= link_to(image_tag("layout/openaccess.gif", :alt=>"Open Access", :style => "float:right; padding-left:5px"), "http://www.biomedcentral.com/info/about/openaccess", :target => "_blank") %>
 			<%= link_to(image_tag("layout/highlyaccessed.gif", :alt=>"Highly Accessed", :style => "float:right; padding-left:5px"), "http://www.biomedcentral.com/info/about/mostviewed#highlyaccessed", :target => "_blank") %>
 		</div>
@@ -73,11 +73,11 @@
 
 		<h4>Ruby interpreter</h4>
 			<p>Invoke GenePainter via one of the following options:</p>
-			<ol>
+			<ul style="padding-left: 5%">
 				<li>
 					As a script 
 					<p>
-						<span style="font-family: monospace">ruby gene_painter.rb</span>
+						<span style="font-family: monospace">$ ruby gene_painter.rb</span>
 					</p>
 				</li>
 				<li>
@@ -86,10 +86,10 @@
 						<span style="font-family: monospace">$ ./gene_painter.rb</span>
 					</p>					
 				</li>
-			</ol>
+			</ul>
 
 			<p><b>Important note</b></br>
-			GenePainter assumes that <span style="font-family: monospace">/usr/bin/env</span> ruby points to the RVM ruby interpreter. While this will work on most UNIX systems, it might not work on windows machines. In case you encounter any <span style="font-family: monospace">“/usr/bin/env ruby: No such file or directory“</span> errors, please edit the very first line of script gene_painter.rb and change the specified path to the correct one. For example, with the Ruby interpreter located at <span style="font-family: monospace">/usr/bin/ruby</span>, the Shebang should look like this: <span style="font-family: monospace">#!/usr/bin/ruby</span>.</p>
+			GenePainter assumes that <span style="font-family: monospace">/usr/bin/env</span> ruby points to the RVM ruby interpreter. While this will work on most UNIX systems, it might not work on windows machines. In case you encounter any <span style="font-family: monospace">&quot;/usr/bin/env ruby: No such file or directory&quot;</span> errors, please edit the very first line of script <span style="font-family: monospace">gene_painter.rb</span> and change the specified path to the correct one. For example, with the Ruby interpreter located at <span style="font-family: monospace">/usr/bin/ruby</span>, the Shebang should look like this: <span style="font-family: monospace">#!/usr/bin/ruby</span>.</p>
 
 		<h4>Using GenePainter under windows</h4>
 			<p>GenePainter was developed for UNIX and Mac. To use GenePainter under Windows, you might consider installing Cygwin, which comes with a bash and appropriate GNU tools. Please make sure to have GNU tools <span style="font-family: monospace">grep</span> and <span style="font-family: monospace">tar</span> installed and in your executable path when using GenePainter with its taxonomy options. If not, you should unpack the NCBI taxonomy dump yourself and add the parameter <span style="font-family: monospace">--no-grep</span> to read the taxonomy dump into memory instead of grepping its content. In order to use GenePainter with the parameter <span style="font-family: monospace">--tree</span>, please make sure to have <span style="font-family: monospace">python</span> installed and in your executable path.</p>

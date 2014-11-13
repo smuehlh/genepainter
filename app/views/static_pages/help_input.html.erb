@@ -1,5 +1,5 @@
-<% provide(:title, 'Help') %>
-<%= content_tag(:h1, "Help") %>
+<% provide(:title, 'Input Files') %>
+<%= content_tag(:h1, "Input Files") %>
 <%= content_tag(:h2, "Contents") %>
 
 <a name="top" class="anker"></a>
@@ -7,17 +7,19 @@
 	<li><a class = "internal" href="#general">General</a></li>
 	<li><a class = "internal" href="#msa">Multiple Protein Sequence Alignment</a></li>
 	<li><a class = "internal" href="#gene_structures">Gene Structure Files</a></li>
+	<li><a class = "internal" href="#mapping">Mapping Sequence Names to Species Names</a></li>
+	<li><a class = "internal" href="#tree">Phylogenetic Tree Files</a></li>
 </ul>
 
 <h2>
-	<table width=100%>
+	<table width=100% height>
 		<tr>
 			<td align="left"><a name="general" style="font-style: normal">General</a></td>
 			<td align="right"><a class="internal" href="#" style="font-size: 12px">Back to top</a></td>
 		</tr>
 	</table>
 </h2>
-	<p>GenePainter expects two types of input:
+	<p>GenePainter requires two types of input:
 	<ul style="padding-left: 5%">
 		<li>A FASTA formatted multiple sequence alignment (MSA)</li>
 		<li>A folder containing gene structures in YAML format as specified by WebScipio or in GFF v.3 format.</li>
@@ -26,7 +28,13 @@
 	<p>
 	GenePainter combines information from the alignment with the gene structures. Therefore, the protein names from the MSA must match to the YAML or GFF filenames. Only those genes, which can be matched (i.e. protein name equals the YAML or GFF filename), will be analysed.
 	</p>
-
+	<p>
+	If gene structure information shall be plotted onto phylogenetic trees, GenePainter also requires either:
+	<ul style="padding-left: 5%">
+		<li>NCBI taxonomy database dump</li>
+		<li>User-provided text-file containing taxonomic lineages</li>
+	</ul>
+	</p>
 <h2>
 	<table width=100%>
 		<tr>
@@ -172,9 +180,11 @@
 			<p>Scipio and WebScipio store gene structure information in YAML format. This format comprises a collection of key – value pairs, an associative array. However, the accurate gene structure representation requires more keys than necessary for the alignment of the gene structures. Thus, GenePainter ignores some data included in the YAML files. Accordingly, these additional keys need not be included in manually reconstructed YAML files. A minimal working example YAML file is defined in Figure 1. An exhaustive description of all keys used by WebScipio can be found at the WebScipio homepage <a class="external" href="http://www.webscipio.org/webscipio/web_service" style="font-size: 12px">http://www.webscipio.org/help/scipio#description</a>.</p>
 
 			
-			<%= image_tag("help/help_fig1.png", :alt=>"fig 1", :class => "img_help, clearfix") %>
+			<%= image_tag("help/input_fig1.png", :alt=>"input 1", :class => "img_help") +
+				tag(:br, :class => "clearfix")
+			%>
 		
-			<p style="font-size: 10px">Excerpt from the YAML file describing HsCoro1A. All exon and intron descriptions within the very first and last ones have been omitted (marked in yellow). Blank lines were added to separate exon and intron descriptions. Additionally, green boxes highlight exons and blue boxes highlight introns. Only those key – value pairs, which are relevant for GenePainter are shown. The original YAML file is part of the test data included in the package.</p>
+			<p style="font-size: 10px"><b>Figure 1</b> Excerpt from the YAML file describing HsCoro1A. All exon and intron descriptions but the very first and last ones have been omitted (marked in yellow). Blank lines were added to separate exon and intron descriptions. Additionally, green boxes highlight exons and blue boxes highlight introns. Only those key – value pairs, which are relevant for GenePainter are shown. The original YAML file is part of the test data included in the package.</p>
 		
 			<p>The list of exons and introns (&quot;matchings&quot;) must start with the keyword 
 <span style="font-family: monospace">- matchings:</span>. The order of keys describing the exons and introns is not important. Mandatory keys for successful incorporation in GenePainter are listed in the following tables:</p>
@@ -216,15 +226,44 @@
 				</tr> -->
 			</table>
 
-			<h4>Structure of file mapping fasta header to species names</h4>
-				<p>Genes that are linked to the corresponding species are considered for taxonomic computations or generation of YAML files, respectively. All other genes are omitted from these computations. Species names must match NCBI taxonomy.</p>
+<h2>
+	<table width=100%>
+		<tr>
+			<td align="left"><a name="mapping" style="font-style: normal">Mapping Sequence Names to Species Names</a></td>
+			<td align="right"><a class="internal" href="#" style="font-size: 12px">Back to top</a></td>
+		</tr>
+	</table>
+</h2>			
+		<p>Only protein/gene sequence names that are linked to species names are considered for taxonomic computations or generation of YAML files, respectively. All other genes are omitted from these computations. Species names must match NCBI taxonomy, if YAML files are obtained via WebScipio and if the NCBI taxonomy tree is used for intron gain and loss plotting. The file containing the mapping of fasta headers and species names must be in a specific format (Figure 2): Only one species name per line. Gene and species names are separated by &quot;:&quot;. If several genes correlate to the same species, their fasta headers might be given in one line. The list of fasta headers needs to be comma-separated or semicolon-separated . The species name must be enclosed by double quotes. Blanks immediately before and after &quot;;&quot; are permitted, and will be ignored by the program.</p>
 				
 				
-			<%= image_tag("help/help_fig2.png", :alt=>"fig 2", :class => "img_help, clearfix") %>
+		<%= image_tag("help/input_fig2.png", :alt=>"input 2", :class => "img_help") +
+			tag(:br, :class => "clearfix")
+		 %>
 		
-			<p style="font-size: 10px">For taxonomy options as well as to generate YAML files, a mapping between genes described in MSA and corresponding species must be established. To this end, fasta headers (separated by &quot;,&quot;) are mapped to species names. Fasta headers and species names are separated by &quot;:&quot;.</p>
+		<p style="font-size: 10px"><b>Figure 2</b> For taxonomy options as well as to generate YAML files, a mapping between genes described in MSA and corresponding species must be established. To this end, fasta headers (separated by &quot;,&quot;) are mapped to species names. Fasta headers and species names are separated by &quot;:&quot;.</p>
 
-
+<h2>
+	<table width=100%>
+		<tr>
+			<td align="left"><a name="tree" style="font-style: normal">Phylogenetic Tree Files</a></td>
+			<td align="right"><a class="internal" href="#" style="font-size: 12px">Back to top</a></td>
+		</tr>
+	</table>
+</h2>
+	<p>
+	To map intron gain and loss events onto phylogenetic trees, GenePainter needs to correlate the protein sequence/gene structure names and the species names as present in the NCBI taxonomy database or the user-provided list.<br />
+	
+	GenePainter can extract the taxonomic lineages from the NCBI taxonomy database dump, which can be obtained using the script <span style="font-family: monospace">download_taxdump.rb</span>, or from a user-provided text-file containing taxonomic lineages (Figure 3). In this file, one lineage should be given per line. Taxa should be ordered from root to species and be separated from each other by semicolons. Optionally, a blank may follow the semicolon.<br />
+ 
+	</p>
+	
+	<%= image_tag("help/input_fig3.png", :alt=>"input 3", :class => "img_help") +
+		tag(:br, :class => "clearfix")
+	%>
+		
+	<p style="font-size: 10px"><b>Figure 3</b> Excerpt of file providing a user-defined taxonomic lineage. For displaying purpose, parts of the lineage were omitted.</p>
+	
 
 <%= javascript_tag defer: 'defer' do -%>
 	<!-- show all help-partials included _above_ that have the class 'help' -->
