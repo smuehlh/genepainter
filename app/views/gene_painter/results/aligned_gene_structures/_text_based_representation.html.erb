@@ -82,10 +82,10 @@
           });
 
           // Set spinner default value
-          spinner.spinner( 'value', 1 );
+          spinner.spinner( 'value', 70 );
         });
 
-        spinner.on('input', function() {
+        spinner.on('change', function() {
           if ( isNaN( parseInt(this.value) ) ) {
             $('input#highlight_common').prop('disabled', true);
           } else if ( parseInt(this.value) > 100 || parseInt(this.value) < 1 ) {
@@ -212,7 +212,7 @@
     }
   });
 
-  spinner.on( "spin", function( event, ui ) {
+  spinner.on( "spin change", function( event, ui ) {
     $('input#highlight_common').prop('checked', true);
     resetTable();
     spinnerEventHandler($(this).spinner('value'));
