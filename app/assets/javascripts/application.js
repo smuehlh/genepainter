@@ -58,21 +58,27 @@ function set_up_fileupload(btnSelector) {
   });
 }
 
+var sec = 0;
+var myInterval = false;
 function hide_show_waiting(kind) {
-    myInterval = setInterval(function () {
-        $("#seconds").html(pad(++sec % 60));
-        $("#minutes").html(pad(parseInt(sec / 60, 10) % 60));
-        $("#hours").html(pad(parseInt(sec / 3600, 10)));
-    }, 1000);
     if (kind === 'show') {
-        var sec = 0;
-        function pad(val) { return val > 9 ? val : "0" + val; }
         $('#waiting').css({'height' : $(document).height()});
         $('#waiting').show();
+        function pad(val) { return val > 9 ? val : "0" + val; }
+        sec = 0;       
+        $("#seconds").html(pad(0));
+        $("#minutes").html(pad(0));
+        $("#hours").html(pad(0));
+        myInterval = setInterval(function () {
+            ++sec;     
+            $("#seconds").html(pad(sec % 60));
+            $("#minutes").html(pad(parseInt(sec / 60, 10) % 60));
+            $("#hours").html(pad(parseInt(sec / 3600, 10)));
+        }, 1000);
     }
     else {
-        clearInterval(myInterval);
         $('#waiting').hide();
+        clearInterval(myInterval);
     }
 };
 
