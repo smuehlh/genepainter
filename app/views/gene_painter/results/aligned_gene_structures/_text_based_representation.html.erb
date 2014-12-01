@@ -57,8 +57,8 @@
       <%=
         content_tag(:div,
           check_box_tag('highlight_common') +
-          content_tag(:span, 'Highlight introns with at least ', :style => 'padding-left: 5px;') +
-          '<input id="spinner" name="value" style="width: 25px;">'.html_safe + ' % in common.'
+          content_tag(:span, 'Highlight introns common to at least ', :style => 'padding-left: 5px;') +
+          '<input id="spinner" name="value" style="width: 25px;">'.html_safe + ' % of all genes.'
           )
       %>
 
@@ -179,21 +179,17 @@
 
   var spinner = $("input#spinner");
 
-  function spinnerEventHandler(spinnerValue) {
-    var threshold, class_name, background_color;
+  // color introns by occurence
+  function spinnerEventHandler(percent) {
+    var max, min_occurence;
 
-    threshold = parseInt(spinnerValue*n_rows / 100);
+    max = $non_intron_phase_table[0].rows.length;
+    min_occurence = parseInt(percent * max / 100);
 
-    var tmp = threshold;
-    while (!background_color && tmp <= n_rows) {
-      background_color = $("div#text-based").find("table#merged").find("." + tmp).css("background-color");
-      tmp += 1;
-    }
-
-    if (threshold > 0 && !_.isUndefined(background_color)) {
-
-      for (var i = threshold; i < n_rows; i++) {
+    if (min_occurence > 0) {
+      for (var i = min_occurence; i <= max; i++) {
         class_name = "col-" + i;
+        background_color = $("table#merged").find("." + i).css("background-color");
 
         $("." + class_name).addClass("common-highlighted");
         $("." + class_name).css("background-color", background_color);
@@ -208,7 +204,7 @@
       // reset
       resetTable();
 
-      spinnerEventHandler(spinner.spinner("value"));
+      spinnerEventHandler(spinner.spinner("value")); 
 
       $('input#highlight_unique').prop('checked', false);
     } else {
