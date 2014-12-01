@@ -239,7 +239,7 @@
   // Visible Spectrum
   var start = 450, // nm blue
     end = 780,   // nm red
-    total = end - start + 1;
+    total = end - start;
 
   var wavelength, color;
 
@@ -257,7 +257,6 @@
     } else {
       wavelength = (nIntrons * total) / n_rows + start;
       color = Math.nmToRGB(wavelength);
-
       cell.setAttribute('style', 'background-color: rgb(' +  color.red + ', ' + color.green + ', ' + color.blue + ')');
     }
   }
