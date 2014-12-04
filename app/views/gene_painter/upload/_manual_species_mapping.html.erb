@@ -12,7 +12,7 @@
 			text_field_tag("species", nil, placeholder: "Enter species", disabled: true, size: 20, 
 				:class => "manual_species_mapping ui-widget") +
 			# div for linking headers to species, will be filled later
-			content_tag(:div, nil, :id => "headers", :class => "sequence_names manual_species_mapping") +
+			content_tag(:div, nil, :id => "headers", :class => "link_sequence_names manual_species_mapping") +
 			content_tag(:div, "", :style => "clear: both; padding-top:10px" ) +
 			hidden_field_tag(:task, "insert") +
 			submit_tag("Save",

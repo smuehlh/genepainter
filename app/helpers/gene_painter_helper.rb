@@ -46,27 +46,6 @@ module GenePainterHelper
             )
           end
         end.join.html_safe
-
-        # is_first_line = true
-        # data[species].each.collect do |gene|
-        #   if is_first_line then 
-        #     col1 = species
-        #     tr_class = "with_border"
-        #     is_first_line = false
-        #   else
-        #     col1 = "".html_safe
-        #     tr_class = ""
-        #   end
-        #   content_tag(:tr, :class => tr_class) do 
-        #     content_tag(:td, col1) +
-        #     content_tag(:td, 
-        #       check_box_tag("names[]", gene, nil, :id => "#{gene}_unlink")
-        #     ) +
-        #     content_tag(:td, 
-        #        label_tag("#{gene}_unlink", gene)
-        #     )
-        #   end
-        # end.join.html_safe
       end.join.html_safe
     end
   end
@@ -81,8 +60,8 @@ module GenePainterHelper
 
         # All gene structures are missing if no files are uploaded
         table_body += '<td class="oce-small-text-col"><span id="' + name + '">missing</span></td>'
-        table_body += '<td class="oce-checkbox-col">' + 
-            check_box_tag("generateGeneStructure", name, nil, :disabled => true, 
+        table_body += '<td class="oce-checkbox-col">' +
+            check_box_tag("generateGeneStructure", name, nil, :disabled => true,
               :title => "Provide species mapping to enable checkbox.",
             ) +
           '</td>'
@@ -116,8 +95,9 @@ module GenePainterHelper
       sequence_names << "<tr><td>#{name}</td></tr>"
     end
 
-    # dummy row
-    sequence_names << "<tr><td>&nbsp;</td></tr>"
+    # issue4
+    # # dummy row
+    # sequence_names << "<tr><td>&nbsp;</td></tr>"
 
     sequence_names << "</table>"
     return sequence_names
@@ -183,8 +163,8 @@ module GenePainterHelper
     end
 
     pattern_table << "</table>"
-    # dummy row
-    names_table << "<tr><td>&nbsp;</td></tr>"
+    # # dummy row
+    # names_table << "<tr><td>&nbsp;</td></tr>"
     names_table << "</table>"
     stats_table << "</table>"
     intronpos_table << "</table>"

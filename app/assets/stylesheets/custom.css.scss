@@ -313,7 +313,7 @@ td, th {
   margin-right: 20px;
   max-height: 200px;
 }
-.sequence_names {
+.link_sequence_names {
   width: 40%;
   overflow: auto;
 }
@@ -348,7 +348,7 @@ div.res_left_col {
 
 div.res_height {
   max-height: 300px;
-  overflow: auto;
+  overflow: auto; 
 }
 
 // Style for data center and download table
@@ -451,8 +451,4 @@ div.pattern table, div.pattern th, div.pattern td {
 div.pattern table.with_border td {
   border-left: 1px solid white;
   text-align: center;
-}
-
-div.additional_pattern {
-  padding-top: 5px;
 }
