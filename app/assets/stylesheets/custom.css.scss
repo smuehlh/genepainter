@@ -348,7 +348,11 @@ div.res_left_col {
 
 div.res_height {
   max-height: 300px;
+<<<<<<< HEAD
   overflow: auto; 
+=======
+  overflow: scroll;
+>>>>>>> 88a095ac211262980c9f98e74f3c7977628d5df0
 }
 
 // Style for data center and download table
@@ -360,7 +364,7 @@ table.one-column-emphasis td
 {
   color: #669;
   border-top: 1px solid #e8edff;
-  height: 2em; 
+  height: 2em;
   vertical-align: middle;
 }
 
@@ -395,7 +399,7 @@ ul.ui-tabs-nav.ui-helper-reset.ui-helper-clearfix.ui-widget-header.ui-corner-all
 .ui-tabs .ui-tabs-panel {
 	padding: 1em 0.4em !important;
   /* apply changes to fit jquery-ui to default layout; OR adjust default layout */
-  // font-family: Arial, sans-serif; 
+  // font-family: Arial, sans-serif;
   // font-size: 12px;
 }
 
