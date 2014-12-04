@@ -10,8 +10,8 @@ module GenePainterHelper
 
         # All gene structures are missing if no files are uploaded
         table_body += '<td class="oce-small-text-col"><span id="' + name + '">missing</span></td>'
-        table_body += '<td class="oce-checkbox-col">' + 
-            check_box_tag("generateGeneStructure", name, nil, :disabled => true, 
+        table_body += '<td class="oce-checkbox-col">' +
+            check_box_tag("generateGeneStructure", name, nil, :disabled => true,
               :title => "Provide species mapping to enable checkbox.",
             ) +
           '</td>'
@@ -37,16 +37,13 @@ module GenePainterHelper
     File.open(filename, "r").each_line do |line|
 
       name = line[0...GeneAlignment.max_length_gene_name].strip
-      if name =~ /^>Merged/ || name =~ /^>Consensus/ then 
+      if name =~ /^>Merged/ || name =~ /^>Consensus/ then
         # special pattern, do not include in text-based output!
         next
       end
 
       sequence_names << "<tr><td>#{name}</td></tr>"
     end
-
-    # dummy row
-    sequence_names << "<tr><td>&nbsp;</td></tr>"
 
     sequence_names << "</table>"
     return sequence_names
@@ -70,18 +67,18 @@ module GenePainterHelper
       line = line.chomp
       next if line.empty?
 
-      if line.start_with?(first_char_pattern_line) then 
+      if line.start_with?(first_char_pattern_line) then
         # exon-intron pattern
 
         name = line[0...GeneAlignment.max_length_gene_name].strip
         pattern = line[GeneAlignment.max_length_gene_name..-1] # important: do not strip pattern
         striped_pattern = pattern.gsub(" ", "")
 
-        if name.start_with?(first_chars_merged_line) then 
+        if name.start_with?(first_chars_merged_line) then
 
           intronpos_table << merged_pattern_to_intronpos( striped_pattern )
 
-          # make intron numbers first pattern in names and patterns table 
+          # make intron numbers first pattern in names and patterns table
           names_table.insert( 1, "<tr><td>&gt;Intron number</td></tr>" )
           pattern_table.insert( 1, merged_pattern_to_intronpos(striped_pattern )  )
 
@@ -98,7 +95,7 @@ module GenePainterHelper
 
         parts = line.split("\t")
         stats_table.push "<tr>"
-        if is_first_stats_line then 
+        if is_first_stats_line then
           # use table head element
           data = parts.map{ |ele| "<th>#{ele}</th>"}
           is_first_stats_line = false
@@ -112,8 +109,6 @@ module GenePainterHelper
     end
 
     pattern_table << "</table>"
-    # dummy row
-    names_table << "<tr><td>&nbsp;</td></tr>"
     names_table << "</table>"
     stats_table << "</table>"
     intronpos_table << "</table>"
@@ -134,13 +129,13 @@ module GenePainterHelper
     File.open(filename, "r").each_line do |line|
 
       name = line[0...GeneAlignment.max_length_gene_name].strip
-      if name =~ /^>Merged/ || name =~ /^>Consensus/ then 
+      if name =~ /^>Merged/ || name =~ /^>Consensus/ then
         # this is a special pattern, do not include it in text-based output!
         next
       end
 
       pattern = line[GeneAlignment.max_length_gene_name..-1].strip
-      if is_first_line && opts[:colgroup_class] then 
+      if is_first_line && opts[:colgroup_class] then
         # get table row and generate colgroup
         table << pattern_to_colgroup( pattern, opts[:colgroup_class] )
         is_first_line = false
@@ -166,6 +161,7 @@ module GenePainterHelper
     if retVal
       return new_name
     else
+      logger.debug('"convert" commands seem not to be in any packages. Try imagemagick.')
       return nil
     end
   end
@@ -178,7 +174,7 @@ module GenePainterHelper
   end
   def render_lucullus_iframe(fileid)
       iframe_src = Lucullus_url + "?source=#{fileid}"
-      return content_tag(:iframe, "Loading ...", :src => iframe_src, 
+      return content_tag(:iframe, "Loading ...", :src => iframe_src,
         :width => "700px", :height => "400px", :id => "lucullus_alignment_frame")
   end
 
@@ -255,14 +251,14 @@ module GenePainterHelper
     n_introns = 1
     data = []
 
-    # if opts[:is_displaynone] then 
+    # if opts[:is_displaynone] then
     #   data << "<tr style='display:none;'>"
     # else
     #   data << "<tr>"
     # end
 
     pattern.each_char do |char|
-      if char == "-" then 
+      if char == "-" then
         # exon
         data.push "<td>&nbsp;</td>"
       else
@@ -270,8 +266,8 @@ module GenePainterHelper
         n_introns += 1
       end
     end
-    
-    # if opts[:is_insert_dummy_cells] then 
+
+    # if opts[:is_insert_dummy_cells] then
     #   data << "<td>&nbsp;</td>"
     #   data << "<td>&nbsp;</td>"
     # end
