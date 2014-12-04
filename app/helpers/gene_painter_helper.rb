@@ -95,13 +95,6 @@ module GenePainterHelper
       sequence_names << "<tr><td>#{name}</td></tr>"
     end
 
-<<<<<<< HEAD
-    # issue4
-    # # dummy row
-    # sequence_names << "<tr><td>&nbsp;</td></tr>"
-
-=======
->>>>>>> 88a095ac211262980c9f98e74f3c7977628d5df0
     sequence_names << "</table>"
     return sequence_names
   end
@@ -166,11 +159,6 @@ module GenePainterHelper
     end
 
     pattern_table << "</table>"
-<<<<<<< HEAD
-    # # dummy row
-    # names_table << "<tr><td>&nbsp;</td></tr>"
-=======
->>>>>>> 88a095ac211262980c9f98e74f3c7977628d5df0
     names_table << "</table>"
     stats_table << "</table>"
     intronpos_table << "</table>"
