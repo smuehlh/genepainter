@@ -51,6 +51,7 @@ module SequenceHelper
 				raise "Error while parsing mapping between species and genes. Expecting \':\'-separated list of genes and species"
 			end
 			species = species.strip # remove leading & trailing white spaces
+			species = species.gsub(/\A"|"\Z/, '') # remove leading * trailing quotes
 			genes = genes.split(/,/).map { |g| g.strip } # remove leading & trailing white spaces
 
 			genes.each do |gene|

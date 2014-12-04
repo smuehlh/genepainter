@@ -323,40 +323,6 @@ class GenePainterController < ApplicationController
     end
   end
 
-  def update_species_mapping_old
-    @task = params[:task]
-
-    logger.debug(@task)
-
-    if @task == "insert"
-      @new_mapping = params[:new_mapping]
-      species = params[:species] == nil ? "" : params[:species]
-
-      # if find a species
-      @error_message = nil
-      if Node.any_of(scientific_name: "#{species}").length > 0
-        File.open("#{session[:basepath_data]}/fastaheaders2species.txt", "a") { |f|
-          f.write("#{@new_mapping}\n")
-        }
-      else
-        @error_message = "Species not found."
-      end
-    else
-
-      @updated_mapping = params[:data]
-
-    end
-
-  rescue RuntimeError => ex
-    @fatal_error = ex.message
-  rescue NoMethodError, Errno::ENOENT, Errno::EACCES, ArgumentError, NameError => ex
-    @fatal_error = 'Cannot update species mapping.'
-  ensure
-    respond_to do |format|
-      format.js
-    end
-  end
-
   def create_alignment_file
     sequence_string = params[:sequence]
     @fatal_error = ""
@@ -430,7 +396,6 @@ class GenePainterController < ApplicationController
     end
 
     filename = "taxonomy_list.csv"
-
     File.open("#{session[:basepath_data]}/#{filename}", "w") { |file|
       file.write(taxonomy_list)
     }

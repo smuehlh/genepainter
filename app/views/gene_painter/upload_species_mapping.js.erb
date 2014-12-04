@@ -4,6 +4,16 @@ hide_show_waiting('hide');
   // toggle help
   $("div#upload_species_mapping_help").hide("slow");
 
+  // manual species mapping
+  // clear text-field input
+  $("#species").val('');
+  // update species mapping
+  <% new_content = escape_javascript(render(partial: "gene_painter/upload/manual_species_mapping_headers"))%>
+  $('#headers').html('<%=new_content%>');
+  // update unlink genes from species
+  <% new_content = escape_javascript(render(partial: "gene_painter/upload/manual_species_mapping_unlink"))%>
+  $('#unlink_genes').html('<%= new_content %>');
+
   // update uploaded filename
   $('#uploaded_species_mapping').html('<%= @basename %>');
 
