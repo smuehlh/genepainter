@@ -1,5 +1,76 @@
 module GenePainterHelper
 
+  # creates table,
+  # first row: multi checkbox set, 
+  # second row: data
+  def prepare_table_with_checkbox(data)
+    content_tag(:tbody) do 
+      data.each.collect do |str|
+        content_tag(:tr) do 
+          content_tag(:td, check_box_tag("names[]", str, nil, :id => "#{str}_link") ) +
+          content_tag(:td, str.html_safe)
+        end
+      end.join().html_safe
+    end
+  end
+  # data [Hash]: keys: col1 (might span multiple columns, values: col2 (checkbox; multi-select per col1 value) + col3
+  def prepare_table_with_checkbox_and_span_columns(data)
+
+    col1_data = data.keys.sort
+    content_tag(:thead, escape: false) do 
+      content_tag(:tr) do 
+        content_tag(:th, "Species") +
+        content_tag(:th, "Gene", :colspan => 2)
+      end
+    end +
+    content_tag(:tbody) do 
+      col1_data.each.collect do |species|
+        genes = data[species].sort
+        gene = genes.shift
+        content_tag(:tr, :class => "with_border") do 
+          content_tag(:td, species, :rowspan => genes.size + 1) + # +1 to account for shifted gene
+          content_tag(:td, 
+            check_box_tag("names[]", gene, nil, :id => "#{gene}_unlink")
+          ) +
+          content_tag(:td, 
+             label_tag("#{gene}_unlink", gene)
+          )
+        end + 
+        genes.each.collect do |gene|
+          content_tag(:tr) do 
+            content_tag(:td, 
+              check_box_tag("names[]", gene, nil, :id => "#{gene}_unlink")
+            ) +
+            content_tag(:td, 
+               label_tag("#{gene}_unlink", gene)
+            )
+          end
+        end.join.html_safe
+
+        # is_first_line = true
+        # data[species].each.collect do |gene|
+        #   if is_first_line then 
+        #     col1 = species
+        #     tr_class = "with_border"
+        #     is_first_line = false
+        #   else
+        #     col1 = "".html_safe
+        #     tr_class = ""
+        #   end
+        #   content_tag(:tr, :class => tr_class) do 
+        #     content_tag(:td, col1) +
+        #     content_tag(:td, 
+        #       check_box_tag("names[]", gene, nil, :id => "#{gene}_unlink")
+        #     ) +
+        #     content_tag(:td, 
+        #        label_tag("#{gene}_unlink", gene)
+        #     )
+        #   end
+        # end.join.html_safe
+      end.join.html_safe
+    end
+  end
+
   def create_data_center_table(seq_names)
     table_body = ''
 

@@ -32,7 +32,11 @@ class GenePainterController < ApplicationController
     session[:p_gene_structures]
   end
 
-  def name_species_map
+  def sequence_names
+    session[:sequence_names]
+  end
+
+  def genes_to_species_map
     session[:genes_to_species_map]
   end
 
@@ -47,7 +51,8 @@ class GenePainterController < ApplicationController
     session[:basepath_data] = "" # path to folder containing input data 
     session[:p_alignment] = "" # path to file containing input alignment
     session[:p_gene_structures] = "" # path to folder containing gene structures
-    session[:genes_to_species_map] = "" # hash with genes and corresponding species
+    session[:sequence_names] = [] # list of fasta headers
+    session[:genes_to_species_map] = {} # hash with genes and corresponding species
     session[:p_pdb] = "" # path to PDB file
     session[:new_gene_structures] = [] # newly generated gene structures
   end
@@ -75,6 +80,7 @@ class GenePainterController < ApplicationController
   
   end
 
+  # generate species list for species to fasta mapping
   def autocomplete
     list = Autocomplete.search( params[:q] )
     # convert to array of hashes to satisfy jquery ui autocomplete plugin
@@ -99,6 +105,7 @@ class GenePainterController < ApplicationController
         Helper.move_or_copy_file(f_src, session[:p_alignment], 'copy')
 
         @seq_names = SequenceHelper.read_in_alignment(session[:p_alignment])
+        session[:sequence_names] = @seq_names
 
       else
         file = params[:file]
@@ -115,6 +122,7 @@ class GenePainterController < ApplicationController
 
         # read in data
         @seq_names = SequenceHelper.read_in_alignment(session[:p_alignment])
+        session[:sequence_names] = @seq_names
 
         throw :error, 'Cannot upload file. Please contact us.' if ! is_sucess
       end
@@ -268,6 +276,54 @@ class GenePainterController < ApplicationController
   end
 
   def update_species_mapping
+ 
+    @fatal_error = catch(:error) do 
+      if params[:task] == "insert" then 
+        # add new species-names pair
+
+        if ! params.has_key?("species") ||
+          params["species"].blank? then 
+          throw :error, "No species selected."
+        end
+   
+        if ! params.has_key?("names") ||
+          params["names"].empty? then 
+          throw :error, "No genes are selected."
+        end
+
+        # no error occured, so gene-species pair can be saved
+        # key: gene, value: species
+        params["names"].each do |name|
+          session[:genes_to_species_map][name] = params["species"]
+        end     
+
+      elsif params[:task] == "delete"
+        # delete a species-names pair
+
+        if ! params.has_key?("names") ||
+          params["names"].empty? then 
+          throw :error, "No genes are selected."
+        end
+
+        # no error occured, delete gene-species pair
+        params["names"].each do |name|
+          session[:genes_to_species_map].delete(name)
+        end
+      end
+      "" # default error-message
+    end
+
+  rescue RuntimeError => ex
+    @fatal_error = ex.message
+  rescue NoMethodError, Errno::ENOENT, Errno::EACCES, ArgumentError, NameError => ex
+    @fatal_error = 'Cannot update species mapping.'
+  ensure
+    respond_to do |format|
+      format.js
+    end
+  end
+
+  def update_species_mapping_old
     @task = params[:task]
 
     logger.debug(@task)
@@ -320,6 +376,7 @@ class GenePainterController < ApplicationController
     f.close
 
     @seq_names = SequenceHelper.read_in_alignment(session[:p_alignment])
+    session[:sequence_names] = @seq_names
 
   rescue RuntimeError => ex
     @fatal_error = ex.message
@@ -330,7 +387,9 @@ class GenePainterController < ApplicationController
   end
 
   def map_sequence_name_to_species
-    session[:genes_to_species_map] = SequenceHelper.map_genenames_to_speciesnames(session[:basepath_data] + '/fastaheaders2species.txt')
+    session[:genes_to_species_map] = SequenceHelper.map_genenames_to_speciesnames(
+      session[:basepath_data] + '/fastaheaders2species.txt'
+    )
   end
 
   def call_genepainter

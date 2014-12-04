@@ -1,0 +1,64 @@
+<%
+	# displays all mapped species and gene names (names together with checkbox)
+	species_with_genes = {}
+	controller.genes_to_species_map.each do |gene, species|
+		if ! species_with_genes[species] then 
+			species_with_genes[species] = []
+		end
+		species_with_genes[species].push gene
+	end
+	table_content = prepare_table_with_checkbox_and_span_columns(species_with_genes) 
+%>
+<%= 
+	if species_with_genes.any? then 
+		content_tag(:normal, "Unlink genes from species") + 
+		image_tag("icons/popup_icon.png", 
+			:style => "margin-left: 10px; cursor: pointer", :id => 'unlink_genes_from_species'
+		) +
+		content_tag(:div, 
+			"",
+			:id => "unlink_genes_modal", 
+			:style => "display: none"
+		) +
+
+		# show this table in jquery-dialog modal !
+		content_tag(:div, 
+			content_tag(:table, table_content),
+			:id => "unlink_genes_table",
+			:style => "display: none; width: 100%;"
+		)
+	end
+%>
+
+<script defer>
+
+	$("#unlink_genes_modal").dialog({
+		autoOpen: false,
+		title: "Undo species mapping",
+		modal: true,
+		height: 400,
+		buttons: {
+			Save: function() {
+				var checkbox_data = new Array(); 
+				$("div#unlink_genes_modal [type=checkbox]:checked").each(function(){
+					checkbox_data.push($(this).attr('value'))
+				});
+			
+				$.ajax({
+					type: 'POST',
+					url: '/update_species_mapping',
+					dataType: 'script',
+	                data: {'names': checkbox_data, 'task': 'delete'},
+				});
+				$(this).dialog("close");
+			}
+		}
+	});
+
+	$("img#unlink_genes_from_species").click(function(){
+		$('#unlink_genes_modal').html( $('#unlink_genes_table').html() );
+		$("#unlink_genes_modal").dialog('open');
+		return false;
+	});
+
+</script>

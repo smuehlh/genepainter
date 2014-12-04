@@ -295,8 +295,31 @@ td, th {
     zoom: 1;
 }
 
-label {
+// label {
+//   margin-right: 20px;
+// }
+.manual_species_mapping_left {
+  float: left;
+  width: 60%;
+  overflow: hidden;
+}
+.manual_species_mapping_right {
+  float: left;
+  overflow: hidden;
+}
+
+.manual_species_mapping {
+  float: left;
   margin-right: 20px;
+  max-height: 200px;
+}
+.sequence_names {
+  width: 40%;
+  overflow: auto;
+}
+.vertical_line {
+    border-left: 1px solid $dunkelgrau;
+    padding-left: 10px;
 }
 
 div.help {
@@ -339,6 +362,10 @@ table.one-column-emphasis td
   border-top: 1px solid #e8edff;
   height: 2em; 
   vertical-align: middle;
+}
+
+#unlink_genes_modal tr.with_border {
+  border-top: 1px solid #e8edff;
 }
 tr:hover td {
   color: #339;

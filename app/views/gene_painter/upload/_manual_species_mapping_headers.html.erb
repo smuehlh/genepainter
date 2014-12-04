@@ -1,0 +1,8 @@
+<%
+	# displays all unmapped sequences names as table (together with checkbox)
+	unmapped_sequences = controller.sequence_names - controller.genes_to_species_map.keys
+	unmapped_sequences = unmapped_sequences.sort
+	table_content = prepare_table_with_checkbox(unmapped_sequences) %>
+<%= 
+	content_tag(:table, table_content)
+%>

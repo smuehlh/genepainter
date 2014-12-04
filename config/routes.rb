@@ -17,7 +17,7 @@ Rails.application.routes.draw do
   match 'upload_gene_structures', to: 'gene_painter#upload_gene_structures', as: 'post/upload_gene_structures', :via => [:post]
   match 'upload_species_mapping', to: 'gene_painter#upload_species_mapping', as: 'post/upload_species_mapping', :via => [:post]
   match 'upload_pdb', to: 'gene_painter#upload_pdb', as: 'post/upload_pdb', :via => [:post]
-  match 'update_species_mapping', to: 'gene_painter#update_species_mapping', as: 'post/update_species_mapping', :via => [:post]
+  match 'update_species_mapping', to: 'gene_painter#update_species_mapping', as: 'update_species_mapping', :via => [:post]
   match 'create_alignment_file', to: 'gene_painter#create_alignment_file', as: 'post/create_alignment_file', :via => [:post]
   match 'call_genepainter', to: 'gene_painter#call_genepainter', as: 'post/call_genepainter', :via => [:post]
   match 'build_svg', to: 'gene_painter#build_svg', as: 'post/build_svg', :via => [:post]

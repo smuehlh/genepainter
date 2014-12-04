@@ -3,7 +3,7 @@
     <% if controller.action_name == "home" then selected = " class='selected'" else selected = "" end %>
     <li<%=raw(selected)%>><%= link_to "Home", root_path %></li>
 
-    <% if controller.action_name == "genepainter" then selected = " class='selected'" else selected = "" end%>
+    <% if controller.action_name == "gene_painter" then selected = " class='selected'" else selected = "" end%>
     <li<%=raw(selected)%>><%= link_to "GenePainter", gene_painter_path %></li>
 
     <% if controller.action_name.start_with?("help") then selected = " class='selected'" else selected = "" end%>

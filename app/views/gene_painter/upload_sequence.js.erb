@@ -29,21 +29,14 @@ hide_show_waiting('hide');
   $('#gene_structures_uploader').prop('disabled', false);
   $('#species_mapping_uploader').prop('disabled', false);
   $('#pdb_uploader').prop('disabled', false);
-  $('input#map_to_another_species').prop('disabled', false);
+  $('input#manual_species_mapping_button').prop('disabled', false);
+  $("input#species").prop("disabled", false);
+  $("input#manual_species_mapping_button").prop("disabled", false);
 
-  <% @seq_names.each do |name| %>
-    $("div#manual_mapping").find("div#headers").append("<label><input type='checkbox' name='<%= name %>' value='<%= name %>'><%= name %></label><br>");
-  <% end %>
-
-  // sort headers;
-  var newLabels = $("div#manual_mapping").find("div#headers").find('label').map(function(index, elem){
-                    return $(elem).find('input')[0].value;
-                  }).sort();
-
-  $("div#manual_mapping").find("div#headers").html("");
-  _.each(newLabels, function(label) {
-    $("div#manual_mapping").find("div#headers").append('<label><input type="checkbox" value="' + label + '">' + label + '</label><br>');
-  });
+  // init manual species mapping
+  <% new_content = escape_javascript(render(partial: "gene_painter/upload/manual_species_mapping_headers"))%>
+  $('#headers').html('<%=new_content%>');
+  // no need to init unlink species mapping, since at this stage, there is nothing to be unlinked!
 
   // Initial data center table
   var $dataTableBody = $($('table#one-column-emphasis').find('tbody')[0]);
@@ -52,9 +45,6 @@ hide_show_waiting('hide');
   // Show data center
   $('p#t_data_center').hide("slow");
   $('div#b_data_center').show("show");
-
-  $("input#species").removeAttr("disabled");
-  $("div#unlink_genes").show();
 
 <% else%>
   error('<%=raw(@fatal_error)%>');
@@ -68,5 +58,11 @@ hide_show_waiting('hide');
     // was input of text-field
     $("div#text_seq_help").show('slow');
   }
+  $('#gene_structures_uploader').prop('disabled', true);
+  $('#species_mapping_uploader').prop('disabled', true);
+  $('#pdb_uploader').prop('disabled', true);
+  $('input#manual_species_mapping_button').prop('disabled', true);
+  $("input#species").prop("disabled", true);
+  $("input#manual_species_mapping_button").prop("disabled", true);
 
 <% end %>

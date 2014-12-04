@@ -1,208 +1,78 @@
-<div id="manual_mapping" style="max-height: 300px; overflow: auto">
-  <div style="width: 25%; max-height: 250px; float: left">
-    <div class="ui-widget">
-      <input type="text" id="species" style="width: 150px" disabled/>
-    </div>
+<%= 
+	## header
+	content_tag(:b, "Enter species and select corresponding genes") +
+	image_tag("icons/help.png", :class => "help manual_species_mapping_help") +
+	# content_tag(:br) +
+	render( :partial => "gene_painter/help/manual_species_mapping_help") 
+%>
 
-    <script defer>
-      $(function() {
-
-        $("input#species" ).autocomplete({
-          minLength: 3,
-          delay: 300,
-          source: function(request, response) {
-            $.ajax({
-              type: 'GET',
-              url: "/autocomplete",
-              data: {"q": request.term},
-              success: function(result) {
-                response(result);
-              }
-            });
-          },
-          select: function( event, ui ) {
-          },
-          open: function() {
-            $( this ).removeClass( "ui-corner-all" ).addClass( "ui-corner-top" );
-          },
-          close: function() {
-            $( this ).removeClass( "ui-corner-top" ).addClass( "ui-corner-all" );
-          }
-        });
-      });
-    </script>
-
-  </div>
-
-  <div id="headers" style="width: 25%; max-height: 250px; overflow: auto; float: left; margin-right: 20px;">
+<%= 
+	content_tag(:div, 
+		form_tag(update_species_mapping_path, remote: true, :id => "myForm") do 
+			text_field_tag("species", nil, placeholder: "Enter species", disabled: true, size: 20, 
+				:class => "manual_species_mapping ui-widget") +
+			# div for linking headers to species, will be filled later
+			content_tag(:div, nil, :id => "headers", :class => "sequence_names manual_species_mapping") +
+			content_tag(:div, "", :style => "clear: both; padding-top:10px" ) +
+			hidden_field_tag(:task, "insert") +
+			submit_tag("Save",
+				:id => "manual_species_mapping_button",
+				:disabled => true
+			) 
+		end,
+		:class => "manual_species_mapping_left"
+	) +
+	content_tag(:div, 
+		# div for unlinking headers to species, will be filled later
+		content_tag(:div, 
+			"", :id => "unlink_genes", :class => "manual_species_mapping"
+		),
+		:class => "manual_species_mapping_right vertical_line"
+	)
+%>
 
 
-  </div>
 
-  <div style="max-height: 250px; overflow: auto; display: none" id="unlink_genes">
+<%= javascript_tag defer: 'defer' do -%>
+	$("img.manual_species_mapping_help").click(function() {
+		 $("div#manual_species_mapping_help").toggle("slow");
+	});
 
-    Unlink genes from species
+	$(function() {
+		$("input#species" ).autocomplete({
+			minLength: 3,
+			delay: 300,
+			source: function(request, response) {
+				$.ajax({
+					type: 'GET',
+					url: "/autocomplete",
+					data: {"q": request.term},
+					success: function(result) {
+					response(result);
+					}
+				});
+			},
+			select: function( event, ui ) {
+			},
+			open: function() {
+				$( this ).removeClass( "ui-corner-all" ).addClass( "ui-corner-top" );
+			},
+			close: function() {
+				$( this ).removeClass( "ui-corner-top" ).addClass( "ui-corner-all" );
+			}
+		});
+	});
 
-    <%= image_tag("icons/popup_icon.png", :style => "margin-left: 10px; cursor: pointer", :id => 'unlink_genes_from_species') %>
-
-    <div id="unlink_genes_modal" title="Unlink genes from species" style="display: none">
-      <table class="mapped_headers" id="one-column-emphasis" style="width: 100%;">
-        <thead>
-          <tr>
-            <th><b>Species</b></th>
-            <th><b>Genes</b></th>
-          </tr>
-        </thead>
-      </table>
-    </div>
-
-    <script defer>
-
-      $("img#unlink_genes_from_species").click(function() {
-
-        $("div#unlink_genes_modal").dialog({
-          modal: true,
-          buttons: {
-            Ok: function() {
-
-              var data = {},
-                $unlinkTable = $("table.mapped_headers");
-
-              $.ajax({
-                type: 'POST',
-                url: '/update_species_mapping',
-                data: {'data': data, 'task': 'update'},
-                dataType: 'script'
-              });
-
-              // update data center
-              $unlinkTable.find("input").filter(function(index, elem) {
-                return $(elem).is(":checked") == false;
-              }).map(function(index, elem) {
-
-                // species column
-                $("div#data_table").find("td#species").filter(function(index, species) {
-                  return species.getAttribute("data") == elem.value;
-                })[0].innerHTML = "";
-
-                // generate gene structures column
-                var inputs = $("div#data_table").find("input#generateGeneStructure").filter(function(index, input) {
-                  return input.getAttribute("value") == elem.value;
-                });
-
-                if (inputs.length) {
-                  inputs[0].setAttribute("disabled", true);
-                }
-
-                // update gene list in species mapping section
-                $("div#manual_mapping").find("div#headers").append('<label><input type="checkbox" value="' + elem.value + '">' + elem.value + '</label><br>');
-
-                // sort headers
-                var newLabels = $("div#manual_mapping").find("div#headers").find('label').map(function(index, elem){
-                                  return $(elem).find('input')[0].value;
-                                }).sort();
-
-                $("div#manual_mapping").find("div#headers").html("");
-                _.each(newLabels, function(label) {
-                  $("div#manual_mapping").find("div#headers").append('<label><input type="checkbox" value="' + label + '">' + label + '</label><br>');
-                });
-
-                // update popup modal
-                $(elem).parent().next().remove(); // remove breakline first
-                $(elem).parent().remove();        // remove label and checkbox
-              });
-
-              $( this ).dialog( "close" );
-            }
-          }
-        });
-      });
-
-    </script>
-
-  </div>
-
-</div>
-
-<div style="padding-top: 10px;">
-  <input id="map_to_another_species" type="button" value="Save mapping to current species" disabled="true">
-</div>
-
-<script defer>
-  $("input#map_to_another_species").click(function() {
-
-    var selectedHeaders = _.filter($("div#headers").find("input"), function(input) {
-      return $(input).is(":checked");
-    });
-
-    var error_message = "";
-    var species_name = $("input#species")[0].value;
-
-    if (species_name.length) {
-      if (selectedHeaders.length) {
-
-        // var unlinkTable = $("table.mapped_headers")[0];
-        //
-        // newRow = unlinkTable.insertRow();
-        // cell1 = newRow.insertCell(0);
-        // cell2 = newRow.insertCell(1);
-        //
-        // cell1.innerHTML = species_name
-        // cell1.setAttribute("id", "species");
-        //
-        // var tmp = "";
-        // _.each(selectedHeaders, function(header) {
-        //   tmp += '<label><input type="checkbox" checked="true" value="' + header.value + '">' + header.value + '</label><br>';
-        // });
-        //
-        // $(cell2).html(tmp);
-
-        var data = "";
-        _.each(selectedHeaders, function(header) {
-          data += header.value;
-
-          if (header === _.last(selectedHeaders)) {
-            data += ":";
-          } else {
-            data += ",";
-          }
-
-        });
-
-        data += "\"" + species_name + "\"";
-
-        // Call genepainter controller
-        $.ajax({
-          type: 'POST',
-          url: '/update_species_mapping',
-          data: {'new_mapping': data, 'task': 'insert', 'species': species_name},
-          dataType: 'script'
-        });
-
-      } else {
-        error_message += "No headers are selected.\n";
-      }
-    } else {
-      error_message += "Species name is empty.\n";
-    }
-
-    // Update UI
-    if (error_message.length) {
-      error(error_message);
-    } else {
-      // $("input#species")[0].value = "";
-      //
-      // var selectedLabels = _.filter($("div#headers").find("label"), function(label) {
-      //   return $($(label).children()[0]).is(":checked");
-      // });
-      //
-      // _.each(selectedLabels, function(label) {
-      //   $(label).next().remove();
-      //   $(label).remove();
-      // });
-
-    }
+<% end -%>
 
 
-  });
-</script>
+<!-- 
+TODO
+
+1) manual_species_mappping auch rendern, wenn upload_species_mapping
+
+2) "upload species mapping"
+id = species_mapping_uploader
+ -->
+
+
