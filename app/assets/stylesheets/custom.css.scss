@@ -33,6 +33,10 @@ $h1_color: #336699;
 $h2_color: #ddd;
 $nice_button_bg: $h1_color;
 $h1_accent_color: #FF8D66 ; // #FFA666;
+$warning_red: #CD5C5C;
+$warning_red_light: #F0CECE;
+$warning_orange: #FFDAB9;
+
 
 /*** Allgemeine Regeln ***/
 
@@ -278,8 +282,11 @@ form.disabled {
     color: white;
 }
 
-#errors_container {
-    color: red;
+#error_container {
+  color: $warning_red;
+}
+.error_dialog .ui-dialog-titlebar {
+  background: $warning_red;
 }
 
 td, th {
@@ -324,7 +331,7 @@ td, th {
 
 div.help {
   display: none;
-  background: #FFE4E1;
+  background: $warning_red_light;
   margin: 5px;
   padding-top: 10px;
   padding-bottom: 10px

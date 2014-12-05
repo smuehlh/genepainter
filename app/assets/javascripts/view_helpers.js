@@ -46,15 +46,18 @@ function checkAll(inputs, checkOrNot) {
 }
 
 function error(message) {
-  $("div#error_dialog").html("<p>" + message + "</p>");
-  $("div#error_dialog").dialog({
-        modal: true,
-        buttons: {
-          Ok: function() {
-            $( this ).dialog( "close" );
-          }
-        }
-      });
+  $("div#error_container").html("<p>" + message + "</p>");
+  $("div#error_container").dialog({
+    modal: true,
+    resizable: false,
+    title: "Something went wrong ...",
+    dialogClass: "error_dialog",
+    buttons: {
+      Ok: function() {
+        $( this ).dialog( "close" );
+      }
+    }
+  });
 }
 // function warning(message) {
 //   $("div#warning_dialog").html("<p>" + message + "</p>");
