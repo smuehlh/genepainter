@@ -29,7 +29,7 @@ module SequenceHelper
 		if names.size != seqs.size then
 			raise "Error while parsing multiple sequence alignment. Number of fasta header and sequences does not match." 
 		elsif names.size == 0 
-			raise "EError while parsing multiple sequence alignment. Must contain at least one sequence "
+			raise "Error while parsing multiple sequence alignment. Must contain at least one sequence."
 		end
 		return names
 	end
