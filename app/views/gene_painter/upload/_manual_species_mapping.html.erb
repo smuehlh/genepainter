@@ -10,7 +10,8 @@
 	content_tag(:div, 
 		form_tag(update_species_mapping_path, remote: true, :id => "myForm") do 
 			text_field_tag("species", nil, placeholder: "Enter species", disabled: true, size: 20, 
-				:class => "manual_species_mapping ui-widget") +
+				:class => "manual_species_mapping ui-widget"
+			) +
 			# div for linking headers to species, will be filled later
 			content_tag(:div, nil, :id => "headers", :class => "link_sequence_names manual_species_mapping") +
 			content_tag(:div, "", :style => "clear: both; padding-top:10px" ) +
@@ -64,15 +65,3 @@
 	});
 
 <% end -%>
-
-
-<!-- 
-TODO
-
-1) manual_species_mappping auch rendern, wenn upload_species_mapping
-
-2) "upload species mapping"
-id = species_mapping_uploader
- -->
-
-

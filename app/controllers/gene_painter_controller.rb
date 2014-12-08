@@ -1,29 +1,6 @@
 class GenePainterController < ApplicationController
 
-  # @@id = ''
-  # @@basepath_data = '' # basepath input data
-  # session[:p_alignment] = '' # input data: alignment file
-  # session[:p_gene_structures] = '' # input data: folder with gene structures
-
-  # @@name_species_map = {}
-
-  # session[:new_gene_structures] = []
-
-  # def id
-  #   @@id
-  # end
-
-  # def p_gene_structures
-  #   session[:p_gene_structures]
-  # end
-
-  # def name_species_map
-  #   @@name_species_map
-  # end
-
-  # def new_gene_structures
-  #   session[:new_gene_structures]
-  # end
+  @@gene_structure_to_status_map = {} # use class variable as hot-fix for issue that first uploaded gene structure not stored otherwise
   def id
     session[:id]
   end
@@ -44,6 +21,10 @@ class GenePainterController < ApplicationController
     session[:new_gene_structures]
   end
 
+  def gene_structure_to_status_map
+    @@gene_structure_to_status_map
+  end
+
   # prepare a new session 
   def prepare_new_session
     reset_session
@@ -55,6 +36,7 @@ class GenePainterController < ApplicationController
     session[:genes_to_species_map] = {} # hash with genes and corresponding species
     session[:p_pdb] = "" # path to PDB file
     session[:new_gene_structures] = [] # newly generated gene structures
+    @@gene_structure_to_status_map = {} # hash with genes (that have a gene structure) and the status of that gene structures
   end
 
   # Render start page for GenePainter
@@ -146,20 +128,21 @@ class GenePainterController < ApplicationController
       @is_example = params[:is_example]
 
       if @is_example
-        genes = Dir["#{Rails.root}/public/sample/gene_structures/*"]
+        pathes_to_genes = Dir["#{Rails.root}/public/sample/gene_structures/*"]
 
-        genes.each do |gene|
-          Helper.move_or_copy_file(gene, session[:p_gene_structures], 'copy')
+        pathes_to_genes.each do |path|
+          gene = File.basename(path, ".*")
+
+          Helper.move_or_copy_file(path, session[:p_gene_structures], 'copy')
+          @@gene_structure_to_status_map[gene] = GenestructureHelper.get_status_of_gene_structure(path)
+          # session[:gene_structure_to_status_map][gene] = GenestructureHelper.get_status_of_gene_structure(path)
         end
-
-        @gene_names = genes.collect! do |gene|
-          File.basename(gene, ".yaml")
-        end
-
       else
+
         file = params[:files][0]
 
         # validate file
+
         FormatChecker.validate_genestructure( file.path, file.original_filename )
 
         # check file size
@@ -167,18 +150,24 @@ class GenePainterController < ApplicationController
         Helper.move_or_copy_file(file.path(), session[:p_gene_structures], 'move')
 
         # rename to original name
-        Helper.rename(File.join(session[:p_gene_structures], File.basename(file.path())),
-          File.join(session[:p_gene_structures], file.original_filename))
-
-        @filename = file.original_filename
+        path_src = File.join( session[:p_gene_structures], File.basename(file.path()) )
+        path_dest = File.join(session[:p_gene_structures], file.original_filename)
+        Helper.rename(path_src, path_dest)
 
         # call fromdos
         is_sucess = system('fromdos', File.join(session[:p_gene_structures], file.original_filename))
         throw :error, 'Cannot upload files. Please contact us.' if ! is_sucess
+
+
+        # save gene structure and status 
+        gene = File.basename(path_dest, ".*")    
+        @@gene_structure_to_status_map[gene] = GenestructureHelper.get_status_of_gene_structure(path_dest) 
       end
 
       "" # default for @fatal_error
     }
+
+    @n_gene_structs = @@gene_structure_to_status_map.size
 
     rescue RuntimeError => exp
       @fatal_error = exp.message
@@ -447,6 +436,12 @@ class GenePainterController < ApplicationController
         )
         if is_sucess then 
           session[:new_gene_structures] = new_gene_structures
+          new_gene_structures.each do |gene|
+            matching_files = Dir.glob( File.join(d_gene_structures, gene, ".*") )
+            if path = matching_files[0] then 
+              @@gene_structure_to_status_map[gene] = GenestructureHelper.get_status_of_gene_structure(path) 
+            end
+          end
         else
           throw :error, "Could not generated requested gene structures."
         end

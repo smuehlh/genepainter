@@ -49,36 +49,56 @@ module GenePainterHelper
       end.join.html_safe
     end
   end
-
-  def create_data_center_table(seq_names)
-    table_body = ''
-
-    seq_names.each { |name|
-      table_body += '<tr>'
-        table_body += '<td class="oce-checkbox-col">' + check_box_tag("analyze", name, true) + '</td>'
-        table_body += '<td class="oce-small-text-col">' + name + '</td>'
-
-        # All gene structures are missing if no files are uploaded
-        table_body += '<td class="oce-small-text-col"><span id="' + name + '">missing</span></td>'
-        table_body += '<td class="oce-checkbox-col">' +
-            check_box_tag("generateGeneStructure", name, nil, :disabled => true,
-              :title => "Provide species mapping to enable checkbox.",
-            ) +
-          '</td>'
-
-        # table_body += '<td style="text-align: left">' + map[name].to_s  + '</td>'
-        table_body += "<td data=\"#{name}\" id=\"species\" class=\"oce-species-col\"></td>"
-
-      table_body += '</tr>'
-    }
-
-    return table_body
-  end
-
-  # Returns gene structure status
-  def gene_structure_status(filename)
-    f_path = File.join( controller.p_gene_structures, filename)
-    return GenestructureHelper.get_status_of_gene_structure(f_path).to_s
+  # table for data center
+  def prepare_table_body(col1_data, col1_data_with_species, col1_data_with_genestruct)
+    content_tag(:tbody) do 
+      col1_data.sort.each.collect do |gene|
+        species, status_genestruct = "", ""
+        style_generate_genestruct = "display: none;" 
+        if col1_data_with_species[gene] then 
+          species = col1_data_with_species[gene]
+          style_generate_genestruct = "" # species info present, so its ok to display checkbox
+        end
+        if col1_data_with_genestruct[gene] then 
+          status_genestruct = col1_data_with_genestruct[gene]
+          style_generate_genestruct = "display: none;" # gene structure present, so its ok to hide checkbox
+        end
+        content_tag(:tr) do 
+          content_tag(:td, 
+            check_box_tag("analyse[]", 
+              gene, true, # true: is checked
+              :id => "#{gene}_analyse", 
+              :class => "analyse_checkbox"
+            ),
+            :class => "oce-checkbox-col"
+          ) +
+          content_tag(:td, 
+            label_tag("#{gene}_analyse", gene),
+            :class => "oce-small-text-col"
+          ) +
+          content_tag(:td,
+            status_genestruct.html_safe,
+            :class => "oce-small-text-col",
+            :id => "#{gene}_status"
+          ) +
+          content_tag(:td,
+            check_box_tag("style_generate_genestruct[]", 
+              gene, nil, 
+              :id => "#{gene}_generate", 
+              :style => style_generate_genestruct,
+              :class => "generate_checkbox",
+              :title => "Provide species mapping to enable checkbox."
+            ),
+            :class => "oce-checkbox-col"
+          ) +
+          content_tag(:td,
+            species.html_safe,
+            :class => "oce-species-col",
+            :id => "#{gene}_species"
+          )
+        end
+      end.join.html_safe
+    end
   end
 
   def get_sequence_names(filename)

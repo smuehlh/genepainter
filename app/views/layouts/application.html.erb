@@ -33,19 +33,12 @@
     <div id="main_page">
       <div id="header">
         <div id="logo"></div>
-        <!-- <div style="height:70px; width:900px;">
-          <br>TODO: banner
-        </div> -->
         <%=render :partial => "layouts/menu"%>
       </div>
       <div>
         <div id="content">
           <div id="error_container" title="Error" style="display: none;"></div>
           <div id="warning_dialog" title="Info" style="display: none;"></div>
-          <%unless flash[:notice].nil? then%>
-            <div id="notice" class="notice"><%=flash[:notice]%></div>
-            <script type="text/javascript">setTimeout("$('#notice').slideUp(500);", 2000);</script>
-          <%end%>
           <%= yield %>
         </div>
         <div id="rightside">

@@ -26,6 +26,10 @@ $( window ).bind('beforeunload', function() {
   });
 });
 
+$(function() {
+  $( document ).tooltip();
+});
+
 $(function () {
 
     $.ajaxSetup ({
@@ -48,7 +52,6 @@ function set_up_fileupload(btnSelector) {
           if (data.files[0].size <= 52428800) {
             data.submit();
           } else {
-            // TODO: nicer error modal
             error('File must be less than 50 MB. <br /> Please contact us to upload larger files.');
           }
       },
@@ -82,6 +85,32 @@ function hide_show_waiting(kind) {
     }
 };
 
+function update_datacenter_checkboxes(analyse_checkbox_elem) {
+  var myId, myGene;
+  myId = analyse_checkbox_elem.id;
+  myGene = myId.replace('_analyse', '');
+
+  if (analyse_checkbox_elem.checked) {
+    // checked 
+
+    // status of corresponding gene structure; empty if no gene structure present
+    var myStat = $("#"+myGene+"_status").html(); 
+    // corresponding species; empty if no species mapped
+    var mySpec = $("#"+myGene+"_species").html();
+    
+    // show generate checkbox if no genestructure present and species is known!
+    if (myStat === "" && mySpec !== "") {
+      $("#" + myGene + "_generate").show();
+    }    
+  } else {
+    // not checked
+
+    // hide generate gene struct-checkbox and un-check it
+    $("#" + myGene + "_generate").prop('checked', false);
+    $("#" + myGene + "_generate").hide();
+  }
+}
+
 function create_alignment_file_ajax() {
   $('textarea#text_seq').first().on('blur', function() {
     if (this.value.length) {
@@ -97,14 +126,6 @@ function create_alignment_file_ajax() {
   });
 }
 
-function update_data_center_table(str_map) {
-  var speciesCells = $('td#species'),
-    map = JSON.parse(str_map.replace(/&quot;/g, '"').replace(/""/g, '"').replace(/=&gt;/g, ':'));
-
-  $.each(speciesCells, function() {
-    this.innerHTML = map[$(this).attr('data')];
-  });
-}
 
 /*
  * .addClassSVG(className)

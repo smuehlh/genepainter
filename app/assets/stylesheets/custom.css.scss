@@ -281,7 +281,16 @@ form.disabled {
     width: 300px;
     color: white;
 }
-
+.warning {
+  background: $warning_orange;
+  margin: 5px;
+  padding-right: 14px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+.warning_close {
+  float: right;
+}
 #error_container {
   color: $warning_red;
 }
@@ -387,7 +396,9 @@ tr:hover td {
 }
 .oce-checkbox-col {
   width: 100px;
-  padding-left: 10px
+}
+td.oce-checkbox-col {
+  padding-left: 10px;
 }
 .oce-small-text-col {
   width: 120px;
@@ -435,7 +446,7 @@ ul.ui-tabs-nav.ui-helper-reset.ui-helper-clearfix.ui-widget-header.ui-corner-all
 }
 
 .fill-grey {
-  fill: lightgrey;
+  fill: #D3D3D3;
 }
 
 table.mapped_headers td {

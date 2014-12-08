@@ -59,14 +59,16 @@ function error(message) {
     }
   });
 }
-// function warning(message) {
-//   $("div#warning_dialog").html("<p>" + message + "</p>");
-//   $("div#warning_dialog").dialog({
-//         modal: true,
-//         buttons: {
-//           Ok: function() {
-//             $( this ).dialog( "close" );
-//           }
-//         }
-//       });
-// }
+function warning(message) {
+  $("div#warning_dialog").html("<p>" + message + "</p>");
+  $("div#warning_dialog").dialog({
+    modal: true,
+    resizable: false,
+    title: "Info ...",
+    buttons: {
+      Ok: function() {
+        $( this ).dialog( "close" );
+      }
+    }
+  });
+}

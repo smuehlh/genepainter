@@ -17,14 +17,9 @@ hide_show_waiting('hide');
   // update uploaded filename
   $('#uploaded_species_mapping').html('<%= @basename %>');
 
-  update_data_center_table('<%= controller.genes_to_species_map.to_json %>');
-
-  // enable create missing gene structure option
-  $.each($('input#generateGeneStructure'), function() {
-    if ( $(this).parent().next().text().length ) {
-      $(this).removeAttr('disabled');
-    }
-  });
+  // update data centre
+  <% new_content = escape_javascript(render(partial: "gene_painter/upload/data_center"))%>
+  $('#t_data_center').html('<%=new_content%>');
 
 <% else%>
   error(' <%= raw(@fatal_error) %> ');

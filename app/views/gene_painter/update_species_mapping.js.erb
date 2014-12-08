@@ -12,6 +12,8 @@
 	$('#unlink_genes').html('<%= new_content %>');
 
 	// update data centre
+	<% new_content = escape_javascript(render(partial: "gene_painter/upload/data_center"))%>
+	$('#t_data_center').html('<%=new_content%>');
 <% else %>
 	error('<%=raw(@fatal_error)%>');
 <% end %>

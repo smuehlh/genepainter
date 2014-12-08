@@ -38,13 +38,9 @@ hide_show_waiting('hide');
   $('#headers').html('<%=new_content%>');
   // no need to init unlink species mapping, since at this stage, there is nothing to be unlinked!
 
-  // Initial data center table
-  var $dataTableBody = $($('table#one-column-emphasis').find('tbody')[0]);
-  $dataTableBody.html('<%= create_data_center_table(@seq_names).html_safe %>');
-
-  // Show data center
-  $('p#t_data_center').hide("slow");
-  $('div#b_data_center').show("show");
+  // init data center
+  <% new_content = escape_javascript(render(partial: "gene_painter/upload/data_center"))%>
+  $('#t_data_center').html('<%=new_content%>');
 
 <% else%>
   error('<%=raw(@fatal_error)%>');

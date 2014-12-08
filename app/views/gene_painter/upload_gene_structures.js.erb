@@ -1,58 +1,18 @@
+hide_show_waiting('hide');
 <% if @fatal_error.blank? then %>
 
-  hide_show_waiting('hide');
   // toggle help
   $('div#upload_gene_struct_help').hide('slow');
 
-  <% if @is_example %>
+  // Update number of uploaded files
+  <% new_content = pluralize(@n_gene_structs, "file uploaded", "files uploaded") %>
+  $('span#uploaded_gene_structures').text('<%= new_content %>');
 
-      $('span#uploaded_gene_structures').text('<%= @gene_names.length %>' + ' gene structures');
-
-      <% @gene_names.each do |gene_name| %>
-        var $span = $('span#' + '<%= gene_name %>');
-
-        if ($span.length) {
-          $span.html('<%= gene_structure_status("#{gene_name}.yaml") %>');
-
-          // Give the user option to generate gene structure if missing
-          if ($span.html() != 'missing') {
-            $span.parent().next().html('');
-          }
-        }
-      <% end %>
-
-  <% else %>
-
-    // Update number of files uploaded
-    var $fileCount = $('span#uploaded_gene_structures');
-
-    if ($fileCount.text() == "No files uploaded") {
-      $fileCount.text('1 file uploaded');
-    } else {
-      var curTotal = parseInt($fileCount.text().split(' ')[0]);
-      curTotal += 1;
-
-      $fileCount.text(curTotal + ' files uploaded');
-    }
-
-    // Update gene structure status
-    var basename = _.first('<%= @filename %>'.split('.'));
-    var $span = $('span#' + basename);
-
-    if ($span.length) {
-      $span.html('<%= gene_structure_status(@filename) %>');
-
-      // Give the user option to generate gene structure if missing
-      if ($span.html() != 'missing') {
-        $span.parent().next().html('');
-      }
-    }
-  <% end %>
-
-
+  // update data center
+  <% new_content = escape_javascript(render(partial: "gene_painter/upload/data_center"))%>
+  $('#t_data_center').html('<%=new_content%>');
 
 <% else%>
-  hide_show_waiting('hide');
   error('<%=raw(@fatal_error)%>');
   // toggle help
   $('div#upload_gene_struct_help').show('slow');

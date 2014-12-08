@@ -1,0 +1,152 @@
+<div class="large_div">
+  <table class="one-column-emphasis">
+    <thead>
+      <tr>
+        <th scope='col' class='oce-checkbox-col'>Analyze</th>
+        <th scope='col' class='oce-small-text-col'>Sequence Name</th>
+        <th scope='col' class='oce-small-text-col'>Gene Structure</th>
+        <th scope='col' class='oce-checkbox-col'>Generate <br />Gene Structure</th>
+        <th scope='col' class='oce-species-col'>Species</th>
+      </tr>
+    </thead>
+  </table>
+</div>
+
+<div id='data_table' class="large_div">
+  <table id='one-column-emphasis' class="one-column-emphasis">
+    <tbody>
+    </tbody>
+  </table>
+</div>
+
+
+<%=
+  content_tag(:div,
+    check_box_tag('select_all') +
+    content_tag(:span, 'Select All', :style => 'padding-left: 5px; padding-right: 20px') +
+    check_box_tag('deselect_all') +
+    content_tag(:span, 'Deselect All', :style => 'padding-left: 5px; padding-right: 20px'),
+    :id => 'options',
+    :style => 'padding: 10px; padding-top: 20px;')
+%>
+
+<%= javascript_tag defer: 'defer' do -%>
+  var $selectAll = $('input#select_all'),
+    $deselectAll = $('input#deselect_all');
+
+  $selectAll.prop('checked', true);
+
+  $deselectAll.change(function() {
+    var analyzeCheckBoxes = $('div#data_table').find('input#analyze');
+
+    checkAll(analyzeCheckBoxes, false);
+
+    var checkedOrNot = $(this).is(':checked');
+    $selectAll.prop('checked', false);
+  });
+
+  $selectAll.change(function() {
+    var analyzeCheckBoxes = $('div#data_table').find('input#analyze');
+
+    checkAll(analyzeCheckBoxes, true);
+
+    var checkedOrNot = $(this).is(':checked');
+    $deselectAll.prop('checked', false);
+  });
+
+<% end -%>
+
+<%=
+  content_tag(:div,
+    content_tag(:button, 'Submit', :id => 'btnSubmit') +
+    content_tag(:p, '<b>Press submit when finished with data selection.</b>'.html_safe),
+  )
+%>
+
+<div id="dialog-message" title="Error" style="display: none">
+  <p>
+    Please upload or select to generate gene structures before submitting.
+  </p>
+</div>
+
+<%= javascript_tag defer: 'defer' do -%>
+  var $btnSubmit = $('button#btnSubmit');
+
+  function showErrorModal() {
+    $( "#dialog-message" ).dialog({
+      modal: true,
+      buttons: {
+        Ok: function() {
+          $( this ).dialog( "close" );
+        }
+      }
+    });
+  }
+
+  $btnSubmit.click(function() {
+    var missingGeneStructures = [];
+    var boxes = $('div#data_table').find('input#generateGeneStructure');
+
+    for (var i = 0; i < boxes.length; i++) {
+      if ( $(boxes[i]).is(':checked') ) {
+        missingGeneStructures.push(boxes[i].value);
+      }
+    }
+
+    var selected_for_analysis = [];
+    var boxes = $('div#data_table').find('input#analyze');
+
+    for (var i = 0; i < boxes.length; i++) {
+      if ( $(boxes[i]).is(':checked') ) {
+        selected_for_analysis.push(boxes[i].value);
+      }
+    }
+
+    var $dataTable = $("div#data_table");
+    var species = _.uniq($dataTable.find("td#species").map(function(index, elem) {
+          return elem.innerHTML;
+        }).filter(function(index, elem) {
+          return elem.length !== 0;
+        })
+      );
+
+    var new_mapping = {};
+    _.each($dataTable.find("td#species"),function(element, index, array) {
+      if (new_mapping[element.innerHTML] == undefined) {
+        new_mapping[element.innerHTML] = [element.getAttribute("data")];
+      } else {
+        new_mapping[element.innerHTML].push(element.getAttribute("data"));
+      }
+    });
+
+    var new_mapping_str = "";
+    _.each(_.keys(new_mapping), function(key) {
+      if (key.length) {
+        new_mapping_str += new_mapping[key].toString() + ':"' + key + '"\n';
+      }
+    });
+
+    var all_species = _.keys(new_mapping).filter(function(elem, index) {
+      return elem.length > 0;
+    });
+
+    if (missingGeneStructures.length == 0 && $('span#uploaded_gene_structures').html() == 'No files uploaded') {
+      showErrorModal();
+    } else {
+
+      $.ajax({
+        type: 'POST',
+        url: '/call_genepainter',
+        data: {
+          'data': missingGeneStructures, 
+          'new_mapping': new_mapping_str, 
+          'all_species': all_species, 
+          'analyse': selected_for_analysis
+        },
+        dataType: 'script'
+      });
+
+      hide_show_waiting('show');
+    }
+  });
+<% end -%>
