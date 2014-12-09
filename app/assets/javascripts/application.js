@@ -85,6 +85,7 @@ function hide_show_waiting(kind) {
     }
 };
 
+// dependency between analyse and generate-checkbox
 function update_datacenter_checkboxes(analyse_checkbox_elem) {
   var myId, myGene;
   myId = analyse_checkbox_elem.id;

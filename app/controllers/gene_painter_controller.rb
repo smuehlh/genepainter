@@ -348,14 +348,27 @@ class GenePainterController < ApplicationController
   end
 
   def call_genepainter
+
     @fatal_error = "" # fatal, not output generated
     @warning = "" # non-fatal error, maybe still output generated
 
+    # do NOT use session[:p_gene_structures], as this contains _all_ genestructures
+    # use d_gene_structures instead, which contains _selected_ genestructures only
+    f_alignment = session[:p_alignment]
+    d_output = "#{Rails.root}/public/tmp"
+    f_species_to_fasta = File.join(session[:basepath_data], 'fastaheaders2species.txt')
+    f_pdb = session[:p_pdb]
+    f_taxonomy_list = File.join(session[:basepath_data], 'taxonomy_list.csv')
+
+    Helper.mkdir_or_die(d_output)
+
+
     @is_example = params[:is_example]
-    missing_gene_structures = params[:data] == nil ? [] : params[:data]
+    missing_gene_structures = params[:generate_genestruct] == nil ? [] : params[:generate_genestruct]
 
     # build taxonomy lists
-    all_species = params[:all_species] == nil ? [] : params[:all_species]
+    all_species = params[:species] == nil ? [] : params[:species]
+    all_species = all_species.reject{|e| e.empty?} # delete empty strings (no species info given)
     taxonomy_list = ""
 
     all_species.each do |provided_species|
@@ -384,23 +397,18 @@ class GenePainterController < ApplicationController
       end
     end
 
-    filename = "taxonomy_list.csv"
-    File.open("#{session[:basepath_data]}/#{filename}", "w") { |file|
+    File.open(f_taxonomy_list, "w") { |file|
       file.write(taxonomy_list)
     }
 
-    # regenerate fastaheaders2species.txt file with data from data center
-    new_mapping_str = params[:new_mapping] == nil ? "" : params[:new_mapping]
-    if new_mapping_str.length > 0
-      # delete old file
-      File.delete("#{session[:basepath_data]}/fastaheaders2species.txt")
-      # write to a new one
-      File.open("#{session[:basepath_data]}/fastaheaders2species.txt", "w") { |file|
-        file.write(new_mapping_str)
-      }
+    # write gene to species-mapping to file
+    fh = File.open(f_species_to_fasta, "w")
+    session[:genes_to_species_map].each do |gene, species|
+      fh.puts "#{gene}:\"#{species}\""
     end
+    fh.close
 
-    # apply data selection for analysis
+    # apply data selection for analysis, in case of example: use all genes
     selected_genes = params[:analyse] == nil ? [] : params[:analyse] 
     d_gene_structures = File.join(session[:basepath_data], 'selected_gene_structures')
     Helper.mkdir_or_die(d_gene_structures)
@@ -412,16 +420,6 @@ class GenePainterController < ApplicationController
         Helper.move_or_copy_file(f_src, d_gene_structures, 'copy')
       end
     end
-
-    # do NOT use session[:p_gene_structures], as this contains _all_ genestructures
-    # use d_gene_structures instead, which contains _selected_ genestructures only
-    f_alignment = session[:p_alignment]
-    d_output = "#{Rails.root}/public/tmp"
-    f_species_to_fasta = Dir[session[:basepath_data] + '/fastaheaders2species.txt'].first
-    f_pdb = session[:p_pdb]
-    f_taxonomy_list = "#{session[:basepath_data]}/taxonomy_list.csv"
-
-    Helper.mkdir_or_die(d_output)
 
     # Prefix to all output files
     prefix = session[:id]
@@ -466,7 +464,7 @@ class GenePainterController < ApplicationController
     # the default options for gene painter call
     all_options = "#{options_io} #{options_text_output} #{options_graphical_output}"
 
-    if ! f_species_to_fasta.blank?
+    if session[:genes_to_species_map].any? then 
       # add options for tax. output
       all_options += " #{options_taxonomic_output}"
     end
@@ -575,14 +573,15 @@ class GenePainterController < ApplicationController
     send_file p_dest, :x_sendfile => true
 
   rescue RuntimeError, NoMethodError, Errno::ENOENT, Errno::EACCES, ArgumentError, NameError => ex
-    @error = "Cannot prepare gene structures for download."
-  ensure 
     render plain: 'Cannot prepare gene structures for download'
   end
 
   def download_resultfiles
     f_path = build_output_path( params[:file] )
     send_file f_path, :x_sendfile => true
+
+  rescue RuntimeError, NoMethodError, Errno::ENOENT, Errno::EACCES, ArgumentError, NameError => ex
+    render plain: "Cannot prepare file \"#{params[:file]}\" for download"
   end
 
   def build_output_path(filename)

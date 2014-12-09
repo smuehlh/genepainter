@@ -12,14 +12,15 @@
 
 			hide_show_waiting('show');
 
-			var all_species = _.uniq($("div#data_table").find("td#species").map(function(index, elem) {
-													return elem.innerHTML;
-												}));
+			var all_species = new Array(); 
+			$("#dataCenterForm input[name='species[]'][type='hidden']").each(function(){
+				all_species.push( $(this).attr('value') ); 
+			});
 
 			$.ajax({
 				type: 'POST',
 				url: '/call_genepainter',
-				data: {'data': [], 'is_example': true, 'all_species': all_species},
+				data: {'is_example': true, 'species': all_species},
 				success: function() {
 					$("u#load_example").html("Example loaded");
 					$("u#load_example").removeAttr("onclick");

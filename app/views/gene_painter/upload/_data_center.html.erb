@@ -54,9 +54,11 @@
 			:title => "Deselect al genes for analysis."
 		) +
 		content_tag(:br) +
+		hidden_field_tag(:is_example, false) +
 		submit_tag("Submit", 
 			:id => "data_center_button",
-			:title => "Hit submit to start GenePainter."
+			:title => "Hit submit to start GenePainter.",
+			:onclick => "hide_show_waiting('show');"
 		)
 	end +
 

@@ -82,7 +82,7 @@ module GenePainterHelper
             :id => "#{gene}_status"
           ) +
           content_tag(:td,
-            check_box_tag("style_generate_genestruct[]", 
+            check_box_tag("generate_genestruct[]", 
               gene, nil, 
               :id => "#{gene}_generate", 
               :style => style_generate_genestruct,
@@ -92,7 +92,11 @@ module GenePainterHelper
             :class => "oce-checkbox-col"
           ) +
           content_tag(:td,
-            species.html_safe,
+            species.html_safe +
+            hidden_field_tag( "species[]",
+              species, 
+              :id => "#{gene}_hidden"
+            ),
             :class => "oce-species-col",
             :id => "#{gene}_species"
           )
