@@ -47,10 +47,6 @@
 <%= javascript_tag defer: 'defer' do -%>
 	set_up_fileupload("#gene_structures_uploader");
 
-	$('input#gene_structures_uploader').click(function() {
-		$('span#uploaded_gene_structures').text('No files uploaded');
-	});
-
 	$("img.upload_gene_struct_help").click(function() {
 		 $("div#upload_gene_struct_help").toggle("slow");
 	});
