@@ -44,9 +44,9 @@
 	<div style="width: 50%; float: left">
 		<%= content_tag(:label, content_tag(:b, "Or upload file")) %>
 
-		<!-- TODO: Only accept some file extensions. bug??-->
 		<%= file_field_tag("sequence_uploader",
 			:name => "file",
+			:accept => ".fas,.fasta,.fa,.seq,.fsa,.faa",
 			:data => {url: post_upload_sequence_path}
 			)
 		%>
