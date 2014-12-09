@@ -46,7 +46,6 @@ $(function () {
 });
 
 function set_up_fileupload(btnSelector) {
-console.log(btnSelector);  
   $(btnSelector).fileupload({
       autoUpload: false,
       add: function(e, data) {
