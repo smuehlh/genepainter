@@ -1,5 +1,15 @@
-<%= content_tag(:div,
-  "_manual_species_mapping_help.html.erb",
-  :class => "help",
-  :id => "manual_species_mapping_help")
+<%=
+content_tag(:div, 
+	content_tag(:span, "", 
+		:class => "ui-icon ui-icon-closethick warning_close", 
+		:style => "display:inline-block;",
+		:onclick => "$('#manual_species_mapping_help').hide('slow');"
+	) +		
+	content_tag(:normal,
+		"_manual_species_mapping_help.html.erb".html_safe,
+	),
+	:id => "manual_species_mapping_help",
+	:class => "help",
+	:style => "display:none;"
+)
 %>

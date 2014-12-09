@@ -1,5 +1,16 @@
-<%= content_tag(:div,
-  "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-  :class => "help",
-  :id => "upload_species_mapping_help")
+<%=
+content_tag(:div, 
+	content_tag(:span, "", 
+		:class => "ui-icon ui-icon-closethick warning_close", 
+		:style => "display:inline-block;",
+		:onclick => "$('#upload_species_mapping_help').hide('slow');"
+	) +		
+	content_tag(:normal,
+		"_upload_species_mapping_help.html.erb".html_safe,
+	),
+	:id => "upload_species_mapping_help",
+	:class => "help",
+	:style => "display:none;"
+)
 %>
+
