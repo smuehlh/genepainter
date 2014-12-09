@@ -363,53 +363,69 @@ class GenePainterController < ApplicationController
     Helper.mkdir_or_die(d_output)
 
 
-    @is_example = params[:is_example]
+    @is_example = params[:is_example] == "true" # params is string "true" or string "false"
     missing_gene_structures = params[:generate_genestruct] == nil ? [] : params[:generate_genestruct]
-
-    # build taxonomy lists
     all_species = params[:species] == nil ? [] : params[:species]
     all_species = all_species.reject{|e| e.empty?} # delete empty strings (no species info given)
-    taxonomy_list = ""
+    selected_genes = params[:analyse] == nil ? [] : params[:analyse] 
 
-    all_species.each do |provided_species|
 
-      if found_species = Node.any_of( { scientific_name: provided_species} , { common_names: provided_species } ).first then 
+    # build taxonomy lists and write gene to species mapping, not if example
+    if @is_example then
+      # example data
+      # copy taxonomy list and species mapping to data folder
+      d_sample = File.join("#{Rails.root}", "public", "sample")
+      f_src = File.join( d_sample, "taxonomy_list.csv" )
+      Helper.move_or_copy_file(f_src, f_taxonomy_list, "copy")
 
-        lineage = []
-        current_taxon = found_species
-        while not current_taxon.root?
-          lineage << current_taxon
-          current_taxon = current_taxon.parent
+      f_src = File.join( d_sample, "fastaheaders2species.txt" )
+      Helper.move_or_copy_file(f_src, f_species_to_fasta, "copy")
+
+    else
+puts "fetch taxonomy"      
+      # no example data, build tax. list
+      taxonomy_list = ""
+
+      all_species.each do |provided_species|
+
+        if found_species = Node.any_of( { scientific_name: provided_species} , { common_names: provided_species } ).first then 
+
+          lineage = []
+          current_taxon = found_species
+          while not current_taxon.root?
+            lineage << current_taxon
+            current_taxon = current_taxon.parent
+          end
+          lineage  << current_taxon
+
+          path = lineage.map do |node|
+            node.scientific_name
+          end
+
+          # change species name to user-provided one
+          # this is neccessary for gene painter to establish connection
+          if path[0] != provided_species then 
+            path[0] = provided_species
+          end
+
+          taxonomy_list << path.reverse.join(";") << "\n"
         end
-        lineage  << current_taxon
-
-        path = lineage.map do |node|
-          node.scientific_name
-        end
-
-        # change species name to user-provided one
-        # this is neccessary for gene painter to establish connection
-        if path[0] != provided_species then 
-          path[0] = provided_species
-        end
-
-        taxonomy_list << path.reverse.join(";") << "\n"
       end
-    end
 
-    File.open(f_taxonomy_list, "w") { |file|
-      file.write(taxonomy_list)
-    }
+      File.open(f_taxonomy_list, "w") { |file|
+        file.write(taxonomy_list)
+      }
 
-    # write gene to species-mapping to file
-    fh = File.open(f_species_to_fasta, "w")
-    session[:genes_to_species_map].each do |gene, species|
-      fh.puts "#{gene}:\"#{species}\""
-    end
-    fh.close
+      # write gene to species-mapping to file
+      fh = File.open(f_species_to_fasta, "w")
+      session[:genes_to_species_map].each do |gene, species|
+        fh.puts "#{gene}:\"#{species}\""
+      end
+      fh.close
+
+    end 
 
     # apply data selection for analysis, in case of example: use all genes
-    selected_genes = params[:analyse] == nil ? [] : params[:analyse] 
     d_gene_structures = File.join(session[:basepath_data], 'selected_gene_structures')
     Helper.mkdir_or_die(d_gene_structures)
 
