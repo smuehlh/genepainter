@@ -133,7 +133,7 @@ module GenePainterHelper
     intronpos_table << "<table class='with_border'>"
 
     first_char_pattern_line = ">" # each line of exon-intron patterns should start with ">"
-    first_chars_intronpos_line = ">Intron number" # line containing intron numbers
+    first_chars_intronpos_line = ">Intron" # line containing intron numbers
     first_chars_merged_line = ">Merged" # line containing merged pattern
     is_first_stats_line = true
 
