@@ -1,10 +1,57 @@
 <%= provide(:title, 'Home') %>
-<%= content_tag(:h1, "Welcome to GenePainter") %>
-<p>
-  Placeholder
-</p>
+<%= 
+	content_tag(:h1, "Welcome to GenePainter") +
+		content_tag(:p, 
+			"The conservation of intron positions comprises information useful for de novo gene prediction as well as for analyzing the origin of introns. GenePainter is a standalone tool that maps gene structures onto protein multiple sequence alignments. Gene structures, as provided by WebScipio, are aligned with respect to the exact positions of the introns (down to nucleotide level) and intron phase." 
+		) +
+		content_tag(:p,
+			"This webserver is designed to provide an easily accessbile user-interface for GenePainter."
+		) +
 
-<%= content_tag(:h2, "Restrictions and Licence") %>
-<p>
-  Placeholder
-</p>
+	content_tag(:h2, "Publications") +
+		content_tag(:p, 
+			"Detailed descriptions of the intron mapping algorithm, the analysis strategies and the various output options can be found in the following publications"
+		) +
+		content_tag(:p, 
+			content_tag(:div, 
+				content_tag(:b, "S. Mühlhausen, M. Hellkamp & M. Kollmar (2014)")
+			) +
+			content_tag(:div, 
+				link_to(
+					"GenePainter 2.0 resolves the taxonomic distribution of intron positions.",
+					"http://bioinformatics.oxfordjournals.org/content/early/2014/11/29/bioinformatics.btu798.long",
+					:class => "external", 
+					:target => "_blank"
+				)
+			) +
+			content_tag(:div, 
+				content_tag(:i, "Bioinformatics") +
+				content_tag(:normal, ", pii: btu798 [Epub ahead of print]")
+			)
+		) +
+
+		content_tag(:p, 
+			content_tag(:div, 
+				content_tag(:b, "B. Hammesfahr, F. Odronitz, S. M&uuml;hlhausen, S. Waack &amp; M. Kollmar (2013)")
+			) +
+			content_tag(:div, 
+				link_to(
+					"GenePainter: a fast tool for aligning gene structures of eukaryotic protein families, visualizing the alignments and mapping gene structures onto protein structures.",
+					"http://www.biomedcentral.com/1471-2105/14/77",
+					:class => "external", 
+					:target => "_blank"
+				)
+			) +
+			content_tag(:div, 
+				content_tag(:i, "BMC Bioinformatics") +
+				content_tag(:b, " 14") +
+				content_tag(:normal, ", 77.")
+			)
+		) +
+
+	content_tag(:h2, "Restrictions and Licence") +
+		content_tag(:p, 
+			"Using GenePainter by non-academics requires permission. The source code of a command-line version of GenePainter can be downloaded and used under a GNU Creative Commons License."
+		)
+
+%>
