@@ -1,9 +1,9 @@
 <%= render :partial => "gene_painter/upload/manual_species_mapping"%>
 
 <div style="clear: both">
-	<div style="width: 75%; float: left">
+	<div>
 		<%= content_tag(:div,
-			content_tag(:label, content_tag(:b, "And/Or upload file")) +
+			content_tag(:label, content_tag(:b, "And/Or upload file ")) +
 			file_field_tag("species_mapping_uploader",
 				:name => "files[]",
 				:multiple => true,
