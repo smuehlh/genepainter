@@ -6,7 +6,7 @@ content_tag(:div,
 		:onclick => "$('#upload_pdb_help').hide('slow');"
 	) +		
 	content_tag(:normal,
-		"Info PDB file... Standard parameters for PDB output are applied, i.e. introns occuring in at least 80% of all genes will be mapped onto chain A. For full parameter options, please consider using the stand-alone version of GenePainter.".html_safe,
+		"In order to map intron positions and phases onto a protein structure, upload a PDB file from your local disk. GenePainter provides scripts for execution in PyMol.<p>Standard parameters for PDB output are applied, <i>i.e.</i> introns occuring in at least 80% of all genes will be mapped onto chain A. Basis for the mapping is an alignment between first sequence in the multiple sequence alignment and the PDB sequence. For full parameter options, please consider using the stand-alone version of GenePainter.</p>".html_safe,
 	),
 	:id => "upload_pdb_help",
 	:class => "help",

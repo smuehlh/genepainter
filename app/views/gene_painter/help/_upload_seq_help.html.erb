@@ -6,7 +6,7 @@ content_tag(:div,
 		:onclick => "$('#upload_seq_help').hide('slow');"
 	) +		
 	content_tag(:normal,
-		"_upload_seq_help.html.erb".html_safe,
+		"Upload a multiple protein sequence alignment from your local disk. The alignment must be FASTA-formatted. Protein sequences are matched with the gene structures on the basis of the FASTA header and file names, respectively. For this reason, FASTA headers must not contain any blanks or special characters.".html_safe,
 	),
 	:id => "upload_seq_help",
 	:class => "help",

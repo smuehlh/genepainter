@@ -6,7 +6,7 @@ content_tag(:div,
 		:onclick => "$('#upload_species_mapping_help').hide('slow');"
 	) +		
 	content_tag(:normal,
-		"_upload_species_mapping_help.html.erb".html_safe,
+		"<p>In order to plot intron gain and loss events onto the phylogenetic tree, GenePainter requires a mapping between gene names (FASTA headers) and species names.</p><p>Upload a file containing the mapping of gene names (FASTA headers) and species names from your local disk. Follow the  <a class='internal' href='help_input#mapping' target='_blank'>link</a> for more information on the required file format.</p>".html_safe,
 	),
 	:id => "upload_species_mapping_help",
 	:class => "help",
