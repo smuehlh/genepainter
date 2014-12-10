@@ -1,18 +1,18 @@
 <% 
 	# all files that can be downloaded in principle
 	files_with_desc = {
-		"std.txt" => { alt_name: "Standard", desc: "Exon-intron pattern"},
-		"intron-phase.txt" => { alt_name: "Intron phase", desc: "Exon-intron pattern"},
-		"spaces.txt" => { alt_name: "Spaces", desc: "Exon-intron pattern" },
-		"phylo.fas" => { alt_name: "Phylo", desc: "Exon-intron pattern"},
-		"alignment.fas" => { alt_name: "Alignment", desc: "Alignment with intron positions"},
-		"stats.txt" => { alt_name: "Statistics", desc: "Commonness of intron positions"},
-		"normal.svg" => { alt_name: "Standard SVG", desc: "Graphical representation of genes"},
-		"reduced.svg" => { alt_name: "Reduced SVG", desc: "Graphical representation of genes"},
-		"tree.svg" => { alt_name: "Phylogenetic tree SVG", desc: "Phylogenetic tree (graphical representation)"},
-		"tree.phb" => { alt_name: "Phylogenetic tree PHB", desc: "Phylogenetic tree (Newick tree format)"},
-		"color_exons.py" => { alt_name: "Consensus exons", desc: "Script for execution in PyMOL"},
-		"color_splicesites.py" => { alt_name: "Consensus splicesites", desc: "Script for execution in PyMOL"},
+		"std.txt" => { alt_name: "Standard", desc: "Exon-intron pattern", type: "text" },
+		"intron-phase.txt" => { alt_name: "Intron phase", desc: "Exon-intron pattern", type: "text"},
+		"spaces.txt" => { alt_name: "Spaces", desc: "Exon-intron pattern", type: "text" },
+		"phylo.fas" => { alt_name: "Phylo", desc: "Exon-intron pattern", type: "text"},
+		"alignment.fas" => { alt_name: "Alignment", desc: "Alignment with intron positions", type: "text"},
+		"stats.txt" => { alt_name: "Statistics", desc: "Commonness of intron positions", type: "text"},
+		"normal.svg" => { alt_name: "Standard SVG", desc: "Graphical representation of genes", type: "graphic"},
+		"reduced.svg" => { alt_name: "Reduced SVG", desc: "Graphical representation of genes", type: "graphic"},
+		"tree.svg" => { alt_name: "Phylogenetic tree SVG", desc: "Phylogenetic tree (graphical representation)", type: "tree"},
+		"tree.phb" => { alt_name: "Phylogenetic tree PHB", desc: "Phylogenetic tree (Newick tree format)", type: "tree"},
+		"color_exons.py" => { alt_name: "Consensus exons", desc: "Script for execution in PyMOL", type: "pdb"},
+		"color_splicesites.py" => { alt_name: "Consensus splicesites", desc: "Script for execution in PyMOL", type: "pdb"},
 	} 
 	basepath = "tmp/#{controller.id}-"
 
@@ -20,45 +20,115 @@
 	files_with_desc.delete_if do |f_name, desc|
 		! Helper.does_file_exist( controller.build_output_path(f_name) )
 	end
+
+	is_text_files = files_with_desc.has_key?("std.txt")
+	is_graphic_file = files_with_desc.has_key?("normal.svg")
+	is_tree_files = files_with_desc.has_key?("tree.phb")
+	is_pdb_files = files_with_desc.has_key?("color_exons.py")
+	is_new_genestructs = controller.new_gene_structures.any?
+
+	is_no_files = ! (
+		is_text_files || is_graphic_file || is_tree_files || is_pdb_files || is_new_genestructs
+	)
 %>
 
-<% if controller.new_gene_structures.any? then %>
-	<table id="download">
-		<colgroup>
-			<col class="first_col">
-			<col>
-		</colgroup>
-		<tr>
-			<th>Archive</th>
-			<th>Content</th>
-		</tr>
-		<tr>
-			<td><%= link_to( "Gene structures", get_download_genestructs_path, :class => "external", :target => "_blank" ) %></td>
-			<td>Newly generated gene structures</td>
-		</tr>
-	</table>
-	<p></p>
+<% if is_new_genestructs then %>
+	<h3>Newly generated gene structures</h3>
+		<table id="download">
+			<colgroup>
+				<col class="first_col">
+				<col>
+			</colgroup>
+			<tr>
+				<td><%= link_to( "Gene structures", get_download_genestructs_path, :class => "external", :target => "_blank" ) %></td>
+				<td>Newly generated gene structures</td>
+			</tr>
+		</table>
+		<p></p>
 <% end %>
 
-<table id="download">
-	<colgroup>
-		<col class="first_col">
-		<col>
-	</colgroup>
-	<tr>
-		<th>File</th>
-		<th>Content</th>
-	</tr>
-	<% files_with_desc.each do |f_name, desc| %>
-		<tr>
-			<td>
-				<%= link_to( desc[:alt_name], get_download_resultfiles_path( file: f_name ), :class => "external", :target => "_blank" ) %>
-			</td>
-			<td><%= desc[:desc] %></td>
-		</tr>
-	<% end %>
-</table>
-<%= content_tag(:p, 
-	"Click on files to download.", :class => "filename"
-	)
+<% if is_text_files then %>
+	<h3>Text-based output files</h3>
+		<table id="download">
+			<colgroup>
+				<col class="first_col">
+				<col>
+			</colgroup>
+			<% files_with_desc.each do |f_name, desc| %>
+				<% next if desc[:type] != "text" %>
+				<tr>
+					<td>
+						<%= link_to( desc[:alt_name], get_download_resultfiles_path( file: f_name ), :class => "external", :target => "_blank" ) %>
+					</td>
+					<td><%= desc[:desc] %></td>
+				</tr>
+			<% end %>
+		</table>
+<% end %>
+
+<% if is_text_files then %>	
+	<h3>Graphical output files</h3>
+		<table id="download">
+			<colgroup>
+				<col class="first_col">
+				<col>
+			</colgroup>
+			<% files_with_desc.each do |f_name, desc| %>
+				<% next if desc[:type] != "graphic" %>
+				<tr>
+					<td>
+						<%= link_to( desc[:alt_name], get_download_resultfiles_path( file: f_name ), :class => "external", :target => "_blank" ) %>
+					</td>
+					<td><%= desc[:desc] %></td>
+				</tr>
+			<% end %>
+		</table>
+<% end %>
+
+<% if is_text_files then %>	
+	<h3>Gene structures mapped to protein structures</h3>
+		<table id="download">
+			<colgroup>
+				<col class="first_col">
+				<col>
+			</colgroup>
+			<% files_with_desc.each do |f_name, desc| %>
+				<% next if desc[:type] != "pdb" %>
+				<tr>
+					<td>
+						<%= link_to( desc[:alt_name], get_download_resultfiles_path( file: f_name ), :class => "external", :target => "_blank" ) %>
+					</td>
+					<td><%= desc[:desc] %></td>
+				</tr>
+			<% end %>
+		</table>
+<% end %>
+
+<% if is_text_files then %>	
+	<h3>History of intron gain and loss events</h3>
+		<table id="download">
+			<colgroup>
+				<col class="first_col">
+				<col>
+			</colgroup>
+			<% files_with_desc.each do |f_name, desc| %>
+				<% next if desc[:type] != "tree" %>
+				<tr>
+					<td>
+						<%= link_to( desc[:alt_name], get_download_resultfiles_path( file: f_name ), :class => "external", :target => "_blank" ) %>
+					</td>
+					<td><%= desc[:desc] %></td>
+				</tr>
+			<% end %>
+		</table>
+<% end %>
+
+<%= 
+	if is_no_files then
+		content_tag(:p, "No files to download.")
+	else
+		content_tag(:p, 
+			"Click on files to download.", :class => "filename"
+		)
+	end	
 %>
