@@ -1,10 +1,14 @@
-<% alignment_path = "#{Rails.root}/public/tmp/#{controller.id}-alignment.fas" %>
-<% if File.exist?(alignment_path) %>
-    <% iframe_src_id = copy_alignment_for_lucullus(alignment_path) %>
-    <%= render_lucullus_iframe(iframe_src_id) %>
+<%=
+	alignment_path = "#{Rails.root}/public/tmp/#{controller.id}-alignment.fas" 
 
-<% else %>    
-	<%= content_tag(:i, 
-		"Cannot display alignment"
-	)%>
-<% end %>
+	if Helper.does_file_exist( alignment_path ) then 
+		iframe_src_id = copy_alignment_for_lucullus(alignment_path)
+
+		render_lucullus_iframe(iframe_src_id) +
+		content_tag(:h4, "Enhanced multiple sequence alignment") +
+		content_tag(:p, "Intron phases are included as additional lines in the uploaded multiple sequence alignment.")
+
+	else
+		content_tag(:i, "Cannot display alignment.")
+	end
+%>
