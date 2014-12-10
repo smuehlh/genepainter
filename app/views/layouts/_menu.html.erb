@@ -26,6 +26,9 @@
         <% if controller.action_name == "help" then selected = " class='selected'" else selected = "" end%>
         <li<%=raw(selected)%>><%= link_to "General Information", help_path %></li>
 
+        <% if controller.action_name == "help_webinterface" then selected = " class='selected'" else selected = "" end%>
+        <li<%=raw(selected)%>><%= link_to "Web Interface", help_webinterface_path %></li>
+
         <% if controller.action_name == "help_commandline" then selected = " class='selected'" else selected = "" end%>
         <li<%=raw(selected)%>><%= link_to "Command Line Tool", help_commandline_path %></li>
 

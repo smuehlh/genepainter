@@ -9,6 +9,8 @@ class StaticPagesController < ApplicationController
   end
   def help_commandline
   end
+  def help_webinterface
+  end
   def help_input
   end
   def help_result
