@@ -390,6 +390,10 @@ tr:hover td {
   color: #339;
   background: #eff2ff;
 }
+.unstyled tr:hover td {
+  color: #000;
+  background: none;
+}
 #download .first_col {
   width: 180px;
 }
