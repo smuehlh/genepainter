@@ -25,6 +25,5 @@ module Genepainter
 
     # Enable the asset pipeline
     config.assets.enabled = true
-    config.assets.prefix = "/genepainter/assets"
   end
 end
