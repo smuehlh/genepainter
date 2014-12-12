@@ -32,7 +32,7 @@ if ENV && ENV["PWD"] && ENV["PWD"].include?("fab8") then
   match 'download_resultfiles', to: 'gene_painter#download_resultfiles', as: 'get/download_resultfiles', :via => [:get]
 
 else
-  scope '/bagheera' do
+  scope '/genepainter' do
     root to: 'static_pages#home'
 
     match '/help', to: 'static_pages#help', as: 'help', :via => [:get]
