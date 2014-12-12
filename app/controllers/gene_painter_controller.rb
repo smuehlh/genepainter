@@ -361,6 +361,8 @@ class GenePainterController < ApplicationController
     f_taxonomy_list = File.join(session[:basepath_data], 'taxonomy_list.csv')
 
     Helper.mkdir_or_die(d_output)
+    # dir for displaying genestructure-images
+    Helper.mkdir_or_die( "#{Rails.root}/public/genepainter/tmp" )
 
 
     @is_example = params[:is_example] == "true" # params is string "true" or string "false"
