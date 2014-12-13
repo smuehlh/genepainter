@@ -56,6 +56,8 @@ $(function () {
 function set_up_fileupload(btnSelector) {
   $(btnSelector).fileupload({
       autoUpload: false,
+      singleFileUploads: false,
+      multipart: true,
       add: function(e, data) {
           if (data.files[0].size <= 52428800) {
             data.submit();

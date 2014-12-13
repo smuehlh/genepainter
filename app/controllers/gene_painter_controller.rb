@@ -139,29 +139,30 @@ class GenePainterController < ApplicationController
         end
       else
 
-        file = params[:files][0]
+        params[:files].each do |file|
+          # validate file
 
-        # validate file
+          FormatChecker.validate_genestructure( file.path, file.original_filename )
 
-        FormatChecker.validate_genestructure( file.path, file.original_filename )
+          # check file size
+          Helper.filesize_below_limit(file.tempfile, MAX_FILESIZE)
+          Helper.move_or_copy_file(file.path(), session[:p_gene_structures], 'move')
 
-        # check file size
-        Helper.filesize_below_limit(file.tempfile, MAX_FILESIZE)
-        Helper.move_or_copy_file(file.path(), session[:p_gene_structures], 'move')
+          # rename to original name
+          path_src = File.join( session[:p_gene_structures], File.basename(file.path()) )
+          path_dest = File.join(session[:p_gene_structures], file.original_filename)
+          Helper.rename(path_src, path_dest)
 
-        # rename to original name
-        path_src = File.join( session[:p_gene_structures], File.basename(file.path()) )
-        path_dest = File.join(session[:p_gene_structures], file.original_filename)
-        Helper.rename(path_src, path_dest)
-
-        # call fromdos
-        is_sucess = system('fromdos', File.join(session[:p_gene_structures], file.original_filename))
-        throw :error, 'Cannot upload files. Please contact us.' if ! is_sucess
+          # call fromdos
+          is_sucess = system('fromdos', File.join(session[:p_gene_structures], file.original_filename))
+          throw :error, 'Cannot upload files. Please contact us.' if ! is_sucess
 
 
-        # save gene structure and status 
-        gene = File.basename(path_dest, ".*")    
-        @@gene_structure_to_status_map[gene] = GenestructureHelper.get_status_of_gene_structure(path_dest) 
+          # save gene structure and status 
+          gene = File.basename(path_dest, ".*")    
+          @@gene_structure_to_status_map[gene] = GenestructureHelper.get_status_of_gene_structure(path_dest) 
+        end
+
       end
 
       "" # default for @fatal_error

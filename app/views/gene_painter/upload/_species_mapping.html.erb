@@ -6,7 +6,7 @@
 			content_tag(:label, content_tag(:b, "Or upload file ")) +
 			file_field_tag("species_mapping_uploader",
 				:name => "files[]",
-				:multiple => true,
+				:multiple => false,
 				:accept => "text/plain",
 				:data => {url: post_upload_species_mapping_path},
 				:disabled => true,
