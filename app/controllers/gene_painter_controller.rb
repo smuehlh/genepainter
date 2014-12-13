@@ -382,7 +382,7 @@ class GenePainterController < ApplicationController
       Helper.move_or_copy_file(f_src, f_species_to_fasta, "copy")
 
     else
-puts "fetch taxonomy"      
+     
       # no example data, build tax. list
       taxonomy_list = ""
 
