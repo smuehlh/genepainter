@@ -221,25 +221,6 @@ module GenePainterHelper
     return table.join.html_safe
   end
 
-
-  # Converts a svg file to png.
-  # @return {string} new_name
-  def convert_svg_to_png(filepath)
-    basename = File.basename(filepath, '.svg')
-    new_name = "#{basename}.png"
-
-    new_path = File.join("#{Rails.root}/public/genepainter/tmp", new_name)
-
-    retVal = system "convert #{filepath} #{new_path}"
-
-    if retVal
-      return new_name
-    else
-      logger.debug('"convert" commands seem not to be in any packages. Try imagemagick.')
-      return nil
-    end
-  end
-
   def copy_alignment_for_lucullus(file_src)
     file_id = "genepainter" + rand(1000000000).to_s
     file_dest = File.join(Dir::tmpdir, "cymobase_alignment_#{file_id}.fasta")
@@ -252,24 +233,10 @@ module GenePainterHelper
         :width => "700px", :class => "res_height", :id => "lucullus_alignment_frame")
   end
 
-  def render_svg(filename)
+  def render_svg(filename, classname)
     svg_path = File.join("#{Rails.root}/public/tmp", filename)
-    return File.open(svg_path, 'rb').read.delete!("\n")
-  end
-
-  def render_img(filename, class_name)
-    return image_tag("/genepainter/tmp/#{controller.id}-#{filename}", :class => class_name)
-  end
-
-  def convert_svg_to_pngs
-    convert_svg_to_png("#{Rails.root}/public/tmp/#{controller.id}-genenames-normal.svg")
-    convert_svg_to_png("#{Rails.root}/public/tmp/#{controller.id}-genestructures-normal.svg")
-
-    convert_svg_to_png("#{Rails.root}/public/tmp/#{controller.id}-genenames-reduced.svg")
-    convert_svg_to_png("#{Rails.root}/public/tmp/#{controller.id}-genestructures-reduced.svg")
-
-    convert_svg_to_png("#{Rails.root}/public/tmp/#{controller.id}-legend-normal.svg")
-    convert_svg_to_png("#{Rails.root}/public/tmp/#{controller.id}-legend-reduced.svg")
+    svg = File.open(svg_path, 'rb').read.delete!("\n")
+    return content_tag(:div, svg.html_safe, :class => classname)
   end
 
   def populate_select_genes_modal

@@ -369,6 +369,9 @@ div.res_height {
 iframe.res_height {
   height: 300px;
 }
+div.hide-horizontal-overflow {
+  overflow-x: hidden;
+}
 
 // Style for data center and download table
 table {

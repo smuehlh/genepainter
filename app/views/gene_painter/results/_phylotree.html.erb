@@ -11,7 +11,7 @@
 
       // Display phylotree
 
-      $('div#svg_placeholder').html('<%= render_svg("#{controller.id}-tree.svg").html_safe %>');
+      $('div#svg_placeholder').html('<%= render_svg("#{controller.id}-tree.svg", "svg").html_safe %>');
 
       var intron_numbers = $('<div/>').html('<%= intron_numbers %>').text();
       var obj = JSON.parse(intron_numbers.replace(/=>/g, ':'));
@@ -51,13 +51,13 @@
           tmp.push(_.last(element.split("-")));
         });
 
-        $('rect').removeClassSVG('fill-grey');
+        $('#genestructures-merged rect').removeClassSVG('fill-grey');
 
         if (tmp.length) {
 
-          $('.background').addClassSVG('fill-grey');
+          $('#genestructures-merged .background').addClassSVG('fill-grey');
 
-          _.each($("rect"), function(rect) {
+          _.each($("#genestructures-merged rect"), function(rect) {
 
             if (!_.contains(tmp, rect.getAttribute('class').trim().split('_')[1])) {
               $(rect).addClassSVG('fill-grey');

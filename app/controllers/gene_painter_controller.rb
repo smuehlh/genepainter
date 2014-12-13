@@ -356,13 +356,11 @@ class GenePainterController < ApplicationController
     # use d_gene_structures instead, which contains _selected_ genestructures only
     f_alignment = session[:p_alignment]
     d_output = "#{Rails.root}/public/tmp"
-    d_output_png = "#{Rails.root}/public/genepainter/tmp"
     f_species_to_fasta = File.join(session[:basepath_data], 'fastaheaders2species.txt')
     f_pdb = session[:p_pdb]
     f_taxonomy_list = File.join(session[:basepath_data], 'taxonomy_list.csv')
 
     Helper.mkdir_or_die(d_output)
-    Helper.mkdir_or_die(d_output_png) # folder only needed to display images !
 
 
     @is_example = params[:is_example] == "true" # params is string "true" or string "false"
@@ -506,10 +504,7 @@ class GenePainterController < ApplicationController
       Helper.raise_runtime_error "Cannot execute GenePainter."
     end
 
-    genes_to_show = Dir["#{d_gene_structures}/*.yaml"].take(20)
-    genes_to_show.map! do |gene|
-      File.basename(gene, '.yaml')
-    end
+    genes_to_show = session[:sequence_names]
 
     SvgParser.build_svg_by_genestructs(build_output_path("normal.svg"),
         build_output_path("genenames-normal.svg"),
@@ -546,32 +541,32 @@ class GenePainterController < ApplicationController
     end
   end
 
-  def build_svg
-    @error = ""
-    genes_to_show = params[:data] == nil ? [] : params[:data]
+  # def build_svg
+  #   @error = ""
+  #   genes_to_show = params[:data] == nil ? [] : params[:data]
 
-    # Create images for selected genes only
-    SvgParser.build_svg_by_genestructs(build_output_path("normal.svg"),
-        build_output_path("genenames-normal.svg"),
-        build_output_path("genestructures-normal.svg"),
-        build_output_path("legend-normal.svg"),
-        genes_to_show)
+  #   # Create images for selected genes only
+  #   SvgParser.build_svg_by_genestructs(build_output_path("normal.svg"),
+  #       build_output_path("genenames-normal.svg"),
+  #       build_output_path("genestructures-normal.svg"),
+  #       build_output_path("legend-normal.svg"),
+  #       genes_to_show)
 
-    SvgParser.build_svg_by_genestructs(build_output_path("reduced.svg"),
-        build_output_path("genenames-reduced.svg"),
-        build_output_path("genestructures-reduced.svg"),
-        build_output_path("legend-reduced.svg"),
-        genes_to_show)
+  #   SvgParser.build_svg_by_genestructs(build_output_path("reduced.svg"),
+  #       build_output_path("genenames-reduced.svg"),
+  #       build_output_path("genestructures-reduced.svg"),
+  #       build_output_path("legend-reduced.svg"),
+  #       genes_to_show)
 
-  rescue RuntimeError => ex
-    @error = ex.message
-  rescue NoMethodError, Errno::ENOENT, Errno::EACCES, ArgumentError, NameError, TypeError => ex
-    @error = "Cannot show selected genes."
-  ensure
-    respond_to do |format|
-      format.js
-    end
-  end
+  # rescue RuntimeError => ex
+  #   @error = ex.message
+  # rescue NoMethodError, Errno::ENOENT, Errno::EACCES, ArgumentError, NameError, TypeError => ex
+  #   @error = "Cannot show selected genes."
+  # ensure
+  #   respond_to do |format|
+  #     format.js
+  #   end
+  # end
 
   def download_new_genestructs
     @error = ""
