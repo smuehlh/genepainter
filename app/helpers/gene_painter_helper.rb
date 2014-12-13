@@ -228,7 +228,7 @@ module GenePainterHelper
     basename = File.basename(filepath, '.svg')
     new_name = "#{basename}.png"
 
-    new_path = File.join("#{Rails.root}/public/genepainter/tmp", new_name)
+    new_path = File.join("#{Rails.root}/public/tmp", new_name)
 
     retVal = system "convert #{filepath} #{new_path}"
 
@@ -258,7 +258,7 @@ module GenePainterHelper
   end
 
   def render_img(filename, class_name)
-    return image_tag("/genepainter/tmp/#{controller.id}-#{filename}", :class => class_name)
+    return image_tag("/tmp/#{controller.id}-#{filename}", :class => class_name)
   end
 
   def convert_svg_to_pngs
