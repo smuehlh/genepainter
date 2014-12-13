@@ -27,7 +27,7 @@
 
 				$.ajax({
 					type: 'POST',
-					url: '/upload_gene_structures',
+					url: build_ajax_path('/upload_gene_structures'),
 					data: {'is_example': true},
 					success: function() {
 						$("u#sample_gene_structures").html("Sample data loaded");

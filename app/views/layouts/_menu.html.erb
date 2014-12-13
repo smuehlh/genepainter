@@ -49,7 +49,7 @@
     $(this).click(function() {
       $.ajax({
         type: 'POST',
-        url: '/clean_up'
+        url: build_ajax_path('/clean_up')
       });
     });
   });

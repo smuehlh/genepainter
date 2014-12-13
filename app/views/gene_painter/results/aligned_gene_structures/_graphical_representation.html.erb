@@ -82,7 +82,7 @@
                 if (selected_genes.length) {
                   $.ajax({
                     type: 'POST',
-                    url: '/build_svg',
+                    url: build_ajax_path('/build_svg'),
                     data: {'data': selected_genes},
                     dataType: 'script'
                   });

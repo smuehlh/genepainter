@@ -19,7 +19,7 @@
 
 			$.ajax({
 				type: 'POST',
-				url: '/call_genepainter',
+				url: build_ajax_path('/call_genepainter'),
 				data: {'is_example': true, 'species': all_species},
 				success: function() {
 					$("u#load_example").html("Example loaded");

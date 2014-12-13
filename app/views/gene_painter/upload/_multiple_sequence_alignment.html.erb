@@ -67,7 +67,7 @@
 
 				$.ajax({
 					type: 'POST',
-					url: '/upload_sequence',
+					url: build_ajax_path('/upload_sequence'),
 					data: {'is_example': true},
 					success: function() {
 						$("u#sample_sequence").html("Sample data loaded");

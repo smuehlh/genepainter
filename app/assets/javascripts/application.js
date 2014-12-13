@@ -18,11 +18,19 @@
 //= require turbolinks
 //= require view_helpers
 //= require_tree .
+var ajax_prefix = '';
+$( document ).ready(function() {
+    ajax_prefix = $("body").attr("data-ajaxprefix");
+});
+
+function build_ajax_path(url) {
+  return (ajax_prefix + url).replace('//','/');
+};
 
 $( window ).bind('beforeunload', function() {
   $.ajax({
     type: 'POST',
-    url: '/clean_up'
+    url: build_ajax_path('/clean_up'),
   });
 });
 
@@ -119,7 +127,7 @@ function create_alignment_file_ajax() {
 
       $.ajax({
         type: 'POST',
-        url: '/create_alignment_file',
+        url: build_ajax_path('/create_alignment_file'),
         data: {'sequence': that.value},
         dataType: 'script'
       });

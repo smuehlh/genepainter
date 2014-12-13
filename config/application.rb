@@ -22,5 +22,8 @@ module Genepainter
 
     # Autoload lib/ folder including all subdirectories
     config.autoload_paths += Dir["#{config.root}/lib/**/"]
+
+    # Enable the asset pipeline
+    config.assets.enabled = true
   end
 end

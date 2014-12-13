@@ -356,11 +356,13 @@ class GenePainterController < ApplicationController
     # use d_gene_structures instead, which contains _selected_ genestructures only
     f_alignment = session[:p_alignment]
     d_output = "#{Rails.root}/public/tmp"
+    d_output_png = "#{Rails.root}/public/genepainter/tmp"
     f_species_to_fasta = File.join(session[:basepath_data], 'fastaheaders2species.txt')
     f_pdb = session[:p_pdb]
     f_taxonomy_list = File.join(session[:basepath_data], 'taxonomy_list.csv')
 
     Helper.mkdir_or_die(d_output)
+    Helper.mkdir_or_die(d_output_png) # folder only needed to display images !
 
 
     @is_example = params[:is_example] == "true" # params is string "true" or string "false"

@@ -47,7 +47,7 @@ gem "jquery-fileupload-rails"
 gem 'underscore-rails'
 
 gem 'jquery-ui-rails'
-
+gem 'thin'
 gem "bson_ext"
 gem 'mongoid', '4.0.0.alpha2'
 gem 'mongoid-tree'

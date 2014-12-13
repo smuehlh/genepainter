@@ -28,7 +28,7 @@
 
 				$.ajax({
 					type: 'POST',
-					url: '/upload_species_mapping',
+					url: build_ajax_path('/upload_species_mapping'),
 					data: {'is_example': true},
 					success: function() {
 						$("u#sample_species_mapping").html("Sample data loaded");

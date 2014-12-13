@@ -27,7 +27,7 @@
 
 				$.ajax({
 					type: 'POST',
-					url: '/upload_pdb',
+					url: build_ajax_path('/upload_pdb'),
 					data: {'is_example': true},
 					success: function() {
 						$("u#sample_pdb").html("Sample data loaded");

@@ -46,7 +46,7 @@
 			source: function(request, response) {
 				$.ajax({
 					type: 'GET',
-					url: "/autocomplete",
+					url: build_ajax_path("/autocomplete"),
 					data: {"q": request.term},
 					success: function(result) {
 					response(result);
