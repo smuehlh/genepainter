@@ -64,15 +64,16 @@ class GenePainterController < ApplicationController
 
   # generate species list for species to fasta mapping
   def autocomplete
-    list = Autocomplete.search( params[:q] )
-    # convert to array of hashes to satisfy jquery ui autocomplete plugin
-    list = list.map do |species|
-      { value: species.scientific_name }
-    end
 
-  rescue RuntimeError, NoMethodError, TypeError, NameError, Errno::ENOENT, ArgumentError, Errno::EACCES => exp
-  ensure
-    render json: list
+      list = Autocomplete.search( params[:q] )
+      # convert to array of hashes to satisfy jquery ui autocomplete plugin
+      list = list.map do |species|
+        { value: species.scientific_name }
+      end
+    rescue Moped::Errors::ConnectionFailure
+      list = []
+    ensure 
+      render json: list
   end
 
   def upload_sequence
@@ -352,6 +353,7 @@ class GenePainterController < ApplicationController
 
     @fatal_error = "" # fatal, not output generated
     @warning = "" # non-fatal error, maybe still output generated
+    is_skipped_taxonomy = false
 
     # do NOT use session[:p_gene_structures], as this contains _all_ genestructures
     # use d_gene_structures instead, which contains _selected_ genestructures only
@@ -383,47 +385,51 @@ class GenePainterController < ApplicationController
       Helper.move_or_copy_file(f_src, f_species_to_fasta, "copy")
 
     else
-     
-      # no example data, build tax. list
-      taxonomy_list = ""
+      begin   
+        # no example data, build tax. list
+        taxonomy_list = ""
 
-      all_species.each do |provided_species|
+        all_species.each do |provided_species|
 
-        if found_species = Node.any_of( { scientific_name: provided_species} , { common_names: provided_species } ).first then 
+          if found_species = Node.any_of( { scientific_name: provided_species} , { common_names: provided_species } ).first then 
 
-          lineage = []
-          current_taxon = found_species
-          while not current_taxon.root?
-            lineage << current_taxon
-            current_taxon = current_taxon.parent
+            lineage = []
+            current_taxon = found_species
+            while not current_taxon.root?
+              lineage << current_taxon
+              current_taxon = current_taxon.parent
+            end
+            lineage  << current_taxon
+
+            path = lineage.map do |node|
+              node.scientific_name
+            end
+
+            # change species name to user-provided one
+            # this is neccessary for gene painter to establish connection
+            if path[0] != provided_species then 
+              path[0] = provided_species
+            end
+
+            taxonomy_list << path.reverse.join(";") << "\n"
           end
-          lineage  << current_taxon
-
-          path = lineage.map do |node|
-            node.scientific_name
-          end
-
-          # change species name to user-provided one
-          # this is neccessary for gene painter to establish connection
-          if path[0] != provided_species then 
-            path[0] = provided_species
-          end
-
-          taxonomy_list << path.reverse.join(";") << "\n"
         end
+
+        File.open(f_taxonomy_list, "w") { |file|
+          file.write(taxonomy_list)
+        }
+
+        # write gene to species-mapping to file
+        fh = File.open(f_species_to_fasta, "w")
+        session[:genes_to_species_map].each do |gene, species|
+          fh.puts "#{gene}:\"#{species}\""
+        end
+        fh.close
+      rescue Moped::Errors::ConnectionFailure
+        # mongo db error, call GenePainter without taxonomy
+        is_skipped_taxonomy = true
+        @warning = "Could not fetch taxonomy. Called GenePainter without taxonomy."
       end
-
-      File.open(f_taxonomy_list, "w") { |file|
-        file.write(taxonomy_list)
-      }
-
-      # write gene to species-mapping to file
-      fh = File.open(f_species_to_fasta, "w")
-      session[:genes_to_species_map].each do |gene, species|
-        fh.puts "#{gene}:\"#{species}\""
-      end
-      fh.close
-
     end 
 
     # apply data selection for analysis, in case of example: use all genes
@@ -481,7 +487,7 @@ class GenePainterController < ApplicationController
     # the default options for gene painter call
     all_options = "#{options_io} #{options_text_output} #{options_graphical_output}"
 
-    if session[:genes_to_species_map].any? then 
+    if ! is_skipped_taxonomy && session[:genes_to_species_map].any? then 
       # add options for tax. output
       all_options += " #{options_taxonomic_output}"
     end
@@ -541,33 +547,6 @@ class GenePainterController < ApplicationController
       format.js
     end
   end
-
-  # def build_svg
-  #   @error = ""
-  #   genes_to_show = params[:data] == nil ? [] : params[:data]
-
-  #   # Create images for selected genes only
-  #   SvgParser.build_svg_by_genestructs(build_output_path("normal.svg"),
-  #       build_output_path("genenames-normal.svg"),
-  #       build_output_path("genestructures-normal.svg"),
-  #       build_output_path("legend-normal.svg"),
-  #       genes_to_show)
-
-  #   SvgParser.build_svg_by_genestructs(build_output_path("reduced.svg"),
-  #       build_output_path("genenames-reduced.svg"),
-  #       build_output_path("genestructures-reduced.svg"),
-  #       build_output_path("legend-reduced.svg"),
-  #       genes_to_show)
-
-  # rescue RuntimeError => ex
-  #   @error = ex.message
-  # rescue NoMethodError, Errno::ENOENT, Errno::EACCES, ArgumentError, NameError, TypeError => ex
-  #   @error = "Cannot show selected genes."
-  # ensure
-  #   respond_to do |format|
-  #     format.js
-  #   end
-  # end
 
   def download_new_genestructs
     @error = ""
