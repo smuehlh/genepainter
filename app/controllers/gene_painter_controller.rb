@@ -87,7 +87,7 @@ class GenePainterController < ApplicationController
 
         Helper.move_or_copy_file(f_src, session[:p_alignment], 'copy')
 
-        @seq_names = SequenceHelper.read_in_alignment(session[:p_alignment])
+        @seq_names, dummy = SequenceHelper.read_in_alignment(session[:p_alignment])
         session[:sequence_names] = @seq_names
 
       else
@@ -104,7 +104,7 @@ class GenePainterController < ApplicationController
         is_sucess = system("fromdos", session[:p_alignment])
 
         # read in data
-        @seq_names = SequenceHelper.read_in_alignment(session[:p_alignment])
+        @seq_names, dummy = SequenceHelper.read_in_alignment(session[:p_alignment])
         session[:sequence_names] = @seq_names
 
         throw :error, 'Cannot upload file. Please contact us.' if ! is_sucess
@@ -332,7 +332,7 @@ class GenePainterController < ApplicationController
     end
     f.close
 
-    @seq_names = SequenceHelper.read_in_alignment(session[:p_alignment])
+    @seq_names, dummy = SequenceHelper.read_in_alignment(session[:p_alignment])
     session[:sequence_names] = @seq_names
 
   rescue RuntimeError => ex

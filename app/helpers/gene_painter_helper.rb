@@ -240,9 +240,36 @@ module GenePainterHelper
   end
 
   def copy_alignment_for_lucullus(file_src)
-    file_id = "genepainter" + rand(1000000000).to_s
+    file_id = "genepainter#{controller.id}"
     file_dest = File.join(Dir::tmpdir, "cymobase_alignment_#{file_id}.fasta")
-    FileUtils.cp(file_src, file_dest)
+
+    headers, seqs = SequenceHelper.read_in_alignment(file_src)
+    headers.map!{ |e| ">" << e } # add ">" again to make it a valid header
+
+    # delete additonal patterns
+    ind = headers.index{|ele|ele =~/>Consensus/}
+    if ind then 
+      headers.delete_at(ind)
+      seqs.delete_at(ind)
+    end
+    ind = headers.index{|ele|ele =~/>Merged/}
+    if ind then 
+      headers.delete_at(ind)
+      seqs.delete_at(ind)
+    end
+
+    fh_dest = File.new(file_dest, 'w')
+    fh_dest.puts( headers.zip(seqs).flatten.join("\n") )
+    if headers.size > 22 then 
+      # QUICK-FIX to Lucullus-Bug
+      # add a faked last sequence, to make sure all real sequences are visible
+      # only if there were too many sequences in the first place (22 ist just a rough estimate)
+      fh_dest.puts( ">." )
+      fh_dest.puts( "." * seqs[0].size )
+    end
+
+    fh_dest.close
+
     return file_id
   end
   def render_lucullus_iframe(fileid)

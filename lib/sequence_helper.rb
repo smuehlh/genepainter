@@ -31,7 +31,7 @@ module SequenceHelper
 		elsif names.size == 0 
 			raise "Error while parsing multiple sequence alignment. Must contain at least one sequence."
 		end
-		return names
+		return names, seqs
 	end
 
 	# this method parses a file with mapping between species and genes
