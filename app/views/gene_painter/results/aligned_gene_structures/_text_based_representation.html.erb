@@ -27,7 +27,6 @@
     </div>
   </div>
 
-
   <%= javascript_tag defer: 'defer' do -%>
 
     // simultaneously scroll up/down, left/right
@@ -42,6 +41,20 @@
 
    <% end -%>
 </div>
+
+<h4>Legend</h4>
+<table id='colorbar' class="additional_pattern">
+  <tr>
+    <td>0</td>
+    <td class="0pct">&nbsp;</td><td class="5pct">&nbsp;</td><td class="10pct">&nbsp;</td><td class="15pct">&nbsp;</td>
+    <td class="20pct">&nbsp;</td><td class="25pct">&nbsp;</td><td class="30pct">&nbsp;</td><td class="35pct">&nbsp;</td>
+    <td class="40pct">&nbsp;</td><td class="45pct">&nbsp;</td><td class="50pct">&nbsp;</td><td class="55pct">&nbsp;</td>
+    <td class="60pct">&nbsp;</td><td class="65pct">&nbsp;</td><td class="70pct">&nbsp;</td><td class="75pct">&nbsp;</td>
+    <td class="80pct">&nbsp;</td><td class="85pct">&nbsp;</td><td class="90pct">&nbsp;</td><td class="95pct">&nbsp;</td>
+    <td class="100pct">&nbsp;</td>
+    <td>100&#37; intron conservation</td>
+  </tr>
+</table>
 
 <h4>View Options</h4>
 <table>
@@ -58,7 +71,7 @@
         content_tag(:div,
           check_box_tag('highlight_common') +
           content_tag(:span, 'Highlight introns common to at least ', :style => 'padding-left: 5px;') +
-          '<input id="spinner" name="value" style="width: 25px;">'.html_safe + ' % of all genes.'
+          '<input id="spinner" name="value" style="width: 25px;">'.html_safe + ' % of all genes.'.html_safe
           )
       %>
 
@@ -107,11 +120,11 @@
   $intron_phase_table.toggle();
 
   // number of rows
-  var n_rows = $non_intron_phase_table[0].rows.length;
+  var n_rows_non_intron_phase = $non_intron_phase_table[0].rows.length;
 
   // number of columns
   var allCells = $non_intron_phase_table.find('td');
-  var n_cols = allCells.length / n_rows;
+  var n_cols = allCells.length / n_rows_non_intron_phase;
 
   // traverse column by column
   function traverse(cells) {
@@ -120,7 +133,7 @@
     for (var x = 0; x < n_cols; x++) {
       var n_introns = 0;
 
-      for (var y = 0; y < n_rows; y++) {
+      for (var y = 0; y < n_rows_non_intron_phase; y++) {
         if (cells[n_cols*y + x].innerHTML != "-") {
           n_introns += 1;
         }
@@ -129,14 +142,14 @@
       // class name based on number of introns in the column
       var class_name = "col-" + n_introns;
 
-      for (var y = 0; y < n_rows; y++) {
+      for (var y = 0; y < n_rows_non_intron_phase; y++) {
         $(cells[n_cols*y + x]).addClass(class_name);
       }
 
       // set class names to interact with phylo tree
       if (n_introns > 0) {
         var class_name = "intron-col-" + intron_col_order;
-        for (var y = 0; y < n_rows; y++) {
+        for (var y = 0; y < n_rows_non_intron_phase; y++) {
           $(cells[n_cols*y + x]).addClass(class_name);
         }
 
@@ -154,13 +167,13 @@
   }
   // color introns by occurence
   function spinnerEventHandler(percent) {
-    var max, min_occurence;
+    var min_occurence;
 
-    max = $non_intron_phase_table[0].rows.length;
-    min_occurence = parseInt(percent * max / 100);
+    percent = parseInt(percent) / 100;
+    min_occurence = Math.ceil(percent * n_rows_non_intron_phase );
 
     if (min_occurence > 0) {
-      for (var i = min_occurence; i <= max; i++) {
+      for (var i = min_occurence; i <= n_rows_non_intron_phase; i++) {
         class_name = "col-" + i;
         background_color = $("table#merged").find("." + i).css("background-color");
 
@@ -222,7 +235,7 @@
     if (nIntrons == 0) {
       cell.setAttribute('style', 'background-color: #F5F5F5');
     } else {
-      wavelength = (nIntrons * total) / n_rows + start;
+      wavelength = (nIntrons * total) / n_rows_non_intron_phase + start;
       color = Math.nmToRGB(wavelength);
       cell.setAttribute('style', 'background-color: rgb(' +  color.red + ', ' + color.green + ', ' + color.blue + ')');
     }
@@ -233,4 +246,11 @@
 
   cell = row.insertCell(-1); // insert dummy cell
   cell.innerHTML = "&nbsp;";
+
+  // color bar  
+  for (var i =0; i <= 100; i+=5) {
+    wavelength = i/100 * total + start;
+    color = Math.nmToRGB(wavelength);
+    $("."+i+"pct")[0].setAttribute('style', 'background-color: rgb(' +  color.red + ', ' + color.green + ', ' + color.blue + ')');
+  }
 </script>
