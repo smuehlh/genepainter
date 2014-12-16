@@ -36,6 +36,7 @@ $h1_accent_color: #FF8D66 ; // #FFA666;
 $warning_red: #CD5C5C;
 $warning_red_light: #F0CECE;
 $warning_orange: #FFDAB9;
+$info_blue: #add8e6;
 
 
 /*** Allgemeine Regeln ***/
@@ -283,6 +284,13 @@ form.disabled {
 }
 .warning {
   background: $warning_orange;
+  margin: 5px;
+  padding-right: 14px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+.info {
+  background: $info_blue;
   margin: 5px;
   padding-right: 14px;
   padding-top: 10px;
