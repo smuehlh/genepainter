@@ -125,10 +125,11 @@ module GenePainterHelper
 
   def get_statistics_table(filename, id_patterns_table)
 
-    names_table, pattern_table, stats_table, intronpos_table = [], [], [], []
+    names_table, pattern_table, stats_table, stats_table_head, intronpos_table = [], [], [], [], []
 
     names_table << "<table>"
     pattern_table << "<table id=#{id_patterns_table} class='with_border'>"
+    stats_table_head << "<table>"
     stats_table << "<table>"
     intronpos_table << "<table class='with_border'>"
 
@@ -168,27 +169,44 @@ module GenePainterHelper
         # data statistics
 
         parts = line.split("\t")
-        stats_table.push "<tr>"
+        data = parts.map.each_with_index do |ele, ind|
+          if ind == 0 then 
+            this_class = "stats-intron-count-col"
+          elsif ind == 1
+            this_class = "stats-intron-num-col"
+          elsif ind == 2
+            this_class = "stats-taxon-col"
+          else
+            this_class = ""      
+          end
+          "<td class=\"#{this_class}\">#{ele}</td>"
+        end
+
         if is_first_stats_line then
           # use table head element
-          data = parts.map{ |ele| "<th>#{ele}</th>"}
+          data = data.map{ |ele| ele.gsub("td", "th") }
+          stats_table_head.push "<tr>"
+          stats_table_head.push data
+          stats_table_head.push "</tr>"
           is_first_stats_line = false
         else
           # use table data element
-          data = parts.map{ |ele| "<td>#{ele}</td>" }
+          stats_table.push "<tr>"
+          stats_table.push data
+          stats_table.push "</tr>"
         end
-        stats_table.push data
-        stats_table.push "</tr>"
       end
     end
 
     pattern_table << "</table>"
     names_table << "</table>"
+    stats_table_head << "</table>"
     stats_table << "</table>"
     intronpos_table << "</table>"
 
-    return names_table.join.html_safe, pattern_table.join.html_safe, stats_table.join.html_safe, intronpos_table.join.html_safe
-
+    return names_table.join.html_safe, pattern_table.join.html_safe, 
+      stats_table_head.join.html_safe, stats_table.join.html_safe, 
+      intronpos_table.join.html_safe
   end
 
   def get_table(filename, opts={})

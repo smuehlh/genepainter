@@ -3,7 +3,7 @@
 
 <div id='text-based' class="pattern">
   <div id='left-column' class="res_left_col">
-    <div id='all-left' class="res_height">
+    <div id='all-left' class="res_height res_names">
       <%= get_sequence_names(std_path).html_safe %>
     </div>
     <div id='merged_tab'>
@@ -63,35 +63,26 @@
       %>
 
       <%= javascript_tag defer: 'defer' do -%>
-        var spinner = $('#spinner');
-
+        var spinner = $("input#spinner");
         $(function() {
           spinner.spinner({
-            spin: function( event, ui ) {
-              // Remove disabled attribute if applicable
-              $('input#highlight_common').removeAttr('disabled');
-
-              if ( ui.value > 100 ) {
-                $( this ).spinner( 'value',  1);
-                return false;
-              } else if ( ui.value < 1 ) {
-                $( this ).spinner( 'value', 100 );
-                return false;
-              }
-            }
+            min: 1,
+            max: 100
           });
 
           // Set spinner default value
           spinner.spinner( 'value', 70 );
         });
 
-        spinner.on('change', function() {
+        spinner.on('spinstop spinchange', function() {
+          resetTable();
           if ( isNaN( parseInt(this.value) ) ) {
             $('input#highlight_common').prop('disabled', true);
           } else if ( parseInt(this.value) > 100 || parseInt(this.value) < 1 ) {
             $('input#highlight_common').prop('disabled', true);
           } else {
-            $('input#highlight_common').removeAttr('disabled');
+            $('input#highlight_common').prop('disabled', false);
+            $('input#highlight_common').prop('checked', false).trigger('click');
           }
         });
 
@@ -161,24 +152,6 @@
     $('.highlighted').removeClass('highlighted');
     $('.common-highlighted').removeAttr('style');
   }
-
-  // bind event to check boxes
-  $('input#highlight_unique').change(function() {
-    var checked = $(this).is(':checked');
-
-    if (checked) {
-      // reset
-      resetTable();
-
-      $('td.col-1').addClass('highlighted');
-      $('input#highlight_common').prop('checked', false);
-    } else {
-      $('td.col-1').removeClass('highlighted');
-    }
-  });
-
-  var spinner = $("input#spinner");
-
   // color introns by occurence
   function spinnerEventHandler(percent) {
     var max, min_occurence;
@@ -197,26 +170,24 @@
     }
   }
 
-  $('input#highlight_common').change(function() {
+  // bind event to check boxes
+  $('input#highlight_unique').change(function() {
     var checked = $(this).is(':checked');
-
+    resetTable(); // reset table in any case (checked or unchecked)
     if (checked) {
-      // reset
-      resetTable();
-
-      spinnerEventHandler(spinner.spinner("value")); 
-
-      $('input#highlight_unique').prop('checked', false);
-    } else {
-
+      $('td.col-1').addClass('highlighted');
+      $('input#highlight_common').prop('checked', false);
     }
   });
 
-  spinner.on( "spin change", function( event, ui ) {
-    $('input#highlight_common').prop('checked', true);
-    resetTable();
-    spinnerEventHandler($(this).spinner('value'));
-  } );
+  $('input#highlight_common').change(function() {
+    var checked = $(this).is(':checked');
+    resetTable(); // reset table in any case (checked or unchecked)
+    if (checked) {
+      spinnerEventHandler(spinner.spinner("value")); 
+      $('input#highlight_unique').prop('checked', false);
+    }
+  });
 
   // show intron phase
   $('input#show_intron_phase').change(function() {

@@ -1,6 +1,6 @@
 <% 
   stats_path = "#{Rails.root}/public/tmp/#{controller.id}-stats.txt"
-  names_table, patterns_table, stats_table, intron_num_table = get_statistics_table(
+  names_table, patterns_table, stats_table_head, stats_table_data, intron_num_table = get_statistics_table(
     stats_path, "stats_patterns_table"
   )
 
@@ -8,7 +8,7 @@
 
 <div class="pattern">
   <div class="res_left_col">
-    <div id='stats-left' class="res_height">
+    <div id='stats-left' class="res_height res_names">
       <%= names_table.html_safe %>
     </div>
     <table class="additional_pattern">
@@ -43,8 +43,11 @@
    <% end -%>
 </div>
 <br style="clear:both" />
-<div id="stats_table" class="clear-fix res_height">
-  <%= stats_table.html_safe %>
+<div class="clear-fix">
+  <%= stats_table_head.html_safe%>
+</div>
+<div id="stats_table" class="res_height">
+  <%= stats_table_data.html_safe %>
 </div>
 
 <script type="text/javascript">

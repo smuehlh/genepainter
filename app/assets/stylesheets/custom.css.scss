@@ -366,6 +366,9 @@ div.res_height {
   max-height: 300px;
   overflow: auto; 
 }
+div.res_names {
+  overflow: scroll;
+}
 iframe.res_height {
   height: 300px;
 }
@@ -414,6 +417,15 @@ td.oce-checkbox-col {
   width: 120px;
 }
 .oce-species-col {
+  width: 225px;
+}
+.stats-intron-count-col {
+  width: 48px;
+}
+.stats-intron-num-col {
+  width: 75px;
+}
+.stats-taxon-col {
   width: 225px;
 }
 ul.ui-tabs-nav.ui-helper-reset.ui-helper-clearfix.ui-widget-header.ui-corner-all {
