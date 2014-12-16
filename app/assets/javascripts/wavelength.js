@@ -69,7 +69,7 @@
         } else if (w > 700 && w < 780) {
             SSS = 0.3 + 0.7 * (780 - w) / (780 - 700);
         } else if (w == 780) {
-            SSS = 1.0;
+            SSS = 0.40; // otherwise, its too dark
         } else {
             SSS = 0.0;
         }
