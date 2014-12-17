@@ -64,6 +64,9 @@
 				<tr>
 					<td><span style="font-family: monospace">--alignment</span></td><td>Output the alignment file with additional lines containing intron phases</td>
 				</tr>
+				<tr>
+					<td><span style="font-family: monospace">--fuzzy N</span></td><td>Introns at most N base pairs apart from each other are aligned</td>
+				</tr>				                     
 			</table>
 		</p>
 	<h3>Graphical output format</h3>
@@ -104,13 +107,13 @@
 					<col style="width:240px">
 				</colgroup> 
 				<tr>
-					<td><span style="font-family: monospace">--consensus N</span></td><td>Mark all introns conserved in N % genes.Specify N as decimal number between 0 and 1</td>
+					<td><span style="font-family: monospace">--consensus N</span></td><td>Mark all introns conserved in N % genes. Specify N as decimal number between 0 and 1.</td>
 				</tr>
 				<tr>
 					<td><span style="font-family: monospace">--merge</span></td><td>Merge all introns into a single exon intron pattern</td>
 				</tr>
 				<tr>
-					<td><span style="font-family: monospace">--statistics</span></td><td>Output additional file with statistics about common introns.<br>To include information about taxomony, specify '--taxomony' and '--taxonomy-to-fasta' options</td>
+					<td><span style="font-family: monospace">--statistics</span></td><td>Output additional file with statistics about common introns.<br>To include information about taxomony, specify options <span style="font-family: monospace">--taxomony</span> and <span style="font-family: monospace">&#8209;&#8209;taxonomy&#8209;to&#8209;fasta</span>.</td>
 				</tr>
 			</table>
 		</p>
@@ -132,6 +135,23 @@
 				<tr>
 					<td><span style="font-family: monospace">--[no-]exclusively-in-taxa</span></td><td>Mark introns occuring (not) exclusively in listed taxa.<br>[default: not exclusively]</td>
 				</tr>
+				<tr>
+					<td><span style="font-family: monospace">--introns-per-taxon</span></td><td>Mark newly gained introns for every inner node in taxonomy.</td>
+				</tr>
+			</table>
+		</p>
+		<h4>Parse NCBI taxonomy</h4>
+		<p>	
+			<table>
+				<colgroup>
+					<col style="width:240px">
+				</colgroup> 
+				<tr>
+					<td><span style="font-family: monospace">--no-grep</span></td><td>Read the NCBI taxomony dump into RAM. This will require some additional hundert MBs of RAM. [default: taxomony dump is parsed with <span style="font-family: monospace">grep</span> calls]</td>
+				</tr>
+				<tr>
+					<td><span style="font-family: monospace">--nice</span></td><td>Run <span style="font-family: monospace">grep</span> calls with lower priority. Please make sure to have <span style="font-family: monospace">nice</span> in your executable path when using this option.</td>
+				</tr>								                 
 			</table>
 		</p>
 	<h3>Analysis and output of all or subset of data</h3>
@@ -147,10 +167,10 @@
 					<td><span style="font-family: monospace">--analyse-all-output-selection</span></td><td>Analyse all data and provide text-based and graphical output for selection only. All introns are analysed, including those not present in selection</td>
 				</tr>
 				<tr>
-					<td><span style="font-family: monospace">--analyse-selection-output-selection</span></td><td>Analyse selected data and provide output for selection only</td>
+					<td><span style="font-family: monospace">&#8209;&#8209;analyse&#8209;selection-output&#8209;selection</span></td><td>Analyse selected data and provide output for selection only</td>
 				</tr>
 				<tr>
-					<td><span style="font-family: monospace">--analyse-selection-on-all-data-output-selection</span></td><td>Analyse intron positions of selected data in all data and provide output for selection only. Introns present in selection are analysed in all data</td>
+					<td><span style="font-family: monospace">&#8209;&#8209;analyse&#8209;selection&#8209;on&#8209;all&#8209;data-output&#8209;selection</span></td><td>Analyse intron positions of selected data in all data and provide output for selection only. Introns present in selection are analysed in all data</td>
 				</tr>
 			</table>     
 		</p>     
