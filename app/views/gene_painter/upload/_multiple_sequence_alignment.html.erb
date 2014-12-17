@@ -41,7 +41,7 @@
 <%= content_tag(:textarea, nil, :id => "text_seq", :placeholder => "Enter FASTA sequence(s)", :cols => 80, :rows => 5, :style => "margin-top: 5px; width: 723px;") %>
 
 <div style="clear: both">
-	<div style="width: 50%; float: left">
+	<div class="file-upload-button">
 		<%= content_tag(:label, content_tag(:b, "Or upload file")) %>
 
 		<%= file_field_tag("sequence_uploader",
@@ -51,7 +51,7 @@
 			)
 		%>
 	</div>
-	<div style="width: 25%; float: left">
+	<div class="file-upload-file">
 		<%= content_tag(:span,
 			"No file uploaded",
 			:class => "filename",

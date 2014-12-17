@@ -238,6 +238,18 @@ h1, h2, h3, h4, h5 {
     }
 }
 
+input[type='file'] {
+  color: transparent;
+}
+.file-upload-button {
+  width: 50%;
+  float: left;
+}
+.file-upload-file {
+  width: 25%;
+  float: left;
+}
+
 #results_section {
     position: relative;
     margin-top: 25px;

@@ -1,5 +1,5 @@
 <div style="clear: both">
-	<div style="width: 50%; float: left">
+	<div class="file-upload-button">
 		<%= content_tag(:label, content_tag(:b, "Upload file")) %>
 
 		<%= file_field_tag("pdb_uploader",
@@ -11,7 +11,7 @@
 			)
 		%>
 	</div>
-	<div style="width: 25%; float: left">
+	<div class="file-upload-file">
 		<%= content_tag(:span,
 			"No file uploaded",
 			:class => "filename",
