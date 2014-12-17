@@ -1,14 +1,13 @@
 <%=
 content_tag(:div, 
-	content_tag(:span, "", 
-		:class => "ui-icon ui-icon-closethick warning_close", 
-		:style => "display:inline-block;",
-		:onclick => "$('#pdb_info').hide('slow');"
-	) +		
+	# content_tag(:span, "", 
+	# 	:class => "ui-icon ui-icon-closethick warning_close", 
+	# 	:style => "display:inline-block;",
+	# 	:onclick => "$('#pdb_info').hide('slow');"
+	# ) +		
 	content_tag(:normal, "In order to map intron positions and phases onto a protein structure, GenePainter requires a PDB file. GenePainter provides scripts for execution in PyMol.".html_safe
 	), 
 	:id => "pdb_info",
-	:class => "info",
-	:style => "display:none;"
+	:class => "info"
 )
 %>

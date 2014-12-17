@@ -36,7 +36,7 @@ $h1_accent_color: #FF8D66 ; // #FFA666;
 $warning_red: #CD5C5C;
 $warning_red_light: #F0CECE;
 $warning_orange: #FFDAB9;
-$info_blue: #add8e6;
+$info_blue: #eff2ff;
 
 
 /*** Allgemeine Regeln ***/
@@ -412,7 +412,7 @@ table.one-column-emphasis td
 }
 tr:hover td {
   color: #339;
-  background: #eff2ff;
+  background: $info_blue;
 }
 .unstyled tr:hover td {
   color: #000;
