@@ -32,7 +32,9 @@
 
 		content_tag(:p, 
 			content_tag(:div, 
-				content_tag(:b, "B. Hammesfahr, F. Odronitz, S. Mühlhausen, S. Waack & M. Kollmar (2013)")
+				content_tag(:b, "B. Hammesfahr, F. Odronitz, S. Mühlhausen, S. Waack & M. Kollmar (2013)") +
+				link_to(image_tag("layout/openaccess.gif", :alt=>"Open Access", :style => "float:right; padding-left:5px"), "http://www.biomedcentral.com/info/about/openaccess", :target => "_blank") +
+				link_to(image_tag("layout/highlyaccessed.gif", :alt=>"Highly Accessed", :style => "float:right; padding-left:5px"), "http://www.biomedcentral.com/info/about/mostviewed#highlyaccessed", :target => "_blank")
 			) +
 			content_tag(:div, 
 				link_to(
