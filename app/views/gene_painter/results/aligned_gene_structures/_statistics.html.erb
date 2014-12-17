@@ -70,31 +70,23 @@
     for (var x = 0; x < n_cols; x++) {
       var n_introns = 0;
 
-      for (var y = 0; y < n_rows; y++) {
-        if (cells[n_cols*y + x].innerHTML != "-") {
+      for (var y = 0; y < n_rows_non_intron_phase; y++) {
+        // assume intron-placeholder in stats-pattern is always "|" and never intron phase
+        if (cells[n_cols*y + x].innerHTML == "|") {
           n_introns += 1;
         }
       }
 
-      // // class name based on number of introns in the column
-      // var class_name = "col-" + n_introns;
-
-      // for (var y = 0; y < n_rows; y++) {
-      //   $(cells[n_cols*y + x]).addClass(class_name);
-      // }
-
       // set class names to interact with phylo tree
       if (n_introns > 0) {
         var class_name = "intron-col-" + intron_col_order;
-        for (var y = 0; y < n_rows; y++) {
+        for (var y = 0; y < n_rows_non_intron_phase; y++) {
           $(cells[n_cols*y + x]).addClass(class_name);
         }
-
         intron_col_order += 1;
       }
     }
   }
-
   traverse(allCells);
 
 </script>
