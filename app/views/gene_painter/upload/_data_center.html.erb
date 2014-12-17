@@ -43,31 +43,31 @@
 			),
 		:class => "large_div"
 		) + 
-		button_tag("Select All", 
-			:type => "button", 
-			:id => "toggle_analyse_all",
-			:title => "Select all genes for analysis."
+		content_tag(:p, 
+			button_tag("Select All", 
+				:type => "button", 
+				:id => "toggle_analyse_all",
+				:title => "Select all genes for analysis."
+			) +
+			button_tag("Deselect All",
+				:type => "button",
+				:id => "toggle_analyse_none",
+				:title => "Deselect al genes for analysis."
+			)
 		) +
-		button_tag("Deselect All",
-			:type => "button",
-			:id => "toggle_analyse_none",
-			:title => "Deselect al genes for analysis."
-		) +
-		content_tag(:br) +
 		hidden_field_tag(:is_example, false) +
+		content_tag(:p,
+			content_tag(:b, "Press submit when finished with data selection.") +
+			image_tag("icons/help.png", :class => "help data_center_info")
+		) +
+		render( :partial => "gene_painter/help/data_center_info") +
 		submit_tag("Submit", 
 			:id => "data_center_button",
 			:title => "Hit submit to start GenePainter.",
 			:disabled => true,
 			:onclick => "hide_show_waiting('show');"
 		)
-	end +
-
-	content_tag(:p,
-		content_tag(:b, "Press submit when finished with data selection.") +
-		image_tag("icons/help.png", :class => "help data_center_info")
-	) +
-	render( :partial => "gene_painter/help/data_center_info")
+	end
 %>
 
 <script defer>

@@ -32,9 +32,9 @@
 	});
 <% end -%>
 
-<%= content_tag(:textarea, nil, :id => "text_seq", :placeholder => "Enter FASTA sequence(s)", :cols => 80, :rows => 5, :style => "margin-top: 5px; width: 723px;") %>
+<%= content_tag(:textarea, nil, :id => "text_seq", :placeholder => "Enter FASTA sequence(s)", :cols => 80, :rows => 5, :style => "width: 723px;", :class => "spacer") %>
 
-<div style="clear: both">
+<p style="clear: both">
 	<div class="file-upload-button">
 		<%= content_tag(:label, content_tag(:b, "Or upload file")) %>
 
@@ -72,7 +72,7 @@
 			}
 		</script>
 	</div>
-</div>
+</p>
 
 <div style="clear: both">
 	<%=render :partial => "gene_painter/help/upload_seq_help"%>

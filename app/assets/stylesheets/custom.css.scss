@@ -256,7 +256,9 @@ input[type='file'] {
   width: 50%;
   float: left;
 }
-
+.spacer {
+  margin-top: 5px;
+}
 #results_section {
     position: relative;
     margin-top: 25px;
@@ -303,28 +305,19 @@ form.disabled {
 }
 .warning {
   background: $warning_orange;
-  margin: 5px;
-  padding-right: 14px;
-  padding-top: 10px;
-  padding-bottom: 10px;
-  padding-left: 5px;
+  margin: 5px 0px;
+  padding: 10px 14px 10px 10px;
 }
 div.info {
   background: $info_blue;
-  margin: 5px;
-  padding-right: 14px;
-  padding-top: 10px;
-  padding-bottom: 10px;
-  padding-left: 10px;
+  margin: 5px 0px;
+  padding: 10px 14px 10px 10px;
 }
 div.help {
   display: none;
   background: $warning_red_light;
-  margin: 5px;
-  padding-right: 14px;
-  padding-top: 10px;
-  padding-bottom: 10px;
-  padding-left: 10px;
+  margin: 5px 0px;
+  padding: 10px 14px 10px 10px;
 }
 .warning_close {
   float: right;
@@ -369,14 +362,6 @@ td, th {
 .vertical_line {
     border-left: 1px solid $dunkelgrau;
     padding-left: 10px;
-}
-
-div.help {
-  display: none;
-  background: $warning_red_light;
-  margin: 5px;
-  padding-top: 10px;
-  padding-bottom: 10px
 }
 
 div.large_div, #graphical {
