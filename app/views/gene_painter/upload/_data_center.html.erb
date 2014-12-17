@@ -65,16 +65,16 @@
 
 	content_tag(:p,
 		content_tag(:b, "Press submit when finished with data selection.") +
-		image_tag("icons/help.png", :class => "help data_center_help")
+		image_tag("icons/help.png", :class => "help data_center_info")
 	) +
-	render( :partial => "gene_painter/help/data_center_help")
+	render( :partial => "gene_painter/help/data_center_info")
 %>
 
 <script defer>
 
 	// toggle help with image-click
-	$("img.data_center_help").click(function() {
-		 $("div#data_center_help").toggle("slow");
+	$("img.data_center_info").click(function() {
+		 $("div#data_center_info").toggle("slow");
 	});
 
 	// enable submit button if gene structures are uploaded
