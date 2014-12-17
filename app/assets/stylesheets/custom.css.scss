@@ -65,7 +65,8 @@ a.internal { background: image-url("icons/anchor.png") no-repeat center right; t
 img.help {
   cursor: pointer;
   margin: 0px;
-  padding-left: 20px;
+  vertical-align: top;
+  padding-left: 10px;
 }
 
 h1, h2, h3, h4, h5 {
@@ -320,11 +321,6 @@ form.disabled {
 
 td, th {
     vertical-align: top;
-}
-.img_help {
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
 }
 .clearfix {
     overflow: auto;
