@@ -426,17 +426,20 @@ tr:hover td {
   font-weight: bold;
 }
 .oce-checkbox-col {
-  width: 100px;
+  width: 60px;
+  text-align: center;
 }
-td.oce-checkbox-col {
-  padding-left: 10px;
+.oce-broad-checkbox-col {
+  width: 120px;
+  text-align: center;
 }
-.oce-small-text-col {
+.oce-text-col {
   width: 120px;
 }
 .oce-species-col {
-  width: 225px;
+  width: 240px;
 }
+
 .stats-intron-count-col {
   width: 48px;
 }

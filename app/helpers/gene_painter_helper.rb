@@ -74,11 +74,11 @@ module GenePainterHelper
           ) +
           content_tag(:td, 
             label_tag("#{gene}_analyse", gene),
-            :class => "oce-small-text-col"
+            :class => "oce-text-col"
           ) +
           content_tag(:td,
             status_genestruct.html_safe,
-            :class => "oce-small-text-col",
+            :class => "oce-text-col",
             :id => "#{gene}_status"
           ) +
           content_tag(:td,
@@ -89,7 +89,7 @@ module GenePainterHelper
               :class => "generate_checkbox",
               :title => "Provide species mapping to enable checkbox."
             ),
-            :class => "oce-checkbox-col"
+            :class => "oce-broad-checkbox-col"
           ) +
           content_tag(:td,
             species.html_safe +

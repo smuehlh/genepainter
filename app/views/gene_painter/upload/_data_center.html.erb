@@ -24,11 +24,11 @@
 		content_tag(:thead, escape: false) do 
 			content_tag(:tr) do 
 				content_tag(:th, "Analyze", :class => "oce-checkbox-col" ) +
-				content_tag(:th, "Gene names", :class => "oce-small-text-col") +
-				content_tag(:th, "Gene structures", :class => "oce-small-text-col") +
+				content_tag(:th, "Gene names", :class => "oce-text-col") +
+				content_tag(:th, "Gene structures", :class => "oce-text-col") +
 				content_tag(:th, 
-					"Generate gene&nbsp;structure".html_safe,
-					:class => "oce-checkbox-col"
+					"Generate gene structure".html_safe,
+					:class => "oce-broad-checkbox-col"
 				) +
 				content_tag(:th, "Species", :class => "oce-species-col")
 			end
