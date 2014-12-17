@@ -9,10 +9,16 @@
 <%= content_tag(:h2, "Gene Structures") %>
 <%= render :partial => "gene_painter/upload/gene_structures" %>
 
-<%= content_tag(:h2, "Species Mapping", :class => "species_mapping_heading") %>
+<%= content_tag(:h2, 
+	content_tag(:normal, "Species Mapping (optional)") +
+	image_tag("icons/help.png", :class => "help-heading species_mapping_info")
+) %>
 <%= render :partial => "gene_painter/upload/species_mapping" %>
 
-<%= content_tag(:h2, "PDB File") %>
+<%= content_tag(:h2, 
+	content_tag(:normal, "PDB File (optional)") +
+	image_tag("icons/help.png", :class => "help-heading pdb_info")
+) %>
 <%= render :partial => "gene_painter/upload/pdb" %>
 
 <%= content_tag(:h1, "Data Center", :style => "margin-top: 10px;") %>
@@ -34,3 +40,12 @@
 <p class='default-text' id="t_download">
 	No data provided.
 </p>
+
+<%= javascript_tag defer: 'defer' do -%>
+	$("img.species_mapping_info").click(function() {
+		 $("div#species_mapping_info").toggle("slow");
+	});
+	$("img.pdb_info").click(function() {
+		 $("div#pdb_info").toggle("slow");
+	});
+<% end -%>
