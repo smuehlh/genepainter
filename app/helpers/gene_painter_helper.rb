@@ -1,5 +1,9 @@
 module GenePainterHelper
 
+  def class_intron_col(n_introns)
+    "intron-col-" + n_introns.to_s
+  end
+
   # creates table,
   # first row: multi checkbox set, 
   # second row: data
@@ -137,6 +141,7 @@ module GenePainterHelper
     first_chars_intronpos_line = ">Intron" # line containing intron numbers
     first_chars_merged_line = ">Merged" # line containing merged pattern
     is_first_stats_line = true
+    zero_based_intron_count = 0 # for stats -table
 
     IO.foreach(filename) do |line|
       line = line.chomp
@@ -162,12 +167,11 @@ module GenePainterHelper
         else
           # "normal pattern" line
           names_table << "<tr><td>#{name}</td></tr>"
-          pattern_table << pattern_to_tr(striped_pattern) # important: use pattern without white-spaces
+          pattern_table << pattern_to_tr(striped_pattern) # important: use pattern without white-spaces       
         end
 
       else
         # data statistics
-
         parts = line.split("\t")
         data = parts.map.each_with_index do |ele, ind|
           if ind == 0 then 
@@ -184,14 +188,16 @@ module GenePainterHelper
 
         if is_first_stats_line then
           # use table head element
-          data = data.map{ |ele| ele.gsub("td", "th") }
+          data = data.map{ |ele| ele.gsub("td", "th") }    
           stats_table_head.push "<tr>"
           stats_table_head.push data
           stats_table_head.push "</tr>"
           is_first_stats_line = false
         else
           # use table data element
-          stats_table.push "<tr>"
+          this_class = class_intron_col(zero_based_intron_count) 
+          stats_table.push "<tr class=\"#{this_class}\">"
+          zero_based_intron_count += 1
           stats_table.push data
           stats_table.push "</tr>"
         end
@@ -325,6 +331,7 @@ module GenePainterHelper
     data.push "</tr>"
     return data
   end
+
   def pattern_to_colgroup(pattern, colgroup_class)
     data = ["<colgroup class='#{colgroup_class}'>"]
     pattern.each_char do |char|
@@ -337,12 +344,7 @@ module GenePainterHelper
     n_introns = 1
     data = []
 
-    # if opts[:is_displaynone] then
-    #   data << "<tr style='display:none;'>"
-    # else
-    #   data << "<tr>"
-    # end
-
+    data.push "<tr>"
     pattern.each_char do |char|
       if char == "-" then
         # exon
@@ -352,11 +354,6 @@ module GenePainterHelper
         n_introns += 1
       end
     end
-
-    # if opts[:is_insert_dummy_cells] then
-    #   data << "<td>&nbsp;</td>"
-    #   data << "<td>&nbsp;</td>"
-    # end
 
     data.push "</tr>"
     return data
