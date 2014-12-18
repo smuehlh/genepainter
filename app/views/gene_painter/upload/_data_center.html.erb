@@ -115,14 +115,22 @@
 		}
 
 		// enable submit button if gene structures are uploaded OR at least one should be generated
-		is_generate_genestruct_selected = 
-			$("#dataCenterForm input[type=checkbox][name='generate_genestruct[]']:checked").length > 0
+		nChecked = $("#dataCenterForm input[type=checkbox][name='generate_genestruct[]']:checked").length;
+
+		is_generate_genestruct_selected = nChecked > 0
 		if (is_genestruct_uploaded || is_generate_genestruct_selected )  {
 			$("#data_center_button").prop("disabled", false);
 			$("#data_center_help").hide();
 		} else {
 			$("#data_center_button").prop("disabled", true);
 			$("#data_center_help").show("slow");
+		}
+
+		// limit number of checked checkboxes
+		var maxAllowed = 5;
+		if ( nChecked > maxAllowed ) {
+			$(this).prop('checked', false);
+			warning("Select maximum " + maxAllowed + " gene structures!");
 		}
 
 	});
