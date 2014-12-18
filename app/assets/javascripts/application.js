@@ -107,7 +107,7 @@ function update_datacenter_checkboxes(analyse_checkbox_elem) {
     // status of corresponding gene structure; empty if no gene structure present
     var myStat = $("#"+myGene+"_status").html(); 
     // corresponding species; empty if no species mapped
-    var mySpec = $("#"+myGene+"_species").html();
+    var mySpec = $("#"+myGene+"_hidden").val();   
     
     // show generate checkbox if no genestructure present and species is known!
     if (myStat === "" && mySpec !== "") {
