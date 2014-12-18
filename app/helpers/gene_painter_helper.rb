@@ -4,7 +4,7 @@ module GenePainterHelper
     "intron-col-" + n_introns.to_s
   end
 
-  # creates table,
+  # creates table for manual species-mapping (link)
   # first row: multi checkbox set, 
   # second row: data
   def prepare_table_with_checkbox(data)
@@ -12,11 +12,12 @@ module GenePainterHelper
       data.each.collect do |str|
         content_tag(:tr) do 
           content_tag(:td, check_box_tag("names[]", str, nil, :id => "#{str}_link") ) +
-          content_tag(:td, str.html_safe)
+          content_tag(:td, label_tag("#{str}_link", str) )
         end
       end.join().html_safe
     end
   end
+  # creates table for manual species-mapping (unlink)
   # data [Hash]: keys: col1 (might span multiple columns, values: col2 (checkbox; multi-select per col1 value) + col3
   def prepare_table_with_checkbox_and_span_columns(data)
 
@@ -33,6 +34,7 @@ module GenePainterHelper
         gene = genes.shift
         content_tag(:tr, :class => "with_border") do 
           content_tag(:td, species, :rowspan => genes.size + 1) + # +1 to account for shifted gene
+          # add checkbox for first gene
           content_tag(:td, 
             check_box_tag("names[]", gene, nil, :id => "#{gene}_unlink")
           ) +
@@ -40,6 +42,7 @@ module GenePainterHelper
              label_tag("#{gene}_unlink", gene)
           )
         end + 
+        # add checkboxes for all but first gene
         genes.each.collect do |gene|
           content_tag(:tr) do 
             content_tag(:td, 
