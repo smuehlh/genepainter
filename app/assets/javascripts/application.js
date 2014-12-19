@@ -59,16 +59,40 @@ function set_up_fileupload(btnSelector) {
       singleFileUploads: false,
       multipart: true,
       add: function(e, data) {
-          if (data.files[0].size <= 52428800) {
-            data.submit();
-          } else {
-            error('File must be less than 50 MB. <br /> Please contact us to upload larger files.');
-          }
+            var all_valid = true;
+            for (var i = 0; i < data.files.length; i++) {
+                var file = data.files[i];
+                all_valid = validate_file(file, btnSelector); // renders error if file is not valid!  
+                if (! all_valid) {
+                    return false;
+                }    
+            }
+            if (all_valid) {
+                data.submit();
+            }
       },
       submit: function() {
           hide_show_waiting('show');
       }
   });
+}
+function validate_file(file, selector) {
+    var is_valid = true;
+
+    // check file type
+    var accepted_types = $(selector).attr("accept");
+    var file_type = file.name.split(".").pop();  
+    if (accepted_types.indexOf(file_type) == -1) {      
+        is_valid = false;
+        error("File(s) must be of type " + accepted_types );
+    }
+
+    // check file size
+    if (file.size > 52428800) {
+        is_valid = false;
+        error("File(s) must be less than 50 MB. <br /> Please contact us to upload larger files. <br /> Offending file: " + file.name);
+    }
+    return is_valid;
 }
 
 var sec = 0;
