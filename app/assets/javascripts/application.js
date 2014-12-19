@@ -119,6 +119,17 @@ function hide_show_waiting(kind) {
     }
 };
 
+// restricts number of checked checkboxes in _datacenter_ 
+function restrict_num_checked_checkboxes(checkboxEle, maxAllowed, name, warningItem) {
+    // limit number of checked checkboxes
+    var nChecked = $("#dataCenterForm input[type=checkbox][name='" + name + "[]']:checked").length;   
+    if ( nChecked > maxAllowed ) {
+      $(checkboxEle).prop('checked', false);
+      warning( warningItem );
+    }
+}
+
+
 // dependency between analyse and generate-checkbox
 function update_datacenter_checkboxes(analyse_checkbox_elem) {
   var myId, myGene;

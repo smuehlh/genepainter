@@ -89,7 +89,12 @@
 	};
 
 	// onclick of analyse-checkboxes (select all/ deselect all)
+	var maxAllowedAnalyse = 50;
+	var maxAllowedGenerate = 5;
 	$(".analyse_checkbox").click(function() {
+		// limit number of checked checkboxes
+		restrict_num_checked_checkboxes(this, maxAllowedAnalyse, "analyse", "Select maximum " + maxAllowedAnalyse + " genes for analysis!"); 
+
 		update_datacenter_checkboxes(this);
 	});
 	// # trigger('click') is neccessary to make jquery-click trigger events
@@ -97,7 +102,12 @@
 		// warning: this is a hotfix that looks quite insane 
 		// the goal: have each analyse-checkbox checked and the onclick-event triggered
 		// the approach: 1) set checked to false (!!!), 2) trigger click event (sets checked to true again)
-		$('.analyse_checkbox').prop('checked', false).trigger('click');
+
+		// selecting only first _n_ genes for analysis, display a warning if some are left over
+		$('.analyse_checkbox').prop('checked', false).slice(0,maxAllowedAnalyse).trigger('click');
+		if ( $('.analyse_checkbox').length > maxAllowedAnalyse ) {
+			warning("Selected maximum "+maxAllowedAnalyse+ " genes for analysis!");
+		}
 	});
 	$("#toggle_analyse_none").click(function() {
 		// warning: this is a hotfix that looks quite insane 
@@ -127,11 +137,7 @@
 		}
 
 		// limit number of checked checkboxes
-		var maxAllowed = 5;
-		if ( nChecked > maxAllowed ) {
-			$(this).prop('checked', false);
-			warning("Select maximum " + maxAllowed + " gene structures!");
-		}
+		restrict_num_checked_checkboxes(this, maxAllowedGenerate, "generate_genestruct", "Select maximum " + maxAllowedGenerate + " gene structures!"); 
 
 	});
 </script>

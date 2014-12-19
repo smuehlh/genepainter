@@ -73,7 +73,7 @@ module GenePainterHelper
         content_tag(:tr) do 
           content_tag(:td, 
             check_box_tag("analyse[]", 
-              gene, true, # true: is checked
+              gene, nil,
               :id => "#{gene}_analyse", 
               :class => "analyse_checkbox"
             ),
