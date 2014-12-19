@@ -22,6 +22,8 @@ var ajax_prefix = '';
 $( document ).ready(function() {
     ajax_prefix = $("body").attr("data-ajaxprefix");
 });
+var maxAllowedAnalyse = 50; 
+var maxAllowedGenerate = 5;
 
 function build_ajax_path(url) {
   return (ajax_prefix + url).replace('//','/');
@@ -59,6 +61,15 @@ function set_up_fileupload(btnSelector) {
       singleFileUploads: false,
       multipart: true,
       add: function(e, data) {
+
+            // validate max number of files
+            if (data.files.length > maxAllowedAnalyse ) {
+              all_valid = false;
+              error("Upload maximum "+ maxAllowedAnalyse + " files!");
+              return false;
+            }
+
+            // validate each file
             var all_valid = true;
             for (var i = 0; i < data.files.length; i++) {
                 var file = data.files[i];

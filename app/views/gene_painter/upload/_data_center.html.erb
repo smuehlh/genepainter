@@ -89,8 +89,6 @@
 	};
 
 	// onclick of analyse-checkboxes (select all/ deselect all)
-	var maxAllowedAnalyse = 50;
-	var maxAllowedGenerate = 5;
 	$(".analyse_checkbox").click(function() {
 		// limit number of checked checkboxes
 		restrict_num_checked_checkboxes(this, maxAllowedAnalyse, "analyse", "Select maximum " + maxAllowedAnalyse + " genes for analysis!"); 
