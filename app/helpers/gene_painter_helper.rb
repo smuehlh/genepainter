@@ -298,7 +298,7 @@ module GenePainterHelper
   end
 
   def render_uploaded_species_mapping  
-    return File.open("#{controller.p_species_mapping}", 'rb').read.gsub("\n", "<br>")
+    return File.open("#{controller.p_species_mapping}", 'rb').read.gsub("\n", "\\n") # gsub("\n", "<br>")
   end
 
   def populate_select_genes_modal
