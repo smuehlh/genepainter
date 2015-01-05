@@ -6,3 +6,13 @@
 <%= 
 	content_tag(:table, table_content)
 %>
+
+<%= javascript_tag defer: 'defer' do -%>
+	var is_unmapped_sequences = <%= unmapped_sequences.any? %>
+	// disable input text-field if nothing to select
+	if ( is_unmapped_sequences ) {
+		$("input#species").prop("disabled", false);
+	} else {
+		$("input#species").prop("disabled", true);
+	}
+<% end -%>
