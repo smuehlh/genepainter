@@ -1,7 +1,5 @@
 <%
-# TODO: display only those genes that are part of alingment
-
-	# displays all mapped species and gene names (names together with checkbox)
+	# displays all mapped species and gene names (but only those genes that are part of sequence alignment) (names together with checkbox)
 	species_with_genes = {}
 	(controller.sequence_names & controller.genes_to_species_map.keys).each do |gene|
 		species = controller.genes_to_species_map[gene]
@@ -10,12 +8,6 @@
 		end
 		species_with_genes[species].push gene
 	end
-	# controller.genes_to_species_map.each do |gene, species|
-	# 	if ! species_with_genes[species] then 
-	# 		species_with_genes[species] = []
-	# 	end
-	# 	species_with_genes[species].push gene
-	# end
 	table_content = prepare_table_with_checkbox_and_span_columns(species_with_genes) 
 %>
 <%= 
