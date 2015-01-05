@@ -293,6 +293,15 @@ module GenePainterHelper
     return content_tag(:div, svg.html_safe, :class => classname)
   end
 
+  def render_uploaded_seq_alignment  
+    # return File.open("#{Rails.root}/public/sample/coronin.fas", 'rb').read.gsub("\n", "\\n")
+puts "****"
+puts controller.sequence_names
+puts controller.p_alignment
+puts "****"    
+    return File.open("#{controller.p_alignment}", 'rb').read.gsub("\n", "\\n")
+  end
+
   def populate_select_genes_modal
     table = '<table>'
 

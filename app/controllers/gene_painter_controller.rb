@@ -25,6 +25,10 @@ class GenePainterController < ApplicationController
     @@gene_structure_to_status_map
   end
 
+  def p_alignment
+    session[:p_alignment]
+  end
+
   # prepare a new session 
   def prepare_new_session
     reset_session
@@ -77,7 +81,7 @@ class GenePainterController < ApplicationController
   end
 
   def upload_sequence
-
+    @is_fileupload = true
     @fatal_error = catch(:error) {
       # save file as session[:p_alignment]
 
@@ -317,6 +321,7 @@ class GenePainterController < ApplicationController
   def create_alignment_file
     sequence_string = params[:sequence]
     @fatal_error = ""
+    @is_fileupload = false
 
     FormatChecker.validate_fasta(sequence_string)
 
