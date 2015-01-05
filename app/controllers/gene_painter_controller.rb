@@ -29,6 +29,10 @@ class GenePainterController < ApplicationController
     session[:p_alignment]
   end
 
+  def p_species_mapping
+    session[:p_species_mapping]
+  end
+
   # prepare a new session 
   def prepare_new_session
     reset_session
@@ -36,6 +40,7 @@ class GenePainterController < ApplicationController
     session[:basepath_data] = "" # path to folder containing input data 
     session[:p_alignment] = "" # path to file containing input alignment
     session[:p_gene_structures] = "" # path to folder containing gene structures
+    session[:p_species_mapping] = ""
     session[:sequence_names] = [] # list of fasta headers
     session[:genes_to_species_map] = {} # hash with genes and corresponding species
     session[:p_pdb] = "" # path to PDB file
@@ -56,6 +61,7 @@ class GenePainterController < ApplicationController
     session[:basepath_data] = File.join(TMP_PATH, id)
     session[:p_alignment] = File.join(session[:basepath_data], 'input.fas')
     session[:p_gene_structures] = File.join(session[:basepath_data], 'gene_structures')
+    session[:p_species_mapping] = File.join(session[:basepath_data], 'fastaheaders2species.txt')
     session[:p_pdb] = File.join(session[:basepath_data], 'pdb.pdb')
 
     Helper.mkdir_or_die(session[:p_gene_structures])
@@ -194,7 +200,7 @@ class GenePainterController < ApplicationController
     if @is_example
       @basename = "fastaheaders2species.txt"
       path = "#{Rails.root}/public/sample/#{@basename}"
-      Helper.move_or_copy_file(path, session[:basepath_data], 'copy')
+      Helper.move_or_copy_file(path, session[:p_species_mapping], 'copy')
 
     else
       file = params[:files][0]
@@ -208,10 +214,10 @@ class GenePainterController < ApplicationController
       # check file size
       Helper.filesize_below_limit(file.tempfile, MAX_FILESIZE)
 
-      Helper.move_or_copy_file(path, "#{session[:basepath_data]}/fastaheaders2species.txt", 'copy')
+      Helper.move_or_copy_file(path, session[:p_species_mapping], 'copy')
 
       # call fromdos
-      is_sucess = system('fromdos', "#{session[:basepath_data]}/fastaheaders2species.txt")
+      is_sucess = system('fromdos', session[:p_species_mapping])
       Helper.raise_runtime_error 'Cannot upload file. Please contact us.' if ! is_sucess
     end
     map_sequence_name_to_species
