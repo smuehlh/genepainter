@@ -15,10 +15,10 @@
   %>    
 
   <script>
-
       // Display phylotree
-
       $('div#svg_placeholder').html('<%= render_svg("#{controller.id}-tree.svg", "svg").html_safe %>');
+      // add tooltip (title) to taxon-elements
+      $(".taxon").attr("title", "Highlight introns in text-based and graphical representation.");
 
       var intron_numbers = $('<div/>').html('<%= intron_numbers %>').text();
       var obj = JSON.parse(intron_numbers.replace(/=>/g, ':'));
