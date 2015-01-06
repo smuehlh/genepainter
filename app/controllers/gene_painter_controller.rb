@@ -92,8 +92,12 @@ class GenePainterController < ApplicationController
       # save file as session[:p_alignment]
 
       if params[:is_example]
-        @basename = "coronin.fas"
-        f_src = "#{Rails.root}/public/sample/#{@basename}"
+        if params[:sample_data] == "coronin" then 
+          @basename = "coronin.fas"
+        elsif params[:sample_data] == "tubulin"
+          @basename = "tubulin.fas"
+        end
+        f_src = File.join(Rails.root, "public", "sample", params[:sample_data], @basename)
 
         Helper.move_or_copy_file(f_src, session[:p_alignment], 'copy')
 
@@ -139,8 +143,7 @@ class GenePainterController < ApplicationController
       @is_example = params[:is_example]
 
       if @is_example
-        pathes_to_genes = Dir["#{Rails.root}/public/sample/gene_structures/*"]
-
+        pathes_to_genes = Dir[ File.join(Rails.root, "public", "sample", params[:sample_data], "gene_structures", "*") ]
         pathes_to_genes.each do |path|
           gene = File.basename(path, ".*")
 
@@ -199,7 +202,7 @@ class GenePainterController < ApplicationController
 
     if @is_example
       @basename = "fastaheaders2species.txt"
-      path = "#{Rails.root}/public/sample/#{@basename}"
+      path = File.join(Rails.root, "public", "sample", params[:sample_data], @basename)
       Helper.move_or_copy_file(path, session[:p_species_mapping], 'copy')
 
     else
@@ -238,8 +241,14 @@ class GenePainterController < ApplicationController
       # save file as session[:p_pdb]
 
       if params[:is_example]
-        @basename = "2AQ5.pdb"
-        f_src = "#{Rails.root}/public/sample/#{@basename}"
+        @basename = ""
+        if params[:sample_data] == "coronin" then 
+          @basename = "2AQ5.pdb"
+        else
+# TODO   tubulin-sample
+          @basename = ""
+        end
+        f_src = File.join(Rails.root, "public", "sample", params[:sample_data], @basename)
 
         Helper.move_or_copy_file(f_src, session[:p_pdb], 'copy')
 
@@ -388,7 +397,7 @@ class GenePainterController < ApplicationController
     if @is_example then
       # example data
       # copy taxonomy list and species mapping to data folder
-      d_sample = File.join("#{Rails.root}", "public", "sample")
+      d_sample = File.join("#{Rails.root}", "public", "sample", params[:sample_data])
       f_src = File.join( d_sample, "taxonomy_list.csv" )
       Helper.move_or_copy_file(f_src, f_taxonomy_list, "copy")
 

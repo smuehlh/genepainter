@@ -24,13 +24,13 @@
 	</div>
 	<div>
 		<script defer>
-			function load_sample_pdb() {
+			function load_sample_pdb(kind) {
 				hide_show_waiting('show');
 
 				$.ajax({
 					type: 'POST',
 					url: build_ajax_path('/upload_pdb'),
-					data: {'is_example': true},
+					data: {'is_example': true, 'sample_data': kind},
 				});
 			}
 		</script>

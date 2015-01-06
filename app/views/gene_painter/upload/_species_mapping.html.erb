@@ -26,13 +26,13 @@
 	</div>
 	<div>
 		<script defer>
-			function load_species_mapping() {
+			function load_species_mapping(kind) {
 				hide_show_waiting('show');
 
 				$.ajax({
 					type: 'POST',
 					url: build_ajax_path('/upload_species_mapping'),
-					data: {'is_example': true},
+					data: {'is_example': true, 'sample_data': kind},
 				});
 			}
 		</script>

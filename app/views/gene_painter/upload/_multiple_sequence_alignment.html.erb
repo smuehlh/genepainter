@@ -55,13 +55,13 @@
 	</div>
 	<div>
 		<script defer>
-			function load_sample_sequence_alignment() {
+			function load_sample_sequence_alignment(kind) {
 				hide_show_waiting('show');
 
 				$.ajax({
 					type: 'POST',
 					url: build_ajax_path('/upload_sequence'),
-					data: {'is_example': true},
+					data: {'is_example': true, 'sample_data': kind},
 				});
 			}
 		</script>

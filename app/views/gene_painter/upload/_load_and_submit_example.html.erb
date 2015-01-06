@@ -10,7 +10,12 @@
 <script defer>
 
 	function load_example(kind) {
-		var AjaxQ = [load_sample_sequence_alignment, load_sample_gene_structures, load_species_mapping, load_sample_pdb];
+		var AjaxQ = [
+			function() {load_sample_sequence_alignment(kind)}, 
+			function() {load_sample_gene_structures(kind)}, 
+			function() {load_species_mapping(kind)}, 
+			function() {load_sample_pdb(kind)}
+		];
 		var myId;
 		if (kind === "coronin") {
 			myId = "#load_example_coronin";
@@ -25,7 +30,7 @@
 			$("#dataCenterForm input[name='species[]'][type='hidden']").each(function(){
 				all_species.push( $(this).attr('value') ); 
 			});
-console.log("start gene painter");
+
 			$.ajax({
 				type: 'POST',
 				url: build_ajax_path('/call_genepainter'),
@@ -39,7 +44,7 @@ console.log("start gene painter");
 			});
 
 		});
-console.log(AjaxQ);
+
 		$(document).sc_ExecuteAjaxQ({ fx: AjaxQ });
 	}
 </script>
