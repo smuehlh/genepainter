@@ -31,11 +31,16 @@
 
       function resetPhylotree() {
         // apparently, jquery-ui broke removeClass, so use this instead
-        $(".taxon-highlight").attr("class", "taxon")
+        $(".taxon-highlight").attr("class", "taxon");
       }
 
       $('.taxon').click(function() {
         $("#phylo_tree_info").show(); // show info box
+
+        // link to text-based rep.
+        // un-check checkboxes with highlighting-options in text-based representation (and have the events of un-checking triggered)
+        $('.checkbox-textbased-highlight').prop('checked', true).trigger('click');
+
         resetPhylotree();
         resetTable();
 

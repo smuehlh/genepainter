@@ -62,14 +62,14 @@
     <td>
       <%=
         content_tag(:div,
-          check_box_tag('highlight_unique') +
+          check_box_tag('highlight_unique', "1", nil, :class => "checkbox-textbased-highlight") +
           content_tag(:span, 'Highlight unique introns', :style => 'padding-left: 5px; padding-right: 20px')
           )
       %>
 
       <%=
         content_tag(:div,
-          check_box_tag('highlight_common') +
+          check_box_tag('highlight_common', "1", nil, :class => "checkbox-textbased-highlight") +
           content_tag(:span, 'Highlight introns common to at least ', :style => 'padding-left: 5px;') +
           '<input id="spinner" name="value" style="width: 25px;">'.html_safe + ' % of all genes.'.html_safe
           )
@@ -190,6 +190,9 @@
     if (checked) {
       $('td.col-1').addClass('highlighted');
       $('input#highlight_common').prop('checked', false);
+
+      $(".taxon-highlight").attr("class", "taxon"); // link to phylotree: default display
+      // do not use resetPhylotree(); since function might be undefined
     }
   });
 
@@ -199,6 +202,9 @@
     if (checked) {
       spinnerEventHandler(spinner.spinner("value")); 
       $('input#highlight_unique').prop('checked', false);
+
+      $(".taxon-highlight").attr("class", "taxon"); // link to phylotree: default display
+      // do not use resetPhylotree(); since function might be undefined
     }
   });
 
