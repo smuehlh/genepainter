@@ -23,7 +23,6 @@
 		<%= image_tag("icons/help.png", :class => "help upload_pdb_help") %>
 	</div>
 	<div>
-		<u onclick="load_sample_pdb()" id="sample_pdb" style="float: right; cursor: pointer; display:none"><i>Load sample data</i></u>
 		<script defer>
 			function load_sample_pdb() {
 				hide_show_waiting('show');
@@ -32,11 +31,6 @@
 					type: 'POST',
 					url: build_ajax_path('/upload_pdb'),
 					data: {'is_example': true},
-					success: function() {
-						$("u#sample_pdb").html("Sample data loaded");
-						$("u#sample_pdb").removeAttr("onclick");
-						$("u#sample_pdb")[0].setAttribute("style", "float: right; cursor: auto; color: grey");
-					}
 				});
 			}
 		</script>

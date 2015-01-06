@@ -20,7 +20,6 @@
 		<%= image_tag("icons/help.png", :class => "help upload_gene_struct_help") %>
 	</div>
 	<div>
-		<u onclick="load_sample_gene_structures()" id="sample_gene_structures" style="float: right; cursor: pointer; display:none"><i>Load sample data</i></u>
 		<script defer>
 			function load_sample_gene_structures() {
 				hide_show_waiting('show');
@@ -29,11 +28,6 @@
 					type: 'POST',
 					url: build_ajax_path('/upload_gene_structures'),
 					data: {'is_example': true},
-					success: function() {
-						$("u#sample_gene_structures").html("Sample data loaded");
-						$("u#sample_gene_structures").removeAttr("onclick");
-						$("u#sample_gene_structures")[0].setAttribute("style", "float: right; cursor: auto; color: grey");
-					}
 				});
 			}
 		</script>

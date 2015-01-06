@@ -25,7 +25,6 @@
 		<%= image_tag("icons/help.png", :class => "help upload_species_mapping_help") %>
 	</div>
 	<div>
-		<u onclick="load_species_mapping()" id="sample_species_mapping" style="float: right; cursor: pointer; display:none"><i>Load sample data</i></u>
 		<script defer>
 			function load_species_mapping() {
 				hide_show_waiting('show');
@@ -34,11 +33,6 @@
 					type: 'POST',
 					url: build_ajax_path('/upload_species_mapping'),
 					data: {'is_example': true},
-					success: function() {
-						$("u#sample_species_mapping").html("Sample data loaded");
-						$("u#sample_species_mapping").removeAttr("onclick");
-						$("u#sample_species_mapping")[0].setAttribute("style", "float: right; cursor: auto; color: grey");
-					}
 				});
 			}
 		</script>
