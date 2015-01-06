@@ -1,0 +1,344 @@
+--- 
+- ID: 31
+  status: auto
+  reason: 
+  prot_len: 452
+  prot_start: 0
+  prot_end: 452
+  prot_seq: MPSDGRECVSIHIGQAGAQIGNACWELYCIEHGLDEAGFLKEEEKNKKQQSLQAFFSESMNGKHVPRAIYVDLEPTVLDEIRNGVYGNLFHPDQIINGKEDAANNYARGHYTIGKELIDVVLDRIRKQTENCEGLQGFLVFHSFGGGTGSGFSSLLMERLSVEFGKKSKLEFSVYPAPQVSTSVVEPYNSILTTHTTLELSDCSFMVDNEAIYDLCRQKLHVERPSYSNLNRLIAQVVSSITASLRFDGALNVDLNEFQTNLVPYPRIHFPLATYAPVISADRAHHEPLSVQDITHMCFEKANQMVKCDPSAGKYMAVCLLYRGDVVPKDVNAAISSVKAKRGINFVDWCPTGFKVGINYQAPITVEGGDLAKVHRAVCMLSNTTAIAEAWARLDHKFDLMYSKRAFVHWFVGEGMEEGEFMEARDDLAALEKDYAEVSRDTADLEEENDEF
+  target: X
+  target_len: 17718854
+  strand: 
+  - 
+  dna_start: -9458148
+  dna_end: -9455497
+  matches: 452
+  mismatches: 0
+  undetermined: 0
+  unmatched: 0
+  additional: 0
+  score: 1.0
+  upstream: gatcaaagtgttcaattttcaattgagttccttttatggattgaatgtggcttgggaacagaacaacgtgtctaaaaataaataataatattaattatgcatttcaaaaaacgcaacaaggcgattttcttgttctatgaatttttttgactaaaaaacttgcacctaaaacaattttgatacctgcccaatatacgacctaaattgttttgttcattttcccatatttctaattactgttcagaatagtcatgaaataattatcttttaaaatttgcaattatttccataggtgtgcttgcaagtacgttgttgcctatcatttaatcggtaagatgaatcaacataaacgattttcagaaaatcgagacaaattttagaacaagacataaaataagattacagaaaaaaaaaatcaccgaaagactactttctcaagctgaacacacgtgatattccggaatttacttttggcacaaaatgggcaacaattttgactgctttgcacgttcgagaaaagtatcatcaaattttgatttcaaagatgttaaaagaaacaggcaaatcgtatttatgtacgttggttcttgttgtatgtagaaaatatgttcaaagtggaaacttaggatacagaaaaaatttaaaaatttcgtatatggctcttattttctattgtgtctatagaataatttgtaaacctatttttcattctggttttgatttcaaaacattcctgctcactgttgaattctttccagtattgaatttttgacctaaattcgatttagcgtggcatgtcagatagctatcagttttcgaaatgcggtggaaactttttgcggtgttttcgaaaaaaagaagggagatacggatcgtcccgtattttgacataacgcgtgaatttaactgctaatctgagttgaaaatcagaagaaacgaccttccattttagttggacagtttgaaactgtaggttacaagagccgaaatccgcgaaaac
+  upstream_gap: 
+  matchings: 
+  - type: exon
+    nucl_start: 0
+    nucl_end: 15
+    dna_start: -9458148
+    dna_end: -9458133
+    prot_start: 0
+    prot_end: 5
+    seqshifts: []
+
+    mismatchlist: []
+
+    translation: MPSDG
+    seq: atgccttcggatggt
+    undeterminedlist: []
+
+    overlap: 
+    inframe_stopcodons: []
+
+    number: 1
+    contig: 1
+  - type: intron
+    nucl_start: 15
+    dna_start: -9458133
+    dna_end: -9458082
+    seq: gtaagtcaattttatttatttcaatttcttttatcaaaaaaacattttcag
+    number: 1
+    contig: 1
+  - type: exon
+    nucl_start: 15
+    nucl_end: 384
+    dna_start: -9458082
+    dna_end: -9457713
+    prot_start: 5
+    prot_end: 128
+    seqshifts: []
+
+    mismatchlist: []
+
+    translation: RECVSIHIGQAGAQIGNACWELYCIEHGLDEAGFLKEEEKNKKQQSLQAFFSESMNGKHVPRAIYVDLEPTVLDEIRNGVYGNLFHPDQIINGKEDAANNYARGHYTIGKELIDVVLDRIRKQ
+    seq: agagaatgcgtttcaattcatattggtcaagctggtgctcaaattggaaatgcttgctgggagctgtattgtattgaacatggtcttgatgaagctggatttttaaaggaggaagagaaaaacaagaaacagcaatcacttcaagcatttttctcggagtcgatgaacgggaagcatgtgccacgagcgatttatgtggatttggaaccaactgtgctggatgagatacgaaatggggtgtatggtaacttattccatcctgatcagattatcaatggtaaagaagatgctgccaacaactatgcacgagggcactacactattggaaaagagctcattgatgtggtcttggacagaattcgaaaacag
+    undeterminedlist: []
+
+    overlap: 
+    inframe_stopcodons: []
+
+    number: 2
+    contig: 1
+  - type: intron
+    nucl_start: 384
+    dna_start: -9457713
+    dna_end: -9457113
+    seq: gtcggtgacggaatggttatgtctgattaaaaaatcatgaagaactttttcggtattcagtgccatctttttagtagaaaatctattaaatgatttgctgagtagctgctaaaaagttgcggcagcgtttcctagtggctgctgagtctacctgtatgtatacgtcaggttaagtttactcggcaaccagtttctaacatttttttcaaaaaacaaatcaaacttttttcactgagagtggaccatgaggaacatctattgaaatagatattaaatattggaaagcagatgaaaactgctggaaaatatacacttttctattttatttcaaatatacttattatccttactagaaattaagaaaattgcccacaactacagaaatatctttgttagtggttttcaataaccttcagtccaattttgttgtcaaataaaatatcgaaataaaatgaacggagtgagaaatgaaaagaggaatcaacaataatctgaatgactaaaataccattaagcatcttcagagtgcaaatttaaaaagagaaaacatactgtagagtgtaatgtagcagggttagaaaataaaaatcatcaattcag
+    number: 2
+    contig: 1
+  - type: exon
+    nucl_start: 384
+    nucl_end: 518
+    dna_start: -9457113
+    dna_end: -9456979
+    prot_start: 128
+    prot_end: 173
+    seqshifts: []
+
+    mismatchlist: []
+
+    translation: TENCEGLQGFLVFHSFGGGTGSGFSSLLMERLSVEFGKKSKLEFS
+    seq: actgagaactgtgagggacttcaaggatttctcgtcttccactctttcggtggaggcactggatctgggttcagctctcttctaatggagcgactttcggtggaatttggaaagaaaagtaaattggagttcag
+    undeterminedlist: []
+
+    overlap: 
+    inframe_stopcodons: []
+
+    number: 3
+    contig: 1
+  - type: intron
+    nucl_start: 518
+    dna_start: -9456979
+    dna_end: -9456931
+    seq: gtttattttagtactttgtaccaccagacgtaaatccgaactttatag
+    number: 3
+    contig: 1
+  - type: exon
+    nucl_start: 518
+    nucl_end: 669
+    dna_start: -9456931
+    dna_end: -9456780
+    prot_start: 173
+    prot_end: 223
+    seqshifts: []
+
+    mismatchlist: []
+
+    translation: VYPAPQVSTSVVEPYNSILTTHTTLELSDCSFMVDNEAIYDLCRQKLHVE
+    seq: tgtgtatccagcaccacaagtctccacgtctgtcgttgagccctacaactctattctgactactcacacaacattggagctctccgactgctcttttatggtggacaacgaggcgatttacgacctttgtcgtcaaaaacttcatgttgag
+    undeterminedlist: []
+
+    overlap: 
+    inframe_stopcodons: []
+
+    number: 4
+    contig: 1
+  - type: intron
+    nucl_start: 669
+    dna_start: -9456780
+    dna_end: -9456735
+    seq: gtgagaggggaattattcacgatgcattgaagataataatctcag
+    number: 4
+    contig: 1
+  - type: exon
+    nucl_start: 669
+    nucl_end: 777
+    dna_start: -9456735
+    dna_end: -9456627
+    prot_start: 223
+    prot_end: 259
+    seqshifts: []
+
+    mismatchlist: []
+
+    translation: RPSYSNLNRLIAQVVSSITASLRFDGALNVDLNEFQ
+    seq: agaccttcctactcaaatctcaaccgtcttatcgcccaagttgtgtcatcgatcaccgcttcgctaagatttgacggagctttgaatgttgatttaaacgaattccag
+    undeterminedlist: []
+
+    overlap: 
+    inframe_stopcodons: []
+
+    number: 5
+    contig: 1
+  - type: intron
+    nucl_start: 777
+    dna_start: -9456627
+    dna_end: -9456578
+    seq: gtgaaaacaaaaaactgaatatagagcgacggtgacaatgtgatttcag
+    number: 5
+    contig: 1
+  - type: exon
+    nucl_start: 777
+    nucl_end: 849
+    dna_start: -9456578
+    dna_end: -9456506
+    prot_start: 259
+    prot_end: 283
+    seqshifts: []
+
+    mismatchlist: []
+
+    translation: TNLVPYPRIHFPLATYAPVISADR
+    seq: acaaacctggttccatatccaagaattcattttccactggctacctacgctccagtcatttcagctgatagg
+    undeterminedlist: []
+
+    overlap: 
+    inframe_stopcodons: []
+
+    number: 6
+    contig: 1
+  - type: intron
+    nucl_start: 849
+    dna_start: -9456506
+    dna_end: -9456386
+    seq: gtaagagtgcatcagccaatttatttcaattataatttcaattaatgaatccgttctacataaaatgacatgatgtagtattacaagttaagcttttttgcaaacgataacctcattcag
+    number: 6
+    contig: 1
+  - type: exon
+    nucl_start: 849
+    nucl_end: 948
+    dna_start: -9456386
+    dna_end: -9456287
+    prot_start: 283
+    prot_end: 316
+    seqshifts: []
+
+    mismatchlist: []
+
+    translation: AHHEPLSVQDITHMCFEKANQMVKCDPSAGKYM
+    seq: gctcaccacgaacccttgtcagttcaagatatcactcacatgtgtttcgaaaaggctaatcagatggtgaaatgtgacccaagtgctggaaaatacatg
+    undeterminedlist: []
+
+    overlap: 
+    inframe_stopcodons: []
+
+    number: 7
+    contig: 1
+  - type: intron
+    nucl_start: 948
+    dna_start: -9456287
+    dna_end: -9456241
+    seq: gtaactcaaatataaatgacactcaactgcacattaatattttcag
+    number: 7
+    contig: 1
+  - type: exon
+    nucl_start: 948
+    nucl_end: 1046
+    dna_start: -9456241
+    dna_end: -9456143
+    prot_start: 316
+    prot_end: 349
+    seqshifts: []
+
+    mismatchlist: []
+
+    translation: AVCLLYRGDVVPKDVNAAISSVKAKRGINFVDW
+    seq: gcggtctgtttgctttatcgcggcgacgtcgttcctaaggatgtcaacgcagctatttcgtcagtaaaggcaaaacgaggaatcaactttgtagattg
+    undeterminedlist: []
+
+    overlap: 
+    inframe_stopcodons: []
+
+    number: 8
+    contig: 1
+  - type: intron
+    nucl_start: 1046
+    dna_start: -9456143
+    dna_end: -9456098
+    seq: gtaatgttgcaattttaatgtactgtgatgaattacaaatgccag
+    number: 8
+    contig: 1
+  - type: exon
+    nucl_start: 1046
+    nucl_end: 1119
+    dna_start: -9456098
+    dna_end: -9456025
+    prot_start: 349
+    prot_end: 373
+    seqshifts: []
+
+    mismatchlist: []
+
+    translation: CPTGFKVGINYQAPITVEGGDLAK
+    seq: gtgtccaactggattcaaagtcggaatcaactaccaagccccaataacagtcgagggtggagatcttgcaaag
+    undeterminedlist: []
+
+    overlap: 
+    inframe_stopcodons: []
+
+    number: 9
+    contig: 1
+  - type: intron
+    nucl_start: 1119
+    dna_start: -9456025
+    dna_end: -9455948
+    seq: gtgaaatactttttacatgcagtttatgtttcatttcttagtatttctcaaaactcaaattgaaatgctttttttag
+    number: 9
+    contig: 1
+  - type: exon
+    nucl_start: 1119
+    nucl_end: 1243
+    dna_start: -9455948
+    dna_end: -9455824
+    prot_start: 373
+    prot_end: 414
+    seqshifts: []
+
+    mismatchlist: []
+
+    translation: VHRAVCMLSNTTAIAEAWARLDHKFDLMYSKRAFVHWFVGE
+    seq: gtacaccgtgctgtttgcatgctgtccaataccacagcaattgctgaagcgtgggctcgtctcgaccacaaatttgacctaatgtattcgaagcgcgcatttgtgcactggtttgtaggagaag
+    undeterminedlist: []
+
+    overlap: 
+    inframe_stopcodons: []
+
+    number: 10
+    contig: 1
+  - type: intron
+    nucl_start: 1243
+    dna_start: -9455824
+    dna_end: -9455673
+    seq: gtacgtgactacggtaggacagaaacattttgaagaaatcttggaaaatgatgcgaaagagaatacaatttccgtagtagattctttatcataattgtagggacatttgaaaacatcaaataaaattcaacgaggcaaaatttgatttcag
+    number: 10
+    contig: 1
+  - type: exon
+    nucl_start: 1243
+    nucl_end: 1311
+    dna_start: -9455673
+    dna_end: -9455605
+    prot_start: 414
+    prot_end: 437
+    seqshifts: []
+
+    mismatchlist: []
+
+    translation: GMEEGEFMEARDDLAALEKDYAE
+    seq: gtatggaggaaggagaattcatggaagctcgtgatgatctggctgctctcgaaaaagattatgcagag
+    undeterminedlist: []
+
+    overlap: 
+    inframe_stopcodons: []
+
+    number: 11
+    contig: 1
+  - type: intron
+    nucl_start: 1311
+    dna_start: -9455605
+    dna_end: -9455542
+    seq: gtttgtgaggaaaaatcccaaaatacaactaatttacaagtgatttacggaatattgtttcag
+    number: 11
+    contig: 1
+  - type: exon
+    nucl_start: 1311
+    nucl_end: 1356
+    dna_start: -9455542
+    dna_end: -9455497
+    prot_start: 437
+    prot_end: 452
+    seqshifts: []
+
+    mismatchlist: []
+
+    translation: VSRDTADLEEENDEF
+    seq: gtgagcagagacactgcagatttggaagaagagaatgacgagttc
+    undeterminedlist: []
+
+    overlap: 
+    inframe_stopcodons: []
+
+    number: 12
+    contig: 1
+  stopcodon: taa
+  downstream: taagaaaaattataagaatgcaaattaatacgtcaatatgaaaaagtttaaccatttcaataaagtttaataacggtttttctaactctaatcatgcccgacctttaaaacttcaaaacaaaaaacttaccgtatgttttagtgtagtatgcaatacagctgtccgaatatgtttgcggtgcagttacagactgaaaattaatattttattacttattttttgattaaaaaatgtcaatcattaaattaaaaatataagctcaatgaaaatttgttggtaatcataacaaaaaattataaaccagtaattggcacattaataagcgaaaatttggtagtacaagttaaattcaatttacaaataataaaaacctttcacatctctcagtttcagtaacagaaattactgataaaattaaaaattaaagaaaaattgaattgagcgttttgtatcaaacataaggtttttgtgcatgagtgtttttactaatttttatatttaaaatatctgaacgaactttgttttaaaaaaagatttcgaaccaacgtattacgatttgtctgtttcttttaacgtctttgaaatcaaaatttgatgacactttatacttcgacttagcgaaaaatacaatattaaatgtaaaattcttaacaaacaaaattagcatcatggatacagtagagacattatccggaatacaaaaaacttttgctaaaatatgttgaaaaattggaactacataaagcagaaaatttgaacagagaaagtaacaaaaatatgcgtcacaaagggttttgtgtttatgggtgagaagggttcggtttgaaatcgtgaatttatgcaaggtagacgtccttcaagtgtcgggtatagttcatgttgtctcaaaaggtcgtctgctcttcactgtattttctctttctcagattttctgcttccctcatcattgccattttgtcgtcttttcagctttcgcttcttgttccgttcacgctccgg
+  downstream_gap: 
+  number: 1

@@ -1,0 +1,100 @@
+--- 
+- ID: 1
+  status: auto
+  reason: 
+  prot_len: 455
+  prot_start: 0
+  prot_end: 455
+  prot_seq: MSGKGEIIQIHIGQAGVQIANACWELFCLEHGILANGRLTQSPMDDSFLTFFEFTSHQPCVQPRLVMIDTEPTVIDEIRTGSYRNLFHPDTLITGKDDSGSNFARGYNLMASELLDRSMNAIRRVADRCRNLRGFLVFRAIGGGSGSGLGTRIMERLVEDFGKKMTVVEFLVYPSPSISPVIVEPYNALLAAHFSMDCADVSFIVDNEALYDICANTLNVPAPTYTNLNRIIAQVVSSFTASQRFGGGSTVSFQELQTNLVPYPRIHYPLINYAPLVPISHSQFVNMSTAQLTGQCFQMSNQMVRCNPSHGKYMASVLLYRGDIAPNEINTALENIKRNRSFRFVDWSPTGFKIGVSPMPPYYVPGGDLAPTNRACVAISNNTNIRIAWCRLVNKFDKLYQRRAFVYHYVGEGLEEGNFNEASENICQLVHDYLEVDASAPTSRRDSDPEEDSLN
+  target: gi|56411841|ref|NT_033777.2| Drosophila melanogaster chromosome 3R, complete sequence
+  target_len: 27905053
+  strand: +
+  dna_start: 13849530
+  dna_end: 13851018
+  matches: 455
+  mismatches: 0
+  undetermined: 0
+  unmatched: 0
+  additional: 0
+  score: 1.0
+  upstream: ggaacagtcacttctttagatagtccacacaaaagccttgaacaaattagcagcatgagaacaaagcattaacaagaataactaaaagacggtgcattttaggactttaggaacgcatttcattcaagtaatttttgtggcactttctctgccaatgcggacaactacctttaaaaaaaatgaaatacattattgtctagtaacactttatttatttaatgtaaaagttaagttacaagaatgacattttaaatatgcattctagattaagttttaaaatgcgaactttcagtataaaacaaattatttacacattttagttttagttttagttattcctttgccatatttcttctctagtcaaaaagaaaagttcccaagctgaattctatctcacaaccaaaacagctattaaattatttcaatttactttgtacacatatcttaatcgattttgttgattttcaccacatatttacttatagtcgtaaaatgcactgttctgttctcatttagacatcaggtgtataaactttgtaaactctctagtccttgcactatccaaaccgaaagtatttgtataattttattaatgttttgtaaattatttacgtagcttgacgtagcatttgtattatacacagagatacgcgtatctgcatacagatacagatgaatttttttgtaggactaggtggccacaattcaattctgacttcatcgtacacattccaatttacaacggcaacgtactcgagcacggaattacctaactaaatataagaatatatctgtatatctaataaattgtatctacacgtatccaacgcttcgaaaactgattaatccgcgcgcggacaataaatcaatgttatgtacttaatccgttgtgtagcaagttttccttgtttagattgtcaattcgatttgattttagaacattttggaaaactacattcccagagaaaggaaattaatggttaaaattaagatatgacac
+  upstream_gap: 
+  matchings: 
+  - type: exon
+    nucl_start: 0
+    nucl_end: 226
+    dna_start: 13849530
+    dna_end: 13849756
+    prot_start: 0
+    prot_end: 75
+    seqshifts: []
+
+    mismatchlist: []
+
+    translation: MSGKGEIIQIHIGQAGVQIANACWELFCLEHGILANGRLTQSPMDDSFLTFFEFTSHQPCVQPRLVMIDTEPTVI
+    seq: atgtccggaaagggggagatcatccagatccacattggccaggccggtgtgcagatagccaacgcctgttgggagctcttctgtctggagcacggcattttggccaatggaagactaacccagtcgcccatggacgactcgttcctcacgttctttgagttcaccagccatcagccgtgtgtgcaacctcgactcgtcatgatcgacacggagcccacagtgatag
+    undeterminedlist: []
+
+    overlap: 
+    inframe_stopcodons: []
+
+    number: 1
+    contig: 1
+  - type: intron
+    nucl_start: 226
+    dna_start: 13849756
+    dna_end: 13849814
+    seq: gtaagtttccgccagaagcttggattgtgtcatataaattttttatcttcctttccag
+    number: 1
+    contig: 1
+  - type: exon
+    nucl_start: 226
+    nucl_end: 530
+    dna_start: 13849814
+    dna_end: 13850118
+    prot_start: 75
+    prot_end: 177
+    seqshifts: []
+
+    mismatchlist: []
+
+    translation: DEIRTGSYRNLFHPDTLITGKDDSGSNFARGYNLMASELLDRSMNAIRRVADRCRNLRGFLVFRAIGGGSGSGLGTRIMERLVEDFGKKMTVVEFLVYPSPS
+    seq: atgaaatccgtaccggctcctaccgcaacctctttcatccggatactttgatcacgggcaaggatgacagtggcagtaacttcgccaggggctacaatctgatggccagcgagctgttggatcgctccatgaacgccattcgtcgcgtggcggatcgttgcagaaatctcaggggtttcctggtctttcgagcaatcggcggaggttctggttccgggctagggactcgcatcatggagagactggtcgaagactttggcaagaagatgactgttgtggagttcctcgtttatccttcgccttc
+    undeterminedlist: []
+
+    overlap: 
+    inframe_stopcodons: []
+
+    number: 2
+    contig: 1
+  - type: intron
+    nucl_start: 530
+    dna_start: 13850118
+    dna_end: 13850183
+    seq: gtaaggtattggcttgggtatgttttctgctactcatgtgcacttttttttttttttgctcctag
+    number: 2
+    contig: 1
+  - type: exon
+    nucl_start: 530
+    nucl_end: 1365
+    dna_start: 13850183
+    dna_end: 13851018
+    prot_start: 177
+    prot_end: 455
+    seqshifts: []
+
+    mismatchlist: []
+
+    translation: ISPVIVEPYNALLAAHFSMDCADVSFIVDNEALYDICANTLNVPAPTYTNLNRIIAQVVSSFTASQRFGGGSTVSFQELQTNLVPYPRIHYPLINYAPLVPISHSQFVNMSTAQLTGQCFQMSNQMVRCNPSHGKYMASVLLYRGDIAPNEINTALENIKRNRSFRFVDWSPTGFKIGVSPMPPYYVPGGDLAPTNRACVAISNNTNIRIAWCRLVNKFDKLYQRRAFVYHYVGEGLEEGNFNEASENICQLVHDYLEVDASAPTSRRDSDPEEDSLN
+    seq: aatctctccggttattgtggaaccctacaacgcactgctggctgcccatttctccatggactgcgccgatgtatcgtttattgtggacaatgaagctctatacgacatatgtgctaatacactcaatgtccctgctcccacgtatacgaatctcaataggatcatcgcacaagtggtttccagctttacggcctcacagcgttttggtggcggatcgaccgtgagttttcaggagctgcagacgaacctggtgccatatccccgaatccactatccgctgatcaactacgcaccactggtacccatttcgcactcgcagttcgtcaatatgtcgacggcccagctaacgggtcagtgtttccagatgagcaaccaaatggtcagatgcaatccctcgcatggcaagtacatggccagtgtgctgctctaccgcggtgatatcgcacccaatgagatcaatacggcgctggagaacatcaagcggaacaggtctttccgttttgtcgactggtcgcccacgggctttaagatcggcgttagccccatgccgccgtactatgttcctggcggcgatctggcgcccaccaatcgcgcctgcgtggccatctcgaacaacacgaacatccggatcgcctggtgccgcctggtcaacaagttcgacaagctctatcagcggcgagccttcgtctatcactatgtgggcgaaggactcgaggagggcaacttcaacgaggcctccgagaacatttgccagctggtgcacgactatctggaggtggatgcatcggctcccacctcgcgacgcgactccgatccggaggaggactctctcaac
+    undeterminedlist: []
+
+    overlap: 
+    inframe_stopcodons: []
+
+    number: 3
+    contig: 1
+  stopcodon: taa
+  downstream: taaagtgtgctctgtatctgaccctttcgtctgcatttttgaatcaacgaaattttaataaatttaacgtattgaatattttactaaagactaatgattgttaagtctcattaatatataacataaaatctagaaaaatcttatctgacaatctttagctaaatatctttggagagtatcttcgattcggtgtgcaaaggtatcccacagcccttttatatctttctctttcgaggctttcgtcagctcgaaaccgttgcccaaattaagtatttatggttggctaaaacaaacattgacccagcctgcaatttgcgttgcttgaccccagcgccagaggggaaaggggagggcgcggattatggagccgatgggcatgggcgtggccagtcgggccgatatggggtataattaaaatgatcgcagcccaggggcttagcacgtaccgaggcaaaagtcgcgcttatcgcgatcgcacccagggcaaggtcttaccaatccggcatcttcggatgatcttcatcccgggacggcggaactggtcccttaacccttaactttggtggccccaacgctgccagctgtgtgtgacgtgacttacgcacgcttagtgcgcgattatcgatgaagggatcttggccagcacgcagaccgctcacttggccatcttatcagcgggatggctaacttttgtggtgtggtccttgcgcaggatgaccgctgttattaagggcactatcatcatcatgagatcccggtgccttttcgccaattcctttgtgtgttaactgttgctaatcttaaattgaagtcgagcctctcgcttttgtttcacagcgtgagaaccgctgcgtgtggctttagatccaaactttttggattttcatatatattttttcagggggtgttaatgagcttaaggaaatgccagaaggaccaccatgggctgcacagttagtgtgaattaagctgttattccgttcgacatgggctaataaag
+  downstream_gap: 
+  number: 1

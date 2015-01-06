@@ -1,0 +1,4 @@
+HsTub1A;HsTub1B;HsTub1C;HsTub1D;HsTub1E;HsTub1F;HsTub1G;HsTub1H;HsTub1J;HsTub1L;HsTub1M;HsTub1N;HsTub1P;HsTub1S;HsTub1T;HsTub1Y;HsTub1Z;HsTub2A;HsTub2B;HsTub2C;HsTub2D;HsTub2E;HsTub2F;HsTub2G;HsTub2H;HsTub2Ia;HsTub2Ib;HsTub2J;HsTub2K;HsTub2L;HsTub2N;HsTub2O;HsTub2P;HsTub2Q;HsTub2R;HsTub2S;HsTub2V;HsTub2X;HsTub2Y;HsTub2Z;HsTub2ZA;HsTub2ZB;HsTub2ZF;HsTub3A;HsTub3B;HsTub3C;HsTub4;HsTub5:"Homo sapiens"
+CeTub1A;CeTub1B;CeTub1C;CeTub1D;CeTub1E;CeTub1F;CeTub1G;CeTub1H;CeTub1I;CeTub2A;CeTub2B;CeTub2C;CeTub2D;CeTub2E;CeTub2F;CeTub3:"Caenorhabditis elegans"
+DmTub1A;DmTub1B;DmTub1C;DmTub1D;DmTub1E;DmTub2A;DmTub2B;DmTub2C;DmTub2D;DmTub2E;DmTub3A;DmTub3B:"Drosophila melanogaster"
+Sc_cTub1A;Sc_cTub1B;Sc_cTub2;Sc_cTub3:"Saccharomyces cerevisiae S288c"

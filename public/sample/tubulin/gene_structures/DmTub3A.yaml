@@ -1,0 +1,100 @@
+--- 
+- number: 1
+  matchings: 
+  - number: 1
+    overlap: 
+    mismatchlist: []
+
+    prot_start: 0
+    nucl_end: 49
+    prot_end: 16
+    translation: MPSEIITLQLGQCGNQ
+    dna_start: 2973058
+    type: exon
+    contig: 1
+    seqshifts: []
+
+    undeterminedlist: []
+
+    nucl_start: 0
+    seq: atgccaagtgaaataattactttgcagcttgggcagtgcggcaatcaaa
+    inframe_stopcodons: []
+
+    dna_end: 2973107
+  - number: 1
+    dna_start: 2973107
+    type: intron
+    contig: 1
+    nucl_start: 49
+    seq: gtaggtttctgaaatcaggacgagtaccatctgcattgctaaaatcgtttaaacgcag
+    dna_end: 2973165
+  - number: 2
+    overlap: 
+    mismatchlist: []
+
+    prot_start: 16
+    nucl_end: 252
+    prot_end: 84
+    translation: IGFEFWKRLCLEHGISPSGVLEDFANDGLDRKDVFFYQADDDHYIPRAVLLDLEPRVINTIMGSVYSK
+    dna_start: 2973165
+    type: exon
+    contig: 1
+    seqshifts: []
+
+    undeterminedlist: []
+
+    nucl_start: 49
+    seq: ttggctttgagttctggaaaagattgtgcctggagcatggcatctcccctagcggcgtgctggaggactttgccaatgatggcttggaccgcaaggatgtgttcttctaccaggcggacgacgaccactacataccccgcgcggtgctcttggacttggaaccgagggtgatcaataccataatgggctcggtctactccaag
+    inframe_stopcodons: []
+
+    dna_end: 2973368
+  - number: 2
+    dna_start: 2973368
+    type: intron
+    contig: 1
+    nucl_start: 252
+    seq: gtgagtcctctctaaataacttttaattttttgcgccaaacctactattaactcccgtag
+    dna_end: 2973428
+  - number: 3
+    overlap: 
+    mismatchlist: []
+
+    prot_start: 84
+    nucl_end: 1425
+    prot_end: 475
+    translation: LYNPENVYLSKHGGGAGNNWASGYSQGEKLQEEVFDIIDREADGSDSLEGFILCHSIAGGTGSGMGSFIMERLADRYPKKLIQTFSVFPNQDEISDVVVQPYNSMLTLKRLTTAADSVVVLDNTALNRIACDRLHIQNPSFSQINNLVSTIMSVSTTTLRYPSYMNNNLIGLTAPLIPTPQLHFLMTGYTPLTSDSDIHTQQLVNVRKTTVLDVMRRLLQPKNMMVSTGPDKSNHHCYISILNIIQGEVDPTQVHKSLQRIRDRKMAQFIPWGPTSIQVALSRSSPYVQSNHRVSGLMLANHTSICSLFERALNQYDKLRKRGAFLDQFRREDIFKDDLNELDESRETVDCLVQEYEAATREDYMQFSVKRGNGPVDSKSEDSRSVTSAGS
+    dna_start: 2973428
+    type: exon
+    contig: 1
+    seqshifts: []
+
+    undeterminedlist: []
+
+    nucl_start: 252
+    seq: ctctacaatccggaaaatgtgtacctatccaagcacggaggcggtgcgggcaacaactgggcctcaggctatagccagggcgaaaagctgcaagaagaggtattcgacatcattgaccgtgaggcagatggaagcgattcgttggagggctttatactttgccattcgattgctggcggaacgggatcgggaatgggctcctttatcatggagcgcctggcggaccgctatcccaagaaacttatccaaacattcagtgtgtttcccaatcaggacgagatcagtgatgtagtggtgcagccatacaactccatgctcaccctgaaacgtttgactacggctgcggacagtgtggttgtcctggacaacactgctcttaatcgtattgcctgcgatcgcttgcacattcagaatcccagcttttcgcagatcaacaacctggtctccaccataatgagcgtcagcaccactacgctgaggtatccatcctacatgaacaacaatctcattgggctgacggctcctttaatcccgacgccccagctgcattttctcatgacaggctacacgccgctgactagcgattcggatatccatacccagcagctggttaatgtgcgaaagactactgttctagatgtaatgcggcgtctgttgcagcccaagaacatgatggtgtccactggtcccgacaagtcaaatcatcactgctacatctccattctaaacattatccagggcgaggtggatcccactcaagtgcacaagtcactgcagcgcatccgcgaccgcaagatggcccagttcattccctggggccccacctctatccaggtagccctttcccgctcatcgccctacgtgcagagcaaccatcgagtgtccggactgatgctggccaaccacaccagcatttgctcgcttttcgagcgagctctcaaccagtatgacaagcttcgcaagcgcggcgcctttcttgaccagtttcgacgcgaggacatcttcaaggacgacctcaatgagctggacgaatctcgcgaaactgttgactgcctggtgcaagagtatgaggcagccacgcgtgaggactacatgcagttttcagtgaagcggggaaatgggccagttgactccaagtcggaggatagtcgatctgtgaccagcgccggttcc
+    inframe_stopcodons: []
+
+    dna_end: 2974601
+  unmatched: 0
+  prot_start: 0
+  stopcodon: tag
+  downstream: tagttcgcttgtgccagaagaaatgcgtgccatgcatcttaaccaatgtattttaaaatgtaatattctccaatgacgatgggattcgaaatccttaagtagtagtgataagacgattgttggtatgactcgcatgtatgtaaacgctgtttcgtcttttacgatatttaacgttcgtatttccattgttgcaaaattacacatgagatttcccgatcatgtttaatatgtgacacattaaataaaaaacagtttttaaatgtggtagtgagtgtttattgagaagtatattacatatttctttggtgtattttataatatgaaatccttatggttaatgtcgacttgaggcagtatgaactgatattgcagtgagaattcacttgtgaagctgcacgatactgctgtccttgttccgttgtcatgtcatttcgtatgtcaaatatgtttagggtgtgttattcagtttaaaatgttcctattgtattgaagaagaaaagagttagatatataaagcacattttataaatcaaggaagtttttcgttaccatgaatcccgttacccatcggcttgcttacaaggagcatgtgtcttcattaaccacctcagcgttgcaattctcttcctcctgatgaggctcttcgcactcctcgccctccgcttcaggagtgacctctacatcattgctcttctcgcccggctcctcttcaatgaactccacatcatcgtgttgctcttcagctgcctcttccacctcatcatgatcttcagtcatctcattctcattttcatcatcatcatctcccttcacttcgtccacaacggtcagatcaagatgagaaatgaactcttcgccgtcctcttcggttaggtcaatttcagataactcggcggtggacctagcctctgagctgcgaaccgccttgagggcctccttgccacttatctcgcggcaattgagctggttaaaacggtagctaaggcaaaagcccttcttc
+  additional: 0
+  prot_end: 475
+  ID: 25
+  dna_start: 2973058
+  reason: 
+  downstream_gap: 
+  upstream_gap: 
+  target_len: 23011544
+  strand: +
+  target: gi|116010444|ref|NT_033779.4| Drosophila melanogaster chromosome 2L, complete sequence
+  upstream: ttgccacgcgcggctgcagtgggcgccttttgtggctcgacttcctcggagttttccgcagatacagccgtcttggtggctttcctcgcgcgcggctttccttttgccggcaccttgagttcctcagcggcagagtctgcgttttcgtcgactccattcccattggcatttggagtggggtcagtgggttcagatgccaacgcctctgcttgttttttcacggccttgacacgcggcattatggagttctactgctcggactgataggttctcaaaaatgacttgtatttacttccacagatttccagctttttcttttgcttgttttgcagagccactgtcgcttggttcagcacccgatatcaacaaaaagaaaactgcgcgggcaacgcgatttttgcaagccggtcggcttgactttggtctgcttacaacactatttgtgtgccttccttggaaaaacacgactgtggagcaaatattgcacattgtgacgtcactagtagtacaaatagttcgacgtcattagtagtacaaaatgggtggagctcaataacctaattgaaaaactttcttatagaaaattatattcaagttaagcttagtattgaactattagattgatattcatgacatgtttcgatctttctaactcatagtcttagatttccaacacttttttgcctttccaaaatacaaagtagaaaaatgtaatgtttatttttatttatttaattcacaataaaggtcttaagtaatcatatatattttataacagagggcacactgcgccacctttcaaatgaggacgccattaaacgctgcggtgttatcaacactggactttcttaaaattacaaagtacgtccccgctgtgggattttttaaaaattttgttataattcgacgatcttttagttgtgttttattttatttcgactaattcgaccttaaacgcgaaacttcacttgacgattctggccggaaacaacacaccaca
+  score: 1.0
+  prot_seq: MPSEIITLQLGQCGNQIGFEFWKRLCLEHGISPSGVLEDFANDGLDRKDVFFYQADDDHYIPRAVLLDLEPRVINTIMGSVYSKLYNPENVYLSKHGGGAGNNWASGYSQGEKLQEEVFDIIDREADGSDSLEGFILCHSIAGGTGSGMGSFIMERLADRYPKKLIQTFSVFPNQDEISDVVVQPYNSMLTLKRLTTAADSVVVLDNTALNRIACDRLHIQNPSFSQINNLVSTIMSVSTTTLRYPSYMNNNLIGLTAPLIPTPQLHFLMTGYTPLTSDSDIHTQQLVNVRKTTVLDVMRRLLQPKNMMVSTGPDKSNHHCYISILNIIQGEVDPTQVHKSLQRIRDRKMAQFIPWGPTSIQVALSRSSPYVQSNHRVSGLMLANHTSICSLFERALNQYDKLRKRGAFLDQFRREDIFKDDLNELDESRETVDCLVQEYEAATREDYMQFSVKRGNGPVDSKSEDSRSVTSAGS
+  prot_len: 475
+  status: auto
+  undetermined: 0
+  mismatches: 0
+  matches: 475
+  dna_end: 2974601
