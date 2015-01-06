@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="350" height="45"><g  transform="translate(.5,.5)">
+<text y="10" x="0" style="font-size: 10px" fill="green">
+# of introns gained
+</text>
+<text y="25" x="0" style="font-size: 10px" fill="red">
+# of introns lost
+</text>
+<text y="40" x="0" style="font-size: 12px">
+taxon # of species # of genes # of intron positions
+</text>
+</g></svg>
