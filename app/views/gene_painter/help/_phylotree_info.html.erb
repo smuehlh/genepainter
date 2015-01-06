@@ -1,0 +1,15 @@
+<%=
+  content_tag(:div, 
+    content_tag(:span, "", 
+      :class => "ui-icon ui-icon-closethick warning_close", 
+      :style => "display:inline-block;",
+      :onclick => "$('#phylo_tree_info').hide();"
+    ) +   
+    content_tag(:normal,
+      "Intron common/unique to selected taxon are highlighted in text-based and graphical representation. Please note that respective intron positions are not focused automatically and you might need to scroll through text-based or graphical representation in order to see them.".html_safe,
+    ),
+    :id => "phylo_tree_info",
+    :class => "info",
+    :style => "display:none;"
+  )
+%>

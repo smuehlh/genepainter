@@ -1,15 +1,18 @@
 <% if File.exist?("#{Rails.root}/public/tmp/#{controller.id}-taxonomy-intron-numbers.txt") &&
       File.exist?("#{Rails.root}/public/tmp/#{controller.id}-tree.svg") then %>
-  <div id='svg_placeholder' style='padding: 10px 0px 10px 0px'>
-  </div>
 
-  <%= 
+  <%= render :partial => "gene_painter/help/phylotree_info" %>
+  <%=
+    content_tag(:div, "", 
+      :id => "svg_placeholder", 
+      :style => "padding: 10px 0px 10px 0px"
+    ) +
     content_tag(:h4, "Legend") +
     content_tag(:div, render_tree_legend) +
     content_tag(:p, 
       "Click on taxa to highlight common/unique introns in text-based and graphical representation.", :class => "filename"
     )
-  %>
+  %>    
 
   <script>
 
@@ -32,7 +35,7 @@
       }
 
       $('.taxon').click(function() {
-
+        $("#phylo_tree_info").show(); // show info box
         resetPhylotree();
         resetTable();
 
