@@ -1,8 +1,22 @@
-<u onclick="load_example()" id="load_example" class="filename" style="position:absolute; right:15px; top:15px; z-index:1; cursor: pointer"><i>Load and submit example</i></u>
+<p>
+	<b>Example 1: </b><span onclick="load_example('coronin')" id="load_example_coronin" class="active_example">Coronin genes</span>
+</p>
+<p>
+	<b>Example 2: </b><span onclick="load_example('tubulin')" id="load_example_tubulin" class="active_example">Tubulin genes</span>
+</p>
+<p class="filename">Click on link to load and submit example.</p>
+
+
 <script defer>
 
-	function load_example() {
+	function load_example(kind) {
 		var AjaxQ = [load_sample_sequence_alignment, load_sample_gene_structures, load_species_mapping, load_sample_pdb];
+		var myId;
+		if (kind === "coronin") {
+			myId = "#load_example_coronin";
+		} else if (kind === "tubulin") {
+			myId = "#load_example_tubulin";
+		}
 
 		AjaxQ.push(function() {
 			$("u#sample_sequence").remove();
@@ -16,20 +30,21 @@
 			$("#dataCenterForm input[name='species[]'][type='hidden']").each(function(){
 				all_species.push( $(this).attr('value') ); 
 			});
-
+console.log("start gene painter");
 			$.ajax({
 				type: 'POST',
 				url: build_ajax_path('/call_genepainter'),
-				data: {'is_example': true, 'species': all_species},
+				data: {'is_example': true, 'sample_data': kind, 'species': all_species},
 				success: function() {
-					$("u#load_example").html("Example loaded");
-					$("u#load_example").removeAttr("onclick");
-					$("u#load_example")[0].setAttribute("style", "position:absolute; right:15px; top:15px; z-index:1; color: grey");
+					$(myId).append(" (Example loaded.)");
+					$(myId).removeAttr("onclick");
+					$(myId).removeClass("active_example");
+					$(myId).addClass("inactive_example");
 				}
 			});
 
 		});
-
+console.log(AjaxQ);
 		$(document).sc_ExecuteAjaxQ({ fx: AjaxQ });
 	}
 </script>

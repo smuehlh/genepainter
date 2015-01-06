@@ -1,0 +1,35 @@
+<u onclick="load_example()" id="load_example" class="filename" style="position:absolute; right:15px; top:15px; z-index:1; cursor: pointer"><i>Load and submit example</i></u>
+<script defer>
+
+	function load_example() {
+		var AjaxQ = [load_sample_sequence_alignment, load_sample_gene_structures, load_species_mapping, load_sample_pdb];
+
+		AjaxQ.push(function() {
+			$("u#sample_sequence").remove();
+			$("u#sample_gene_structures").remove();
+			$("u#sample_species_mapping").remove();
+			$("u#sample_pdb").remove();
+
+			hide_show_waiting('show');
+
+			var all_species = new Array(); 
+			$("#dataCenterForm input[name='species[]'][type='hidden']").each(function(){
+				all_species.push( $(this).attr('value') ); 
+			});
+
+			$.ajax({
+				type: 'POST',
+				url: build_ajax_path('/call_genepainter'),
+				data: {'is_example': true, 'species': all_species},
+				success: function() {
+					$("u#load_example").html("Example loaded");
+					$("u#load_example").removeAttr("onclick");
+					$("u#load_example")[0].setAttribute("style", "position:absolute; right:15px; top:15px; z-index:1; color: grey");
+				}
+			});
+
+		});
+
+		$(document).sc_ExecuteAjaxQ({ fx: AjaxQ });
+	}
+</script>
