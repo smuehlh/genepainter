@@ -2,8 +2,12 @@
       File.exist?("#{Rails.root}/public/tmp/#{controller.id}-tree.svg") then %>
   <div id='svg_placeholder' style='padding: 10px 0px 10px 0px'>
   </div>
-  <%= content_tag(:p, 
-    "Click on taxa to highlight gained introns in text-based and graphical representation.", :class => "filename"
+
+  <%= 
+    content_tag(:h4, "Legend") +
+    content_tag(:div, render_tree_legend) +
+    content_tag(:p, 
+      "Click on taxa to highlight common/unique introns in text-based and graphical representation.", :class => "filename"
     )
   %>
 

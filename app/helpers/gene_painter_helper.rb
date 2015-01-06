@@ -292,7 +292,11 @@ module GenePainterHelper
     svg = File.open(svg_path, 'rb').read.delete!("\n")
     return content_tag(:div, svg.html_safe, :class => classname)
   end
-
+  def render_tree_legend
+    svg_path = File.join("app", "assets", "images", "help", "phylo_legend.svg")
+    svg = File.open(svg_path, 'rb').read.delete!("\n")
+    return content_tag(:div, svg.html_safe)
+  end
   def render_uploaded_seq_alignment    
     return File.open("#{controller.p_alignment}", 'rb').read.gsub("\n", "\\n")
   end
