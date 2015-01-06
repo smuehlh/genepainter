@@ -268,6 +268,18 @@ input[type='file'] {
 form.disabled {
     color: $dunkelgrau;
 }
+.active_example {
+  color: black;
+  text-decoration: underline;
+  font-style: italic;
+  cursor: pointer;
+}
+.inactive_example {
+  color: $dunkelgrau;
+  text-decoration: none;
+  font-style: normal;
+  cursor: inherit;
+}
 
 
 .notice {
