@@ -142,7 +142,30 @@ function restrict_num_checked_checkboxes(checkboxEle, maxAllowed, name, warningI
 
 // call on onclick-event of analyse checkbox
 function update_datacenter(analyse_checkbox_elem) {
-  update_datacenter_checkboxes(analyse_checkbox_elem);
+  update_datacenter_checkboxes(analyse_checkbox_elem); 
+  update_datacenter_buttons();
+}
+
+// dependency between analyse-checkboxes and buttons
+// if analyse-checkboxes visible: enable select-all/deselect-all buttons
+// if analyse-checkboxes checked: enable submit button
+function update_datacenter_buttons() {
+  nChecked = $(".analyse_checkbox:checked").length;
+  nVisible = $(".analyse_checkbox:visible").length;
+  if (nChecked > 0) {
+    $("#data_center_button").prop("disabled", false);
+    $("#data_center_info").hide();
+  } else {
+    $("#data_center_button").prop("disabled", true);
+    $("#data_center_info").show("slow");  
+  }
+  if (nVisible > 0) {
+    $("#toggle_analyse_none").prop("disabled", false);
+    $("#toggle_analyse_all").prop("disabled", false);
+  } else {
+    $("#toggle_analyse_none").prop("disabled", true);
+    $("#toggle_analyse_all").prop("disabled", true);
+  };
 }
 
 // dependency between analyse and generate-checkbox
