@@ -121,8 +121,10 @@
 		// link status of checkbox to analyse-checkbox 
 		if (this.checked) {
 			$('#'+analyseId).show();
+			$('#'+analyseId).prop('checked', false).trigger('click');
 		} else {
 			$('#'+analyseId).hide();
+			$('#'+analyseId).prop('checked', true).trigger('click');
 		}
 
 		// enable submit button if gene structures are uploaded OR at least one should be generated
