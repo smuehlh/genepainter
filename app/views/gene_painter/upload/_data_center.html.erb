@@ -82,10 +82,10 @@
 	is_genestruct_uploaded = <%= (controller.sequence_names & controller.gene_structure_to_status_map.keys).any? %>
 	if (is_genestruct_uploaded) {
 		$("#data_center_button").prop("disabled", false);
-		$("#data_center_help").hide();
+		$("#data_center_info").hide();
 	} else {
 		$("#data_center_button").prop("disabled", true);
-		$("#data_center_help").show("slow");
+		$("#data_center_info").show("slow");
 	};
 
 	// onclick of analyse-checkboxes (select all/ deselect all)
@@ -135,10 +135,10 @@
 		is_generate_genestruct_selected = nChecked > 0
 		if (is_genestruct_uploaded || is_generate_genestruct_selected )  {
 			$("#data_center_button").prop("disabled", false);
-			$("#data_center_help").hide();
+			$("#data_center_info").hide();
 		} else {
 			$("#data_center_button").prop("disabled", true);
-			$("#data_center_help").show("slow");
+			$("#data_center_info").show("slow");
 		}
 
 		// limit number of checked generate-checkboxes
