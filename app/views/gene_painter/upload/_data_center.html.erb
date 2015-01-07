@@ -101,9 +101,10 @@
 		// the goal: have each analyse-checkbox checked and the onclick-event triggered
 		// the approach: 1) set checked to false (!!!), 2) trigger click event (sets checked to true again)
 
-		// selecting only first _n_ genes for analysis, display a warning if some are left over
-		$('.analyse_checkbox').prop('checked', false).slice(0,maxAllowedAnalyse).trigger('click');
-		if ( $('.analyse_checkbox').length > maxAllowedAnalyse ) {
+		// selecting only first _n_ visible checkboxes for analysis, display a warning if some are left over
+		// visible checkboxes as there gene structure is uploaded or selected for generation!
+		$('.analyse_checkbox:visible').prop('checked', false).slice(0,maxAllowedAnalyse).trigger('click');
+		if ( $('.analyse_checkbox:visible').length > maxAllowedAnalyse ) {
 			warning("Selected maximum "+maxAllowedAnalyse+ " genes for analysis!");
 		}
 	});
