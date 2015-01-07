@@ -98,7 +98,7 @@ module GenePainterHelper
               :id => "#{gene}_generate", 
               :style => style_generate_genestruct_checkbox,
               :class => "generate_checkbox",
-              :title => "Provide species mapping to enable checkbox."
+              :title => "Select to analyse gene."
             ),
             :class => "oce-broad-checkbox-col"
           ) +
