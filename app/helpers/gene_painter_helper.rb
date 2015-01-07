@@ -63,10 +63,12 @@ module GenePainterHelper
         species, status_genestruct = "", ""
         style_analyse_checkbox, style_generate_genestruct_checkbox = "display: none;", "display: none;" 
         is_check_analyse_checkbox = nil # only checked if gene structure uploaded
+        title_generate_cell = "Provide species mapping to enable option."
         # is species known?
         if col1_data_with_species[gene] then 
           species = col1_data_with_species[gene]
           style_generate_genestruct_checkbox = "" # species info present, so its ok to display checkbox
+          title_generate_cell = "" # species info present, checkbox visible, so no need for a helpful tooltip
         end
         # is gene structure uploaded?
         if col1_data_with_genestruct[gene] then 
@@ -99,10 +101,10 @@ module GenePainterHelper
               gene, nil, 
               :id => "#{gene}_generate", 
               :style => style_generate_genestruct_checkbox,
-              :class => "generate_checkbox",
-              :title => "Select to analyse gene."
+              :class => "generate_checkbox"
             ),
-            :class => "oce-broad-checkbox-col"
+            :class => "oce-broad-checkbox-col",
+            :title => title_generate_cell
           ) +
           content_tag(:td,
             species.html_safe +
