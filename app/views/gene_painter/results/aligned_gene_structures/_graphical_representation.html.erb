@@ -47,24 +47,28 @@
     <td>
       <%=
         content_tag(:div,
-          check_box_tag('standard') +
-          content_tag(:span, 'Standard', :style => 'padding-left: 5px; padding-right: 20px')
+          radio_button_tag("graphical",
+            "standard", 
+            true, # checked
+            :id => "standard"
+          ) +
+          label_tag('standard', 'Standard', :style => 'padding-left: 5px; padding-right: 20px')
           )
       %>
 
       <%=
         content_tag(:div,
-          check_box_tag('focus_on_common_introns') +
-          content_tag(:span, 'Focus on common introns', :style => 'padding-left: 5px; padding-right: 20px')
+          radio_button_tag("graphical",
+            "focus_on_common_introns", 
+            nil, # not checked
+            :id => "focus_on_common_introns"
+          ) +
+          label_tag('graphical_focus_on_common_introns', 'Focus on common introns', :style => 'padding-left: 5px; padding-right: 20px')
         )
       %>
     </td>
   <tr>
 </table>
-
-<%= javascript_tag defer: 'defer' do -%>
-  $('input#standard').prop('checked', true);
-<% end -%>
 
 <script>
 
@@ -84,12 +88,10 @@
 
   render_svg_normal_merged();
 
-  $("input#standard").prop("checked", true);
   $("div.reduced").toggle();
 
   $("input#standard").change(function() {
     if ($(this).is(":checked")) {
-      $("input#focus_on_common_introns").prop("checked", false);
       $("div.reduced").toggle(false);
       $("div.normal").toggle(true);
 
@@ -99,7 +101,6 @@
 
   $("input#focus_on_common_introns").change(function() {
     if ($(this).is(":checked")) {
-      $("input#standard").prop("checked", false);
       $("div.normal").toggle(false);
       $("div.reduced").toggle(true);
 
