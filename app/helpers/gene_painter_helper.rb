@@ -61,21 +61,25 @@ module GenePainterHelper
     content_tag(:tbody) do 
       col1_data.sort.each.collect do |gene|
         species, status_genestruct = "", ""
-        style_generate_genestruct = "display: none;" 
+        style_analyse_checkbox, style_generate_genestruct_checkbox = "display: none;", "display: none;" 
+        # is species known?
         if col1_data_with_species[gene] then 
           species = col1_data_with_species[gene]
-          style_generate_genestruct = "" # species info present, so its ok to display checkbox
+          style_generate_genestruct_checkbox = "" # species info present, so its ok to display checkbox
         end
+        # is gene structure uploaded?
         if col1_data_with_genestruct[gene] then 
           status_genestruct = col1_data_with_genestruct[gene]
-          style_generate_genestruct = "display: none;" # gene structure present, so its ok to hide checkbox
+          style_generate_genestruct_checkbox = "display: none;" # hide generate-checkbox (even if species mapping is provided)
+          style_analyse_checkbox = "" # display analyse-checkbox
         end
         content_tag(:tr) do 
           content_tag(:td, 
             check_box_tag("analyse[]", 
               gene, nil,
               :id => "#{gene}_analyse", 
-              :class => "analyse_checkbox"
+              :class => "analyse_checkbox",
+              :style => style_analyse_checkbox
             ),
             :class => "oce-checkbox-col"
           ) +
@@ -92,7 +96,7 @@ module GenePainterHelper
             check_box_tag("generate_genestruct[]", 
               gene, nil, 
               :id => "#{gene}_generate", 
-              :style => style_generate_genestruct,
+              :style => style_generate_genestruct_checkbox,
               :class => "generate_checkbox",
               :title => "Provide species mapping to enable checkbox."
             ),
