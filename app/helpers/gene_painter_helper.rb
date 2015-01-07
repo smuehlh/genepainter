@@ -62,6 +62,7 @@ module GenePainterHelper
       col1_data.sort.each.collect do |gene|
         species, status_genestruct = "", ""
         style_analyse_checkbox, style_generate_genestruct_checkbox = "display: none;", "display: none;" 
+        is_check_analyse_checkbox = nil # only checked if gene structure uploaded
         # is species known?
         if col1_data_with_species[gene] then 
           species = col1_data_with_species[gene]
@@ -72,11 +73,12 @@ module GenePainterHelper
           status_genestruct = col1_data_with_genestruct[gene]
           style_generate_genestruct_checkbox = "display: none;" # hide generate-checkbox (even if species mapping is provided)
           style_analyse_checkbox = "" # display analyse-checkbox
+          is_check_analyse_checkbox = true
         end
         content_tag(:tr) do 
           content_tag(:td, 
             check_box_tag("analyse[]", 
-              gene, nil,
+              gene, is_check_analyse_checkbox,
               :id => "#{gene}_analyse", 
               :class => "analyse_checkbox",
               :style => style_analyse_checkbox
