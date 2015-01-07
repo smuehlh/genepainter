@@ -93,7 +93,7 @@
 		// limit number of checked checkboxes
 		restrict_num_checked_checkboxes(this, maxAllowedAnalyse, "analyse", "Select maximum " + maxAllowedAnalyse + " genes for analysis!"); 
 
-		update_datacenter_checkboxes(this);
+		update_datacenter(this);
 	});
 	// # trigger('click') is neccessary to make jquery-click trigger events
 	$("#toggle_analyse_all").click(function(){
@@ -109,10 +109,11 @@
 		}
 	});
 	$("#toggle_analyse_none").click(function() {
-		// warning: this is a hotfix that looks quite insane 
-		// the goal: have each analyse-checkbox checked and the onclick-event triggered
-		// the approach: 1) set checked to true(!!!), 2) trigger click event (sets checked to false again)
-		$('.analyse_checkbox').prop('checked', true).trigger('click');
+		// do not trigger onclick-event but trigger datacenter updates
+		$('.analyse_checkbox').prop('checked', false);
+		$('.analyse_checkbox').each(function(){ update_datacenter(this); });
+
+		// $('.analyse_checkbox').prop('checked', true).trigger('click'); // triggers onclick-event (which potentially includes a warning, if too many checkboxes were temporarily! selected)
 	});
 
 	// onclick of generate-checkbox 

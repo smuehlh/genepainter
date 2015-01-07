@@ -140,6 +140,10 @@ function restrict_num_checked_checkboxes(checkboxEle, maxAllowed, name, warningI
     }
 }
 
+// call on onclick-event of analyse checkbox
+function update_datacenter(analyse_checkbox_elem) {
+  update_datacenter_checkboxes(analyse_checkbox_elem);
+}
 
 // dependency between analyse and generate-checkbox
 function update_datacenter_checkboxes(analyse_checkbox_elem) {
@@ -162,9 +166,9 @@ function update_datacenter_checkboxes(analyse_checkbox_elem) {
   } else {
     // not checked
 
-    // hide generate gene struct-checkbox and un-check it
+    // un-check generate gene struct-checkbox
     $("#" + myGene + "_generate").prop('checked', false);
-    $("#" + myGene + "_generate").hide();
+    // $("#" + myGene + "_generate").hide();
   }
 }
 
