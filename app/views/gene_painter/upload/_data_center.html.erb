@@ -116,10 +116,13 @@
 
 	// onclick of generate-checkbox 
 	$(".generate_checkbox").click(function() {
+		// corresponding analyse-checkbox
+		var analyseId = this.id.replace('_generate', '_analyse');
+		// link status of checkbox to analyse-checkbox 
 		if (this.checked) {
-			$('#generate_genestruct_warning').show();
+			$('#'+analyseId).show();
 		} else {
-			$('#generate_genestruct_warning').hide();
+			$('#'+analyseId).hide();
 		}
 
 		// enable submit button if gene structures are uploaded OR at least one should be generated
@@ -134,8 +137,14 @@
 			$("#data_center_help").show("slow");
 		}
 
-		// limit number of checked checkboxes
+		// limit number of checked generate-checkboxes
 		restrict_num_checked_checkboxes(this, maxAllowedGenerate, "generate_genestruct", "Select maximum " + maxAllowedGenerate + " gene structures!"); 
 
+		// display generate-genestruct warning if some checkboxes are checked, hide else
+		if (nChecked > 0) {
+			$('#generate_genestruct_warning').show();
+		} else {
+			$('#generate_genestruct_warning').hide();
+		}
 	});
 </script>
