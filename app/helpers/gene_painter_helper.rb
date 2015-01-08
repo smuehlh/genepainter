@@ -80,7 +80,7 @@ module GenePainterHelper
 
           if status_genestruct == "complete" then 
             class_status_genestruct = "genestruct_complete"
-          elsif status_genestruct == "incomple"
+          elsif status_genestruct == "incomplete"
             class_status_genestruct = "genestruct_incomplete"
           end 
         end
