@@ -61,6 +61,7 @@ module GenePainterHelper
     content_tag(:tbody) do 
       col1_data.sort.each.collect do |gene|
         species, status_genestruct = "", ""
+        class_status_genestruct = "" # additional class to display complete in green and incomple in red
         style_analyse_checkbox, style_generate_genestruct_checkbox = "display: none;", "display: none;" 
         is_check_analyse_checkbox = nil # only checked if gene structure uploaded
         title_generate_cell = "Provide species mapping to enable option."
@@ -76,6 +77,12 @@ module GenePainterHelper
           style_generate_genestruct_checkbox = "display: none;" # hide generate-checkbox (even if species mapping is provided)
           style_analyse_checkbox = "" # display analyse-checkbox
           is_check_analyse_checkbox = true
+
+          if status_genestruct == "complete" then 
+            class_status_genestruct = "genestruct_complete"
+          elsif status_genestruct == "incomple"
+            class_status_genestruct = "genestruct_incomplete"
+          end 
         end
         content_tag(:tr) do 
           content_tag(:td, 
@@ -93,7 +100,7 @@ module GenePainterHelper
           ) +
           content_tag(:td,
             status_genestruct.html_safe,
-            :class => "oce-text-col",
+            :class => "oce-text-col #{class_status_genestruct}",
             :id => "#{gene}_status"
           ) +
           content_tag(:td,

@@ -37,6 +37,7 @@ $warning_red: #CD5C5C;
 $warning_red_light: #F0CECE;
 $warning_orange: #FFDAB9;
 $info_blue: #eff2ff;
+$green: #6B8E23;
 
 
 /*** Allgemeine Regeln ***/
@@ -352,6 +353,7 @@ td, th {
 // label {
 //   margin-right: 20px;
 // }
+
 .manual_species_mapping_left {
   float: left;
   width: 60%;
@@ -418,7 +420,12 @@ table.one-column-emphasis td
   height: 2em;
   vertical-align: middle;
 }
-
+table.one-column-emphasis td.genestruct_complete {
+  color: $green;
+}
+table.one-column-emphasis td.genestruct_incomplete {
+  color: $warning_red;
+}
 #unlink_genes_modal tr.with_border {
   border-top: 1px solid #e8edff;
 }
