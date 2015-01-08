@@ -1,9 +1,16 @@
 <% if File.exist?("#{Rails.root}/public/tmp/#{controller.id}-taxonomy-intron-numbers.txt") &&
       File.exist?("#{Rails.root}/public/tmp/#{controller.id}-tree.svg") then %>
 
+  <%
+    taxa_with_gained_introns, taxa_with_all_introns = get_phylotree_intronpos_info(
+      "#{Rails.root}/public/tmp/#{controller.id}-taxonomy-intron-numbers.txt"
+    ) 
+  %>
+
   <%= render :partial => "gene_painter/help/phylotree_info" %>
   <%=
-    content_tag(:div, "", 
+    content_tag(:div, 
+      render_svg("#{controller.id}-tree.svg", "svg"), 
       :id => "svg_placeholder", 
       :style => "padding: 10px 0px 10px 0px"
     ) +
@@ -31,68 +38,74 @@
 
   <script>
       // Display phylotree
-      $('div#svg_placeholder').html('<%= render_svg("#{controller.id}-tree.svg", "svg").html_safe %>');
+      // classes on taxa:
+      // 'taxon' - each taxon has. use when 'all' is selected
+      // 'taxon-intron-gain' - only some taxa have. use when 'gained' is selected
+
       // add tooltip (title) to taxon-elements
       $(".taxon").attr("title", "Highlight introns in text-based and graphical representation.");
 
-      var intron_numbers = $('<div/>').html('<%= intron_numbers %>').text();
-      var obj = JSON.parse(intron_numbers.replace(/=>/g, ':'));
+      // function colorize(cells) {
+      //   _.each(cells, function(cell) {
+      //     $(cell).addClass('highlighted');
+      //   });
+      // }
 
-      function colorize(cells) {
-        _.each(cells, function(cell) {
-          $(cell).addClass('highlighted');
-        });
-      }
+      // function resetPhylotree() {
+      //   // apparently, jquery-ui broke removeClass, so use this instead
+      //   // TODO - do not override all classes, there might be also class 'taxon-intron-gain'
+      //   $(".taxon-highlight").attr("class", "taxon");
+      // }
+    
+      // // onclick of taxon
+      // $(".taxon").click(function() {
 
-      function resetPhylotree() {
-        // apparently, jquery-ui broke removeClass, so use this instead
-        $(".taxon-highlight").attr("class", "taxon");
-      }
+      // });
 
-      $('.taxon').click(function() {
-        $("#phylo_tree_info").show(); // show info box
+      // $('.taxon').click(function() {
+      //   $("#phylo_tree_info").show(); // show info box
 
-        // link to text-based rep.
-        // un-check checkboxes with highlighting-options in text-based representation (and have the events of un-checking triggered)
-        $('.checkbox-textbased-highlight').prop('checked', true).trigger('click');
+      //   // link to text-based rep.
+      //   // un-check checkboxes with highlighting-options in text-based representation (and have the events of un-checking triggered)
+      //   $('.checkbox-textbased-highlight').prop('checked', true).trigger('click');
 
-        resetPhylotree();
-        resetTable();
+      //   resetPhylotree();
+      //   resetTable();
 
-        this.setAttribute('class', 'taxon taxon-highlight'); // taxon-highlight CSS for styling 
+      //   this.setAttribute('class', 'taxon taxon-highlight'); // taxon-highlight CSS for styling 
 
-        var textTokens = this.innerHTML.split(" ");
+      //   var textTokens = this.innerHTML.split(" ");
 
-        if (textTokens.length > 1) {
-          textTokens.pop();
-          textTokens.pop();
-          textTokens.pop();
-        }
+      //   if (textTokens.length > 1) {
+      //     textTokens.pop();
+      //     textTokens.pop();
+      //     textTokens.pop();
+      //   }
 
-        var nodeName = textTokens.toString().replace(/,/g, " ");
-        var tmp = [];
+      //   var nodeName = textTokens.toString().replace(/,/g, " ");
+      //   var tmp = [];
 
-        _.each(obj[nodeName], function(element) {
-          colorize($("." + element));
+      //   _.each(obj[nodeName], function(element) {
+      //     colorize($("." + element));
 
-          tmp.push(_.last(element.split("-")));
-        });
+      //     tmp.push(_.last(element.split("-")));
+      //   });
 
-        $('#genestructures-merged rect').removeClassSVG('fill-grey');
+      //   $('#genestructures-merged rect').removeClassSVG('fill-grey');
 
-        if (tmp.length) {
+      //   if (tmp.length) {
 
-          $('#genestructures-merged .background').addClassSVG('fill-grey');
+      //     $('#genestructures-merged .background').addClassSVG('fill-grey');
 
-          _.each($("#genestructures-merged rect"), function(rect) {
+      //     _.each($("#genestructures-merged rect"), function(rect) {
 
-            if (!_.contains(tmp, rect.getAttribute('class').trim().split('_')[1])) {
-              $(rect).addClassSVG('fill-grey');
-            }
-          });
-        }
+      //       if (!_.contains(tmp, rect.getAttribute('class').trim().split('_')[1])) {
+      //         $(rect).addClassSVG('fill-grey');
+      //       }
+      //     });
+      //   }
 
-      });
+      // });
   </script>
 
 <% else %>

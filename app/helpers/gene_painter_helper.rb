@@ -336,20 +336,23 @@ module GenePainterHelper
     table << '</table>'
   end
 
-  def intron_numbers
-    map = {}
-    File.open("#{Rails.root}/public/tmp/#{controller.id}-taxonomy-intron-numbers.txt", "r").each_line do |line|
-      tokens = line.strip.split(':')
+  def get_phylotree_intronpos_info(filename)
+    taxa_with_gainedpos, taxa_with_allpos = {}, {}
+    IO.foreach(filename) do |line|
+      line = line.chomp
+      match_data = line.match(/(.*):(.*):(.*)/)
+      if match_data.size == 4 then 
+        taxon = match_data[1]
+        gained_pos = match_data[2].split(/,\s*/)
+        all_pos = match_data[3].split(/,\s*/)
 
-      class_names = []
-      tokens[1].split(',').each do |number|
-        class_names.push("intron-col-#{number}")
+        taxa_with_gainedpos[taxon] = gained_pos.map{|num| "intron-col-#{num}"}
+        taxa_with_allpos[taxon] = all_pos.map{|num| "intron-col-#{num}"}
       end
 
-      map[tokens[0]] = class_names
     end
 
-    return map
+    return taxa_with_gainedpos, taxa_with_allpos
   end
 
   ### helper methods for converting exon-intron pattern to table rows
