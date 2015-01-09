@@ -441,7 +441,7 @@ tr:hover td {
   width: 180px;
 }
 .filename, th {
-  color: #336699; //#039
+  color: $h1_color; //#039
   font-weight: bold;
 }
 .oce-checkbox-col {
@@ -510,11 +510,12 @@ div.highlight-gain {
   font-size: 15px !important;
   font-weight: bold;
   font-family: inherit;
-  fill: #336699;
+  fill: $h1_color;
 }
 // color table (text-based and statistics rep.)
 .highlighted {
-  background-color: $h1_accent_color !important;
+  background-color: $h1_color !important;
+  color: $hellgrau !important;
 }
 // color graphical-rep.
 .fill-darkgrey {
