@@ -485,18 +485,28 @@ ul.ui-tabs-nav.ui-helper-reset.ui-helper-clearfix.ui-widget-header.ui-corner-all
 }
 
 // phylogenetic tree
-.taxon:hover {
-  font-size: 15px !important;
-  font-weight: bold;
-  font-family: inherit;
-  cursor: pointer;
-}
 #svg_placeholder {
   width: 100%;
   height: 100%;
   overflow: auto;
 }
-.taxon-highlight {
+div.highlight-all {
+  .taxon:hover {
+    font-size: 15px !important;
+    font-weight: bold;
+    font-family: inherit;
+    cursor: pointer;
+  }
+}
+div.highlight-gain {
+  .taxon-intron-gain:hover {
+    font-size: 15px !important;
+    font-weight: bold;
+    font-family: inherit;
+    cursor: pointer;
+  }
+}
+.active-taxon {
   font-size: 15px !important;
   font-weight: bold;
   font-family: inherit;

@@ -1,73 +1,102 @@
 <% if File.exist?("#{Rails.root}/public/tmp/#{controller.id}-taxonomy-intron-numbers.txt") &&
-      File.exist?("#{Rails.root}/public/tmp/#{controller.id}-tree.svg") then %>
+    File.exist?("#{Rails.root}/public/tmp/#{controller.id}-tree.svg") then %>
 
   <%
     taxa_with_gained_introns, taxa_with_all_introns = get_phylotree_intronpos_info(
-      "#{Rails.root}/public/tmp/#{controller.id}-taxonomy-intron-numbers.txt"
+        "#{Rails.root}/public/tmp/#{controller.id}-taxonomy-intron-numbers.txt"
     ) 
   %>
 
   <%= render :partial => "gene_painter/help/phylotree_info" %>
   <%=
     content_tag(:div, 
-      render_svg("#{controller.id}-tree.svg", "svg"), 
-      :id => "svg_placeholder", 
-      :style => "padding: 10px 0px 10px 0px"
+        render_svg("#{controller.id}-tree.svg", "svg"), 
+        :id => "svg_placeholder", 
+        :class => "highlight-all", # 'all' radiobutton is preselected
+        :style => "padding: 10px 0px 10px 0px"
     ) +
     content_tag(:h4, "Legend") +
     content_tag(:div, render_tree_legend) +
     content_tag(:h4, "View Options") +
 
     content_tag(:table, :class => "unstyled") do
-      content_tag(:tr) do
-        content_tag(:td,
-          radio_button_tag(:phylo, "all", :checked => true) +
-          label_tag("phylo_all", "Highlight all introns", :style => "padding-left: 5px; padding-right: 20px")
-        ) +
-        content_tag(:td,
-          radio_button_tag(:phylo, "gained") +
-          label_tag("phylo_gained", "Highlight gained introns", :style => "padding-left: 5px; padding-right: 20px")
-        )
-      end
+        content_tag(:tr) do
+            # important: preselect 'all' radiobutton
+            content_tag(:td,
+                radio_button_tag(:phylo, "all", :checked => true) +
+                label_tag("phylo_all", "Highlight all introns", :style => "padding-left: 5px; padding-right: 20px")
+            ) +
+            content_tag(:td,
+                radio_button_tag(:phylo, "gained") +
+                label_tag("phylo_gained", "Highlight gained introns", :style => "padding-left: 5px; padding-right: 20px")
+            )
+        end
     end +
 
     content_tag(:p, 
-      "Click on taxa to highlight introns in text-based and graphical representation.", :class => "filename"
+        "Click on taxa to highlight introns in text-based and graphical representation.", :class => "filename"
     )
   %>    
 
-  <script>
-      // Display phylotree
-      // classes on taxa:
-      // 'taxon' - each taxon has. use when 'all' is selected
-      // 'taxon-intron-gain' - only some taxa have. use when 'gained' is selected
+    <script>
+        // Display phylotree
+        // classes on taxa:
+        // 'taxon' - each taxon has this class. use when 'all' is selected
+        // 'taxon-intron-gain' - only some taxa have this class. use when 'gained' is selected
 
-      // add tooltip (title) to taxon-elements
-      $(".taxon").attr("title", "Highlight introns in text-based and graphical representation.");
+        // setup page - assume 'all' is preselected radiobutton
+        var taxonTitle = "Highlight introns in text-based and graphical representation.";
+        $(".taxon").attr("title", taxonTitle);
 
-      // function colorize(cells) {
-      //   _.each(cells, function(cell) {
-      //     $(cell).addClass('highlighted');
-      //   });
-      // }
 
-      // function resetPhylotree() {
-      //   // apparently, jquery-ui broke removeClass, so use this instead
-      //   // TODO - do not override all classes, there might be also class 'taxon-intron-gain'
-      //   $(".taxon-highlight").attr("class", "taxon");
-      // }
-    
-      // // onclick of taxon
-      // $(".taxon").click(function() {
+        // onclick of radiobuttons: determine which elements have tooltip and hover
+        $("#phylo_all").click(function() {
+            $("#svg_placeholder").attr("class", "highlight-all");
+            $(".taxon-intron-gain").attr("title", "");
+            $(".taxon").attr("title", taxonTitle);
+        });
+        $("#phylo_gained").click(function() {
+            $("#svg_placeholder").attr("class", "highlight-gain");
+            $(".taxon").attr("title", "");
+            $(".taxon-intron-gain").attr("title", taxonTitle);
+        });
 
-      // });
+
+        // colorize cells in text-based representation
+        function colorize(cells) {
+            _.each(cells, function(cell) {
+                $(cell).addClass('highlighted');
+            });
+        }
+
+        // onclick of taxon
+        $(".taxon").click(function() {
+            // trigger function only if
+            // a) radiobutton 'all' selected
+            // b) radiobutton 'gained' selected & this element has also class 'taxon-intron-gain'
+            var isAllTaxaActive = $("#phylo_all").is(':checked');
+            var isGainTaxaActive = $("#phylo_gained").is(':checked');
+            var isGainTaxon = this.classList.contains("taxon-intron-gain");
+            if ( isAllTaxaActive || (isGainTaxaActive && isGainTaxon) ) {
+
+                // reset all other taxa to non-active elements
+                $(".taxon").each(function() {
+                    this.classList.remove("active-taxon");
+                });
+                // set this element to active
+                this.classList.add("active-taxon");
+
+                // show info-box
+                $("#phylo_tree_info").show();
+
+
+            } // else: don't do anything, behave as if the element is not-clickable at all
+        });
+
+
+
 
       // $('.taxon').click(function() {
-      //   $("#phylo_tree_info").show(); // show info box
-
-      //   // link to text-based rep.
-      //   // un-check checkboxes with highlighting-options in text-based representation (and have the events of un-checking triggered)
-      //   $('.checkbox-textbased-highlight').prop('checked', true).trigger('click');
 
       //   resetPhylotree();
       //   resetTable();
@@ -106,7 +135,7 @@
       //   }
 
       // });
-  </script>
+    </script>
 
 <% else %>
 	<%= content_tag(:i, 
