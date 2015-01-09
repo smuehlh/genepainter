@@ -9,8 +9,17 @@
 
 <script defer>
 
+	function refreshSession() {
+		// clean up uploaded files and refresh session-data; allows to upload both examples sequentially
+		$.ajax({
+			type: 'POST',
+			url: build_ajax_path('/prepare_new_session')
+		});
+	}
+
 	function load_example(kind) {
 		var AjaxQ = [
+			function() {refreshSession()},
 			function() {load_sample_sequence_alignment(kind)}, 
 			function() {load_sample_gene_structures(kind)}, 
 			function() {load_species_mapping(kind)}, 

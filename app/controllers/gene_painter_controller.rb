@@ -35,7 +35,8 @@ class GenePainterController < ApplicationController
 
   # prepare a new session 
   def prepare_new_session
-    reset_session
+    clean_up
+
     session[:id] = "" # id used as folder and file names
     session[:basepath_data] = "" # path to folder containing input data 
     session[:p_alignment] = "" # path to file containing input alignment
@@ -46,14 +47,6 @@ class GenePainterController < ApplicationController
     session[:p_pdb] = "" # path to PDB file
     session[:new_gene_structures] = [] # newly generated gene structures
     @@gene_structure_to_status_map = {} # hash with genes (that have a gene structure) and the status of that gene structures
-  end
-
-  # Render start page for GenePainter
-  def gene_painter
-
-    clean_up
-
-    prepare_new_session
 
     # Generate a dir in tmp to store uploaded files
     session[:id] = Helper.make_new_tmp_dir(TMP_PATH)
@@ -65,6 +58,15 @@ class GenePainterController < ApplicationController
     session[:p_pdb] = File.join(session[:basepath_data], 'pdb.pdb')
 
     Helper.mkdir_or_die(session[:p_gene_structures])
+
+  end
+
+  # Render start page for GenePainter
+  def gene_painter
+
+    reset_session
+    
+    prepare_new_session
 
     expires_now()
 
