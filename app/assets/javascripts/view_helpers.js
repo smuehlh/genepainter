@@ -86,8 +86,8 @@ function resetPhyloTree() {
 }
 function resetGraphic() {
   // reset graphical rep.
-  $('#genestructures-merged .background').each(function () {
-    this.classList.remove('fill-darkgrey', 'fill-grey', 'fill-highlighted');
+  $('#genestructures-merged rect').each(function () {
+    this.classList.remove('fill-darkgrey', 'fill-grey');
   });
 }
 
