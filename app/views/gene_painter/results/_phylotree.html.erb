@@ -54,11 +54,21 @@
             $("#svg_placeholder").attr("class", "highlight-all");
             $(".taxon-intron-gain").attr("title", "");
             $(".taxon").attr("title", taxonTitle);
+
+            // reset phylotree, graphic and tables; since they might be already colored by 'gained'
+            resetPhyloTree();
+            resetGraphic();
+            resetTable();
         });
         $("#phylo_gained").click(function() {
             $("#svg_placeholder").attr("class", "highlight-gain");
             $(".taxon").attr("title", "");
             $(".taxon-intron-gain").attr("title", taxonTitle);
+
+            // reset phylotree, graphic and tables; since they might be already colored by 'all'
+            resetPhyloTree();
+            resetGraphic();
+            resetTable();
         });
 
         // color graphical representation in grey
