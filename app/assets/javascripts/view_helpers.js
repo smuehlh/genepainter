@@ -72,3 +72,14 @@ function warning(message) {
     }
   });
 }
+
+function resetTable() {
+  $('.highlighted').removeClass('highlighted');
+  $('.common-highlighted').removeAttr('style');
+}
+function resetPhyloTree() {
+  // reset taxon apperance
+  $(".taxon").each(function() {
+    this.classList.remove("active-taxon");
+  });
+}

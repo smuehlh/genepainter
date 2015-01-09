@@ -161,10 +161,6 @@
   traverse(allCells);
   traverse($intron_phase_table.find('td'));
 
-  function resetTable() {
-    $('.highlighted').removeClass('highlighted');
-    $('.common-highlighted').removeAttr('style');
-  }
   // color introns by occurence
   function spinnerEventHandler(percent) {
     var min_occurence;
@@ -191,8 +187,8 @@
       $('td.col-1').addClass('highlighted');
       $('input#highlight_common').prop('checked', false);
 
-      $(".taxon-highlight").attr("class", "taxon"); // link to phylotree: default display
-      // do not use resetPhylotree(); since function might be undefined
+      // link to phylotree
+      resetPhyloTree();
     }
   });
 
@@ -203,8 +199,8 @@
       spinnerEventHandler(spinner.spinner("value")); 
       $('input#highlight_unique').prop('checked', false);
 
-      $(".taxon-highlight").attr("class", "taxon"); // link to phylotree: default display
-      // do not use resetPhylotree(); since function might be undefined
+      // link to phylotree
+      resetPhyloTree();
     }
   });
 

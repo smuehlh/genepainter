@@ -80,6 +80,7 @@
             if ( isAllTaxaActive || (isGainTaxaActive && isGainTaxon) ) {
 
                 // reset all other taxa to non-active elements
+                resetPhyloTree();
                 $(".taxon").each(function() {
                     this.classList.remove("active-taxon");
                 });
@@ -89,6 +90,10 @@
                 // show info-box
                 $("#phylo_tree_info").show();
 
+                // link to text-based rep.
+                // un-check checkboxes with highlighting-options in text-based representation (and have the events of un-checking triggered)
+                $('.checkbox-textbased-highlight').prop('checked', true).trigger('click');
+                resetTable();
 
             } // else: don't do anything, behave as if the element is not-clickable at all
         });
