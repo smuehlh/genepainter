@@ -61,11 +61,27 @@
             $(".taxon-intron-gain").attr("title", taxonTitle);
         });
 
+        // color graphical representation in grey
+        function deColorizeGraphic() {
+            // color all rect grey
+            $('#genestructures-merged rect').each(function () {
+                this.classList.add('fill-darkgrey');
+            });
+            // re-color background
+            $('#genestructures-merged .background').each(function () {
+                this.classList.remove('fill-darkgrey');
+                this.classList.add('fill-grey')
+            });
+        }
 
-        // colorize cells in text-based representation
-        function colorizeTextBased(cells) {
-            _.each(cells, function(cell) {
-                $(cell).addClass('highlighted');
+        // colorize cells in text-based and graphical representation
+        function colorizeByIntronNum(className) {
+            // color text-based and stats representation
+            $('table .'+className).addClass('highlighted');
+            
+            // color graphical rep.
+            $('#genestructures-merged .'+className).each(function () {
+                this.classList.remove('fill-darkgrey'); // just re-store the original color!
             });
         }
 
@@ -91,9 +107,6 @@
 
                 // reset all other taxa to non-active elements
                 resetPhyloTree();
-                $(".taxon").each(function() {
-                    this.classList.remove("active-taxon");
-                });
                 // set this element to active
                 this.classList.add("active-taxon");
 
@@ -104,6 +117,8 @@
                 // un-check checkboxes with highlighting-options in text-based representation (and have the events of un-checking triggered)
                 $('.checkbox-textbased-highlight').prop('checked', true).trigger('click');
                 resetTable();
+                resetGraphic();
+                deColorizeGraphic(); // make everything grey first to then re-store color of wanted parts!
 
                 // which intron-pos should be highlighted for this taxon??
                 var thisTaxon = getTaxonName($(this).text());
@@ -117,57 +132,13 @@
                 console.log(targetClasses);
 
                 $.each(targetClasses, function(i, val) {
-                    // highlight in text-based rep.
-                    colorizeTextBased($("."+val));
-
+                    colorizeByIntronNum(val);
                 });
 
 
             } // else: don't do anything, behave as if the element is not-clickable at all
         });
 
-
-
-
-      // $('.taxon').click(function() {
-
-      //   resetPhylotree();
-      //   resetTable();
-
-      //   this.setAttribute('class', 'taxon taxon-highlight'); // taxon-highlight CSS for styling 
-
-      //   var textTokens = this.innerHTML.split(" ");
-
-      //   if (textTokens.length > 1) {
-      //     textTokens.pop();
-      //     textTokens.pop();
-      //     textTokens.pop();
-      //   }
-
-      //   var nodeName = textTokens.toString().replace(/,/g, " ");
-      //   var tmp = [];
-
-      //   _.each(obj[nodeName], function(element) {
-      //     colorize($("." + element));
-
-      //     tmp.push(_.last(element.split("-")));
-      //   });
-
-      //   $('#genestructures-merged rect').removeClassSVG('fill-grey');
-
-      //   if (tmp.length) {
-
-      //     $('#genestructures-merged .background').addClassSVG('fill-grey');
-
-      //     _.each($("#genestructures-merged rect"), function(rect) {
-
-      //       if (!_.contains(tmp, rect.getAttribute('class').trim().split('_')[1])) {
-      //         $(rect).addClassSVG('fill-grey');
-      //       }
-      //     });
-      //   }
-
-      // });
     </script>
 
 <% else %>
