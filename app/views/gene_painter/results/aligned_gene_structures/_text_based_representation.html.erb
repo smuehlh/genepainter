@@ -148,7 +148,7 @@
 
       // set class names to interact with phylo tree
       if (n_introns > 0) {
-        var class_name = "intron-col-" + intron_col_order;
+        var class_name = "intron_" + intron_col_order;
         for (var y = 0; y < n_rows_non_intron_phase; y++) {
           $(cells[n_cols*y + x]).addClass(class_name);
         }

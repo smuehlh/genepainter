@@ -1,7 +1,7 @@
 module GenePainterHelper
 
   def class_intron_col(n_introns)
-    "intron-col-" + n_introns.to_s
+    "intron_" + n_introns.to_s
   end
 
   # creates table for manual species-mapping (link)
@@ -346,8 +346,8 @@ module GenePainterHelper
         gained_pos = match_data[2].split(/,\s*/)
         all_pos = match_data[3].split(/,\s*/)
 
-        taxa_with_gainedpos[taxon] = gained_pos.map{|num| "intron-col-#{num}"}
-        taxa_with_allpos[taxon] = all_pos.map{|num| "intron-col-#{num}"}
+        taxa_with_gainedpos[taxon] = gained_pos.map{|num| class_intron_col(num)}
+        taxa_with_allpos[taxon] = all_pos.map{|num| class_intron_col(num)}
       end
 
     end
