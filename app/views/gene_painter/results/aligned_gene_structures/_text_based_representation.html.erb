@@ -187,8 +187,9 @@
       $('td.col-1').addClass('highlighted');
       $('input#highlight_common').prop('checked', false);
 
-      // link to phylotree
+      // link to phylotree and graphic
       resetPhyloTree();
+      resetGraphic();
     }
   });
 
@@ -199,8 +200,9 @@
       spinnerEventHandler(spinner.spinner("value")); 
       $('input#highlight_unique').prop('checked', false);
 
-      // link to phylotree
+      // link to phylotree and graphic
       resetPhyloTree();
+      resetGraphic();
     }
   });
 
