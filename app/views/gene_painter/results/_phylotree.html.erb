@@ -13,7 +13,8 @@
         render_svg("#{controller.id}-tree.svg", "svg"), 
         :id => "svg_placeholder", 
         :class => "highlight-all", # 'all' radiobutton is preselected
-        :style => "padding: 10px 0px 10px 0px"
+        :style => "padding: 10px 0px 10px 0px", 
+        :data => {all: taxa_with_all_introns, gained: taxa_with_gained_introns} # attach intron-cols to div
     ) +
     content_tag(:h4, "Legend") +
     content_tag(:div, render_tree_legend) +
@@ -48,7 +49,6 @@
         var taxonTitle = "Highlight introns in text-based and graphical representation.";
         $(".taxon").attr("title", taxonTitle);
 
-
         // onclick of radiobuttons: determine which elements have tooltip and hover
         $("#phylo_all").click(function() {
             $("#svg_placeholder").attr("class", "highlight-all");
@@ -63,10 +63,20 @@
 
 
         // colorize cells in text-based representation
-        function colorize(cells) {
+        function colorizeTextBased(cells) {
             _.each(cells, function(cell) {
                 $(cell).addClass('highlighted');
             });
+        }
+
+        function getTaxonName(str) {
+            var textTokens = str.split(" ");
+            if (textTokens.length > 1) {
+                textTokens.pop();
+                textTokens.pop();
+                textTokens.pop();
+            }
+            return textTokens.join(" ")
         }
 
         // onclick of taxon
@@ -94,6 +104,24 @@
                 // un-check checkboxes with highlighting-options in text-based representation (and have the events of un-checking triggered)
                 $('.checkbox-textbased-highlight').prop('checked', true).trigger('click');
                 resetTable();
+
+                // which intron-pos should be highlighted for this taxon??
+                var thisTaxon = getTaxonName($(this).text());
+                var targetClasses;
+                if (isAllTaxaActive) {
+                    targetClasses = $('#svg_placeholder').data('all')[thisTaxon] || [];
+                } else {
+                    targetClasses = $('#svg_placeholder').data('gained')[thisTaxon] || [];
+                }
+                console.log(thisTaxon);
+                console.log(targetClasses);
+
+                $.each(targetClasses, function(i, val) {
+                    // highlight in text-based rep.
+                    colorizeTextBased($("."+val));
+
+                });
+
 
             } // else: don't do anything, behave as if the element is not-clickable at all
         });
