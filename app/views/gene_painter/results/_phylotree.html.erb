@@ -117,6 +117,11 @@
                 // un-check checkboxes with highlighting-options in text-based representation (and have the events of un-checking triggered)
                 $('.checkbox-textbased-highlight').prop('checked', true).trigger('click');
                 resetTable();
+
+                // link to graphical rep.
+                // check reduced view, since in this all introns are guaranteed to be large enough for viewing
+                // this will automatically un-check the other checkbox in graphical view!
+                $('input#focus_on_common_introns').prop('checked', false).trigger('click');
                 resetGraphic();
                 deColorizeGraphic(); // make everything grey first to then re-store color of wanted parts!
 
