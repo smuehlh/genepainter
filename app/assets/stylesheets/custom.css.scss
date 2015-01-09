@@ -512,14 +512,16 @@ div.highlight-gain {
   font-family: inherit;
   fill: #336699;
 }
-
-// color background table
+// color table (text-based and statistics rep.)
 .highlighted {
-  background-color: orange !important;
+  background-color: $h1_accent_color !important;
 }
-
+// color graphical-rep.
+.fill-darkgrey {
+  fill: $grau;
+}
 .fill-grey {
-  fill: #D3D3D3;
+  fill: $hellgrau;
 }
 
 table.mapped_headers td {
