@@ -74,6 +74,7 @@ function warning(message) {
 }
 
 function resetTable() {
+  // reset text-based rep. and statistics-tab
   $('.highlighted').removeClass('highlighted');
   $('.common-highlighted').removeAttr('style');
 }
@@ -83,3 +84,10 @@ function resetPhyloTree() {
     this.classList.remove("active-taxon");
   });
 }
+function resetGraphic() {
+  // reset graphical rep.
+  $('#genestructures-merged .background').each(function () {
+    this.classList.remove('fill-darkgrey', 'fill-grey', 'fill-highlighted');
+  });
+}
+
