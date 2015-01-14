@@ -312,12 +312,8 @@ module GenePainterHelper
     svg = File.open(svg_path, 'rb').read.delete!("\n")
     return content_tag(:div, svg.html_safe)
   end
-  def render_uploaded_seq_alignment    
-    return File.open("#{controller.p_alignment}", 'rb').read.gsub("\n", "\\n")
-  end
-
-  def render_uploaded_species_mapping  
-    return File.open("#{controller.p_species_mapping}", 'rb').read.gsub("\n", "\\n") # gsub("\n", "<br>")
+  def render_file(filename)    
+    return File.open(filename, 'rb').read.gsub("\n", "\\n")
   end
 
   def populate_select_genes_modal
