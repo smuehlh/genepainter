@@ -569,6 +569,20 @@ class GenePainterController < ApplicationController
     end
   end
 
+  def display_genestruct
+    @info = ""
+
+    # find file, file-extension (is yaml or gff file?) is not known
+    file = Dir.glob(File.join(p_gene_structures, "#{params[:gene]}.*") )[0]
+    @content = view_context.render_file(file)
+
+    rescue RuntimeError, NoMethodError, TypeError, NameError, Errno::EISDIR, Errno::ENOENT, Errno::EACCES, ArgumentError => exp
+      @info = 'Cannot display file.'
+
+    ensure
+      render :display_genestruct, formats: [:js]
+  end
+
   def download_new_genestructs
     @error = ""
     p_src_all = File.join(session[:basepath_data], 'selected_gene_structures')

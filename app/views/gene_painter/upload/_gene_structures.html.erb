@@ -37,6 +37,40 @@
 <div style="clear: both">
 	<%= render :partial => "gene_painter/help/upload_gene_struct_help"%>
 </div>
+<%= 
+	content_tag(:div, 
+		content_tag(:p, 
+			content_tag(:label, content_tag(:b, "View uploaded file")) +
+			image_tag("icons/down.png", :class => "help uploaded_genestruct_info")
+		) +
+		# same structure as help-partials!
+		content_tag(:div, 
+			content_tag(:span, "", 
+				:class => "ui-icon ui-icon-closethick warning_close", 
+				:style => "display:inline-block;",
+				:onclick => "$('#uploaded_genestruct_info').hide('slow');"
+			) +		
+			content_tag(:div, 
+				nil,
+				:id => "uploaded_genestruct_list"
+			) +
+			content_tag(:textarea, nil, 
+				:id => "uploaded_genestruct_content", 
+				:class => "spacer",
+				:placeholder => "Gene structure as part of the uploaded files", 
+				:cols => 80, :rows => 15, 
+				:style => "width: 700px;", 
+				:disabled => true,
+			),
+			:id => "uploaded_genestruct_info",
+			:style => "display:none"
+		),
+		:class => "genestruct-upload-viewer",
+		:style => "display:none;"
+	)	
+%>
+
+<p><b>Or generate gene structures for selected sequences (Data Center)</b></p>
 
 <%= javascript_tag defer: 'defer' do -%>
 	set_up_fileupload("#gene_structures_uploader");
@@ -44,6 +78,7 @@
 	$("img.upload_gene_struct_help").click(function() {
 		 $("div#upload_gene_struct_help").toggle("slow");
 	});
+	$("img.uploaded_genestruct_info").click(function() {
+		 $("div#uploaded_genestruct_info").toggle("slow");
+	});
 <% end -%>
-
-<p><b>Or generate gene structures for selected sequences (Data Center)</b></p>

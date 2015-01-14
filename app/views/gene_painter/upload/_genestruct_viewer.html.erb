@@ -1,0 +1,26 @@
+<%=
+	# display dropdown menu of gene names
+	# do not preselect first gene, (pre-)selection is handeled by jquery
+	sorted_genes = controller.gene_structure_to_status_map.keys.sort
+	first_gene = sorted_genes[0]
+
+	label_tag(:gene_select, "Display gene structure ") +
+	select_tag(:gene_select, 
+		options_for_select( sorted_genes ),
+		:multiple => false,
+		:disabled => false,
+		:onchange => "render_genestruct(this.value);"
+	)
+%>
+
+<script defer>
+	// trigger event to show structure of preselected gene
+	$('#gene_select').val("<%= first_gene %>").trigger('change');
+	function render_genestruct(selected) {
+		$.ajax({
+			type: 'POST',
+			url: build_ajax_path('/display_genestruct'),
+			data: {'gene': selected},
+		});
+	}
+</script>

@@ -1,0 +1,10 @@
+<% if @info.blank? then %>
+
+  // display uploaded gene structure
+  $("#uploaded_genestruct_content").html('<%= raw(@content) %>');
+
+<% else%>
+  // do not render an error/warning box; instead simply render a text-message in the textarea
+  $("#uploaded_genestruct_content").html('<%= raw(@info) %>');
+
+<% end %>

@@ -28,6 +28,7 @@ Rails.application.routes.draw do
     match 'clean_up', to: 'gene_painter#clean_up', as: 'post/clean_up', :via => [:post]
     match 'prepare_new_session', to: 'gene_painter#prepare_new_session', as: 'post/prepare_new_session', :via => [:post]
     match 'autocomplete', to: 'gene_painter#autocomplete', as: 'get/autocomplete', :via => [:get]
+    match 'display_genestruct', to: 'gene_painter#display_genestruct', as: 'display_genestruct', :via => [:post]
     match 'download_genestructs', to: 'gene_painter#download_new_genestructs', as: 'get/download_genestructs', :via => [:get]
     match 'download_resultfiles', to: 'gene_painter#download_resultfiles', as: 'get/download_resultfiles', :via => [:get]
 
@@ -60,6 +61,7 @@ Rails.application.routes.draw do
       match 'clean_up', to: 'gene_painter#clean_up', as: 'post/clean_up', :via => [:post]
       match 'prepare_new_session', to: 'gene_painter#prepare_new_session', as: 'post/prepare_new_session', :via => [:post]
       match 'autocomplete', to: 'gene_painter#autocomplete', as: 'get/autocomplete', :via => [:get]
+      match 'display_genestruct', to: 'gene_painter#display_genestruct', as: 'display_genestruct', :via => [:post]
       match 'download_genestructs', to: 'gene_painter#download_new_genestructs', as: 'get/download_genestructs', :via => [:get]
       match 'download_resultfiles', to: 'gene_painter#download_resultfiles', as: 'get/download_resultfiles', :via => [:get]
     end
