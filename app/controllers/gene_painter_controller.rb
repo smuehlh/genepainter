@@ -363,9 +363,7 @@ class GenePainterController < ApplicationController
   end
 
   def map_sequence_name_to_species
-    session[:genes_to_species_map] = SequenceHelper.map_genenames_to_speciesnames(
-      session[:basepath_data] + '/fastaheaders2species.txt'
-    )
+    session[:genes_to_species_map] = SequenceHelper.map_genenames_to_speciesnames( session[:p_species_mapping] )
   end
 
   def call_genepainter
