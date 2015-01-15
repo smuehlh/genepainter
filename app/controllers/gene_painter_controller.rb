@@ -1,6 +1,5 @@
 class GenePainterController < ApplicationController
 
-  @@gene_structure_to_status_map = {} # use class variable as hot-fix for issue that first uploaded gene structure not stored otherwise
   def id
     session[:id]
   end
@@ -22,7 +21,7 @@ class GenePainterController < ApplicationController
   end
 
   def gene_structure_to_status_map
-    @@gene_structure_to_status_map
+    session[:gene_structure_to_status_map]
   end
 
   def p_alignment
@@ -46,7 +45,7 @@ class GenePainterController < ApplicationController
     session[:genes_to_species_map] = {} # hash with genes and corresponding species
     session[:p_pdb] = "" # path to PDB file
     session[:new_gene_structures] = [] # newly generated gene structures
-    @@gene_structure_to_status_map = {} # hash with genes (that have a gene structure) and the status of that gene structures
+    session[:gene_structure_to_status_map] = {} # hash with genes (that have a gene structure) and the status of that gene structures
 
     # Generate a dir in tmp to store uploaded files
     session[:id] = Helper.make_new_tmp_dir(TMP_PATH)
@@ -150,8 +149,7 @@ class GenePainterController < ApplicationController
           gene = File.basename(path, ".*")
 
           Helper.move_or_copy_file(path, session[:p_gene_structures], 'copy')
-          @@gene_structure_to_status_map[gene] = GenestructureHelper.get_status_of_gene_structure(path)
-          # session[:gene_structure_to_status_map][gene] = GenestructureHelper.get_status_of_gene_structure(path)
+          session[:gene_structure_to_status_map][gene] = GenestructureHelper.get_status_of_gene_structure(path)
         end
       else
 
@@ -176,7 +174,7 @@ class GenePainterController < ApplicationController
 
           # save gene structure and status 
           gene = File.basename(path_dest, ".*")    
-          @@gene_structure_to_status_map[gene] = GenestructureHelper.get_status_of_gene_structure(path_dest) 
+          session[:gene_structure_to_status_map][gene] = GenestructureHelper.get_status_of_gene_structure(path_dest) 
         end
 
       end
@@ -184,7 +182,7 @@ class GenePainterController < ApplicationController
       "" # default for @fatal_error
     }
 
-    @n_gene_structs = @@gene_structure_to_status_map.size
+    @n_gene_structs = session[:gene_structure_to_status_map].size
 
     rescue RuntimeError => exp
       @fatal_error = exp.message
@@ -481,7 +479,7 @@ class GenePainterController < ApplicationController
           new_gene_structures.each do |gene|
             matching_files = Dir.glob( File.join(d_gene_structures, gene, ".*") )
             if path = matching_files[0] then 
-              @@gene_structure_to_status_map[gene] = GenestructureHelper.get_status_of_gene_structure(path) 
+              session[:gene_structure_to_status_map][gene] = GenestructureHelper.get_status_of_gene_structure(path) 
             end
           end
         else
