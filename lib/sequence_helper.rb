@@ -52,7 +52,7 @@ module SequenceHelper
 			end
 			species = species.strip # remove leading & trailing white spaces
 			species = species.gsub(/\A"|"\Z/, '') # remove leading * trailing quotes
-			genes = genes.split(/,/).map { |g| g.strip } # remove leading & trailing white spaces
+			genes = genes.split(/[,|;]/).map { |g| g.strip } # remove leading & trailing white spaces
 
 			genes.each do |gene|
 				if ! genes_with_corresponding_species[gene] then 
