@@ -29,13 +29,13 @@ function build_ajax_path(url) {
   return (ajax_prefix + url).replace('//','/');
 };
 
-// $( window ).bind('beforeunload', function() {
-//   $.ajax({
-//     type: 'POST',
-//     url: build_ajax_path('/clean_up'),
-//     data: {'authenticity_token': authenticity_token}
-//   });
-// });
+$( window ).bind('beforeunload', function() {
+  $.ajax({
+    type: 'POST',
+    url: build_ajax_path('/clean_up'),
+    data: {'authenticity_token': authenticity_token}
+  });
+});
 
 $(function() {
   $( document ).tooltip();
