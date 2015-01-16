@@ -383,13 +383,14 @@ class GenePainterController < ApplicationController
 
     Helper.mkdir_or_die(d_output)
 
-
     @is_example = params[:is_example] == "true" # params is string "true" or string "false"
     missing_gene_structures = params[:generate_genestruct] == nil ? [] : params[:generate_genestruct]
-    all_species = params[:species] == nil ? [] : params[:species]
-    all_species = all_species.reject{|e| e.empty?} # delete empty strings (no species info given)
+
     selected_genes = params[:analyse] == nil ? [] : params[:analyse] 
 
+    # all species belonging to genes selected for analysis
+    all_species = session[:genes_to_species_map].collect {|k,v| v if selected_genes.include?(k)}
+    all_species = all_species.compact.uniq # might contain nil values and duplicated values
 
     # build taxonomy lists and write gene to species mapping, not if example
     if @is_example then
@@ -505,8 +506,9 @@ class GenePainterController < ApplicationController
     # the default options for gene painter call
     all_options = "#{options_io} #{options_text_output} #{options_graphical_output}"
 
-    if ! is_skipped_taxonomy && session[:genes_to_species_map].any? then 
+    if ! is_skipped_taxonomy && all_species.any? then 
       # add options for tax. output
+      # as taxonomy was generated and at least some selected genes have species mapping!
       all_options += " #{options_taxonomic_output}"
     end
 

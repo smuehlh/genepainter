@@ -36,15 +36,15 @@
 		AjaxQ.push(function() {
 			hide_show_waiting('show');
 
-			var all_species = new Array(); 
-			$("#dataCenterForm input[name='species[]'][type='hidden']").each(function(){
-				all_species.push( $(this).attr('value') ); 
+			var selected_genes = new Array(); 
+			$("#dataCenterForm input[name='analyse[]']:checked").each(function(){
+				selected_genes.push( this.value );
 			});
 
 			$.ajax({
 				type: 'POST',
 				url: build_ajax_path('/call_genepainter'),
-				data: {'is_example': true, 'sample_data': kind, 'species': all_species, 
+				data: {'is_example': true, 'sample_data': kind, 'analyse': selected_genes, 
 					'authenticity_token': authenticity_token},
 				success: function() {
 					$(myId).append(" (Example loaded.)");
