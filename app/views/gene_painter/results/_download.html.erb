@@ -40,7 +40,7 @@
 				<col>
 			</colgroup>
 			<tr>
-				<td><%= link_to( "Gene structures", get_download_genestructs_path, :class => "external", :target => "_blank" ) %></td>
+				<td><%= link_to( "Gene structures", get_download_genestructs_path(authenticity_token:  form_authenticity_token), :class => "external", :target => "_blank" ) %></td>
 				<td>Newly generated gene structures</td>
 			</tr>
 		</table>
@@ -58,7 +58,7 @@
 				<% next if desc[:type] != "text" %>
 				<tr>
 					<td>
-						<%= link_to( desc[:alt_name], get_download_resultfiles_path( file: f_name ), :class => "external", :target => "_blank" ) %>
+						<%= link_to( desc[:alt_name], get_download_resultfiles_path( file: f_name, authenticity_token:  form_authenticity_token ), :class => "external", :target => "_blank" ) %>
 					</td>
 					<td><%= desc[:desc] %></td>
 				</tr>

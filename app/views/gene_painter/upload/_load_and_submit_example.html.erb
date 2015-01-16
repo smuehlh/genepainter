@@ -8,12 +8,13 @@
 
 
 <script defer>
-
+	var authenticity_token = $('meta[name=csrf-token]').attr('content');
 	function refreshSession() {
 		// clean up uploaded files and refresh session-data; allows to upload both examples sequentially
 		$.ajax({
 			type: 'POST',
-			url: build_ajax_path('/prepare_new_session')
+			url: build_ajax_path('/prepare_new_session'),
+			data: {"authenticity_token": authenticity_token},
 		});
 	}
 
@@ -43,7 +44,8 @@
 			$.ajax({
 				type: 'POST',
 				url: build_ajax_path('/call_genepainter'),
-				data: {'is_example': true, 'sample_data': kind, 'species': all_species},
+				data: {'is_example': true, 'sample_data': kind, 'species': all_species, 
+					'authenticity_token': authenticity_token},
 				success: function() {
 					$(myId).append(" (Example loaded.)");
 					$(myId).removeAttr("onclick");

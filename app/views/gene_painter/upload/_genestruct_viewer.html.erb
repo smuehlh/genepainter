@@ -17,10 +17,11 @@
 	// trigger event to show structure of preselected gene
 	$('#gene_select').val("<%= first_gene %>").trigger('change');
 	function render_genestruct(selected) {
+		var authenticity_token = $('meta[name=csrf-token]').attr('content');
 		$.ajax({
 			type: 'POST',
 			url: build_ajax_path('/display_genestruct'),
-			data: {'gene': selected},
+			data: {'gene': selected, "authenticity_token": authenticity_token},
 		});
 	}
 </script>

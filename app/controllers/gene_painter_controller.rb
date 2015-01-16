@@ -34,7 +34,6 @@ class GenePainterController < ApplicationController
 
   # prepare a new session 
   def prepare_new_session
-    clean_up
 
     session[:id] = "" # id used as folder and file names
     session[:basepath_data] = "" # path to folder containing input data 
@@ -62,8 +61,8 @@ class GenePainterController < ApplicationController
 
   # Render start page for GenePainter
   def gene_painter
-
-    reset_session
+# do not reset_session since this causes Invalid CSRF tokens when using multiple sessions     
+#     reset_session
     
     prepare_new_session
 
@@ -615,12 +614,11 @@ class GenePainterController < ApplicationController
   def clean_up
     files_to_remove = Dir["#{Rails.root}/public/tmp/#{session[:id]}*"]
 
-    if files_to_remove.blank?
-    else
-      files_to_remove.each do |file|
-        File.delete(file)
-      end
+    files_to_remove.each do |file|
+      File.delete(file)
     end
+    clear_session
+
   rescue RuntimeError, NoMethodError, Errno::ENOENT, Errno::EACCES, ArgumentError, NameError => ex
   end
 

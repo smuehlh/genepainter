@@ -6,13 +6,17 @@
 	<div class="file-upload-button">
 		<%= content_tag(:label, content_tag(:b, "Or upload file ")) %>
 
-		<%= file_field_tag("species_mapping_uploader",
-			:name => "files[]",
-			:multiple => false,
-			:accept => ".txt",
-			:data => {url: post_upload_species_mapping_path},
-			:disabled => true
-		)
+		<%= 
+		form_tag(post_upload_species_mapping_path, remote: true, :id => "sequenceUploadedForm") do
+			file_field_tag("species_mapping_uploader",
+				:name => "files[]",
+				:multiple => false,
+				:accept => ".txt",
+				:data => {url: post_upload_species_mapping_path, authenticity_token: form_authenticity_token},
+				:disabled => true
+			) +
+			hidden_field_tag(:authenticity_token, form_authenticity_token)
+		end
 		%>
 	</div>
 	<div class="file-upload-file">
@@ -28,11 +32,11 @@
 		<script defer>
 			function load_species_mapping(kind) {
 				hide_show_waiting('show');
-
+				var authenticity_token = $('meta[name=csrf-token]').attr('content');
 				$.ajax({
 					type: 'POST',
 					url: build_ajax_path('/upload_species_mapping'),
-					data: {'is_example': true, 'sample_data': kind},
+					data: {'is_example': true, 'sample_data': kind, "authenticity_token": authenticity_token},
 				});
 			}
 		</script>

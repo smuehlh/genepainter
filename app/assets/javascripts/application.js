@@ -29,12 +29,13 @@ function build_ajax_path(url) {
   return (ajax_prefix + url).replace('//','/');
 };
 
-$( window ).bind('beforeunload', function() {
-  $.ajax({
-    type: 'POST',
-    url: build_ajax_path('/clean_up'),
-  });
-});
+// $( window ).bind('beforeunload', function() {
+//   $.ajax({
+//     type: 'POST',
+//     url: build_ajax_path('/clean_up'),
+//     data: {'authenticity_token': authenticity_token}
+//   });
+// });
 
 $(function() {
   $( document ).tooltip();
@@ -199,11 +200,11 @@ function create_alignment_file_ajax() {
   $('textarea#text_seq').first().on('blur', function() {
     if (this.value.length) {
       var that = this;
-
+      var authenticity_token = $('meta[name=csrf-token]').attr('content');
       $.ajax({
         type: 'POST',
         url: build_ajax_path('/create_alignment_file'),
-        data: {'sequence': that.value},
+        data: {'sequence': that.value, "authenticity_token": authenticity_token},
         dataType: 'script'
       });
     }

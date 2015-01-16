@@ -12,6 +12,7 @@
 			content_tag(:div, nil, :id => "headers", :class => "link_sequence_names manual_species_mapping") +
 			content_tag(:div, "", :style => "clear: both; padding-top:10px" ) +
 			hidden_field_tag(:task, "insert") +
+			hidden_field_tag(:authenticity_token, form_authenticity_token) +
 			submit_tag("Save",
 				:id => "manual_species_mapping_button",
 				:disabled => true
@@ -36,6 +37,7 @@
 	});
 
 	$(function() {
+		var authenticity_token = $('meta[name=csrf-token]').attr('content');
 		$("input#species" ).autocomplete({
 			minLength: 3,
 			delay: 300,
@@ -43,7 +45,7 @@
 				$.ajax({
 					type: 'GET',
 					url: build_ajax_path("/autocomplete"),
-					data: {"q": request.term},
+					data: {"q": request.term, "authenticity_token": authenticity_token},
 					success: function(result) {
 					response(result);
 					}

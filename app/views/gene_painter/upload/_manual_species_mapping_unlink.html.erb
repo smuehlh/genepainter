@@ -46,12 +46,12 @@
 				$("div#unlink_genes_modal [type=checkbox]:checked").each(function(){
 					checkbox_data.push($(this).attr('value'))
 				});
-			
+				var authenticity_token = $('meta[name=csrf-token]').attr('content');
 				$.ajax({
 					type: 'POST',
 					url: build_ajax_path('/update_species_mapping'),
 					dataType: 'script',
-	                data: {'names': checkbox_data, 'task': 'delete'},
+	                data: {'names': checkbox_data, 'task': 'delete', "authenticity_token": authenticity_token},
 				});
 				$(this).dialog("close");
 			}

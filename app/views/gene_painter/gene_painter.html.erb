@@ -1,5 +1,7 @@
 <% provide(:title, 'GenePainter') %>
-
+<%
+puts form_authenticity_token
+%>
 <%= content_tag(:h1, "Load and Submit Sample Data") %>
 <%= render :partial => "gene_painter/upload/load_and_submit_example" %>
 

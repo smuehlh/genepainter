@@ -43,14 +43,3 @@
 
     </ul>
 <% end %>
-
-<%= javascript_tag defer: 'defer' do -%>
-  $.each($('div#menu').find('a'), function() {
-    $(this).click(function() {
-      $.ajax({
-        type: 'POST',
-        url: build_ajax_path('/clean_up')
-      });
-    });
-  });
-<% end -%>
