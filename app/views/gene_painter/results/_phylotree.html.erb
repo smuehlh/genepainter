@@ -1,16 +1,16 @@
-<% if File.exist?("#{Rails.root}/public/tmp/#{controller.id}-taxonomy-intron-numbers.txt") &&
-    File.exist?("#{Rails.root}/public/tmp/#{controller.id}-tree.svg") then %>
+<% if File.exist?( controller.build_output_path("taxonomy-intron-numbers.txt") ) &&
+    File.exist?( controller.build_output_path("tree.svg") ) then %>
 
   <%
     taxa_with_gained_introns, taxa_with_all_introns = get_phylotree_intronpos_info(
-        "#{Rails.root}/public/tmp/#{controller.id}-taxonomy-intron-numbers.txt"
+        controller.build_output_path("taxonomy-intron-numbers.txt")
     ) 
   %>
 
   <%= render :partial => "gene_painter/help/phylotree_info" %>
   <%=
     content_tag(:div, 
-        render_svg("#{controller.id}-tree.svg", "svg"), 
+        render_svg("tree.svg", "svg"), 
         :id => "svg_placeholder", 
         :class => "highlight-all", # 'all' radiobutton is preselected
         :style => "padding: 10px 0px 10px 0px", 

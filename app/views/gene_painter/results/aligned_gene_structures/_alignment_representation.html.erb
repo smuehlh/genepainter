@@ -1,5 +1,5 @@
 <%=
-	alignment_path = "#{Rails.root}/public/tmp/#{controller.id}-alignment.fas" 
+	alignment_path = controller.build_output_path("alignment.fas")
 
 	if Helper.does_file_exist( alignment_path ) then 
 		iframe_src_id = copy_alignment_for_lucullus(alignment_path)

@@ -1,32 +1,32 @@
 <div id='graphical' class="large_div">
   <div class="res_left_col" style='width: 125px'>
     <div id='genenames' class="res_height">
-      <%= render_svg("#{controller.id}-genenames-normal.svg", "hide-horizontal-overflow").html_safe %>
+      <%= render_svg("genenames-normal.svg", "hide-horizontal-overflow").html_safe %>
     </div>
   </div>
 
   <div id='right-column'>
     <div id='genestructures' class="res_height">
-      <%= render_svg("#{controller.id}-genestructures-normal.svg", "normal").html_safe %>
-      <%= render_svg("#{controller.id}-genestructures-reduced.svg", "reduced").html_safe %>
+      <%= render_svg("genestructures-normal.svg", "normal").html_safe %>
+      <%= render_svg("genestructures-reduced.svg", "reduced").html_safe %>
     </div>
   </div>
 
   <div id='legend' style='overflow: hidden'>
-    <%= render_svg("#{controller.id}-legend-normal.svg", "normal").html_safe %>
-    <%= render_svg("#{controller.id}-legend-reduced.svg", "reduced").html_safe %>
+    <%= render_svg("legend-normal.svg", "normal").html_safe %>
+    <%= render_svg("legend-reduced.svg", "reduced").html_safe %>
   </div>
 
   <div id='left-column' class="res_left_col" style='width: 125px'>
     <div id='genenames-merged' class="res_height" style='overflow: hidden'>
-      <%= render_svg("#{controller.id}-genenames-normal-merged.svg", "merged-name").html_safe %>
+      <%= render_svg("genenames-normal-merged.svg", "merged-name").html_safe %>
     </div>
   </div>
 
   <div id='right-column'>
     <div id='genestructures-merged' class="res_height" style="overflow-y: hidden">
-      <%= render_svg("#{controller.id}-genestructures-normal-merged.svg", "normal").html_safe %>
-      <%= render_svg("#{controller.id}-genestructures-reduced-merged.svg", "reduced").html_safe %>
+      <%= render_svg("genestructures-normal-merged.svg", "normal").html_safe %>
+      <%= render_svg("genestructures-reduced-merged.svg", "reduced").html_safe %>
 
     </div>
   </div>

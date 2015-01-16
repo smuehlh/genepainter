@@ -303,7 +303,7 @@ module GenePainterHelper
   end
 
   def render_svg(filename, classname)
-    svg_path = File.join("#{Rails.root}/public/tmp", filename)
+    svg_path = controller.build_output_path(filename)
     svg = File.open(svg_path, 'rb').read.delete!("\n")
     return content_tag(:div, svg.html_safe, :class => classname)
   end

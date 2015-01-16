@@ -1,5 +1,5 @@
 <% 
-  stats_path = "#{Rails.root}/public/tmp/#{controller.id}-stats.txt"
+  stats_path = controller.build_output_path("stats.txt")
   names_table, patterns_table, stats_table_head, stats_table_data, intron_num_table = get_statistics_table(
     stats_path, "stats_patterns_table"
   )

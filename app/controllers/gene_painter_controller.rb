@@ -45,15 +45,17 @@ class GenePainterController < ApplicationController
     session[:p_pdb] = "" # path to PDB file
     session[:new_gene_structures] = [] # newly generated gene structures
     session[:gene_structure_to_status_map] = {} # hash with genes (that have a gene structure) and the status of that gene structures
+    session[:basepath_output] = "" # path to folder containing output data
 
     # Generate a dir in tmp to store uploaded files
     session[:id] = Helper.make_new_tmp_dir(TMP_PATH)
 
-    session[:basepath_data] = File.join(TMP_PATH, id)
+    session[:basepath_data] = File.join(TMP_PATH, session[:id])
     session[:p_alignment] = File.join(session[:basepath_data], 'input.fas')
     session[:p_gene_structures] = File.join(session[:basepath_data], 'gene_structures')
     session[:p_species_mapping] = File.join(session[:basepath_data], 'fastaheaders2species.txt')
     session[:p_pdb] = File.join(session[:basepath_data], 'pdb.pdb')
+    session[:basepath_output] = File.join(Rails.root, "public", "tmp", session[:id])
 
     Helper.mkdir_or_die(session[:p_gene_structures])
 
@@ -374,7 +376,7 @@ class GenePainterController < ApplicationController
     # do NOT use session[:p_gene_structures], as this contains _all_ genestructures
     # use d_gene_structures instead, which contains _selected_ genestructures only
     f_alignment = session[:p_alignment]
-    d_output = "#{Rails.root}/public/tmp"
+    d_output = session[:basepath_output]
     f_species_to_fasta = File.join(session[:basepath_data], 'fastaheaders2species.txt')
     f_pdb = session[:p_pdb]
     f_taxonomy_list = File.join(session[:basepath_data], 'taxonomy_list.csv')
@@ -461,7 +463,7 @@ class GenePainterController < ApplicationController
     end
 
     # Prefix to all output files
-    prefix = session[:id]
+    prefix = "results" # same prefix used in build_output_files method
 
     # Creates missing gene structures
     # generate gene structures only for those genes that are part of the analysis
@@ -553,7 +555,6 @@ class GenePainterController < ApplicationController
         build_output_path("legend-reduced-merged.svg"),
         ["Merged"])
 
-
   rescue RuntimeError => ex
     @fatal_error = ex.message
   rescue NoMethodError, Errno::ENOENT, Errno::EACCES, ArgumentError, NameError, TypeError => ex
@@ -608,15 +609,12 @@ class GenePainterController < ApplicationController
   end
 
   def build_output_path(filename)
-    return "#{Rails.root}/public/tmp/#{session[:id]}-#{filename}"
+    return File.join(session[:basepath_output], "results-#{filename}")
   end
 
   def clean_up
-    files_to_remove = Dir["#{Rails.root}/public/tmp/#{session[:id]}*"]
+    FileUtils.remove_dir( session[:basepath_output] )
 
-    files_to_remove.each do |file|
-      File.delete(file)
-    end
     clear_session
 
   rescue RuntimeError, NoMethodError, Errno::ENOENT, Errno::EACCES, ArgumentError, NameError => ex
