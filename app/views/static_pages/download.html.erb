@@ -1,7 +1,8 @@
 <% provide(:title, 'Download') %>
 <h1>Download</h1>
-<p>
-		<p>
+
+<h2>Command-line version</h2>
+	<p>
 		<%= link_to( "tgz compressed archive", get_download_sources_path( file: "gene_painter.tgz" ), :class => "external", :target => "_blank" ) %>
 		<%= tag(:br) %>
 
@@ -9,41 +10,73 @@
 		<%= tag(:br) %>
 
 		<%= link_to( "Documentation", get_download_sources_path( file: "Documentation.pdf" ), :class => "external", :target => "_blank" ) %>
-		<%= tag(:br) %>
+	</p>
+	<%= content_tag(:p, 
+			"Click on files to download.", :class => "filename"
+			)
+	%>
+	<h3>Archive content</h3>
+		<p>
+			<table>
+					<tr>
+							<td>gene_painter.rb</td><td>Main script</td>
+					</tr>
+					<tr>
+							<td>lib/</td><td>Folder containing library</td>
+					</tr>
+					<tr>
+							<td>example/</td><td>Folder containing coronin test data</td>
+					</tr>
+					<tr>
+							<td>tools/</td><td>Folder containing additional scripts, i.e. to obtain NCBI taxonomy dump and YAML files</td>
+					</tr>
+					<tr>
+							<td>Documentation.pdf</td><td>Exhaustive documentation</td>
+					</tr>
+					<tr>
+							<td>README</td><td>Information about installation and usage of GenePainter</td>
+					</tr>
+			</table>
+		</p>
 
-		<%= content_tag(:p, 
+<h3>Version history</h3>
+	<h4>v.2.0.1, January 2015</h4>
+		<ul style="padding-left: 5%">
+			<li>Minor bug-fixes</li>
+		</ul>
+	<h4>v.2.0, June 2014</h4>
+		<ul style="padding-left: 5%">
+			<li>Incorporation of NCBI taxonomy</li>
+			<li>Fuzzy intron positions</li>
+			<li>Statistics about common introns</li>
+			<li>Data and output selection</li>
+		</ul>
+	<h4>v.1.0, September 2012</h4>
+		<ul style="padding-left: 5%">
+			<li>GenePainter goes public!</li>
+		</ul>
+		<p>
+			<%= link_to( "GenePainter v.1.0", get_download_sources_path( file: "gene_painter_v1.zip" ), :class => "external", :target => "_blank" ) %>(zip compressed archive)
+			<%= tag(:br) %>
+			<%= link_to( "Documentation v.1.0", get_download_sources_path( file: "Documentation_v1.png" ), :class => "external", :target => "_blank" ) %>
+			<%= tag(:br) %>
+			<%= content_tag(:p, 
 				"Click on files to download.", :class => "filename"
 				)
-		%>
-</p>
-</p>
-<h2>Archive content</h2>
-<p>
-		<table>
-				<tr>
-						<td>gene_painter.rb</td><td>Main script</td>
-				</tr>
-				<tr>
-						<td>lib/</td><td>Folder containing library</td>
-				</tr>
-				<tr>
-						<td>example/</td><td>Folder containing test data</td>
-				</tr>
-				<tr>
-						<td>tools/</td><td>Folder containing additional scripts, i.e. to obtain NCBI taxonomy dump and YAML files</td>
-				</tr>
-				<tr>
-						<td>Documentation.pdf</td><td>Exhaustive documentation</td>
-				</tr>
-				<tr>
-						<td>README</td><td>Information about installation and usage of GenePainter</td>
-				</tr>
-		</table>
-</p>
-<h2>Old version</h2>
-<p>
-	<%= link_to( "GenePainter v.1.0", get_download_sources_path( file: "gene_painter_v1.zip" ), :class => "external", :target => "_blank" ) %>
-	<%= tag(:br) %>
-	<%= link_to( "Documentation v.1.0", get_download_sources_path( file: "Documentation_v1.png" ), :class => "external", :target => "_blank" ) %>
-	<%= tag(:br) %>
-</p>
+			%>
+		</p>
+<h2>Sample data from website</h2>
+	<p>
+		<%= link_to( "Example 1: coronin genes", get_download_sources_path( file: "gene_painter_example_coronin.zip" ), :class => "external", :target => "_blank" ) %>(zip compressed archive)
+		<%= tag(:br) %>
+
+		<%= link_to( "Example 2: tubulin genes", get_download_sources_path( file: "gene_painter_example_tubulin.zip" ), :class => "external", :target => "_blank" ) %>(zip compressed archive)
+	</p>	
+	<%= content_tag(:p, 
+			"Click on files to download.", :class => "filename"
+			)
+	%>		
+<h2>Restrictions and Licence</h2>
+	<p>
+		GenePainter can be downloaded and used under a GNU General Public License.
+	</p>
