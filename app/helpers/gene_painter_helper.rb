@@ -308,7 +308,8 @@ module GenePainterHelper
     return content_tag(:div, svg.html_safe, :class => classname)
   end
   def render_tree_legend
-    svg_path = File.join("app", "assets", "images", "help", "phylo_legend.svg")
+    # build full path to load svg in both development and production mode
+    svg_path = File.join( Rails.root, "app", "assets", "images", "help", "phylo_legend.svg" )
     svg = File.open(svg_path, 'rb').read.delete!("\n")
     return content_tag(:div, svg.html_safe)
   end

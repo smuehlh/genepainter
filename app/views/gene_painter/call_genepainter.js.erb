@@ -1,5 +1,3 @@
-hide_show_waiting('hide');
-
 <% if @fatal_error.blank? then %>
 	<% if ! @warning.blank? then %>
 		warning('<%=raw(@warning)%>');
@@ -19,7 +17,10 @@ hide_show_waiting('hide');
 	$("#t_download").show();
 	<% new_content = escape_javascript(render(partial: "gene_painter/results/download"))%>
 	$("#t_download").html("<%= new_content %>");
-
+	// hide waiting screen after page is loaded!
+	hide_show_waiting('hide');
 <% else %>
+	// hide waiting screen before error is rendered!
+	hide_show_waiting('hide');
 	error('<%=raw(@fatal_error)%>');
 <% end %>
