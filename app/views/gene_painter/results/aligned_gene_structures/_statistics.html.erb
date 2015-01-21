@@ -1,10 +1,9 @@
 <% 
   stats_path = controller.build_output_path("stats.txt")
-  names_table, patterns_table, stats_table_head, stats_table_data, intron_num_table = get_statistics_table(
-    stats_path, "stats_patterns_table"
+  patterns_table, names_table, intronpos_table, stats_only_th_table, stats_only_td_table = get_statistics_table(
+    stats_path, "stats_patterns_table", "stats_intronpos_table"
   )
-
- %>
+%>
 
 <div class="pattern">
   <div class="res_left_col">
@@ -23,7 +22,7 @@
       <%= patterns_table.html_safe %>
     </div>
     <div id='intron_pos' class="additional_pattern" style='overflow: hidden; padding-left: 10px'>
-      <%= intron_num_table.html_safe %>
+      <%= intronpos_table.html_safe %>
     </div>
   </div>
 
@@ -44,49 +43,20 @@
 </div>
 <br style="clear:both" />
 <div class="clear-fix">
-  <%= stats_table_head.html_safe%>
+  <%= stats_only_th_table.html_safe%>
 </div>
 <div id="stats_table" class="res_height">
-  <%= stats_table_data.html_safe %>
+  <%= stats_only_td_table.html_safe %>
 </div>
 
 <script type="text/javascript">
-    // hot fix alignment issue of table in Statistics tab
-  $($('table.with_border')[1]).children().children().append("<td>&nbsp;</td>");
+  var row, cell;
+  row = $("#stats_intronpos_table")[0].rows[0];
+  // insert dummy cells to match scroll-bar of pattern-table
+  cell = row.insertCell(-1);
+  cell.innerHTML = "&nbsp;"; 
 
-  var $table = $('table#stats_patterns_table');
-
-  // number of rows
-  var n_rows = $table[0].rows.length;
-
-  // number of columns
-  var allCells = $table.find('td');
-  var n_cols = allCells.length / n_rows;
-
-  // traverse column by column
-  function traverse(cells) {
-    var intron_col_order = 0;
-
-    for (var x = 0; x < n_cols; x++) {
-      var n_introns = 0;
-
-      for (var y = 0; y < n_rows; y++) {
-        // assume intron-placeholder in stats-pattern is always "|" and never intron phase
-        if (cells[n_cols*y + x].innerHTML == "|") {
-          n_introns += 1;
-        }
-      }
-
-      // set class names to interact with phylo tree
-      if (n_introns > 0) {
-        var class_name = "intron_" + intron_col_order;
-        for (var y = 0; y < n_rows; y++) {
-          $(cells[n_cols*y + x]).addClass(class_name);
-        }
-        intron_col_order += 1;
-      }
-    }
-  }
-  traverse(allCells);
+  cell = row.insertCell(-1);
+  cell.innerHTML = "&nbsp;";
 
 </script>
