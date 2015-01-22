@@ -14,8 +14,8 @@
   )
   intronphase_table, dummy = get_table(intron_phase_path, {id_pattern_table: 'intron_phase'})
 
-  # fuzzy
-  fuzzy_pos = get_fuzzypos_info(fuzzy_path)
+  # fuzzy tables and positions
+  std_fuzzy_table, merged_fuzzy_table, fuzzy_pos = get_fuzzy_table_and_info(fuzzy_path, 'non_intron_phase_fuzzy', 'merged_fuzzy')
 
 %>
 
@@ -37,7 +37,8 @@
     <%=
       content_tag(:div,
         std_table +
-        intronphase_table,
+        intronphase_table +
+        std_fuzzy_table,
         :id => "all-right",
         :class => "res_height res_names",
         :style => "padding-left: 10px",
@@ -45,7 +46,10 @@
       )
     %>
     <div id='merged-container' style='overflow: hidden; padding-left: 10px'>
-      <%= merged_table.html_safe%>
+      <%= 
+        merged_table +
+        merged_fuzzy_table
+      %>
     </div>
   </div>
 
@@ -81,7 +85,7 @@
 <h4>View Options</h4>
 <table class="unstyled">
   <tr>
-    <td>
+    <td style='padding-right: 15px;'>
       <%=
         content_tag(:div,
           check_box_tag('highlight_unique', "1", nil, :class => "checkbox-textbased-highlight") +
@@ -129,7 +133,7 @@
 
       <% end -%>
     </td>
-    <td style='padding-left: 30px;'>
+    <td style='padding-left: 15px;' class="vertical_line">
       <%=
         content_tag(:div,
           check_box_tag('show_intron_phase') +
@@ -146,30 +150,77 @@
 
 <script>
 
-  var $non_intron_phase_table = $('table#non_intron_phase'),
-  $intron_phase_table = $('table#intron_phase');
+  // init vars
+  // tables
+  var $non_intron_phase_table, $intron_phase_table, $non_intron_phase_fuzzy_table;
+  var $merged_table, $merged_fuzzy_table;
 
+  $non_intron_phase_table = $('table#non_intron_phase');
+  $intron_phase_table = $('table#intron_phase');
+  $non_intron_phase_fuzzy_table = $('table#non_intron_phase_fuzzy');
+  $merged_table = $('table#merged');
+  $merged_fuzzy_table = $('table#merged_fuzzy');
+
+  // Visible Spectrum
+  var start = 450, // nm blue
+    end = 780,   // nm red
+    total = end - start;
+  var wavelength, color;
+
+
+  // default settings:
+  $non_intron_phase_fuzzy_table.toggle();
   $intron_phase_table.toggle();
+  $merged_fuzzy_table.toggle();
 
   // number of rows
-  var n_rows_non_intron_phase = $non_intron_phase_table[0].rows.length;
+  var n_rows = $non_intron_phase_table[0].rows.length;
 
   // color introns by occurence
   function spinnerEventHandler(percent) {
     var min_occurence;
+    
+    var active_merged_table;
+    if ( $merged_table.is(":visible") ) {
+      active_merged_table = $merged_table;
+    } else {
+      active_merged_table = $merged_fuzzy_table;
+    }
 
     percent = parseInt(percent) / 100;
-    min_occurence = Math.ceil(percent * n_rows_non_intron_phase );
+    min_occurence = Math.ceil(percent * n_rows );
 
     if (min_occurence > 0) {
-      for (var i = min_occurence; i <= n_rows_non_intron_phase; i++) {
+      for (var i = min_occurence; i <= n_rows; i++) {
         class_name = "col-" + i;
-        background_color = $("table#merged").find("." + i).css("background-color");
+        background_color = active_merged_table.find("." + i).css("background-color");
 
         $("." + class_name).addClass("common-highlighted");
         $("." + class_name).css("background-color", background_color);
       }
     }
+  }
+
+  // color merged table
+  function colorMergedTable(tMerged) {
+    var row = tMerged.rows[0];
+    for (var i = 0, cell; cell = row.cells[i]; i++) {
+      var nIntrons = cell.className;
+      if (nIntrons == 0) {
+        cell.setAttribute('style', 'background-color: #F5F5F5');
+      } else {
+        wavelength = (nIntrons * total) / n_rows_non_intron_phase + start;
+        color = Math.nmToRGB(wavelength);
+        cell.setAttribute('style', 'background-color: rgb(' +  color.red + ', ' + color.green + ', ' + color.blue + ')');
+      }
+    }
+
+    // insert dummy cells to match scroll-bar of pattern-table
+    cell = row.insertCell(-1);
+    cell.innerHTML = "&nbsp;"; 
+
+    cell = row.insertCell(-1);
+    cell.innerHTML = "&nbsp;";
   }
 
   // bind event to check boxes
@@ -233,48 +284,71 @@
     }
   });
 
-  // show intron phase
-  $('input#show_intron_phase').change(function() {
-    var checked = $(this).is(':checked');
 
-    $intron_phase_table.toggle();
-    $non_intron_phase_table.toggle();
-  });
   // show intron phase
+  $("input#show_intron_phase").change(function() {  
+    // in any case: hide fuzzy tables and show the unfuzzy-merged table
+    $non_intron_phase_fuzzy_table.hide();
+    $merged_fuzzy_table.hide();
+
+    $merged_table.show();
+
+    if ( $(this).is(':checked') ) {
+      // show intronphase-table
+      $intron_phase_table.show();
+      $non_intron_phase_table.hide();
+
+      // link to fuzzy-checkbox
+      $('input#show_fuzzy_introns').prop('checked', false);
+
+      // link to common introns
+      if ( $('input#highlight_common').is(':checked') ) {
+        spinnerEventHandler(spinner.spinner("value")); 
+      }
+
+    } else {
+      // show std-table
+      $intron_phase_table.hide();
+      $non_intron_phase_table.show();
+    }
+  });
+
+  // show fuzzy introns merged into one position
   $('input#show_fuzzy_introns').change(function() {
-    var checked = $(this).is(':checked');
-// TODO
+    // in any case: hide intron-phase table
+    $intron_phase_table.hide();
+
+    if ( $(this).is(':checked') ) {
+      // show fuzzy-tables
+      $non_intron_phase_fuzzy_table.show();
+      $merged_fuzzy_table.show();
+
+      $merged_table.hide();
+      $non_intron_phase_table.hide();
+
+      // link to common introns
+      if ( $('input#highlight_common').is(':checked') ) {
+        spinnerEventHandler(spinner.spinner("value")); 
+      }
+
+      // link to intron_phase checkbox
+      $('input#show_intron_phase').prop('checked', false);
+
+    } else {
+      // show std-tables
+      $non_intron_phase_fuzzy_table.hide();
+      $merged_fuzzy_table.hide();
+
+      $merged_table.show();
+      $non_intron_phase_table.show();
+    }
   });
 
 
   // merged
-
-  // Visible Spectrum
-  var start = 450, // nm blue
-    end = 780,   // nm red
-    total = end - start;
-  var wavelength, color;
-
-  // color merged table
-  var tMerged = $('table#merged')[0];
-  var row = tMerged.rows[0];
-  for (var i = 0, cell; cell = row.cells[i]; i++) {
-    var nIntrons = cell.className;
-    if (nIntrons == 0) {
-      cell.setAttribute('style', 'background-color: #F5F5F5');
-    } else {
-      wavelength = (nIntrons * total) / n_rows_non_intron_phase + start;
-      color = Math.nmToRGB(wavelength);
-      cell.setAttribute('style', 'background-color: rgb(' +  color.red + ', ' + color.green + ', ' + color.blue + ')');
-    }
-  }
-
-  // insert dummy cells to match scroll-bar of pattern-table
-  cell = row.insertCell(-1);
-  cell.innerHTML = "&nbsp;"; 
-
-  cell = row.insertCell(-1);
-  cell.innerHTML = "&nbsp;";
+  // color merged table(s)
+  colorMergedTable($merged_table[0]);
+  colorMergedTable($merged_fuzzy_table[0])
 
   // color bar  
   for (var i =0; i <= 100; i+=5) {

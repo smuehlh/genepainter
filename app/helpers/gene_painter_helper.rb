@@ -163,6 +163,37 @@ module GenePainterHelper
     return pattern_table, names_table, intronpos_table, stats_only_th_table, stats_only_td_table
   end
 
+  def get_fuzzy_table_and_info(filename, id_pattern_table, id_merged_table)
+    pos_with_fuzzy = {}
+    pattern_data, names_data = [], [] # names data not acutally needed
+    introns_per_column = nil # init with nil, will be converted to array later ...
+
+    is_collected_fuzzy_pos = false
+
+    IO.foreach(filename) do |line|
+      line = line.chomp
+      next if line.empty?
+
+      if line[0] == ">" && is_collected_fuzzy_pos then 
+        # pattern, with fuzzy pos merged, treat as pattern in get_table method
+        introns_per_column = init_intron_counts(line) if introns_per_column.nil?
+        update_wanted_data(line, pattern_data, names_data, introns_per_column)
+
+      elsif is_fuzzy_pos_list(line)
+        # table with mapping of fuzzy positions
+        update_fuzzy_pos(line, pos_with_fuzzy)
+        is_collected_fuzzy_pos = true
+      end
+    end
+
+    classes_per_column = convert_fuzzy_intron_numbers_to_classes(introns_per_column, pos_with_fuzzy)
+
+    pattern_table = build_pattern_table(pattern_data, classes_per_column, {id: id_pattern_table})
+    merged_table = build_merged_pattern_table(introns_per_column, id_merged_table)
+
+    return pattern_table, merged_table, pos_with_fuzzy
+  end
+
   def get_table(filename, opts={})
     is_return_merged_table = opts[:is_merged_table]
     id_pattern_table = opts[:id_pattern_table] || ""
@@ -364,6 +395,34 @@ module GenePainterHelper
     return classes_arr
   end
 
+  def convert_fuzzy_intron_numbers_to_classes(introns_per_column, fuzzy_pos)
+    classes_arr = Array.new(introns_per_column.size, "")
+
+    intronpos = 0 # first intron has class intron_0
+    introns_per_column.each_with_index do |n_introns, ind|
+      this_classes = "col-#{n_introns}"
+
+      if n_introns > 0 then 
+        this_intron_col_class = class_intron_col(intronpos)
+
+        # add own intronpos- class
+        this_classes += " #{this_intron_col_class}"
+        intronpos += 1
+
+        # add all merged intronpos-classes
+        if mapped_classes = fuzzy_pos[this_intron_col_class] then    
+          mapped_classes.each do |this_class|      
+            this_classes += " #{this_class}"
+            intronpos += 1
+          end 
+        end
+      end
+
+      classes_arr[ind] = this_classes
+    end
+    return classes_arr
+  end
+
   def update_stats(line, stats_data, stats_head)
     if stats_head.empty? then 
       # first line -> table head
@@ -373,6 +432,21 @@ module GenePainterHelper
       stats_data.push line.split("\t")
     end
   end
+
+  def update_fuzzy_pos(line, pos_with_fuzzy)
+    parts = line.split("\t")
+
+    ref = parts[0].to_i - 1 # -1: convert human to ruby counting
+    mapped_pos = parts[1].split(/,\s*/).map {|num| num.to_i - 1 } # -1 convert human to ruby counting
+
+    pos_with_fuzzy[class_intron_col(ref)] = mapped_pos.map{|num| class_intron_col(num)}
+  end
+  def is_fuzzy_pos_list(line)
+    parts = line.split("\t")
+    # line contains a tab-separated table (in fuzzy output, only fuzzy-table itself does)
+    return parts.size == 2 && parts[0].to_i != 0
+  end
+
   def build_stats_table(data, is_th_tag)
     table = [ "<table>", nil, "</table>" ]
     intronpos = 0
@@ -387,7 +461,6 @@ module GenePainterHelper
     end  
     return table.join.html_safe
   end
-
 
   def build_pattern_table(data, classes_per_col, opts={})
     open_tag = "<table"
