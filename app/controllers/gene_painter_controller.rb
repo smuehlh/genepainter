@@ -1,5 +1,7 @@
 class GenePainterController < ApplicationController
 
+  protect_from_forgery except: :clean_up
+
   def id
     session[:id]
   end
@@ -619,7 +621,7 @@ class GenePainterController < ApplicationController
 
     clear_session
 
-  rescue RuntimeError, NoMethodError, Errno::ENOENT, Errno::EACCES, ArgumentError, NameError => ex
+  rescue RuntimeError, NoMethodError, Errno::ENOENT, Errno::EACCES, Errno::ENOTEMPTY, ArgumentError, NameError => ex
   end
 
 end
