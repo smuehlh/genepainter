@@ -497,7 +497,7 @@ class GenePainterController < ApplicationController
 
     # call genepainter
     options_io = "-i #{f_alignment} -p #{d_gene_structures} --outfile #{prefix} --path-to-output #{d_output}"
-    options_text_output = "--intron-phase --alignment --statistics"
+    options_text_output = "--intron-phase --alignment --statistics --fuzzy 5"
     options_graphical_output = "--svg --svg-format both --svg-merged --svg-nested"
     options_taxonomic_output = "--intron-numbers-per-taxon --taxonomy-to-fasta #{f_species_to_fasta} --tree --taxonomy #{f_taxonomy_list}"
     options_pdb_output = "--pdb #{f_pdb} --consensus 0.8"
