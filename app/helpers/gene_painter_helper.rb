@@ -149,8 +149,10 @@ module GenePainterHelper
     pattern_data.unshift intronpos_data
     names_data.unshift ">Intron number"
 
-    pattern_table = build_pattern_table(pattern_data, introns_per_column, 
-      {id: id_pattern_table, classes: 'with_border', is_no_col_classes: true} 
+    classes_per_column = convert_intron_numbers_to_classes(introns_per_column, true) # true: use only intronpos-class
+
+    pattern_table = build_pattern_table(pattern_data, classes_per_column, 
+      {id: id_pattern_table, classes: 'with_border'} 
     )
     names_table = build_table(names_data)
     intronpos_table = build_intronpos_table(intronpos_data, {id: id_intronpos_table, classes: 'with_border'})
@@ -173,7 +175,9 @@ module GenePainterHelper
       update_wanted_data(line, pattern_data, names_data, introns_per_column)
     end
 
-    pattern_table = build_pattern_table(pattern_data, introns_per_column, {id: id_pattern_table})
+    classes_per_column = convert_intron_numbers_to_classes(introns_per_column)
+
+    pattern_table = build_pattern_table(pattern_data, classes_per_column, {id: id_pattern_table})
     names_table = build_table(names_data)
     if is_return_merged_table then 
       id_merged_table = opts[:id_merged_table] || "merged-unused-id"
@@ -339,6 +343,27 @@ module GenePainterHelper
     end
   end
 
+  def convert_intron_numbers_to_classes(introns_per_column, is_only_intronpos_classes=false)
+    classes_arr = Array.new(introns_per_column.size, "")
+
+    intronpos = 0 # first intron has class intron_0 !
+    introns_per_column.each_with_index do |n_introns, ind|
+      if is_only_intronpos_classes then 
+        this_classes = ""
+      else
+        this_classes = "col-#{n_introns}"
+      end
+      if n_introns > 0 then 
+        # intron position in any pattern, not neccessarily this pattern
+        this_classes += " #{class_intron_col(intronpos)}"
+        intronpos += 1
+      end
+      classes_arr[ind] = this_classes
+    end
+
+    return classes_arr
+  end
+
   def update_stats(line, stats_data, stats_head)
     if stats_head.empty? then 
       # first line -> table head
@@ -364,14 +389,14 @@ module GenePainterHelper
   end
 
 
-  def build_pattern_table(data, additional_info, opts={})
+  def build_pattern_table(data, classes_per_col, opts={})
     open_tag = "<table"
     open_tag += " id='#{opts[:id]}'" if opts[:id] && opts[:id] != ""
     open_tag += " class='#{opts[:classes]}'" if opts[:classes] && opts[:classes] != ""
     open_tag += ">"
     table = [ open_tag, nil, "</table>" ]
     table[1] = data.collect do |datum|
-      pattern_to_tr(datum, additional_info, opts[:is_no_col_classes])
+      pattern_to_tr(datum, classes_per_col)
     end
     return table.join.html_safe
   end
@@ -396,8 +421,8 @@ module GenePainterHelper
         str = "|"
       end
     end
-
-    table = ["<table id='#{id}'>", merged_pattern_to_tr(pattern, introns_per_column), "</table>"]
+    # use intron counts as they are as class!
+    table = ["<table id='#{id}'>", pattern_to_tr(pattern, introns_per_column), "</table>"]
     return table.join.html_safe
   end
   def build_intronpos_table(pattern, opts={})
@@ -408,29 +433,11 @@ module GenePainterHelper
     table = [open_tag, array_to_tr(pattern), "</table>"]
     return table.join.html_safe
   end
-  def merged_pattern_to_tr(pattern, introns_per_column)
-    res = ["<tr>", nil, "</tr>"]
-    res[1] = pattern.each_with_index.collect do |char, ind|
-      n_introns = introns_per_column[ind]
-      "<td class='#{n_introns}'>#{char}</td>"
-    end
-    return res.join("")   
-  end
-  def pattern_to_tr(pattern, introns_per_column, is_no_col_classes)
+  def pattern_to_tr(pattern, classes_per_col)
     res = ["<tr>", nil, "</tr>"]
     intronpos = 0 # first intron has class intron_0 !
     res[1] = pattern.each_with_index.collect do |char, ind|
-      n_introns = introns_per_column[ind]
-      if is_no_col_classes then 
-        classes = ""
-      else 
-        classes = "col-#{n_introns}"
-      end
-      if n_introns > 0 then 
-        # intron position in any pattern, not neccessarily this pattern
-        classes += " #{class_intron_col(intronpos)}"
-        intronpos += 1
-      end
+      classes = classes_per_col[ind]
       "<td class='#{classes}'>#{char}</td>"
     end
     return res.join("")
