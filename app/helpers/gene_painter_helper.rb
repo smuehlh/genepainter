@@ -379,6 +379,23 @@ module GenePainterHelper
     return taxa_with_gainedpos, taxa_with_allpos
   end
 
+  def get_fuzzypos_info(filename)
+    pos_with_fuzzy = {}
+    IO.foreach(filename) do |line|
+      line = line.chomp
+      parts = line.split("\t")
+      if parts.size == 2 && parts[0].to_i != 0 then 
+        # line describes fuzzy positions:
+        # pos & all pos mapped onto that
+        ref = parts[0].to_i - 1 # -1: convert human to ruby counting
+        mapped_pos = parts[1].split(/,\s*/).map {|num| num.to_i - 1 } # -1 convert human to ruby counting
+
+        pos_with_fuzzy[class_intron_col(ref)] = mapped_pos.map{|num| class_intron_col(num)}
+      end
+    end
+    return pos_with_fuzzy
+  end
+
   ### helper methods for converting exon-intron pattern to table rows
   def split_pattern_line(line)
     name = line[0...GeneAlignment.max_length_gene_name].strip

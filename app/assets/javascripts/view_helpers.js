@@ -76,6 +76,7 @@ function warning(message) {
 function resetTable() {
   // reset text-based rep. and statistics-tab
   $('.highlighted').removeClass('highlighted');
+  $('.highlighted-2').removeClass('highlighted-2');
   $('.common-highlighted').removeAttr('style');
 }
 function resetPhyloTree() {

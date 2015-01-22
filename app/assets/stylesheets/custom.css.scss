@@ -30,6 +30,7 @@ $menu_links_inactiv: #F2F2F2;
 $menu_links_selected: #999999;
 $content_background: #F6F6F6;
 $h1_color: #336699;
+$h1_color_variation: #4683c1;
 $h2_color: #ddd;
 $nice_button_bg: $h1_color;
 $h1_accent_color: #FF8D66 ; // #FFA666;
@@ -515,6 +516,10 @@ div.highlight-gain {
 // color table (text-based and statistics rep.)
 .highlighted {
   background-color: $h1_color !important;
+  color: $hellgrau !important;
+}
+.highlighted-2 {
+  background-color: $h1_color_variation !important;
   color: $hellgrau !important;
 }
 // color graphical-rep.

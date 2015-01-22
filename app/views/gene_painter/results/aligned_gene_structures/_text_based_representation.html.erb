@@ -1,7 +1,9 @@
 <%
   std_path = controller.build_output_path("std.txt")
   intron_phase_path = controller.build_output_path("intron-phase.txt") 
+  fuzzy_path = controller.build_output_path("fuzzy.txt")
 
+  # "normal" tables
   std_table, names_table, merged_table = get_table(
     std_path, 
     {
@@ -11,6 +13,10 @@
     }
   )
   intronphase_table, dummy = get_table(intron_phase_path, {id_pattern_table: 'intron_phase'})
+
+  # fuzzy
+  fuzzy_pos = get_fuzzypos_info(fuzzy_path)
+
 %>
 
 <div id='text-based' class="pattern">
@@ -28,10 +34,16 @@
   </div>
 
   <div id='right-column'>
-    <div id='all-right' class="res_height res_names" style='padding-left: 10px'>
-      <%= std_table.html_safe %>
-      <%= intronphase_table.html_safe %>
-    </div>
+    <%=
+      content_tag(:div,
+        std_table +
+        intronphase_table,
+        :id => "all-right",
+        :class => "res_height res_names",
+        :style => "padding-left: 10px",
+        :data => {fuzzy: fuzzy_pos}
+      )
+    %>
     <div id='merged-container' style='overflow: hidden; padding-left: 10px'>
       <%= merged_table.html_safe%>
     </div>
@@ -67,7 +79,7 @@
 </table>
 
 <h4>View Options</h4>
-<table>
+<table class="unstyled">
   <tr>
     <td>
       <%=
@@ -82,6 +94,12 @@
           check_box_tag('highlight_common', "1", nil, :class => "checkbox-textbased-highlight") +
           content_tag(:span, 'Highlight introns common to at least ', :style => 'padding-left: 5px;') +
           '<input id="spinner" name="value" style="width: 25px;">'.html_safe + ' % of all genes.'.html_safe
+          )
+      %>
+      <%=
+        content_tag(:div,
+          check_box_tag('highlight_fuzzy', "1", nil, :class => "checkbox-textbased-highlight") +
+          content_tag(:span, 'Highlight introns fuzzy within 5 base pairs', :style => 'padding-left: 5px; padding-right: 20px')
           )
       %>
 
@@ -116,6 +134,10 @@
         content_tag(:div,
           check_box_tag('show_intron_phase') +
           content_tag(:span, 'Show intron phase', :style => 'padding-left: 5px; padding-right: 20px')
+          ) +
+        content_tag(:div,
+          check_box_tag('show_fuzzy_introns') +
+          content_tag(:span, 'Show fuzzy introns merged', :style => 'padding-left: 5px; padding-right: 20px')
           )
       %>
     </td>
@@ -157,6 +179,7 @@
     if (checked) {
       $('td.col-1').addClass('highlighted');
       $('input#highlight_common').prop('checked', false);
+      $('input#highlight_fuzzy').prop('checked', false);
 
       // link to phylotree and graphic
       resetPhyloTree();
@@ -170,6 +193,39 @@
     if (checked) {
       spinnerEventHandler(spinner.spinner("value")); 
       $('input#highlight_unique').prop('checked', false);
+      $('input#highlight_fuzzy').prop('checked', false);
+
+      // link to phylotree and graphic
+      resetPhyloTree();
+      resetGraphic();
+    }
+  });
+
+  $('input#highlight_fuzzy').change(function() {
+    var checked = $(this).is(':checked');
+    resetTable(); // reset table in any case (checked or unchecked)
+    if (checked) {
+
+      var i = 0;
+      var useClass;
+      $.each($("#all-right").data('fuzzy'), function(key, val) {
+        // alternate color
+        if (i % 2 == 0) {
+          useClass = "highlighted";
+        } else {
+          useClass = "highlighted-2";
+        }    
+        i++;
+
+        // highlight table columns
+        $("."+key).addClass(useClass);
+        $.each(val, function(i, this_val){
+          $("."+this_val).addClass(useClass);
+        });
+      });
+
+      $('input#highlight_unique').prop('checked', false);
+      $('input#highlight_common').prop('checked', false);
 
       // link to phylotree and graphic
       resetPhyloTree();
@@ -184,6 +240,12 @@
     $intron_phase_table.toggle();
     $non_intron_phase_table.toggle();
   });
+  // show intron phase
+  $('input#show_fuzzy_introns').change(function() {
+    var checked = $(this).is(':checked');
+// TODO
+  });
+
 
   // merged
 
