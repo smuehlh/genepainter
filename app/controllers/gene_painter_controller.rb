@@ -381,7 +381,7 @@ class GenePainterController < ApplicationController
   end
 
   def call_genepainter
-    
+
     @fatal_error = "" # fatal, not output generated
     @warning = "" # non-fatal error, maybe still output generated
     is_skipped_taxonomy = false
@@ -510,10 +510,8 @@ class GenePainterController < ApplicationController
 
     # call genepainter
     options_io = "-i #{f_alignment} -p #{d_gene_structures} --outfile #{prefix} --path-to-output #{d_output}"
-    options_text_output = "--intron-phase --alignment --statistics --fuzzy 5"
+    options_text_output = "--intron-phase --alignment --statistics --fuzzy #{params[:fuzzy_val]}"
     options_graphical_output = "--svg --svg-format both --svg-merged --svg-nested"
-    options_taxonomic_output = "--intron-numbers-per-taxon --taxonomy-to-fasta #{f_species_to_fasta} --tree --taxonomy #{f_taxonomy_list}"
-    options_pdb_output = "--pdb #{f_pdb} --consensus 0.8"
 
     is_sucess = nil
     # the default options for gene painter call
@@ -522,11 +520,24 @@ class GenePainterController < ApplicationController
     if ! is_skipped_taxonomy && all_species.any? then 
       # add options for tax. output
       # as taxonomy was generated and at least some selected genes have species mapping!
+      options_taxonomic_output = "--intron-numbers-per-taxon --taxonomy-to-fasta #{f_species_to_fasta} --tree --taxonomy #{f_taxonomy_list}"
+
       all_options += " #{options_taxonomic_output}"
     end
 
     if is_pdb then 
       # add options for pdb output
+
+      options_pdb_output = "--pdb #{f_pdb} --pdb-chain #{params[:pdb_chain]}"
+      if params[:pdb_use] == "merged" then 
+        options_pdb_output += " --merge"
+      elsif params[:pdb_use] == "consensus"
+        consensus_val = params[:pdb_consensus_val].to_f / 100
+        options_pdb_output += " --consensus #{consensus_val}"
+      else
+        ref_seq = SequenceHelper.speciesname_to_fastaheader(params[:pdb_ref_seq])
+        options_pdb_output += " --pdb-ref-prot-struct --pdb-ref-prot \"#{ref_seq}\""
+      end       
       all_options += " #{options_pdb_output}"
     end
 

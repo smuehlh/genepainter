@@ -34,6 +34,10 @@ module SequenceHelper
 		return names, seqs
 	end
 
+	def speciesname_to_fastaheader(str)
+		">" + str
+	end
+
 	# this method parses a file with mapping between species and genes
 	# @path [String] path to mapping file
 	# returns [Hash] keys: gene names (i.e. fasta headers), values: corresponding species
