@@ -526,17 +526,19 @@ class GenePainterController < ApplicationController
     end
 
     if is_pdb then 
-      # add options for pdb output
 
-      options_pdb_output = "--pdb #{f_pdb} --pdb-chain #{params[:pdb_chain]}"
+      # add options for pdb output
+      ref_seq = params[:pdb_ref_seq] || session[:sequence_names][0]
+      ref_seq = SequenceHelper.speciesname_to_fastaheader(ref_seq)
+      chain = params[:pdb_chain] || session[:pdb_chains]
+      options_pdb_output = "--pdb #{f_pdb} --pdb-chain #{chain} --pdb-ref-prot \"#{ref_seq}\""
       if params[:pdb_use] == "merged" then 
         options_pdb_output += " --merge"
       elsif params[:pdb_use] == "consensus"
         consensus_val = params[:pdb_consensus_val].to_f / 100
         options_pdb_output += " --consensus #{consensus_val}"
       else
-        ref_seq = SequenceHelper.speciesname_to_fastaheader(params[:pdb_ref_seq])
-        options_pdb_output += " --pdb-ref-prot-struct --pdb-ref-prot \"#{ref_seq}\""
+        options_pdb_output += " --pdb-ref-prot-struct"
       end       
       all_options += " #{options_pdb_output}"
     end
@@ -583,7 +585,7 @@ class GenePainterController < ApplicationController
 
   rescue RuntimeError => ex
     @fatal_error = ex.message
-  rescue NoMethodError, Errno::ENOENT, Errno::EACCES, ArgumentError, NameError, TypeError => ex
+  rescue NoMethodError, Errno::ENOENT, Errno::EACCES, ArgumentError, NameError, TypeError => ex  
     @fatal_error = "Cannot execute GenePainter."
   ensure
     respond_to do |format|
