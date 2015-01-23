@@ -209,7 +209,7 @@
       if (nIntrons == 0) {
         cell.setAttribute('style', 'background-color: #F5F5F5');
       } else {
-        wavelength = (nIntrons * total) / n_rows_non_intron_phase + start;
+        wavelength = (nIntrons * total) / n_rows + start;
         color = Math.nmToRGB(wavelength);
         cell.setAttribute('style', 'background-color: rgb(' +  color.red + ', ' + color.green + ', ' + color.blue + ')');
       }
@@ -350,7 +350,7 @@
   colorMergedTable($merged_table[0]);
   colorMergedTable($merged_fuzzy_table[0])
 
-  // color bar  
+  // color bar (legend)
   for (var i =0; i <= 100; i+=5) {
     wavelength = i/100 * total + start;
     color = Math.nmToRGB(wavelength);
