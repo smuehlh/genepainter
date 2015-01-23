@@ -18,6 +18,22 @@
 		});
 	}
 
+	function submitData(kind) {
+		// set form data before form is submitted
+		$("#dataCenterForm #is_example").val(true);
+		$("#dataCenterForm #sample_data").val(kind);
+
+		var preSel;
+		if (kind === "coronin") {
+			preSel = "HsCoro1A";
+		} else if (kind === "tubulin") {
+			preSel = "HsTub1A";
+		}
+		$("#dataCenterForm #pdb_ref_seq").val(preSel).trigger('change');
+
+		$('#dataCenterForm').submit(); 
+	}
+
 	function load_example(kind) {
 		var myId = "#load_example_" + kind;
 
@@ -34,13 +50,8 @@
 			function() {load_sample_gene_structures(kind)}, 
 			function() {load_species_mapping(kind)}, 
 			function() {load_sample_pdb(kind)},
-			function() { 
-				// set form data before form is submitted
-				$("#dataCenterForm #is_example").val(true);
-				$("#dataCenterForm #sample_data").val(kind);
-
-				$('#dataCenterForm').submit(); 
-			} 
+			function() {}, // hotfix to call submitData only after all other methods are finished
+			function() {submitData(kind)}
 		];
 		$(document).sc_ExecuteAjaxQ({ fx: AjaxQ });
 	}
