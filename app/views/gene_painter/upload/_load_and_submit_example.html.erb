@@ -19,43 +19,29 @@
 	}
 
 	function load_example(kind) {
+		var myId = "#load_example_" + kind;
+
+		// style clicked example
+		$(myId).append(" (Example loaded.)");
+		$(myId).removeAttr("onclick");
+		$(myId).removeClass("active_example");
+		$(myId).addClass("inactive_example");
+
+		// call functions to load example
 		var AjaxQ = [
 			function() {refreshSession()},
 			function() {load_sample_sequence_alignment(kind)}, 
 			function() {load_sample_gene_structures(kind)}, 
 			function() {load_species_mapping(kind)}, 
-			function() {load_sample_pdb(kind)}
+			function() {load_sample_pdb(kind)},
+			function() { 
+				// set form data before form is submitted
+				$("#dataCenterForm #is_example").val(true);
+				$("#dataCenterForm #sample_data").val(kind);
+
+				$('#dataCenterForm').submit(); 
+			} 
 		];
-		var myId;
-		if (kind === "coronin") {
-			myId = "#load_example_coronin";
-		} else if (kind === "tubulin") {
-			myId = "#load_example_tubulin";
-		}
-
-		AjaxQ.push(function() {
-			hide_show_waiting('show');
-
-			var selected_genes = new Array(); 
-			$("#dataCenterForm input[name='analyse[]']:checked").each(function(){
-				selected_genes.push( this.value );
-			});
-
-			$.ajax({
-				type: 'POST',
-				url: build_ajax_path('/call_genepainter'),
-				data: {'is_example': true, 'sample_data': kind, 'analyse': selected_genes, 
-					'authenticity_token': authenticity_token},
-				success: function() {
-					$(myId).append(" (Example loaded.)");
-					$(myId).removeAttr("onclick");
-					$(myId).removeClass("active_example");
-					$(myId).addClass("inactive_example");
-				}
-			});
-
-		});
-
 		$(document).sc_ExecuteAjaxQ({ fx: AjaxQ });
 	}
 </script>
