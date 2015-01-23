@@ -16,7 +16,7 @@
 			) +
 			content_tag(:td, 
 				select_tag(:fuzzy_val, 
-					options_for_select(1..12, 5),
+					options_for_select(1..15, 5), # 15 equals 5 codons, which is quite a lot fuzzy
 					:multiple => false,
 					:disabled => false
 				) +
@@ -26,7 +26,6 @@
 	end 
 %>
 <%=
-puts "adding pdb options ..."
 	content_tag(:h3, "PDB options") +
 	content_tag(:table, :class => "unstyled", :id => "pdb_options") do
 		content_tag(:colgroup) do 
