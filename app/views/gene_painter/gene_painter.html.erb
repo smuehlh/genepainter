@@ -18,11 +18,20 @@
 <%= render :partial => "gene_painter/upload/pdb" %>
 
 <%= content_tag(:h1, "Data Center", :style => "margin-top: 10px;") %>
-<p class='default-text' id='t_data_center'>
-	No data provided.
-</p>
+<div id="t_data_center">
+	<p class='default-text'>
+		No data provided.
+	</p>
+	<%= 
+		# this partial will be rendered in data-center partial !
+		content_tag(:h1, "Options and Submission")
+	%>
+	<p>
+		No data provided.
+	</p>
+</div>
 
-<%= content_tag(:h1, "Aligned Gene Structures") %>
+<%= content_tag(:h1, "Aligned Gene Structures", :style => "margin-top: 10px;") %>
 <p class='default-text' id='t_aligned_gene_structures'>
 	No data provided.
 </p>

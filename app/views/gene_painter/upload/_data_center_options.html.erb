@@ -1,0 +1,116 @@
+<%
+	sorted_genes = controller.gene_structure_to_status_map.keys.sort
+	pdb_chains = controller.pdb_chains
+%>
+<%=
+	content_tag(:h1, "Options and Submission") +
+	content_tag(:h2, "Options") +
+	content_tag(:h3, "General options") +
+	content_tag(:table, :class => "unstyled") do
+		content_tag(:colgroup) do 
+			content_tag(:col, "", :style => "width:160px;")
+		end +
+		content_tag(:tr) do 
+			content_tag(:td, 
+				label_tag(:fuzzy_val, "Align fuzzy introns within")
+			) +
+			content_tag(:td, 
+				select_tag(:fuzzy_val, 
+					options_for_select(1..12, 5),
+					:multiple => false,
+					:disabled => false
+				) +
+				label_tag(:fuzzy_val, " base pairs")
+			) 
+		end
+	end 
+%>
+<%=
+puts "adding pdb options ..."
+	content_tag(:h3, "PDB options") +
+	content_tag(:table, :class => "unstyled", :id => "pdb_options") do
+		content_tag(:colgroup) do 
+			content_tag(:col, "", :style => "width:160px;")
+		end +
+		content_tag(:tr) do 
+			content_tag(:td, "Mark in PDB", :rowspan => 3) +
+			content_tag(:td, 
+				radio_button_tag(:pdb_use, "merged") +
+				label_tag("pdb_use_merged", "Merged introns")
+			)
+		end +
+		content_tag(:tr) do 
+			# important - preselect consensus option
+			content_tag(:td, 
+				radio_button_tag(:pdb_use, "consensus", :checked => true) +
+				label_tag("pdb_use_consensus", "Introns conserved in ") +
+				select_tag(:pdb_consensus_val,
+					options_for_select(1..100, 70),
+					:multiple => false,
+					:disabled => false, # important - preselect consensus option
+				) +
+				label_tag("pdb_use_consensus", " % of all genes ")
+			)
+		end +
+		content_tag(:tr) do 
+			content_tag(:td, 
+				radio_button_tag(:pdb_use, "ref_seq") +
+				label_tag("pdb_use_ref_seq", "Introns of reference sequence")
+			)
+		end +
+		content_tag(:tr) do 
+			content_tag(:td, 
+				label_tag(:pdb_ref_seq, "Reference sequence")
+			) +
+			content_tag(:td, 
+				select_tag(:pdb_ref_seq, 
+					options_for_select( sorted_genes ),
+					:multiple => false,
+				)
+			)
+		end +			
+		content_tag(:tr) do 
+			content_tag(:td, 
+				label_tag(:pdb_chain, "Mark introns in chain")
+			) +
+			content_tag(:td, 
+				select_tag(:pdb_chain, 
+					options_for_select( pdb_chains ),
+					:multiple => false,
+				)
+			)
+		end
+	end
+%>
+<%= 
+	content_tag(:h2, "Submission")
+%>
+
+<script defer>
+	// check if pdb options should be enabled in general
+	var is_pdb = <%= controller.is_pdb %>
+	if (is_pdb) {
+		$("#pdb_options :input").prop('disabled', false);
+	} else {
+		$("#pdb_options :input").prop('disabled', true);
+	}
+	// then check if genes-selector should be enabled
+	var n_genes = <%= sorted_genes.size %>
+	if (n_genes > 0 && is_pdb) {
+		$("#pdb_ref_seq").prop('disabled', false);
+	} else {
+		$("#pdb_ref_seq").prop('disabled', true);
+	}
+
+	// pdb option: radiobuttons (determine if dropdown within radio buttons should be active)
+    $("#pdb_use_consensus").click(function() {
+    	$("#pdb_consensus_val").prop('disabled', false);
+    });
+    $("#pdb_use_merged").click(function() {
+    	$("#pdb_consensus_val").prop('disabled', true);
+    });    
+    $("#pdb_use_ref_seq").click(function() {
+    	$("#pdb_consensus_val").prop('disabled', true);
+    });
+
+</script>

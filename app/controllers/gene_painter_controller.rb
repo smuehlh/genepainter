@@ -34,6 +34,14 @@ class GenePainterController < ApplicationController
     session[:p_species_mapping]
   end
 
+  def is_pdb 
+    Helper.does_file_exist( session[:p_pdb] )
+  end
+
+  def pdb_chains
+    session[:pdb_chains]
+  end
+
   # prepare a new session 
   def prepare_new_session
 
@@ -45,6 +53,7 @@ class GenePainterController < ApplicationController
     session[:sequence_names] = [] # list of fasta headers
     session[:genes_to_species_map] = {} # hash with genes and corresponding species
     session[:p_pdb] = "" # path to PDB file
+    session[:pdb_chains] = [] # chains found in pdb file
     session[:new_gene_structures] = [] # newly generated gene structures
     session[:gene_structure_to_status_map] = {} # hash with genes (that have a gene structure) and the status of that gene structures
     session[:basepath_output] = "" # path to folder containing output data
@@ -273,6 +282,8 @@ class GenePainterController < ApplicationController
         throw :error, 'Cannot upload file. Please contact us.' if ! is_sucess
       end
 
+      session[:pdb_chains] = PdbParser.get_chains(session[:p_pdb])
+
       "" # default for @fatal_error
     }
 
@@ -370,7 +381,7 @@ class GenePainterController < ApplicationController
   end
 
   def call_genepainter
-
+    
     @fatal_error = "" # fatal, not output generated
     @warning = "" # non-fatal error, maybe still output generated
     is_skipped_taxonomy = false
@@ -514,7 +525,7 @@ class GenePainterController < ApplicationController
       all_options += " #{options_taxonomic_output}"
     end
 
-    if Helper.does_file_exist(f_pdb) then 
+    if is_pdb then 
       # add options for pdb output
       all_options += " #{options_pdb_output}"
     end
