@@ -105,7 +105,7 @@ class GenePainterController < ApplicationController
 
   def upload_sequence
     @is_fileupload = true
-    @is_example = params[:is_example]
+    @is_example = params[:is_example] == "true"
     @fatal_error = catch(:error) {
       # save file as session[:p_alignment]
 
@@ -158,7 +158,7 @@ class GenePainterController < ApplicationController
   def upload_gene_structures
     @fatal_error = catch(:error) {
 
-      @is_example = params[:is_example]
+    @is_example = params[:is_example] == "true"
 
       if @is_example
         pathes_to_genes = Dir[ File.join(Rails.root, "public", "sample", params[:sample_data], "gene_structures", "*") ]
@@ -215,8 +215,8 @@ class GenePainterController < ApplicationController
 
   def upload_species_mapping
 
-    @is_example = params[:is_example]
-
+    @is_example = params[:is_example] == "true"
+    
     if @is_example
       @basename = "fastaheaders2species.txt"
       path = File.join(Rails.root, "public", "sample", params[:sample_data], @basename)
@@ -254,7 +254,7 @@ class GenePainterController < ApplicationController
 
   def upload_pdb
 
-    @is_example = params[:is_example]
+    @is_example = params[:is_example] == "true"
 
     @fatal_error = catch(:error) {
       # save file as session[:p_pdb]
