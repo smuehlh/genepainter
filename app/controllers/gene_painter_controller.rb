@@ -42,6 +42,10 @@ class GenePainterController < ApplicationController
     session[:pdb_chains]
   end
 
+  def p_pdb
+    session[:p_pdb]
+  end
+
   # prepare a new session 
   def prepare_new_session
 
