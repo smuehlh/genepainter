@@ -39,13 +39,15 @@
 		<%= content_tag(:label, content_tag(:b, "Or upload file")) %>
 
 		<%= 
-		form_tag(post_upload_sequence_path, remote: true, :id => "sequenceUploadedForm") do
+		form_tag(post_upload_sequence_path, remote: true, :id => "sequenceForm") do
 			file_field_tag("sequence_uploader",
 				:name => "file",
 				:accept => ".fas,.fasta,.fa,.seq,.fsa,.faa",
 				:data => {url: post_upload_sequence_path}
 			) +
-			hidden_field_tag(:authenticity_token, form_authenticity_token)
+			hidden_field_tag(:authenticity_token, form_authenticity_token) +
+			hidden_field_tag(:is_example, false, :id => "seq_form_is_example") +
+			hidden_field_tag(:sample_data, "", :id => "seq_form_sample_data")
 		end
 		%>
 	</div>
@@ -56,19 +58,6 @@
 			:id => "uploaded_sequence") %>
 
 		<%= image_tag("icons/help.png", :class => "help upload_seq_help") %>
-	</div>
-	<div>
-		<script defer>
-			function load_sample_sequence_alignment(kind) {
-				hide_show_waiting('show');
-				var authenticity_token = $('meta[name=csrf-token]').attr('content');
-				$.ajax({
-					type: 'POST',
-					url: build_ajax_path('/upload_sequence'),
-					data: {'is_example': true, 'sample_data': kind, "authenticity_token": authenticity_token},
-				});
-			}
-		</script>
 	</div>
 </p>
 

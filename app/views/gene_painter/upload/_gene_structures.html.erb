@@ -3,7 +3,7 @@
 		<%= content_tag(:label, content_tag(:b, "Upload files")) %>
 
 		<%= 
-		form_tag(post_upload_gene_structures_path, remote: true, :id => "sequenceUploadedForm") do
+		form_tag(post_upload_gene_structures_path, remote: true, :id => "genestructForm") do
 			file_field_tag("gene_structures_uploader",
 				:name => "files[]",
 				:multiple => true,
@@ -11,7 +11,10 @@
 				:accept => ".yaml,.gff",
 				:data => {url: post_upload_gene_structures_path, authenticity_token: form_authenticity_token}
 			) +
-			hidden_field_tag(:authenticity_token, form_authenticity_token)
+			hidden_field_tag(:authenticity_token, form_authenticity_token) +
+			hidden_field_tag(:is_example, false, :id => "genestruct_form_is_example") +
+			hidden_field_tag(:sample_data, "", :id => "genestruct_form_sample_data")
+
 		end
 		%>
 	</div>
@@ -22,19 +25,6 @@
 			:id => "uploaded_gene_structures") %>
 
 		<%= image_tag("icons/help.png", :class => "help upload_gene_struct_help") %>
-	</div>
-	<div>
-		<script defer>
-			function load_sample_gene_structures(kind) {
-				hide_show_waiting('show');
-				var authenticity_token = $('meta[name=csrf-token]').attr('content');
-				$.ajax({
-					type: 'POST',
-					url: build_ajax_path('/upload_gene_structures'),
-					data: {'is_example': true, 'sample_data': kind, "authenticity_token": authenticity_token},
-				});
-			}
-		</script>
 	</div>
 </div>
 

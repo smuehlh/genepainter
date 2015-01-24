@@ -1,4 +1,8 @@
-hide_show_waiting('hide');
+<% if ! @is_example then %>
+	// hide loading screen only this is not the example
+	// if its the example, loading screen is hidden by last method called!
+	hide_show_waiting('hide');
+<% end %>
 
 <% if @fatal_error.blank? then %>
 	// toggle help

@@ -18,6 +18,10 @@
 		});
 	}
 
+	function prepareForm(id, kind) {
+		$('#'+id+'_is_example').val(true);
+		$('#'+id+'_sample_data').val(kind);
+	} 
 	function submitData(kind) {
 		// set form data before form is submitted
 		$("#dataCenterForm #is_example").val(true);
@@ -35,6 +39,8 @@
 	}
 
 	function load_example(kind) {
+		hide_show_waiting('show');
+
 		var myId = "#load_example_" + kind;
 
 		// style clicked example
@@ -46,10 +52,22 @@
 		// call functions to load example
 		var AjaxQ = [
 			function() {refreshSession()},
-			function() {load_sample_sequence_alignment(kind)}, 
-			function() {load_sample_gene_structures(kind)}, 
-			function() {load_species_mapping(kind)}, 
-			function() {load_sample_pdb(kind)},
+			function() {
+				prepareForm("seq_form", kind);
+				$("#sequenceForm").submit();
+			}, 
+			function() {
+				prepareForm("genestruct_form", kind);
+				$("#genestructForm").submit();	
+			}, 
+			function() {
+				prepareForm("pdb_form", kind);
+				$("#pdbForm").submit();
+			},
+			function() {
+				prepareForm("species_form", kind);
+				$('#speciesForm').submit();
+			}, 
 			function() {}, // hotfix to call submitData only after all other methods are finished
 			function() {submitData(kind)}
 		];

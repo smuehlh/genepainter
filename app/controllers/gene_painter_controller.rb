@@ -105,10 +105,11 @@ class GenePainterController < ApplicationController
 
   def upload_sequence
     @is_fileupload = true
+    @is_example = params[:is_example]
     @fatal_error = catch(:error) {
       # save file as session[:p_alignment]
 
-      if params[:is_example]
+      if @is_example then 
         if params[:sample_data] == "coronin" then 
           @basename = "coronin.fas"
         elsif params[:sample_data] == "tubulin"
@@ -253,10 +254,12 @@ class GenePainterController < ApplicationController
 
   def upload_pdb
 
+    @is_example = params[:is_example]
+
     @fatal_error = catch(:error) {
       # save file as session[:p_pdb]
 
-      if params[:is_example]
+      if @is_example then 
         @basename = ""
         if params[:sample_data] == "coronin" then 
           @basename = "2AQ5.pdb"
