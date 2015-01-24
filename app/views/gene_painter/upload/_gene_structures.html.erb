@@ -60,11 +60,10 @@
 			) +
 			content_tag(:textarea, nil, 
 				:id => "uploaded_genestruct_content", 
-				:class => "spacer",
+				:class => "spacer disabled_textarea",
 				:placeholder => "Gene structure as part of the uploaded files", 
 				:cols => 80, :rows => 15, 
-				:style => "width: 700px;", 
-				:disabled => true,
+				:readonly => true,
 			),
 			:id => "uploaded_genestruct_info",
 			:style => "display:none"

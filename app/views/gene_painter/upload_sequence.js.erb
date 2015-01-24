@@ -13,8 +13,10 @@ hide_show_waiting('hide');
     $('#uploaded_sequence').html('<%= @basename %>');
     // show content of uploaded file
     $("#text_seq").text('<%= render_file(controller.p_alignment).html_safe %>');
-    // disable input text-field
-    disable($('#text_seq'), true);
+    // style input text-field
+    $("#text_seq").prop('disabled', true);
+    $("#text_seq").prop('readonly', true);
+    $("#text_seq").addClass('disabled_textarea');
   <% else %>
     // disable upload button
     disable($('#sequence_uploader'), true);

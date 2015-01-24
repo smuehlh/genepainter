@@ -61,10 +61,10 @@
 		) +		
 		content_tag(:textarea, nil, 
 			:id => "uploaded_file_content", 
+			:class => "disabled_textarea",
 			:placeholder => "Species mapping as part of the uploaded file", 
 			:cols => 80, :rows => 15, 
-			:style => "width: 700px;", 
-			:disabled => true
+			:readonly => true
 		),
 		:id => "uploaded_file_info",
 		:style => "display:none"

@@ -270,6 +270,10 @@ input[type='file'] {
 form.disabled {
     color: $dunkelgrau;
 }
+.disabled_textarea {
+  width: 700px;
+  color: rgb(84, 84, 84);
+}
 .active_example {
   color: black;
   text-decoration: underline;
