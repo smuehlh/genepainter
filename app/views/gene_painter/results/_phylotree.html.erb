@@ -40,6 +40,14 @@
   %>    
 
     <script>
+
+        // hotfix - svg width
+        // since svg is likely truncated at right side, make it a bit wider
+        var mySvg = $('div.svg svg')[0]
+        var svgNewWidth = Math.ceil(mySvg.getBBox().width);
+        mySvg.setAttribute('width', svgNewWidth);
+
+
         // Display phylotree
         // classes on taxa:
         // 'taxon' - each taxon has this class. use when 'all' is selected
