@@ -517,7 +517,7 @@ class GenePainterController < ApplicationController
 
     # call genepainter
     options_io = "-i #{f_alignment} -p #{d_gene_structures} --outfile #{prefix} --path-to-output #{d_output}"
-    options_text_output = "--intron-phase --alignment --statistics --fuzzy #{params[:fuzzy_val]}"
+    options_text_output = "--intron-phase --phylo --alignment --statistics --fuzzy #{params[:fuzzy_val]}"
     options_graphical_output = "--svg --svg-format both --svg-merged --svg-nested"
 
     is_sucess = nil
