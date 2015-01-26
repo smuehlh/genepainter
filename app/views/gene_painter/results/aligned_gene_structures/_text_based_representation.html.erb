@@ -69,7 +69,7 @@
 </div>
 
 <h4>Legend</h4>
-<table id='colorbar'>
+<table id='colorbar' class="unstyled">
   <tr>
     <td>0</td>
     <td class="0pct">&nbsp;</td><td class="5pct">&nbsp;</td><td class="10pct">&nbsp;</td><td class="15pct">&nbsp;</td>
@@ -78,7 +78,14 @@
     <td class="60pct">&nbsp;</td><td class="65pct">&nbsp;</td><td class="70pct">&nbsp;</td><td class="75pct">&nbsp;</td>
     <td class="80pct">&nbsp;</td><td class="85pct">&nbsp;</td><td class="90pct">&nbsp;</td><td class="95pct">&nbsp;</td>
     <td class="100pct">&nbsp;</td>
-    <td>100&#37; intron conservation</td>
+    <td style="padding-right:115px;">100&#37; intron conservation</td>
+    <td style="padding-left: 15px; font-family: Courier; width:40px" class="vertical_line" id="legend-intron-placeholder">|</td>
+    <td style="padding-left: 5px;">Intron</td>
+  </tr>
+  <tr>
+    <td colspan="23"></td>
+    <td style="padding-left: 15px; font-family: Courier;" class="vertical_line">-</td>
+    <td style="padding-left: 5px;">Coding sequence</td>
   </tr>
 </table>
 
@@ -306,10 +313,14 @@
         spinnerEventHandler(spinner.spinner("value")); 
       }
 
+      $("#legend-intron-placeholder").html("0,1,2");
+
     } else {
       // show std-table
       $intron_phase_table.hide();
       $non_intron_phase_table.show();
+
+      $("#legend-intron-placeholder").html("|");
     }
   });
 
