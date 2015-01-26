@@ -264,7 +264,7 @@ class GenePainterController < ApplicationController
         if params[:sample_data] == "coronin" then 
           @basename = "2AQ5.pdb"
         else
-          @basename = "1TUB.pdb"
+          @basename = "3RYC.pdb"
         end
         f_src = File.join(Rails.root, "public", "sample", params[:sample_data], @basename)
 
