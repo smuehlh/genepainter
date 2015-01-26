@@ -1,12 +1,12 @@
 <div id='graphical' class="large_div">
   <div class="res_left_col" style='width: 125px'>
-    <div id='genenames' class="res_height">
+    <div id='genenames' class="res_height res_names">
       <%= render_svg("genenames-normal.svg", "hide-horizontal-overflow").html_safe %>
     </div>
   </div>
 
   <div id='right-column'>
-    <div id='genestructures' class="res_height">
+    <div id='genestructures' class="res_height res_names">
       <%= render_svg("genestructures-normal.svg", "normal").html_safe %>
       <%= render_svg("genestructures-reduced.svg", "reduced").html_safe %>
     </div>
