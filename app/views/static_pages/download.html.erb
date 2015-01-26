@@ -1,7 +1,7 @@
 <% provide(:title, 'Download') %>
 <h1>Download</h1>
 
-<h2>Command-line version</h2>
+<h2>Latest command-line version</h2>
 	<p>
 		<%= link_to( "tgz compressed archive", get_download_sources_path( file: "gene_painter.tgz" ), :class => "external", :target => "_blank" ) %>
 		<%= tag(:br) %>
@@ -58,7 +58,7 @@
 		<p>
 			<%= link_to( "GenePainter v.1.0", get_download_sources_path( file: "gene_painter_v1.zip" ), :class => "external", :target => "_blank" ) %>(zip compressed archive)
 			<%= tag(:br) %>
-			<%= link_to( "Documentation v.1.0", get_download_sources_path( file: "Documentation_v1.png" ), :class => "external", :target => "_blank" ) %>
+			<%= link_to( "Documentation v.1.0", get_download_sources_path( file: "Documentation_v1.pdf" ), :class => "external", :target => "_blank" ) %>
 			<%= tag(:br) %>
 			<%= content_tag(:p, 
 				"Click on files to download.", :class => "filename"
