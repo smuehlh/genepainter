@@ -484,11 +484,6 @@ ul.ui-tabs-nav.ui-helper-reset.ui-helper-clearfix.ui-widget-header.ui-corner-all
   // font-size: 12px;
 }
 
-#text-based tr:hover td {
-    background: #ededed; /* to better keep track of the line the mouse is over */
-    color:black;
-}
-
 // phylogenetic tree
 #svg_placeholder {
   width: 100%;
@@ -552,6 +547,11 @@ div.pattern table, div.pattern th, div.pattern td {
   font-weight: normal;
 }
 div.pattern table.with_border td {
-  border-left: 1px solid white;
   text-align: center;
 }
+
+div.pattern tr:hover td {
+    background: #ededed; /* to better keep track of the line the mouse is over */
+    color:black;
+}
+
