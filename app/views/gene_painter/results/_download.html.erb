@@ -1,14 +1,14 @@
 <% 
 	# all files that can be downloaded in principle
 	files_with_desc = {
-		"std.txt" => { alt_name: "Standard", desc: "Exon-intron pattern", type: "text" },
-		"intron-phase.txt" => { alt_name: "Intron phase", desc: "Exon-intron pattern", type: "text"},
-		"spaces.txt" => { alt_name: "Spaces", desc: "Exon-intron pattern", type: "text" },
-		"phylo.fas" => { alt_name: "Phylo", desc: "Exon-intron pattern", type: "text"},
-		"alignment.fas" => { alt_name: "Alignment", desc: "Alignment with intron positions", type: "text"},
-		"stats.txt" => { alt_name: "Statistics", desc: "Commonness of intron positions", type: "text"},
-		"normal.svg" => { alt_name: "Standard SVG", desc: "Graphical representation of genes", type: "graphic"},
-		"reduced.svg" => { alt_name: "Reduced SVG", desc: "Graphical representation of genes", type: "graphic"},
+		"std.txt" => { alt_name: "Standard", desc: "Intron alignment (standard)", type: "text" },
+		"intron-phase.txt" => { alt_name: "Intron phase", desc: "Intron alignment (intron phase)", type: "text"},
+		"spaces.txt" => { alt_name: "Spaces", desc: "Intron alignment", type: "text" },
+		"phylo.fas" => { alt_name: "Phylo", desc: "Binary intron alignment", type: "text"},
+		"alignment.fas" => { alt_name: "Alignment", desc: "Protein alignment including intron positions", type: "text"},
+		"stats.txt" => { alt_name: "Intron history", desc: "Conservation of intron positions across taxa", type: "tree"},
+		"normal.svg" => { alt_name: "Standard SVG", desc: "Nucleotide alignment (standard)", type: "graphic"},
+		"reduced.svg" => { alt_name: "Reduced SVG", desc: "Nucleotide alignment (focus on common introns)", type: "graphic"},
 		"tree.svg" => { alt_name: "Phylogenetic tree SVG", desc: "Phylogenetic tree (graphical representation)", type: "tree"},
 		"tree.phb" => { alt_name: "Phylogenetic tree PHB", desc: "Phylogenetic tree (Newick tree format)", type: "tree"},
 		"color_exons.py" => { alt_name: "Consensus exons", desc: "Script for execution in PyMOL", type: "pdb"},
@@ -48,7 +48,7 @@
 <% end %>
 
 <% if is_text_files then %>
-	<h3>Text-based output files</h3>
+	<h3>Intron and protein alignments</h3>
 		<table id="download">
 			<colgroup>
 				<col class="first_col">
