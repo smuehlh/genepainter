@@ -6,6 +6,7 @@
 <ul style="padding-left: 5%">
 	<li><a class = "internal" href="#general">General</a></li>
 	<li><a class = "internal" href="#data_center">Data upload and display in data center</a></li>
+	<li><a class = "internal" href="#submission">Options and submission</a></li>
 	<li><a class = "internal" href="#generate_genestruct">Generating gene structures on the fly</a></li>
 	<li><a class = "internal" href="#result_files">Aligned gene structures</a></li>
 	<li><a class = "internal" href="#phylo">Phylogenetic Distribution of Intron Positions</a></li>
@@ -38,10 +39,22 @@
 		FASTA headers are listed as &quot;Gene names&quot; in Data Center. All uploaded data will be associated with the gene names and displayed in Data Center. For the gene structures, the association will be drawn based on file names of uploaded gene structure files. Species names are linked to gene names either manually or through the uploaded map.
 	</p>
 	<p>
-		The submit-button starts the analysis. If necessary, missing gene structures will be generated. After that, GenePainter is executed. Since GenePainter requires an alignment and gene structures as input, the submit button is disabled until input is provided. 
+		GenePainter will analyse all genes with an aligned sequence and a gene structure. In order to exclude some genes from the analysis, please deselect the corresponding &quot;Analyse&quot; checkbox. 
+	</p>
+
+<h2>
+	<table width=100% class="unstyled">
+		<tr>
+			<td align="left"><a name="submission" style="font-style: normal">Options and submission</a></td>
+			<td align="right"><a class="internal" href="#" style="font-size: 12px">Back to top</a></td>
+		</tr>
+	</table>
+</h2>
+	<p>
+		Data submission will start the analysis. If necessary, missing gene structures will be generated. After that, GenePainter is executed. Since GenePainter requires an alignment and gene structures as input, the submit button is disabled until all input is provided.
 	</p>
 	<p>
-		GenePainter will analyse all genes with an aligned sequence and a gene structure. In order to exclude some genes from the analysis, please deselect the corresponding &quot;Analyse&quot; checkbox. 
+		GenePainter is executed with standard parameters. Apart from that, few options can be set. These include &quot;fuzzy&quot; option and, if a PDB file was uploaded, PDB options. The fuzzy option determines the number of base pairs, within introns are aligned. PDB options specify which intron positions should be mapped onto PDB and which sequences to use for the underlying alignment.
 	</p>
 
 <h2>
@@ -73,36 +86,37 @@
 	<p>
 		GenePainter provides different formats for viewing the aligned gene structures. They are pre-processed and grouped into result tabs.
 	</p>
-	<h3>Text-based Representation</h3>
+	<h3>Intron Alignment</h3>
 	<p>
-		The text-based representation of aligned gene structures is the basic output format of GenePainter. A merged pattern, featuring all intron position, is displayed underneath the exon-intron patterns of individual genes. Intron positions in the merged pattern are colored by their conservation. Dark red corresponds to a highly conserved position, dark blue to a weakly conserved position. Coloring can be applied to exon-intron patterns by selecting the &quot;Highlight common introns&quot; checkbox. Selecting the &quot;Highlight unique introns&quot; checkbox colors those intron positions that are unique to a single gene.
+		The intron alignment is the basic output format of GenePainter. A merged pattern, featuring all intron position, is displayed underneath the exon-intron patterns of individual genes. Intron positions in the merged pattern are colored by their conservation. Dark red corresponds to a highly conserved position, dark blue to a weakly conserved position. Coloring can be applied to exon-intron patterns by selecting the &quot;Highlight common introns&quot; checkbox. Selecting the &quot;Highlight unique introns&quot; checkbox colors those intron positions that are unique to a single gene. Introns within N base pairs are highlighed by selecting the &quot;Highlight fuzzy introns&quot; checkbox. In order to merged those introns, select the &quot;Show fuzzy introns merged&quot; checkbox.
 	</p> 
 	<p>
-		The default marker for introns is &quot;|&quot;. Alternatively, a number indicating the intron phase can be used as marker. To this end, select the &quot;Show intron phase&quot; checkbox.
+		The default marker for introns is &quot;|&quot;. Alternatively, a number indicating the intron phase can be used as marker. To this end, select the &quot;Show intron phase&quot; checkbox. 
 	</p>
 	<%= image_tag("help/web_fig1.png", :alt=>"web 1", width: "700px", :class => "img_help") +
 		tag(:br, :class => "clearfix")
 	 %>
-	<p style="font-size: 10px"><b>Figure 1</b> Different options for viewing the text-based representation are marked in red. 1) &quot;Highlight unique introns&quot; checkbox, 2) &quot;Highlight common introns&quot; checkbox with input field to specify the conservation threshold, 3) &quot;Show intron phase&quot; checkbox.
+	<p style="font-size: 10px"><b>Figure 1</b> Different options for viewing the intron alignment are marked in red. 1) &quot;Highlight unique introns&quot; checkbox, 2) &quot;Highlight common introns&quot; checkbox with input field to specify the conservation threshold, 3) &quot;Highlight fuzzy introns&quot;, 4) &quot;Show intron phase&quot;, 5) &quot;Show fuzzy introns merged&quot;.
 	</p>
 
 	<h3>Alignment</h3>
 	<p>
 		Intron positions are incorporated into the uploaded multiple sequence alignment. Intron phases are included as additional lines in the alignment. Common alignment gaps are removed. Per drag and drop, you can move to different positions in the alignment.
 	</p>
-	<h3>Graphical representation</h3>
+	<h3>Nucleotide Alignment</h3>
 	<p>
-		Two different graphical representations of aligned gene structures exist. In each format, common introns are drawn underneath each other. While exons and introns are both drawn to scale in the standard format, intron length is fixed in the reduced format. You can switch between both formats by selecting „Standard“ or „Focus on common introns“. 
+		Two different graphical representations of then nucleotide alignment exist. In each format, common introns are drawn underneath each other. While exons and introns are both drawn to scale in the standard format, intron length is fixed in the reduced format. You can switch between both formats by selecting &quot;Standard&quot; or &quot;Focus on common introns&quot;.
 	</p>
 	<%= image_tag("help/web_fig2.png", :alt=>"web 2", width: "700px", :class => "img_help") +
 		tag(:br, :class => "clearfix")
 	 %>
-	<p style="font-size: 10px"><b>Figure 2</b> Different formats for viewing the graphical representation are marked in red. 1) &quot;Standard format&quot; checkbox, 2) &quot;Focus on common introns&quot;.
+	<p style="font-size: 10px"><b>Figure 2</b> Different formats for viewing the nucleotide alignment are marked in red. 1) &quot;Standard format&quot; checkbox, 2) &quot;Focus on common introns&quot;.
 	</p>
 
-	<h3>Statistics</h3>
+	<h3>Intron History</h3>
 	<p>
-		The total number of introns at each intron position is listed in the statistics. If a mapping of genes to species was provide, the taxonomic distribution of intron positions is also given. This include the last common ancestor of all species harbouring the respective intron as well as the distribution of intron counts onto direct descendants of that last common ancestor.
+		The intron history lists statistical information as the total number of introns at each intron position as well as the taxonomic distribution of intron positions. The latter is only given, if species information was provided for individual genes.
+		The taxonomic distribution of intron positions include the last common ancestor of all species harbouring the respective intron as well as the distribution of intron counts onto direct descendants of that last common ancestor.
 	</p>
 
 <h2>
@@ -114,15 +128,15 @@
 	</table>
 </h2>
 	<p>
-		Phylogenetic distribution of intron positions can be only displayed if species mapping was provided for at least two analysed species.  
+		The phylogenetic distribution of intron positions can be only displayed if species mapping was provided for at least two of the analysed species.  
 	</p>
 	<p> 
-		GenePainter plots intron gain and loss events onto the NCBI phylogeny using a maximum parsimony approach. Introns shared by the genes of two species are regarded as already been present in their last common ancestor and are marked as intron gain events there.  If species of sub-branches miss the respective intron, an intron-loss event is marked for this branch.
+		GenePainter plots intron gain and loss events onto the NCBI phylogeny using a maximum parsimony approach. Introns shared by the genes of two species are regarded as already been present in their last common ancestor and are marked as intron gain events there. If species of sub-branches miss the respective intron, an intron-loss event is marked for this branch.
 	</p>
 	<p>
-		Intron gain and loss events are plotted in green and red, respectively, onto branches. The positions of gained introns can be marked in the &quot;Text-based Representation&quot; and &quot;Graphical Representation&quot; tabs above. To this end, please click respective taxa in the phylogenetic tree. Please note that highlighted intron positions will not be focused automatically and you might need to scroll through text-based or graphical representation to see them.
+		Intron gain and loss events are plotted in green and red, respectively, onto branches. All introns present in a given taxon, or those introns that were gained by the given taxon can be highlighted in the &quot;Intron Alignment&quot;, &quot;Nucleotide Alignment&quot; and &quot;Intron History&quot; tabs above. To this end, please select a taxon in the phylogenetic tree. Please note that highlighted intron positions will not be focused automatically and you might need to scroll through gene structures and tables to see them.
 	</p>
-	<%= image_tag("help/results_fig9.png", :alt=>"web 3", width: "700px", :class => "img_help") +
+	<%= image_tag("help/web_fig3.png", :alt=>"web 3", width: "700px", :class => "img_help") +
 		tag(:br, :class => "clearfix")
 	%>
-	<p style="font-size: 10px"><b>Figure 3</b> Phylogenetic tree of those branches, at which introns were lost (coloured red) or gained (coloured in green). The numbers displayed behind the species comprise the total number of genes (first number) and intron positions present in these genes (second number).</p>
+	<p style="font-size: 10px"><b>Figure 3</b> Phylogenetic tree of those branches, at which introns were lost (coloured red) or gained (coloured in green). The numbers displayed behind the species comprise the total number of genes (first number) and intron positions present in these genes (second number). <br>Different formats for highlighting introns in the &quot;Intron Alignment&quot;, &quot;Nucleotide Alignment&quot; and &quot;Intron History&quot; tabs above are marked in red. 1) &quot;Highlight all introns&quot;, 2) &quot;Highlight gained introns&quot;. Taxon &quot;Ophisthokonta&quot; is selected.</p>
