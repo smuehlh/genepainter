@@ -22,7 +22,7 @@ var ajax_prefix = '';
 $( document ).ready(function() {
     ajax_prefix = $("body").attr("data-ajaxprefix");
 });
-var maxAllowedAnalyse = 50;
+var maxAllowedAnalyse = 60; // TODO 
 var maxAllowedGenerate = 5;
 
 function build_ajax_path(url) {

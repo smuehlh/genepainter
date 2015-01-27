@@ -270,7 +270,18 @@ module GenePainterHelper
     return content_tag(:div, svg.html_safe)
   end
   def render_file(filename)    
-    return File.open(filename, 'rb').read.gsub("\n", "\\n")
+    content = []
+    n_lines = 0
+    IO.foreach(filename) do |line|
+      content << line.chomp
+      n_lines += 1
+      break if n_lines > 500
+    end
+    if n_lines > 500 then 
+      content << "[Skipped rest of file ...]"
+    end
+
+    return content.join("\\n")
   end
 
   def populate_select_genes_modal
