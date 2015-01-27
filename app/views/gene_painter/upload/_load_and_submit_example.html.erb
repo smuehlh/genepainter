@@ -9,14 +9,6 @@
 
 <script defer>
 	var authenticity_token = $('meta[name=csrf-token]').attr('content');
-	function refreshSession() {
-		// clean up uploaded files and refresh session-data; allows to upload both examples sequentially
-		$.ajax({
-			type: 'POST',
-			url: build_ajax_path('/prepare_new_session'),
-			data: {"authenticity_token": authenticity_token},
-		});
-	}
 
 	function prepareForm(id, kind) {
 		$('#'+id+'_is_example').val(true);
@@ -35,7 +27,11 @@
 		}
 		$("#dataCenterForm #pdb_ref_seq").val(preSel).trigger('change');
 
-		$('#dataCenterForm').submit(); 
+		return $.ajax({
+				type: 'POST',
+				url: build_ajax_path('/call_genepainter'),
+				data: $('#dataCenterForm').serialize(),
+		});
 	}
 
 	function load_example(kind) {
@@ -43,34 +39,48 @@
 
 		var myId = "#load_example_" + kind;
 
+		prepareForm("seq_form", kind);
+		prepareForm("genestruct_form", kind);
+		prepareForm("pdb_form", kind);
+		prepareForm("species_form", kind);
+
+		$.ajax({
+			type: 'POST',
+			url: build_ajax_path('/prepare_new_session'),
+			data: {"authenticity_token": authenticity_token},
+		}).then(function(){
+			return $.ajax({
+				type: 'POST',
+				url: build_ajax_path('/upload_sequence'),
+				data: $('#sequenceForm').serialize(),
+			});
+		}).then(function(){
+			return $.ajax({
+				type: 'POST',
+				url: build_ajax_path('/upload_gene_structures'),
+				data: $('#genestructForm').serialize(),
+			});	
+		}).then(function(){
+			return $.ajax({
+				type: 'POST',
+				url: build_ajax_path('/upload_pdb'),
+				data: $('#pdbForm').serialize(),
+			});	
+		}).then(function(){
+			return $.ajax({
+				type: 'POST',
+				url: build_ajax_path('/upload_species_mapping'),
+				data: $('#speciesForm').serialize(),
+			});	
+		}).then(function(){
+			submitData(kind);
+		});
+
 		// style clicked example
 		$(myId).append(" (Example loaded.)");
 		$(myId).removeAttr("onclick");
 		$(myId).removeClass("active_example");
 		$(myId).addClass("inactive_example");
 
-		// call functions to load example
-		var AjaxQ = [
-			function() {refreshSession()},
-			function() {
-				prepareForm("seq_form", kind);
-				$("#sequenceForm").submit();
-			}, 
-			function() {
-				prepareForm("genestruct_form", kind);
-				$("#genestructForm").submit();	
-			}, 
-			function() {
-				prepareForm("pdb_form", kind);
-				$("#pdbForm").submit();
-			},
-			function() {
-				prepareForm("species_form", kind);
-				$('#speciesForm').submit();
-			}, 
-			function() {}, // hotfix to call submitData only after all other methods are finished
-			function() {submitData(kind)}
-		];
-		$(document).sc_ExecuteAjaxQ({ fx: AjaxQ });
 	}
 </script>
