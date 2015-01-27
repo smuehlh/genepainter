@@ -35,7 +35,7 @@
     end +
 
     content_tag(:p, 
-        "Click on taxa to highlight introns in text-based and graphical representation.", :class => "filename"
+        "Click on taxa to highlight introns in the intron and nucleotide alignment.", :class => "filename"
     )
   %>    
 
@@ -54,7 +54,7 @@
         // 'taxon-intron-gain' - only some taxa have this class. use when 'gained' is selected
 
         // setup page - assume 'all' is preselected radiobutton
-        var taxonTitle = "Highlight introns in text-based and graphical representation.";
+        var taxonTitle = "Highlight introns in the intron and nucleotide alignment.";
         $(".taxon").attr("title", taxonTitle);
 
         // onclick of radiobuttons: determine which elements have tooltip and hover
