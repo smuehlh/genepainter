@@ -224,7 +224,7 @@ module GenePainterHelper
     file_dest = File.join(Dir::tmpdir, "cymobase_alignment_#{file_id}.fasta")
 
     headers, seqs = SequenceHelper.read_in_alignment(file_src)
-    headers.map!{ |e| ">" << e } # add ">" again to make it a valid header
+    headers.map!{ |e| SequenceHelper.speciesname_to_fastaheader(e) } # add ">" again to make it a valid header
 
     # delete additonal patterns
     ind = headers.index{|ele|ele =~/>Consensus/}

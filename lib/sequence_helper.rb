@@ -8,9 +8,7 @@ module SequenceHelper
 	def read_in_alignment(path)
 		names, seqs = [], []
 		IO.foreach(path) do |line|
-			line = line.chomp
-			next if line.empty?
-
+			line.chomp!
 			if line.start_with? ">" then
 				# fasta header
 				names << line[1..-1]
@@ -21,6 +19,9 @@ module SequenceHelper
 				if seqs.size < n_seqs then
 					# new sequence
 					seqs << line
+				else
+					# add to last sequence
+					seqs[n_seqs - 1] += line # -1: convert number of elements n_seqs to an index
 				end
 			end
 		end
