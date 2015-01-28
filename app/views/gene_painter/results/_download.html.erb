@@ -11,10 +11,9 @@
 		"reduced.svg" => { alt_name: "Reduced SVG", desc: "Nucleotide alignment (focus on common introns)", type: "graphic"},
 		"tree.svg" => { alt_name: "Phylogenetic tree SVG", desc: "Phylogenetic tree (graphical representation)", type: "tree"},
 		"tree.phb" => { alt_name: "Phylogenetic tree PHB", desc: "Phylogenetic tree (Newick tree format)", type: "tree"},
-		"color_exons.py" => { alt_name: "Consensus exons", desc: "Script for execution in PyMOL", type: "pdb"},
-		"color_splicesites.py" => { alt_name: "Consensus splicesites", desc: "Script for execution in PyMOL", type: "pdb"},
+		"color_exons.py" => { alt_name: "Consensus exons", desc: "Script for execution in PyMOL (structure is coloured by common exons)", type: "pdb"},
+		"color_splicesites.py" => { alt_name: "Consensus splicesites", desc: "Script for execution in PyMOL (colouring positions of common introns)", type: "pdb"},
 	} 
-	basepath = "tmp/#{controller.id}-"
 
 	# delete all files that do not exist
 	files_with_desc.delete_if do |f_name, desc|
@@ -67,7 +66,7 @@
 <% end %>
 
 <% if is_graphic_file then %>	
-	<h3>Graphical output files</h3>
+	<h3>Nucleotide alignments</h3>
 		<table id="download">
 			<colgroup>
 				<col class="first_col">
