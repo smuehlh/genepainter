@@ -39,6 +39,7 @@
 	<p>
 		<%= content_tag(:label, content_tag(:b, "View uploaded file")) %>	
 		<%= image_tag("icons/down.png", :class => "help uploaded_file_info") %>
+		<%= image_tag("icons/up.png", :class => "help uploaded_file_info", :style => "display:none;") %>
 	</p>
 	<%=
 	# same structure as help-partials!
@@ -46,7 +47,7 @@
 		content_tag(:span, "", 
 			:class => "ui-icon ui-icon-closethick warning_close", 
 			:style => "display:inline-block;",
-			:onclick => "$('#uploaded_file_info').hide('slow');"
+			:onclick => "$('#uploaded_file_info').hide('slow'); $('img.uploaded_file_info').toggle();"
 		) +		
 		content_tag(:textarea, nil, 
 			:id => "uploaded_file_content", 
@@ -69,5 +70,6 @@
 	});
 	$("img.uploaded_file_info").click(function() {
 		 $("div#uploaded_file_info").toggle("slow");
+		 $("img.uploaded_file_info").toggle();
 	});
 <% end -%>
