@@ -2,6 +2,9 @@
 	// hide loading screen only this is not the example
 	// if its the example, loading screen is hidden by last method called!
 	hide_show_waiting('hide');
+<% else %>
+  // this is the example, disable all upload buttons
+	disable($('#pdb_uploader'), true);
 <% end %>
 
 <% if @fatal_error.blank? then %>

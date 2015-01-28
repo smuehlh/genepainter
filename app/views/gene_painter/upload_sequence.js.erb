@@ -2,6 +2,11 @@
   // hide loading screen only this is not the example
   // if its the example, loading screen is hidden by last method called!
   hide_show_waiting('hide');
+
+<% else %>
+  // this is the example, disable all upload buttons
+  // textarea will be disabled as this was an fileupload, so only fileuploaded must be disabled 
+  disable($('#sequence_uploader'), true);
 <% end %>
 
 <% if @fatal_error.blank? && @seq_names.any? then %>
