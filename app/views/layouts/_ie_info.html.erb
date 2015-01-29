@@ -1,7 +1,14 @@
-<!--[if IE]><div class="help" style="display:inline-block;">
-<p>
+<div class="info" id="ie_info">
 	<b>
-		Due to technical limiation of Internet Explorer software, the application's functionality is reduced. To take advantage of the full functionality GenePainter has to offer, please start a recent version of Firefox, Google Chrome or Safari and visit this page again.
+		We optimized the GenePainter web application for Firefox and Google Chrome. The application’s functionality might be reduced in other browsers. To take advantage of the full functionality GenePainter has to offer, please start a recent version of Firefox or Google Chrome and visit this page again.
 	</b>
-</p>
-</div><![endif]-->
+</div>
+ 
+<%= javascript_tag defer: 'defer' do -%>
+	var isChrome = /chrome/.test(navigator.userAgent.toLowerCase());
+	var isFirefox = /firefox/.test(navigator.userAgent.toLowerCase()); 
+
+	if ( isChrome || isFirefox ) {
+		$("#ie_info").hide();
+	}
+<% end -%>
