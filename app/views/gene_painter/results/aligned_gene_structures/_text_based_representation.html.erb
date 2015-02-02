@@ -96,21 +96,21 @@
       <%=
         content_tag(:div,
           check_box_tag('highlight_unique', "1", nil, :class => "checkbox-textbased-highlight") +
-          content_tag(:span, 'Highlight unique introns', :style => 'padding-left: 5px; padding-right: 20px')
+          label_tag('highlight_unique', 'Highlight unique introns', :style => 'padding-left: 5px; padding-right: 20px')
           )
       %>
 
       <%=
         content_tag(:div,
           check_box_tag('highlight_common', "1", nil, :class => "checkbox-textbased-highlight") +
-          content_tag(:span, 'Highlight introns common to at least ', :style => 'padding-left: 5px;') +
+          label_tag('highlight_common', 'Highlight introns common to at least ', :style => 'padding-left: 5px;') +
           '<input id="spinner" name="value" style="width: 25px;">'.html_safe + ' % of all genes.'.html_safe
           )
       %>
       <%=
         content_tag(:div,
           check_box_tag('highlight_fuzzy', "1", nil, :class => "checkbox-textbased-highlight") +
-          content_tag(:span, 'Highlight fuzzy introns', :style => 'padding-left: 5px; padding-right: 20px')
+          label_tag('highlight_fuzzy', 'Highlight fuzzy introns', :style => 'padding-left: 5px; padding-right: 20px')
           )
       %>
 
@@ -144,11 +144,11 @@
       <%=
         content_tag(:div,
           check_box_tag('show_intron_phase') +
-          content_tag(:span, 'Show intron phase', :style => 'padding-left: 5px; padding-right: 20px')
+          label_tag('show_intron_phase', 'Show intron phase', :style => 'padding-left: 5px; padding-right: 20px')
           ) +
         content_tag(:div,
           check_box_tag('show_fuzzy_introns') +
-          content_tag(:span, 'Show fuzzy introns merged', :style => 'padding-left: 5px; padding-right: 20px')
+          label_tag('show_fuzzy_introns', 'Show fuzzy introns merged', :style => 'padding-left: 5px; padding-right: 20px')
           )
       %>
     </td>
