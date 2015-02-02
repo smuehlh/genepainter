@@ -82,13 +82,13 @@ function resetTable() {
 function resetPhyloTree() {
   // reset taxon apperance
   $(".taxon").each(function() {
-    this.classList.remove("active-taxon");
+    this.removeClass("active-taxon");
   });
 }
 function resetGraphic() {
   // reset graphical rep.
   $('#genestructures-merged rect').each(function () {
-    this.classList.remove('fill-darkgrey', 'fill-grey');
+    this.removeClass('fill-darkgrey', 'fill-grey');
   });
 }
 

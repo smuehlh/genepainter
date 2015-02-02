@@ -83,12 +83,12 @@
         function deColorizeGraphic() {
             // color all rect grey
             $('#genestructures-merged rect').each(function () {
-                this.classList.add('fill-darkgrey');
+                this.addClass('fill-darkgrey');
             });
             // re-color background
             $('#genestructures-merged .background').each(function () {
-                this.classList.remove('fill-darkgrey');
-                this.classList.add('fill-grey')
+                this.removeClass('fill-darkgrey');
+                this.addClass('fill-grey')
             });
         }
 
@@ -99,7 +99,7 @@
             
             // color graphical rep.
             $('#genestructures-merged .'+className).each(function () {
-                this.classList.remove('fill-darkgrey'); // just re-store the original color!
+                this.removeClass('fill-darkgrey'); // just re-store the original color!
             });
         }
 
@@ -120,13 +120,13 @@
             // b) radiobutton 'gained' selected & this element has also class 'taxon-intron-gain'
             var isAllTaxaActive = $("#phylo_all").is(':checked');
             var isGainTaxaActive = $("#phylo_gained").is(':checked');
-            var isGainTaxon = this.classList.contains("taxon-intron-gain");
+            var isGainTaxon = this.hasClass("taxon-intron-gain");            
             if ( isAllTaxaActive || (isGainTaxaActive && isGainTaxon) ) {
 
                 // reset all other taxa to non-active elements
                 resetPhyloTree();
                 // set this element to active
-                this.classList.add("active-taxon");
+                this.addClass("active-taxon");
 
                 // show info-box
                 $("#phylo_tree_info").show();
