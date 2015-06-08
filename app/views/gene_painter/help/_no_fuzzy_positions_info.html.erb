@@ -1,0 +1,14 @@
+<%=
+content_tag(:div, 
+	# content_tag(:span, "", 
+	# 	:class => "ui-icon ui-icon-closethick warning_close", 
+	# 	:style => "display:inline-block;",
+	# 	:onclick => "$('#data_center_info').hide('slow');"
+	# ) +		
+	content_tag(:normal, "No fuzzy intron positions.".html_safe
+	), 
+	:id => "no_fuzzy_info",
+	:class => "info",
+	:style => "display:none;"
+)
+%>

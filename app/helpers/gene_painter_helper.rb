@@ -169,7 +169,6 @@ module GenePainterHelper
     introns_per_column = nil # init with nil, will be converted to array later ...
 
     is_collected_fuzzy_pos = false
-
     IO.foreach(filename) do |line|
       line = line.chomp
       next if line.empty?
@@ -186,10 +185,15 @@ module GenePainterHelper
       end
     end
 
+    if pos_with_fuzzy.empty? then 
+      # no fuzzy positions, init 
+      introns_per_column = []
+    end
+
     classes_per_column = convert_fuzzy_intron_numbers_to_classes(introns_per_column, pos_with_fuzzy)
 
     pattern_table = build_pattern_table(pattern_data, classes_per_column, {id: id_pattern_table})
-    merged_table = build_merged_pattern_table(introns_per_column, id_merged_table)
+    merged_table = build_merged_pattern_table(introns_per_column, id_merged_table) 
 
     return pattern_table, merged_table, pos_with_fuzzy
   end

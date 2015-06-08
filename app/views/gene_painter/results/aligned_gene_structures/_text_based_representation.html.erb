@@ -17,6 +17,20 @@
   # fuzzy tables and positions
   std_fuzzy_table, merged_fuzzy_table, fuzzy_pos = get_fuzzy_table_and_info(fuzzy_path, 'non_intron_phase_fuzzy', 'merged_fuzzy')
 
+  if fuzzy_pos.empty? then 
+    # if there are no fuzzy positions, init 'fuzzy' tables with standard-tables 
+    # use correct table ID's
+
+    # important: check if fuzzy positions exist when handling onclick-events to show fuzzy positions!
+    std_fuzzy_table, dummy, merged_fuzzy_table = get_table(
+      std_path, 
+      {
+        is_merged_table: true, 
+        id_merged_table: 'merged_fuzzy',
+        id_pattern_table: 'non_intron_phase_fuzzy'
+      }
+    )
+  end
 %>
 
 <div id='text-based' class="pattern">
@@ -155,6 +169,8 @@
   <tr>
 </table>
 
+<%= render :partial => "gene_painter/help/no_fuzzy_positions_info" %>
+
 <script>
 
   // init vars
@@ -238,6 +254,7 @@
       $('td.col-1').addClass('highlighted');
       $('input#highlight_common').prop('checked', false);
       $('input#highlight_fuzzy').prop('checked', false);
+      $("#no_fuzzy_info").hide();
 
       // link to phylotree and graphic
       resetPhyloTree();
@@ -252,6 +269,7 @@
       spinnerEventHandler(spinner.spinner("value")); 
       $('input#highlight_unique').prop('checked', false);
       $('input#highlight_fuzzy').prop('checked', false);
+      $("#no_fuzzy_info").hide();
 
       // link to phylotree and graphic
       resetPhyloTree();
@@ -262,6 +280,9 @@
   $('input#highlight_fuzzy').change(function() {
     var checked = $(this).is(':checked');
     resetTable(); // reset table in any case (checked or unchecked)
+    // hide info-box (show only if no fuzzy introns)
+    $("#no_fuzzy_info").hide();
+
     if (checked) {
 
       var i = 0;
@@ -288,6 +309,11 @@
       // link to phylotree and graphic
       resetPhyloTree();
       resetGraphic();
+
+      // show info-box if no fuzzy pos
+      if ($.isEmptyObject($("#all-right").data('fuzzy'))) {
+        $("#no_fuzzy_info").show();
+      }
     }
   });
 
@@ -307,6 +333,7 @@
 
       // link to fuzzy-checkbox
       $('input#show_fuzzy_introns').prop('checked', false);
+      $("#no_fuzzy_info").hide();
 
       // link to common introns
       if ( $('input#highlight_common').is(':checked') ) {
@@ -328,6 +355,8 @@
   $('input#show_fuzzy_introns').change(function() {
     // in any case: hide intron-phase table
     $intron_phase_table.hide();
+    // in any case: hide info-box (show only if no fuzzy introns)
+    $("#no_fuzzy_info").hide();
 
     if ( $(this).is(':checked') ) {
       // show fuzzy-tables
@@ -344,6 +373,11 @@
 
       // link to intron_phase checkbox
       $('input#show_intron_phase').prop('checked', false);
+
+      // show info-box if no fuzzy pos
+      if ($.isEmptyObject($("#all-right").data('fuzzy'))) {
+        $("#no_fuzzy_info").show();
+      }      
 
     } else {
       // show std-tables
