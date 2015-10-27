@@ -27,17 +27,11 @@ module Helper
 	end
 
 	def does_file_exist(path)
-		if ! FileTest.file?(path) then
-			return false
-		end
-		true
+		FileTest.file?(path)
 	end
 
 	def is_dir_empty(path)
-		if Dir[File.join(path, "*")].empty? then 
-			return true
-		end
-		false
+		Dir[File.join(path, "*")].empty?
 	end
 
 	def dir_exist_or_die(path)
@@ -46,8 +40,12 @@ module Helper
 		end
 	end
 
+	def does_dir_exist(path)
+		FileTest.directory?(path)
+	end
+
 	def mkdir_or_die(path)
-		if ! FileTest.directory?(path) then
+		if ! does_dir_exist(path) then
 			begin
 				# Dir.mkdir(path)
 				FileUtils.mkdir_p(path)
