@@ -274,6 +274,9 @@ form.disabled {
   width: 700px;
   color: rgb(84, 84, 84);
 }
+input[type=checkbox][disabled] + label {
+    color: $dunkelgrau;
+}
 .active_example {
   color: black;
   text-decoration: underline;

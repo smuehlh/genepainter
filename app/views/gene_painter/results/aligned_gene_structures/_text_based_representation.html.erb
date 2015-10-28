@@ -15,8 +15,14 @@
   intronphase_table, dummy = get_table(intron_phase_path, {id_pattern_table: 'intron_phase'})
 
   # fuzzy tables and positions
-  std_fuzzy_table, merged_fuzzy_table, fuzzy_pos = get_fuzzy_table_and_info(fuzzy_path, 'non_intron_phase_fuzzy', 'merged_fuzzy')
+  is_fuzzy_file =  Helper.does_file_exist( fuzzy_path )
+  if is_fuzzy_file then 
+    std_fuzzy_table, merged_fuzzy_table, fuzzy_pos = get_fuzzy_table_and_info(fuzzy_path, 'non_intron_phase_fuzzy', 'merged_fuzzy')
 
+  else
+    # hot-fix: no file with fuzzy-pattern means that no fuzzy-pos exist ...
+    fuzzy_pos = {}
+  end
   if fuzzy_pos.empty? then 
     # if there are no fuzzy positions, init 'fuzzy' tables with standard-tables 
     # use correct table ID's
@@ -169,7 +175,17 @@
   <tr>
 </table>
 
-<%= render :partial => "gene_painter/help/no_fuzzy_positions_info" %>
+<%= 
+  # render always, to ensure functionality of (fuzzy-) checkboxes
+  render :partial => "gene_painter/help/no_fuzzy_positions_info"
+%>
+<%=
+  # fuzzy file was not created:
+  if ! is_fuzzy_file then 
+    # show additional info-box; no checkbox triggers hiding this message
+    render :partial => "gene_painter/help/no_fuzzy_search_info"
+  end
+%>
 
 <script>
 
@@ -389,6 +405,14 @@
     }
   });
 
+  // fuzzy-introns file was not created at all
+  var is_fuzzy_file = <%= is_fuzzy_file %>
+  console.log(is_fuzzy_file);
+  if (! is_fuzzy_file) {
+    // fuzzy file was not created: disable fuzzy-checkboxes
+    $('input#highlight_fuzzy').prop('disabled', true);
+    $('input#show_fuzzy_introns').prop('disabled', true);
+  }
 
   // merged
   // color merged table(s)

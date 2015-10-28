@@ -12,11 +12,11 @@
 		end +
 		content_tag(:tr) do 
 			content_tag(:td, 
-				label_tag(:fuzzy_val, "Align fuzzy introns within")
+				label_tag(:fuzzy_val, "Enable visualization of fuzzy introns within")
 			) +
 			content_tag(:td, 
 				select_tag(:fuzzy_val, 
-					options_for_select(1..15, 5), # 15 equals 5 codons, which is quite a lot fuzzy
+					options_for_select(0..9, 0), # 9 equals 3 codons, which seems reasonable
 					:multiple => false,
 					:disabled => false
 				) +
