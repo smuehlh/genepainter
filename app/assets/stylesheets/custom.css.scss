@@ -394,7 +394,7 @@ div.large_div, #graphical {
 
 div.pattern {
   font-family: Courier;
-  height: 320px;
+  max-height: 320px;
 }
 
 div.res_left_col {
@@ -411,7 +411,7 @@ div.res_names {
   overflow: scroll;
 }
 iframe.res_height {
-  height: 300px;
+  max-height: 300px;
 }
 div.hide-horizontal-overflow {
   overflow-x: hidden;
