@@ -145,7 +145,8 @@ module GenePainterHelper
         update_stats(line, stats_data, stats_head)
       end
     end
-    intronpos_data = intronpos_to_pattern(introns_per_column)
+    intronpos_data = intronnum_to_intronpos_pattern(introns_per_column)
+
     pattern_data.unshift intronpos_data
     names_data.unshift ">Intron number"
 
@@ -376,8 +377,8 @@ module GenePainterHelper
     names_data.push name
   end
 
-  def intronpos_to_pattern(introns_per_column)
-    intronpos = 0
+  def intronnum_to_intronpos_pattern(introns_per_column)
+    intronpos = 1 # first intron gets number 1...
     return introns_per_column.collect do |n_introns|
       if n_introns == 0 then 
         dat = "&nbsp;"
