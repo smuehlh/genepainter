@@ -407,7 +407,6 @@
 
   // fuzzy-introns file was not created at all
   var is_fuzzy_file = <%= is_fuzzy_file %>
-  console.log(is_fuzzy_file);
   if (! is_fuzzy_file) {
     // fuzzy file was not created: disable fuzzy-checkboxes
     $('input#highlight_fuzzy').prop('disabled', true);
