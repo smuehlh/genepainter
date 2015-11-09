@@ -167,41 +167,6 @@ module GenePainterHelper
     return pattern_table, names_table, intronpos_table, stats_only_th_table, stats_only_td_table
   end
 
-  def get_fuzzy_table_and_info(filename, id_pattern_table, id_merged_table)
-    pos_with_fuzzy = {}
-    pattern_data, names_data = [], [] # names data not acutally needed
-    introns_per_column = nil # init with nil, will be converted to array later ...
-
-    is_collected_fuzzy_pos = false
-    IO.foreach(filename) do |line|
-      line = line.chomp
-      next if line.empty?
-
-      if line[0] == ">" && is_collected_fuzzy_pos then 
-        # pattern, with fuzzy pos merged, treat as pattern in get_table method
-        introns_per_column = init_intron_counts(line) if introns_per_column.nil?
-        update_wanted_data(line, pattern_data, names_data, introns_per_column)
-
-      elsif is_fuzzy_pos_list(line)
-        # table with mapping of fuzzy positions
-        update_fuzzy_pos(line, pos_with_fuzzy)
-        is_collected_fuzzy_pos = true
-      end
-    end
-
-    if pos_with_fuzzy.empty? then 
-      # no fuzzy positions, init 
-      introns_per_column = []
-    end
-
-    classes_per_column = convert_fuzzy_intron_numbers_to_classes(introns_per_column, pos_with_fuzzy)
-
-    pattern_table = build_pattern_table(pattern_data, classes_per_column, {id: id_pattern_table})
-    merged_table = build_merged_pattern_table(introns_per_column, id_merged_table) 
-
-    return pattern_table, merged_table, pos_with_fuzzy
-  end
-
 # TODO
 # Neu
   # parse exonintronpattern table from file

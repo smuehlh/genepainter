@@ -47,61 +47,54 @@
   end
 
 # TODO
-# fuzzy / helper aufrauemen
-# if is_fuzzy_file else init ersetzen: in methode parse_fuzzypattern abfangen ob fuzzyfile exisitert und dort init!
+# helper aufrauemen
 
-# merged table nicht mehr nachtraeglich (?) 2 leere <td> hinzufuegen? -> erst relevant wenn jquery-plugin loesung ...
+# merged table nicht mehr nachtraeglich (?) 2 leere <td> hinzufuegen? -> erst relevant wenn tabelle fertig ...
 
 # stats-methods
-# svg-methods
 # file exist - check also in all other results-tabs
 # use functions parse_X, data_to_tr in all other results-tabs
 # use different names for intron-classes
+# hover 1: add genename as class to all entries of row!
+# hover 2: onclick toggle class!
 
 %>
-
-<div id="pattern-div" class="pattern" data-fuzzy='<%= fuzzy_pos.to_json %>'>
-  <div class="tablescrollwrapper">
-    <table id="pattern-table" class="unstyled pattern-outertable">
-      <thead></thead>
+<div class="patterndata outerwrapper" data-fuzzy='<%= fuzzy_pos.to_json %>'>
+  <div class="rowwrapper">
+    <div class="firstcol">
+      <table>
+        <tbody>
+          <%= firstcol_tr.html_safe %>
+        </tbody>
+      </table>
+    </div>
+    <div class="maintable">
+      <table id="std" class="pattern-innertable">
+        <tbody>
+          <%= std_tr.html_safe %>
+        </tbody>
+      </table>
+      <table id="intron-phase" class="pattern-innertable">
+        <tbody>
+          <%= intron_tr.html_safe %>
+        </tbody>
+      </table>   
+      <table id="std-fuzzy" class="pattern-innertable">
+        <tbody>
+          <%= fuzzy_tr.html_safe %>
+        </tbody>
+      </table>         
+    </div>
+  </div>
+  <div class="footer">
+    <table>
       <tbody>
-          <tr>
-            <td>
-                <table>
-                  <tbody>
-                    <%= firstcol_tr.html_safe %>
-                  </tbody>
-                </table>
-            </td>
-            <td colspan='<%= patterncols.size %>'> 
-              <div class="pattern-innerdiv">
-                <table id="std" class="pattern-innertable">
-                  <tbody>
-                    <%= std_tr.html_safe %>
-                  </tbody>
-                </table>
-                <table id="intron-phase" class="pattern-innertable">
-                  <tbody>
-                    <%= intron_tr.html_safe %>
-                  </tbody>
-                </table>   
-                <table id="std-fuzzy" class="pattern-innertable">
-                  <tbody>
-                    <%= fuzzy_tr.html_safe %>
-                  </tbody>
-                </table>   
-              </div>
-            </td>
-          </tr>
-      </tbody>
-      <tfoot>
         <%= std_merged_tr.html_safe %>
         <%= intron_merged_tr.html_safe %>
         <%= fuzzy_merged_tr.html_safe %>
-      </tfoot>    
+      </tbody>
     </table>
   </div>
-
 </div>
 
 <h4>Legend</h4>
@@ -206,6 +199,7 @@
 <script>
 
   // hover over (nested) exon-intron pattern table
+  // TODO
   $('#pattern-table').on('mouseenter mouseleave', 'tr', {el: false}, function (e) {
       var hl = e.data.el;
       hl && hl.removeClass('hover');
@@ -214,6 +208,27 @@
           $(this).addClass('hover') :
           $(this).parent().closest('tr:hover').addClass('hover');
   });
+
+  // scroll pattern-tables
+  $(document).ready(function(){
+    var cache = {
+
+      rowwrapper: $('.rowwrapper'),
+      maintable: $('.maintable'),
+      firstcol: $('.firstcol')
+
+    };
+
+    $(cache.rowwrapper).css('width', $(cache.maintable).width() + $(cache.firstcol).width());
+    // set maintable offset to widht of firstcol
+    $(cache.maintable).css('left', $(cache.firstcol).width());
+    
+    $(cache.rowwrapper).on('scroll', function(){
+      $(cache.firstcol).css('margin-top', -1 * $(cache.rowwrapper).scrollTop());
+      $(cache.firstcol).css('padding-bottom', $(cache.rowwrapper).scrollTop());
+    });
+  });
+
 
   // init vars
   // tables
