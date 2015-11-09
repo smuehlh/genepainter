@@ -3,6 +3,9 @@ module GenePainterHelper
   def class_intron_col(n_introns)
     "intron_" + n_introns.to_s
   end
+  def exon_placeholder 
+    "-"
+  end
 
   # creates table for manual species-mapping (link)
   # first row: multi checkbox set, 
@@ -199,6 +202,281 @@ module GenePainterHelper
     return pattern_table, merged_table, pos_with_fuzzy
   end
 
+# TODO
+# Neu
+  # parse exonintronpattern table from file
+  # return genenames & patterns as array
+  # no need to deal with number of introns, or merged pattern, or... as this can be extraced from array
+  def parse_exonintronpattern(filename)
+    data = []
+    IO.foreach(filename) do |line|
+      if is_pattern(line) then 
+        parts = pattern_line_to_arr(line)
+        data.push parts
+      end
+    end
+    return data
+  end
+
+  def parse_fuzzypattern(filename)
+    pattern = []
+    pos = nil # init with nil to separate between normal pattern and fuzzy-pattern (follows after fuzzy pos)
+    IO.foreach(filename) do |line|
+      # file consists of three parts:
+      # part 1: normal pattern
+      # nothing to do
+
+      # part 2: list with fuzzy positions
+      if is_table(line) then 
+        if pos.nil? then 
+          # this is first table line -> the header -> do not collect data
+          pos = init_fuzzypos # re-do init
+          next
+        end
+        parts = table_line_to_arr(line)
+        key = parts.shift
+        val = parts.shift
+
+        # convert key to zero-based number; convert values to zero-based list
+        pos[human_to_ruby_counting(key)] = list_to_ruby_counts(val)
+      end
+
+      # part 3: pattern with fuzzy positions merged
+      # follows fuzzy-pos list! (opposed to part 1)
+      if is_pattern(line) && ! pos.nil? then       
+        parts = pattern_line_to_arr(line)
+        pattern.push parts
+      end
+    end
+    return pattern, pos
+  end
+  def init_fuzzypos
+    # "need" this method as fuzzypos should be initialized from view and from this helper
+    return {}
+  end
+  def add_class_info_to_fuzzy_pos(hash)
+    # add intron-index classes to position data
+    hash.keys.each do |key|
+      values = hash[key]
+      hash["intron_#{key}"] = values.map{|num| "intron_#{num}"}
+      hash.delete(key) # delete old key-value pair
+    end
+    return hash
+  end
+  def parse_statspattern(filename)
+  end
+
+  # convert data to tr-data
+  # input: array of arrays
+  # converts only wanted columns!
+  # use number of introns in row & intron position as classes 
+  # assume first cell = name; all other cells = exons/introns
+  # classes:
+  # col-X -> the number of introns in the respective table column (appliccable for exons and introns)
+  # intron_X -> the index of the intron (only for intron-columns)
+  def data_to_tr(arr, cols)
+    table_rows = []
+
+    patterns = arr.collect{ |inner_arr| inner_arr[1..-1] }
+    intron_numbers = pattern_to_intron_numbers(patterns) # number of introns per column
+    intron_indices = pattern_to_intron_indices(patterns) # index of introns in row
+
+    arr.each do |row|
+      tr = "<tr>"
+
+      cols.each do |col_ind|
+        cell = row[col_ind]
+        pattern_ind = col_ind - 1
+
+        if col_ind == 0 then 
+          # genename
+          this_class = "genename"
+        else
+          # pattern
+          this_class = "col-#{intron_numbers[pattern_ind]}"
+          this_class += " intron_#{intron_indices[pattern_ind]}" if intron_indices[pattern_ind]  
+        end
+
+        tr += "<td class='#{this_class}'>#{cell}</td>"
+      end
+     
+      tr += "</tr>"
+      table_rows.push tr
+
+    end
+    return table_rows.join
+  end
+
+  # def data_to_firstcol_tr(arr)
+  #   table_rows = []
+  #   arr.each do |row|
+  #     firstcell = row[0]
+  #     tr = "<tr>"
+  #     tr += "<td class='firstcol'>#{firstcell}</td>"
+  #     tr += "</tr>"
+  #     table_rows.push tr
+  #   end
+  #   return table_rows.join
+  # end
+
+  # convert fuzzy data to tr-data
+  # classes:
+  # col-X -> number of introns in the respective table column
+  # intron_X -> intron index _of the standard, un-fuzzy pattern_ 
+  def fuzzy_data_to_tr(arr, fuzzy_pos, cols)
+    table_rows = []
+
+    patterns = arr.collect{ |inner_arr| inner_arr[1..-1] }
+    intron_numbers = pattern_to_intron_numbers(patterns) # number of introns per column
+    intron_indices = pattern_to_fuzzy_intron_indices(patterns, fuzzy_pos) # index/indices (if merged fuzzy pos) of introns
+
+    arr.each do |row|
+      tr = "<tr>"
+
+      cols.each do |col_ind|
+        cell = row[col_ind]
+        pattern_ind = col_ind - 1
+
+        if col_ind == 0 then 
+          # genename
+          this_class = "genename"
+        else
+          # pattern
+          this_class = "col-#{intron_numbers[pattern_ind]}"
+          intron_indices[pattern_ind].each do |ind|
+            this_class += " intron_#{ind}"
+          end
+        end
+
+        tr += "<td class='#{this_class}'>#{cell}</td>"
+      end
+      
+      tr += "</tr>"
+      table_rows.push tr
+
+    end
+    return table_rows.join
+  end
+
+
+  def data_to_merged_tr(arr, tr_id, genename)
+    tr = "<tr id='#{tr_id}'>"
+
+    patterns = arr.collect{ |inner_arr| inner_arr[1..-1] }
+    intron_numbers = pattern_to_intron_numbers(patterns)
+
+    tr += "<td class='genename'>#{genename}</td>"
+
+    pattern_to_merged(patterns).each_with_index do |cell, pattern_ind|
+      this_class = intron_numbers[pattern_ind]
+      if this_class then 
+        tr += "<td class='#{this_class}'>#{cell}</td>"
+      else
+        tr += "<td>#{cell}</td>"
+      end
+    end
+
+    tr += "</tr>"
+    return tr
+  end
+
+  # get number of introns at each position
+  def pattern_to_intron_numbers(arr)
+    first_row = arr[0]
+    return first_row.each_with_index.collect do |cell, ind_col|
+      col = arr.collect{|row| row[ind_col]} 
+      col.select{|e| e != exon_placeholder }.size # assue every non-exon is an intron!
+    end
+  end
+
+  # get index of intron at each position 
+  def pattern_to_intron_indices(arr)
+    ind = -1 # start with -1 as ind is incremented before collect -> the effective, first ind is 0
+
+    first_row = arr[0]
+    return first_row.each_with_index.collect do |cell, ind_col|
+      col = arr.collect{|row| row[ind_col]} 
+      n_introns = col.select{|e| e != exon_placeholder }.size # assume every non-exon is an intron!
+
+      if n_introns == 0 then 
+        # an exon column -> no intron-index
+        nil
+      else
+        # an intron column
+        ind += 1 
+        ind 
+      end
+    end
+  end
+
+  # get index of intron/ indices of merged introns at each position in merged arr
+  def pattern_to_fuzzy_intron_indices(arr, fuzzy_pos)
+    res = []
+    ind = 0 
+    first_row = arr[0]
+    first_row.each_with_index do |cell, ind_col|
+      col = arr.collect{|row| row[ind_col]} 
+      n_introns = col.select{|e| e != exon_placeholder }.size # assume every non-exon is an intron!
+      this_res = []
+
+      if n_introns == 0 then 
+        # exon column -> no intron index
+      else
+        # intron column
+        this_res.push ind
+
+        # fuzzy pos
+        if fuzzy_pos[ind] then 
+          this_res.push *fuzzy_pos[ind] # * for element-wise appending array
+          ind += fuzzy_pos[ind].size
+        end 
+
+        ind += 1 
+      end
+      res.push this_res
+    end
+
+    return res
+  end
+
+  def pattern_to_merged(arr)
+    first_row = arr[0]
+    return first_row.each_with_index.collect do |cell, ind_col|
+      col = arr.collect{|row| row[ind_col]} 
+      col = col.uniq - [exon_placeholder] # (different) intron placeholders remain
+      if col.size == 0 then 
+        # no intron at all
+        exon_placeholder
+      elsif col.size == 1 
+        # intron, all of same kind (phase)
+        col[0]
+      else
+        # introns of different phase. should never happen...
+        "?"
+      end
+    end
+  end
+  def ensure_same_length(arr, add_genename)
+    fixed_arr = []
+    fixed_add_genename = add_genename
+
+    genenames_sizes = arr.collect{ |inner_arr| inner_arr[0].size }
+    maxlength = [genenames_sizes, add_genename.size].flatten.max
+
+    fixed_arr = arr.collect do |row|
+      genename = row[0]
+      (maxlength - genename.size).times do 
+        genename += "&nbsp;"
+      end
+      [ genename, row[1..-1] ].flatten
+    end
+    (maxlength - add_genename.size).times do 
+      fixed_add_genename += "&nbsp;"
+    end
+    return fixed_arr, fixed_add_genename
+  end
+# ENDE - neu
+
   def get_table(filename, opts={})
     is_return_merged_table = opts[:is_merged_table]
     id_pattern_table = opts[:id_pattern_table] || ""
@@ -340,6 +618,51 @@ module GenePainterHelper
     end
     return pos_with_fuzzy
   end
+
+  ### TODO
+  # helper methods for parsing exon-intron patterns to table data
+  def pattern_line_to_arr(line)
+    name = line[0...GeneAlignment.max_length_gene_name].strip
+    pattern = line[GeneAlignment.max_length_gene_name..-1].strip
+    pattern = pattern.gsub(" ", "") # only statistics-pattern contains spaces, but filtering them out does not hurt!
+    pattern = pattern.chars # split into array
+    return [name, pattern].flatten
+  end
+  def table_line_to_arr(line)
+    parts = line.split("\t")
+    return parts.collect do |str|
+      str.strip
+    end
+  end
+  def list_to_ruby_counts(str)
+    parts = str.split(",")
+    return parts.collect do |str|
+      str = str.strip
+      if str.to_i != 0 then 
+        # assume that a) line contains numbers, but b) no zero-numbers as 
+        # c) numbers are in human counting
+        human_to_ruby_counting(str)
+      else
+        str 
+      end    
+    end
+  end
+  def is_pattern(line)
+    # special patterns should not be included in output!
+    return ( line.start_with?(">") &&
+      ! ( line.start_with?(">Merged") || line.start_with?(">Consensus") || line.start_with?(">Intron") )
+      )
+  end
+  def is_table(line)
+    # line contains a tab-separated table, with at least two columns ?
+    parts = line.split("\t")
+    return parts.size >= 2     
+  end
+  def human_to_ruby_counting(num)
+    num.to_i - 1
+  end
+  # END
+
 
   ### helper methods for converting exon-intron pattern to table rows
   def split_pattern_line(line)

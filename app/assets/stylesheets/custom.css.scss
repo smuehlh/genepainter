@@ -395,8 +395,8 @@ div.large_div, #graphical {
 div.pattern {
   font-family: Courier;
   max-height: 320px;
+  overflow: auto;
 }
-
 div.res_left_col {
   float: left;
   max-height: 400px;
@@ -408,7 +408,7 @@ div.res_height {
   overflow: auto; 
 }
 div.res_names {
-  overflow: scroll;
+  overflow: auto;
 }
 iframe.res_height {
   max-height: 300px;
@@ -554,8 +554,32 @@ div.pattern table.with_border td {
   text-align: center;
 }
 
-div.pattern tr:hover td {
-    background: #ededed; /* to better keep track of the line the mouse is over */
-    color:black;
+// div.pattern .hover {
+//   background-color: red;
+//   color: black;
+// }
+// div.pattern tr:hover td {
+//     background: #ededed; /* to better keep track of the line the mouse is over */
+//     color:black;
+// }
+
+.pattern-outertable .hover {
+  background: white !important;
 }
 
+.pattern-innertable .hover {
+  background: #ededed !important;
+  color: black;
+}
+
+table .genename {
+  padding-right: 10px;
+}
+#merged tfoot {
+  display: table;
+  margin-top: 10px;
+}
+
+.pattern-innerdiv {
+  overflow: auto;
+}

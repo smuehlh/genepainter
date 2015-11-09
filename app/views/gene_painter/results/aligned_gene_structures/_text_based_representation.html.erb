@@ -3,89 +3,105 @@
   intron_phase_path = controller.build_output_path("intron-phase.txt") 
   fuzzy_path = controller.build_output_path("fuzzy.txt")
 
-  # "normal" tables
-  std_table, names_table, merged_table = get_table(
-    std_path, 
-    {
-      is_merged_table: true, 
-      id_merged_table: 'merged',
-      id_pattern_table: 'non_intron_phase'
-    }
-  )
-  intronphase_table, dummy = get_table(intron_phase_path, {id_pattern_table: 'intron_phase'})
-
-  # fuzzy tables and positions
+  Helper.file_exist_or_die(std_path)
+  Helper.file_exist_or_die(intron_phase_path)
   is_fuzzy_file =  Helper.does_file_exist( fuzzy_path )
+
+  # standard exon-intron pattern
+  std_data = parse_exonintronpattern(std_path)
+  merged_td = "Merged"
+  # ensure same length gene names and "Merged"
+  # enough to do it for std-data only, as introns data have same gene names
+  std_data, merged_td = ensure_same_length(std_data, merged_td) 
+
+  n_cols = std_data[0].size
+  n_rows = std_data.size
+
+  firstcols = [0]
+  patterncols = (1..n_cols-1).to_a
+
+  std_merged_tr = data_to_merged_tr(std_data, "std-merged", merged_td)
+  # first col separately from all other cols
+  # enough to have firstcol for std-data only; since introns data have same genenames
+  firstcol_tr = data_to_tr(std_data, firstcols)
+  std_tr = data_to_tr(std_data, patterncols)
+
+  # intron-phase exon-intron pattern
+  intron_data = parse_exonintronpattern(intron_phase_path)
+  intron_tr = data_to_tr(intron_data, patterncols)
+  intron_merged_tr = data_to_merged_tr(intron_data, "intron-phase-merged", merged_td)
+
+  # fuzzy-positions merged exon-intron pattern
   if is_fuzzy_file then 
-    std_fuzzy_table, merged_fuzzy_table, fuzzy_pos = get_fuzzy_table_and_info(fuzzy_path, 'non_intron_phase_fuzzy', 'merged_fuzzy')
+    fuzzy_data, fuzzy_pos = parse_fuzzypattern(fuzzy_path)
 
+    fuzzy_patterncols = ( 1..fuzzy_data[0].size-1 ).to_a
+    fuzzy_tr = fuzzy_data_to_tr(fuzzy_data, fuzzy_pos, fuzzy_patterncols)
+    fuzzy_merged_tr = data_to_merged_tr(fuzzy_data, "std-fuzzy-merged", merged_td)
+
+    fuzzy_pos = add_class_info_to_fuzzy_pos(fuzzy_pos)
   else
-    # hot-fix: no file with fuzzy-pattern means that no fuzzy-pos exist ...
-    fuzzy_pos = {}
+    fuzzy_pos = init_fuzzypos
+    fuzzy_tr = ""
+    fuzzy_merged_tr = "<tr id='std-fuzzy-merged'></tr>"
   end
-  if fuzzy_pos.empty? then 
-    # if there are no fuzzy positions, init 'fuzzy' tables with standard-tables 
-    # use correct table ID's
 
-    # important: check if fuzzy positions exist when handling onclick-events to show fuzzy positions!
-    std_fuzzy_table, dummy, merged_fuzzy_table = get_table(
-      std_path, 
-      {
-        is_merged_table: true, 
-        id_merged_table: 'merged_fuzzy',
-        id_pattern_table: 'non_intron_phase_fuzzy'
-      }
-    )
-  end
+# TODO
+# fuzzy / helper aufrauemen
+# if is_fuzzy_file else init ersetzen: in methode parse_fuzzypattern abfangen ob fuzzyfile exisitert und dort init!
+
+# merged table nicht mehr nachtraeglich (?) 2 leere <td> hinzufuegen? -> erst relevant wenn jquery-plugin loesung ...
+
+# stats-methods
+# svg-methods
+# file exist - check also in all other results-tabs
+# use functions parse_X, data_to_tr in all other results-tabs
+# use different names for intron-classes
+
 %>
 
-<div id='text-based' class="pattern">
-  <div id='left-column' class="res_left_col">
-    <div id='all-left' class="res_height res_names">
-      <%= names_table.html_safe %>
-    </div>
-    <div id='merged_tab'>
-      <table>
-        <tr>
-          <td>&gt;Merged</td>
-        </tr>
-      </table>
-    </div>
+<div id="pattern-div" class="pattern" data-fuzzy='<%= fuzzy_pos.to_json %>'>
+  <div class="tablescrollwrapper">
+    <table id="pattern-table" class="unstyled pattern-outertable">
+      <thead></thead>
+      <tbody>
+          <tr>
+            <td>
+                <table>
+                  <tbody>
+                    <%= firstcol_tr.html_safe %>
+                  </tbody>
+                </table>
+            </td>
+            <td colspan='<%= patterncols.size %>'> 
+              <div class="pattern-innerdiv">
+                <table id="std" class="pattern-innertable">
+                  <tbody>
+                    <%= std_tr.html_safe %>
+                  </tbody>
+                </table>
+                <table id="intron-phase" class="pattern-innertable">
+                  <tbody>
+                    <%= intron_tr.html_safe %>
+                  </tbody>
+                </table>   
+                <table id="std-fuzzy" class="pattern-innertable">
+                  <tbody>
+                    <%= fuzzy_tr.html_safe %>
+                  </tbody>
+                </table>   
+              </div>
+            </td>
+          </tr>
+      </tbody>
+      <tfoot>
+        <%= std_merged_tr.html_safe %>
+        <%= intron_merged_tr.html_safe %>
+        <%= fuzzy_merged_tr.html_safe %>
+      </tfoot>    
+    </table>
   </div>
 
-  <div id='right-column'>
-    <%=
-      content_tag(:div,
-        std_table +
-        intronphase_table +
-        std_fuzzy_table,
-        :id => "all-right",
-        :class => "res_height res_names",
-        :style => "padding-left: 10px",
-        :data => {fuzzy: fuzzy_pos}
-      )
-    %>
-    <div id='merged-container' style='overflow: hidden; padding-left: 10px'>
-      <%= 
-        merged_table +
-        merged_fuzzy_table
-      %>
-    </div>
-  </div>
-
-  <%= javascript_tag defer: 'defer' do -%>
-
-    // simultaneously scroll up/down, left/right
-    $('div#all-right').on('scroll', function() {
-      $('div#all-left').scrollTop($(this).scrollTop());
-      $('div#merged-container').scrollLeft($(this).scrollLeft());
-    });
-
-    $('div#all-left').on('scroll', function() {
-      $('div#all-right').scrollTop($(this).scrollTop());
-    });
-
-   <% end -%>
 </div>
 
 <h4>Legend</h4>
@@ -189,16 +205,27 @@
 
 <script>
 
+  // hover over (nested) exon-intron pattern table
+  $('#pattern-table').on('mouseenter mouseleave', 'tr', {el: false}, function (e) {
+      var hl = e.data.el;
+      hl && hl.removeClass('hover');
+      
+      e.data.el = (e.type === 'mouseenter') ?
+          $(this).addClass('hover') :
+          $(this).parent().closest('tr:hover').addClass('hover');
+  });
+
   // init vars
   // tables
-  var $non_intron_phase_table, $intron_phase_table, $non_intron_phase_fuzzy_table;
-  var $merged_table, $merged_fuzzy_table;
+  var $std_table, $intron_phase_table, $std_fuzzy_table;
+  var $std_merged_tr, $intron_phase_merged_tr, $std_fuzzy_merged_tr;
 
-  $non_intron_phase_table = $('table#non_intron_phase');
-  $intron_phase_table = $('table#intron_phase');
-  $non_intron_phase_fuzzy_table = $('table#non_intron_phase_fuzzy');
-  $merged_table = $('table#merged');
-  $merged_fuzzy_table = $('table#merged_fuzzy');
+  $std_table = $('table#std');
+  $intron_phase_table = $('table#intron-phase');
+  $std_fuzzy_table = $('table#std-fuzzy');
+  $std_merged_tr = $('tr#std-merged');
+  $intron_phase_merged_tr = $('tr#intron-phase-merged');
+  $std_fuzzy_merged_tr = $('tr#std-fuzzy-merged');
 
   // Visible Spectrum
   var start = 450, // nm blue
@@ -208,22 +235,25 @@
 
 
   // default settings:
-  $non_intron_phase_fuzzy_table.toggle();
-  $intron_phase_table.toggle();
-  $merged_fuzzy_table.toggle();
+  $std_fuzzy_table.hide();
+  $intron_phase_table.hide();
+  $intron_phase_merged_tr.hide();
+  $std_fuzzy_merged_tr.hide();
 
   // number of rows
-  var n_rows = $non_intron_phase_table[0].rows.length;
+  var n_rows = <%= n_rows %>;
 
   // color introns by occurence
   function spinnerEventHandler(percent) {
     var min_occurence;
     
-    var active_merged_table;
-    if ( $merged_table.is(":visible") ) {
-      active_merged_table = $merged_table;
+    var active_merged_tr;
+    if ( $std_merged_tr.is(":visible") ) {
+      active_merged_tr = $std_merged_tr;
+    } else if ( $intron_phase_merged_tr.is(":visible") ) {
+      active_merged_tr = $intron_phase_merged_tr;
     } else {
-      active_merged_table = $merged_fuzzy_table;
+      active_merged_tr = $std_fuzzy_merged_tr;
     }
 
     percent = parseInt(percent) / 100;
@@ -232,7 +262,7 @@
     if (min_occurence > 0) {
       for (var i = min_occurence; i <= n_rows; i++) {
         class_name = "col-" + i;
-        background_color = active_merged_table.find("." + i).css("background-color");
+        background_color = active_merged_tr.find("." + i).css("background-color");
 
         $("." + class_name).addClass("common-highlighted");
         $("." + class_name).css("background-color", background_color);
@@ -241,9 +271,14 @@
   }
 
   // color merged table
-  function colorMergedTable(tMerged) {
-    var row = tMerged.rows[0];
-    for (var i = 0, cell; cell = row.cells[i]; i++) {
+  function colorMergedTable(row) {
+    // TODO:
+    // adjusted to table row
+    // var row = trMerged[0];
+    // var row = tMerged.rows[0];
+    // for (var i = 0, cell; cell = row.cells[i]; i++) {
+    // cell[0] contains genename; start with cell 1 instead.
+    for (var i = 1, cell; cell = row.cells[i]; i++) {
       var nIntrons = cell.className;
       if (nIntrons == 0) {
         cell.setAttribute('style', 'background-color: #F5F5F5');
@@ -260,6 +295,16 @@
 
     cell = row.insertCell(-1);
     cell.innerHTML = "&nbsp;";
+  }
+  colorMergedTable($std_merged_tr[0]);
+  colorMergedTable($intron_phase_merged_tr[0]);
+  colorMergedTable($std_fuzzy_merged_tr[0]);
+
+  // color bar (merged legend)
+  for (var i =0; i <= 100; i+=5) {
+    wavelength = i/100 * total + start;
+    color = Math.nmToRGB(wavelength);
+    $("."+i+"pct")[0].setAttribute('style', 'background-color: rgb(' +  color.red + ', ' + color.green + ', ' + color.blue + ')');
   }
 
   // bind event to check boxes
@@ -303,7 +348,7 @@
 
       var i = 0;
       var useClass;
-      $.each($("#all-right").data('fuzzy'), function(key, val) {
+      $.each($("#pattern-div").data('fuzzy'), function(key, val) {
         // alternate color
         if (i % 2 == 0) {
           useClass = "highlighted";
@@ -327,25 +372,24 @@
       resetGraphic();
 
       // show info-box if no fuzzy pos
-      if ($.isEmptyObject($("#all-right").data('fuzzy'))) {
+      if ($.isEmptyObject($("#pattern-div").data('fuzzy'))) {
         $("#no_fuzzy_info").show();
       }
     }
   });
 
-
   // show intron phase
   $("input#show_intron_phase").change(function() {  
-    // in any case: hide fuzzy tables and show the unfuzzy-merged table
-    $non_intron_phase_fuzzy_table.hide();
-    $merged_fuzzy_table.hide();
-
-    $merged_table.show();
+    // in any case: hide fuzzy tables
+    $std_fuzzy_table.hide();
+    $std_fuzzy_merged_tr.hide();
 
     if ( $(this).is(':checked') ) {
       // show intronphase-table
       $intron_phase_table.show();
-      $non_intron_phase_table.hide();
+      $intron_phase_merged_tr.show();
+      $std_table.hide();
+      $std_merged_tr.hide();
 
       // link to fuzzy-checkbox
       $('input#show_fuzzy_introns').prop('checked', false);
@@ -361,7 +405,9 @@
     } else {
       // show std-table
       $intron_phase_table.hide();
-      $non_intron_phase_table.show();
+      $intron_phase_merged_tr.hide();
+      $std_table.show();
+      $std_merged_tr.show();
 
       $("#legend-intron-placeholder").html("|");
     }
@@ -371,16 +417,18 @@
   $('input#show_fuzzy_introns').change(function() {
     // in any case: hide intron-phase table
     $intron_phase_table.hide();
+    $intron_phase_merged_tr.hide();
+
     // in any case: hide info-box (show only if no fuzzy introns)
     $("#no_fuzzy_info").hide();
 
     if ( $(this).is(':checked') ) {
       // show fuzzy-tables
-      $non_intron_phase_fuzzy_table.show();
-      $merged_fuzzy_table.show();
+      $std_fuzzy_table.show();
+      $std_fuzzy_merged_tr.show();
 
-      $merged_table.hide();
-      $non_intron_phase_table.hide();
+      $std_merged_tr.hide();
+      $std_table.hide();
 
       // link to common introns
       if ( $('input#highlight_common').is(':checked') ) {
@@ -391,38 +439,26 @@
       $('input#show_intron_phase').prop('checked', false);
 
       // show info-box if no fuzzy pos
-      if ($.isEmptyObject($("#all-right").data('fuzzy'))) {
+      if ($.isEmptyObject($("#pattern-div").data('fuzzy'))) {
         $("#no_fuzzy_info").show();
       }      
 
     } else {
       // show std-tables
-      $non_intron_phase_fuzzy_table.hide();
-      $merged_fuzzy_table.hide();
+      $std_fuzzy_table.hide();
+      $std_fuzzy_merged_tr.hide();
 
-      $merged_table.show();
-      $non_intron_phase_table.show();
+      $std_merged_tr.show();
+      $std_table.show();
     }
   });
 
   // fuzzy-introns file was not created at all
-  var is_fuzzy_file = <%= is_fuzzy_file %>
+  var is_fuzzy_file = <%= is_fuzzy_file %>;
   if (! is_fuzzy_file) {
     // fuzzy file was not created: disable fuzzy-checkboxes
     $('input#highlight_fuzzy').prop('disabled', true);
     $('input#show_fuzzy_introns').prop('disabled', true);
-  }
-
-  // merged
-  // color merged table(s)
-  colorMergedTable($merged_table[0]);
-  colorMergedTable($merged_fuzzy_table[0])
-
-  // color bar (legend)
-  for (var i =0; i <= 100; i+=5) {
-    wavelength = i/100 * total + start;
-    color = Math.nmToRGB(wavelength);
-    $("."+i+"pct")[0].setAttribute('style', 'background-color: rgb(' +  color.red + ', ' + color.green + ', ' + color.blue + ')');
   }
 
 </script>
