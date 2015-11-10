@@ -9,92 +9,66 @@
 
   # standard exon-intron pattern
   std_data = parse_exonintronpattern(std_path)
-  merged_td = "Merged"
-  # ensure same length gene names and "Merged"
-  # enough to do it for std-data only, as introns data have same gene names
-  std_data, merged_td = ensure_same_length(std_data, merged_td) 
-
-  n_cols = std_data[0].size
-  n_rows = std_data.size
-
-  firstcols = [0]
-  patterncols = (1..n_cols-1).to_a
-
-  std_merged_tr = data_to_merged_tr(std_data, "std-merged", merged_td)
-  # first col separately from all other cols
-  # enough to have firstcol for std-data only; since introns data have same genenames
-  firstcol_tr = data_to_tr(std_data, firstcols)
-  std_tr = data_to_tr(std_data, patterncols)
+  std_merged_tr = data_to_merged_tr(std_data)
+  std_tr = data_to_tr(std_data)
 
   # intron-phase exon-intron pattern
   intron_data = parse_exonintronpattern(intron_phase_path)
-  intron_tr = data_to_tr(intron_data, patterncols)
-  intron_merged_tr = data_to_merged_tr(intron_data, "intron-phase-merged", merged_td)
+  intron_tr = data_to_tr(intron_data)
+  intron_merged_tr = data_to_merged_tr(intron_data)
 
   # fuzzy-positions merged exon-intron pattern
   if is_fuzzy_file then 
     fuzzy_data, fuzzy_pos = parse_fuzzypattern(fuzzy_path)
 
-    fuzzy_patterncols = ( 1..fuzzy_data[0].size-1 ).to_a
-    fuzzy_tr = fuzzy_data_to_tr(fuzzy_data, fuzzy_pos, fuzzy_patterncols)
-    fuzzy_merged_tr = data_to_merged_tr(fuzzy_data, "std-fuzzy-merged", merged_td)
+    fuzzy_tr = fuzzy_data_to_tr(fuzzy_data, fuzzy_pos)
+    fuzzy_merged_tr = data_to_merged_tr(fuzzy_data)
 
     fuzzy_pos = add_class_info_to_fuzzy_pos(fuzzy_pos)
   else
     fuzzy_pos = init_fuzzypos
     fuzzy_tr = ""
-    fuzzy_merged_tr = "<tr id='std-fuzzy-merged'></tr>"
+    fuzzy_merged_tr = "<tr></tr><tr></tr>"
   end
+
+  n_rows = std_data.size
 
 # TODO
 # helper aufrauemen
 
-# merged table nicht mehr nachtraeglich (?) 2 leere <td> hinzufuegen? -> erst relevant wenn tabelle fertig ...
 
 # stats-methods
 # file exist - check also in all other results-tabs
 # use functions parse_X, data_to_tr in all other results-tabs
 # use different names for intron-classes
-# hover 1: add genename as class to all entries of row!
-# hover 2: onclick toggle class!
 
 %>
-<div class="patterndata outerwrapper" data-fuzzy='<%= fuzzy_pos.to_json %>'>
-  <div class="rowwrapper">
-    <div class="firstcol">
-      <table>
-        <tbody>
-          <%= firstcol_tr.html_safe %>
-        </tbody>
-      </table>
-    </div>
-    <div class="maintable">
-      <table id="std" class="pattern-innertable">
-        <tbody>
-          <%= std_tr.html_safe %>
-        </tbody>
-      </table>
-      <table id="intron-phase" class="pattern-innertable">
-        <tbody>
-          <%= intron_tr.html_safe %>
-        </tbody>
-      </table>   
-      <table id="std-fuzzy" class="pattern-innertable">
-        <tbody>
-          <%= fuzzy_tr.html_safe %>
-        </tbody>
-      </table>         
-    </div>
-  </div>
-  <div class="footer">
-    <table>
-      <tbody>
-        <%= std_merged_tr.html_safe %>
-        <%= intron_merged_tr.html_safe %>
-        <%= fuzzy_merged_tr.html_safe %>
-      </tbody>
-    </table>
-  </div>
+
+<div data-fuzzy='<%= fuzzy_pos.to_json %>' class="pattern">
+  <table id="std" class="fixTable unstyled">
+    <tbody>
+      <%= std_tr.html_safe %>
+    </tbody>
+    <tfoot>
+      <%= std_merged_tr.html_safe %>
+    </tfoot>
+  </table>
+  <table id="intron-phase" class="fixTable unstyled">
+    <tbody>
+      <%= intron_tr.html_safe %>
+    </tbody>
+    <tfoot>
+      <%= intron_merged_tr.html_safe %>
+    </tfoot>
+  </table>   
+  <table id="std-fuzzy" class="fixTable unstyled">
+    <tbody>
+      <%= fuzzy_tr.html_safe %>
+    </tbody>
+    <tfoot>
+      <%= fuzzy_merged_tr.html_safe %>
+    </tfoot>
+  </table>   
 </div>
 
 <h4>Legend</h4>
@@ -198,35 +172,26 @@
 
 <script>
 
-  // hover over (nested) exon-intron pattern table
-  // TODO
-  $('#pattern-table').on('mouseenter mouseleave', 'tr', {el: false}, function (e) {
-      var hl = e.data.el;
-      hl && hl.removeClass('hover');
-      
-      e.data.el = (e.type === 'mouseenter') ?
-          $(this).addClass('hover') :
-          $(this).parent().closest('tr:hover').addClass('hover');
+  // fix footer and first column
+  $(document).ready(function() {
+    $("#std.fixTable").tableHeadFixer({'foot': true, 'head': false, 'left': 1}); 
+    $("#intron-phase.fixTable").tableHeadFixer({'foot': true, 'head': false, 'left': 1}); 
+    $("#std-fuzzy.fixTable").tableHeadFixer({'foot': true, 'head': false, 'left': 1}); 
   });
 
-  // scroll pattern-tables
-  $(document).ready(function(){
-    var cache = {
-
-      rowwrapper: $('.rowwrapper'),
-      maintable: $('.maintable'),
-      firstcol: $('.firstcol')
-
-    };
-
-    $(cache.rowwrapper).css('width', $(cache.maintable).width() + $(cache.firstcol).width());
-    // set maintable offset to widht of firstcol
-    $(cache.maintable).css('left', $(cache.firstcol).width());
-    
-    $(cache.rowwrapper).on('scroll', function(){
-      $(cache.firstcol).css('margin-top', -1 * $(cache.rowwrapper).scrollTop());
-      $(cache.firstcol).css('padding-bottom', $(cache.rowwrapper).scrollTop());
-    });
+  // pattern table hover
+  $(".fixTable tr").hover(
+    function () {
+      $(this).addClass("pattern-hover");
+    }, 
+    function () {
+      $(this).removeClass("pattern-hover");
+    }
+  );
+  // pattern table highlight
+  $(".fixTable tr").click(function() {
+    $(this).toggleClass("pattern-highlight");
+    $(this).toggleClass("pattern-hover");
   });
 
 
@@ -238,16 +203,15 @@
   $std_table = $('table#std');
   $intron_phase_table = $('table#intron-phase');
   $std_fuzzy_table = $('table#std-fuzzy');
-  $std_merged_tr = $('tr#std-merged');
-  $intron_phase_merged_tr = $('tr#intron-phase-merged');
-  $std_fuzzy_merged_tr = $('tr#std-fuzzy-merged');
+  $std_merged_tr = $std_table.find('tfoot tr');
+  $intron_phase_merged_tr = $intron_phase_table.find('tfoot tr');
+  $std_fuzzy_merged_tr = $std_fuzzy_table.find('tfoot tr');
 
   // Visible Spectrum
   var start = 450, // nm blue
     end = 780,   // nm red
     total = end - start;
   var wavelength, color;
-
 
   // default settings:
   $std_fuzzy_table.hide();
@@ -287,33 +251,21 @@
 
   // color merged table
   function colorMergedTable(row) {
-    // TODO:
-    // adjusted to table row
-    // var row = trMerged[0];
-    // var row = tMerged.rows[0];
-    // for (var i = 0, cell; cell = row.cells[i]; i++) {
     // cell[0] contains genename; start with cell 1 instead.
     for (var i = 1, cell; cell = row.cells[i]; i++) {
       var nIntrons = cell.className;
       if (nIntrons == 0) {
-        cell.setAttribute('style', 'background-color: #F5F5F5');
+        $(cell).css({'background-color': '#F5F5F5'});
       } else {
         wavelength = (nIntrons * total) / n_rows + start;
         color = Math.nmToRGB(wavelength);
-        cell.setAttribute('style', 'background-color: rgb(' +  color.red + ', ' + color.green + ', ' + color.blue + ')');
+        $(cell).css({'background-color': 'rgb(' +  color.red + ', ' + color.green + ', ' + color.blue + ')'});
       }
     }
-
-    // insert dummy cells to match scroll-bar of pattern-table
-    cell = row.insertCell(-1);
-    cell.innerHTML = "&nbsp;"; 
-
-    cell = row.insertCell(-1);
-    cell.innerHTML = "&nbsp;";
   }
-  colorMergedTable($std_merged_tr[0]);
-  colorMergedTable($intron_phase_merged_tr[0]);
-  colorMergedTable($std_fuzzy_merged_tr[0]);
+  colorMergedTable($std_merged_tr[1]);
+  colorMergedTable($intron_phase_merged_tr[1]);
+  colorMergedTable($std_fuzzy_merged_tr[1]);
 
   // color bar (merged legend)
   for (var i =0; i <= 100; i+=5) {

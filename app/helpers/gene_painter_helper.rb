@@ -239,7 +239,7 @@ module GenePainterHelper
   # classes:
   # col-X -> the number of introns in the respective table column (appliccable for exons and introns)
   # intron_X -> the index of the intron (only for intron-columns)
-  def data_to_tr(arr, cols)
+  def data_to_tr(arr)
     table_rows = []
 
     patterns = arr.collect{ |inner_arr| inner_arr[1..-1] }
@@ -249,18 +249,13 @@ module GenePainterHelper
     arr.each do |row|
       tr = "<tr>"
 
-      cols.each do |col_ind|
-        cell = row[col_ind]
-        pattern_ind = col_ind - 1
+      name = row[0]
+      pattern = row[1..-1]
 
-        if col_ind == 0 then 
-          # genename
-          this_class = "genename"
-        else
-          # pattern
-          this_class = "col-#{intron_numbers[pattern_ind]}"
-          this_class += " intron_#{intron_indices[pattern_ind]}" if intron_indices[pattern_ind]  
-        end
+      tr += "<td class='genename'>#{name}</td>"
+      pattern.each_with_index do |cell, ind|
+        this_class = "col-#{intron_numbers[ind]}"
+        this_class += " intron_#{intron_indices[ind]}" if intron_indices[ind]  
 
         tr += "<td class='#{this_class}'>#{cell}</td>"
       end
@@ -272,23 +267,11 @@ module GenePainterHelper
     return table_rows.join
   end
 
-  # def data_to_firstcol_tr(arr)
-  #   table_rows = []
-  #   arr.each do |row|
-  #     firstcell = row[0]
-  #     tr = "<tr>"
-  #     tr += "<td class='firstcol'>#{firstcell}</td>"
-  #     tr += "</tr>"
-  #     table_rows.push tr
-  #   end
-  #   return table_rows.join
-  # end
-
   # convert fuzzy data to tr-data
   # classes:
   # col-X -> number of introns in the respective table column
   # intron_X -> intron index _of the standard, un-fuzzy pattern_ 
-  def fuzzy_data_to_tr(arr, fuzzy_pos, cols)
+  def fuzzy_data_to_tr(arr, fuzzy_pos)
     table_rows = []
 
     patterns = arr.collect{ |inner_arr| inner_arr[1..-1] }
@@ -298,24 +281,19 @@ module GenePainterHelper
     arr.each do |row|
       tr = "<tr>"
 
-      cols.each do |col_ind|
-        cell = row[col_ind]
-        pattern_ind = col_ind - 1
+      name = row[0]
+      pattern = row[1..-1]
 
-        if col_ind == 0 then 
-          # genename
-          this_class = "genename"
-        else
-          # pattern
-          this_class = "col-#{intron_numbers[pattern_ind]}"
-          intron_indices[pattern_ind].each do |ind|
-            this_class += " intron_#{ind}"
+      tr += "<td class='genename'>#{name}</td>"
+      pattern.each_with_index do |cell, ind|
+          this_class = "col-#{intron_numbers[ind]}"
+          intron_indices[ind].each do |thisind|
+            this_class += " intron_#{thisind}"
           end
-        end
 
         tr += "<td class='#{this_class}'>#{cell}</td>"
       end
-      
+    
       tr += "</tr>"
       table_rows.push tr
 
@@ -323,26 +301,38 @@ module GenePainterHelper
     return table_rows.join
   end
 
+  def data_to_merged_tr(arr)
+    table_rows = []
 
-  def data_to_merged_tr(arr, tr_id, genename)
-    tr = "<tr id='#{tr_id}'>"
-
+    name = "Merged"
     patterns = arr.collect{ |inner_arr| inner_arr[1..-1] }
     intron_numbers = pattern_to_intron_numbers(patterns)
 
-    tr += "<td class='genename'>#{genename}</td>"
+    # empty tr
+    tr = "<tr>"
+    tr += "<th class='genename tfoot-spacer'>&nbsp;</th>"
+    patterns[0].each do |cell|
+      tr += "<th class='tfoot-spacer'>&nbsp;</th>"
+    end
+    tr += "</tr>"
+    table_rows.push tr
+
+    # data tr
+    tr = "<tr>"
+    tr += "<th class='genename'>#{name}</th>"
 
     pattern_to_merged(patterns).each_with_index do |cell, pattern_ind|
       this_class = intron_numbers[pattern_ind]
       if this_class then 
-        tr += "<td class='#{this_class}'>#{cell}</td>"
+        tr += "<th class='#{this_class}'>#{cell}</th>"
       else
-        tr += "<td>#{cell}</td>"
+        tr += "<th>#{cell}</th>"
       end
     end
 
     tr += "</tr>"
-    return tr
+    table_rows.push tr
+    return table_rows.join
   end
 
   # get number of introns at each position
@@ -420,25 +410,6 @@ module GenePainterHelper
         "?"
       end
     end
-  end
-  def ensure_same_length(arr, add_genename)
-    fixed_arr = []
-    fixed_add_genename = add_genename
-
-    genenames_sizes = arr.collect{ |inner_arr| inner_arr[0].size }
-    maxlength = [genenames_sizes, add_genename.size].flatten.max
-
-    fixed_arr = arr.collect do |row|
-      genename = row[0]
-      (maxlength - genename.size).times do 
-        genename += "&nbsp;"
-      end
-      [ genename, row[1..-1] ].flatten
-    end
-    (maxlength - add_genename.size).times do 
-      fixed_add_genename += "&nbsp;"
-    end
-    return fixed_arr, fixed_add_genename
   end
 # ENDE - neu
 

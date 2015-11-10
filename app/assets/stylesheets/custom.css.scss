@@ -395,7 +395,8 @@ div.large_div, #graphical {
 div.pattern {
   font-family: Courier;
   max-height: 320px;
-  overflow: auto;
+  // overflow: auto;
+  width: 100%;
 }
 div.res_left_col {
   float: left;
@@ -411,7 +412,7 @@ div.res_names {
   overflow: auto;
 }
 iframe.res_height {
-  max-height: 300px;
+  height: 300px;
 }
 div.hide-horizontal-overflow {
   overflow-x: hidden;
@@ -553,77 +554,18 @@ div.pattern table, div.pattern th, div.pattern td {
 div.pattern table.with_border td {
   text-align: center;
 }
-
-// div.pattern .hover {
-//   background-color: red;
-//   color: black;
-// }
-// div.pattern tr:hover td {
-//     background: #ededed; /* to better keep track of the line the mouse is over */
-//     color:black;
-// }
-
-// .pattern-outertable .hover {
-//   background: white !important;
-// }
-
-// .pattern-innertable .hover {
-//   background: #ededed !important;
-//   color: black;
-// }
+.pattern-hover td, .pattern-hover td[style] {
+  background-color: #ededed !important;
+  color: black !important;
+}
+.pattern-highlight td, .pattern-highlight td[style] {
+  background-color: $info_blue !important;
+  color: black !important;
+}
 
 table .genename {
   padding-right: 10px;
 }
-#merged tfoot {
-  display: table;
-  margin-top: 10px;
+.tfoot-spacer {
+  font-size: 5px;
 }
-
-// .pattern-innerdiv {
-//   overflow: auto;
-// }
-
-
-//  TODO
-//  div.pattern wiederverwenden -> nur Courier stil?
-.patterndata {
-  font-family: Courier;
-}
-div.patterndata table, div.pattern th, div.pattern td {
-  border-spacing: 0;
-  color: black;
-  font-weight: normal;
-}
-div.patterndata table.with_border td {
-  text-align: center;
-}
-.outerwrapper {
-  position: relative;
-  width: 700px;
-  overflow-y: auto;
-}
-.rowwrapper {
-  height: 300px;
-  overflow-x: hidden;
-  overflow-y: auto;
-  position: relative;
-}
-.firstcol {
-  position: fixed;  
-  display: block;
-  height: 300px;
-  overflow: hidden;
-  background: white;
-  z-index: 10;
-}
-.maintable {
-  position: absolute;
-  top: 0;
-  display: inline-block;  
-}
-.footer {
-
-}
-
-
