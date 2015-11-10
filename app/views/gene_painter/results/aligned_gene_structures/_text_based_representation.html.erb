@@ -20,26 +20,31 @@
   # fuzzy-positions merged exon-intron pattern
   if is_fuzzy_file then 
     fuzzy_data, fuzzy_pos = parse_fuzzypattern(fuzzy_path)
-
-    fuzzy_tr = fuzzy_data_to_tr(fuzzy_data, fuzzy_pos)
-    fuzzy_merged_tr = data_to_merged_tr(fuzzy_data)
-
-    fuzzy_pos = add_class_info_to_fuzzy_pos(fuzzy_pos)
   else
+    fuzzy_data = [ [[]] ]
     fuzzy_pos = init_fuzzypos
-    fuzzy_tr = ""
-    fuzzy_merged_tr = "<tr></tr><tr></tr>"
   end
+  fuzzy_tr = fuzzy_data_to_tr(fuzzy_data, fuzzy_pos)
+  fuzzy_merged_tr = data_to_merged_tr(fuzzy_data)
+  fuzzy_pos = add_class_info_to_fuzzy_pos(fuzzy_pos)
 
   n_rows = std_data.size
 
 # TODO
+# highlight-fuzzy introns not working any more
+# firefox ???
+# only 3 genes?
+
+# stats
+# 1) new helper method
+# 2) html-layout
+# 3) javascript
+
 # helper aufrauemen
-
-
-# stats-methods
 # file exist - check also in all other results-tabs
 # use functions parse_X, data_to_tr in all other results-tabs
+
+# merge branch back to master
 # use different names for intron-classes
 
 %>
