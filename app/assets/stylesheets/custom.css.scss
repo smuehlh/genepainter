@@ -567,5 +567,6 @@ table .genename {
   padding-right: 10px;
 }
 .tfoot-spacer {
-  font-size: 5px;
+  // uncomment to reduce spacing between table and (fixed positioned) footer
+  // font-size: 5px;
 }
