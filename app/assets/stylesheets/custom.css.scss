@@ -517,6 +517,31 @@ div.highlight-gain {
   font-family: inherit;
   fill: $h1_color;
 }
+
+div.pattern table, div.pattern th, div.pattern td {
+  border-spacing: 0;
+  color: black;
+  font-weight: normal;
+}
+div.pattern table.with_border td {
+  text-align: center;
+}
+.pattern-hover td, .pattern-hover td[style] {
+  background-color: #ededed !important;
+  color: black !important;
+}
+.pattern-highlight td, .pattern-highlight td[style] {
+  background-color: $info_blue !important;
+  color: black !important;
+}
+
+table .genename {
+  padding-right: 10px;
+}
+.tfoot-spacer {
+  // uncomment to reduce spacing between table and (fixed positioned) footer
+  // font-size: 5px;
+}
 // color table (text-based and statistics rep.)
 .highlighted {
   background-color: $h1_color !important;
@@ -544,29 +569,4 @@ table.mapped_headers th {
 
 .ui-autocomplete-loading {
     background: white image-url("jquery_ui/ui-anim_basic_16x16.gif") right center no-repeat;
-}
-
-div.pattern table, div.pattern th, div.pattern td {
-  border-spacing: 0;
-  color: black;
-  font-weight: normal;
-}
-div.pattern table.with_border td {
-  text-align: center;
-}
-.pattern-hover td, .pattern-hover td[style] {
-  background-color: #ededed !important;
-  color: black !important;
-}
-.pattern-highlight td, .pattern-highlight td[style] {
-  background-color: $info_blue !important;
-  color: black !important;
-}
-
-table .genename {
-  padding-right: 10px;
-}
-.tfoot-spacer {
-  // uncomment to reduce spacing between table and (fixed positioned) footer
-  // font-size: 5px;
 }
