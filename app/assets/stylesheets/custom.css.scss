@@ -526,11 +526,11 @@ div.pattern table, div.pattern th, div.pattern td {
 div.pattern table.with_border td {
   text-align: center;
 }
-.pattern-hover td, .pattern-hover td[style] {
+.pattern-hover, .pattern-hover td[style] {
   background-color: #ededed !important;
   color: black !important;
 }
-.pattern-highlight td, .pattern-highlight td[style] {
+.pattern-highlight, .pattern-highlight td[style] {
   background-color: $info_blue !important;
   color: black !important;
 }
