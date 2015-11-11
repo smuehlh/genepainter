@@ -31,9 +31,8 @@
   n_rows = std_data.size
 
 # TODO
-# highlight-fuzzy introns not working any more
+# highlight & hover
 # firefox ???
-# only 3 genes?
 
 # stats
 # 1) new helper method
@@ -49,7 +48,7 @@
 
 %>
 
-<div data-fuzzy='<%= fuzzy_pos.to_json %>' class="pattern">
+<div data-fuzzy='<%= fuzzy_pos.to_json %>' class="pattern" id="pattern-div">
   <table id="std" class="fixTable unstyled">
     <tbody>
       <%= std_tr.html_safe %>
