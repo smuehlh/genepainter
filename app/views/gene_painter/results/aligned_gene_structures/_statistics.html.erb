@@ -1,62 +1,55 @@
-<% 
+<%
   stats_path = controller.build_output_path("stats.txt")
-  patterns_table, names_table, intronpos_table, stats_only_th_table, stats_only_td_table = get_statistics_table(
-    stats_path, "stats_patterns_table", "stats_intronpos_table"
-  )
+
+  Helper.file_exist_or_die(stats_path)
+
+  # exon-intron pattern
+  pattern_data, stats_data = parse_statspattern(stats_path)
+  pattern_intronindices_tr = data_to_intronindex_tr(pattern_data)
+  pattern_tr = data_to_tr(pattern_data)
+
+  # statistics info
+  th_data = [ stats_data.shift ]
+  stats_th = data_to_th(th_data)
+  stats_tr = data_to_tr(stats_data)
+
+# TODO
+# javascript: hover over info-table: remove all classes highlight & highlight all cells with same class -> (use intron indices) 
+
+# 1) nucleotide alignemnt:
+# auch tabelle statt div's
+# CSS:
+# aufraumen
+
 %>
 
-<div class="pattern">
-  <div class="res_left_col">
-    <div id='stats-left' class="res_height res_names">
-      <%= names_table.html_safe %>
-    </div>
-    <table class="additional_pattern">
-      <tr>
-        <td>&gt;Intron number</td>
-      </tr>
-    </table>
-  </div>
-
-  <div>
-    <div id='stats-right' class="res_height res_names" style='padding-left: 10px'>
-      <%= patterns_table.html_safe %>
-    </div>
-    <div id='intron_pos' class="additional_pattern" style='overflow: hidden; padding-left: 10px'>
-      <%= intronpos_table.html_safe %>
-    </div>
-  </div>
-
-
-  <%= javascript_tag defer: 'defer' do -%>
-
-    // simultaneously scroll up/down, left/right
-    $('div#stats-right').on('scroll', function() {
-      $('div#stats-left').scrollTop($(this).scrollTop());
-      $('div#intron_pos').scrollLeft($(this).scrollLeft());
-    });
-
-    $('div#stats-left').on('scroll', function() {
-      $('div#stats-right').scrollTop($(this).scrollTop());
-    });
-
-   <% end -%>
+<div class="pattern" id="stats-pattern-div">
+  <table id="stats-pattern" class="fixTable unstyled">
+    <tbody>
+      <%= pattern_tr.html_safe %>
+    </tbody>
+    <tfoot>
+      <%= pattern_intronindices_tr.html_safe %>
+    </tfoot>
+  </table>
 </div>
-<br style="clear:both" />
-<div class="clear-fix">
-  <%= stats_only_th_table.html_safe%>
-</div>
-<div id="stats_table" class="res_height">
-  <%= stats_only_td_table.html_safe %>
+
+<div class="large-spacer stats-info" id="stats-info-div">
+  <table id="stats-info" class="fixTable">
+    <thead>
+      <%= stats_th.html_safe %>
+    </thead>
+    <tbody>
+      <%= stats_tr.html_safe %>
+    </tbody>
+  </table>
 </div>
 
 <script type="text/javascript">
-  var row, cell;
-  row = $("#stats_intronpos_table")[0].rows[0];
-  // insert dummy cells to match scroll-bar of pattern-table
-  cell = row.insertCell(-1);
-  cell.innerHTML = "&nbsp;"; 
-
-  cell = row.insertCell(-1);
-  cell.innerHTML = "&nbsp;";
+  // fix footer and first column
+  $(document).ready(function() {
+    $("#stats-pattern.fixTable").tableHeadFixer({'foot': true, 'head': false, 'left': 1}); 
+    $("#stats-info.fixTable").tableHeadFixer({'foot': false, 'head': true, 'left': 0}); 
+  });
 
 </script>

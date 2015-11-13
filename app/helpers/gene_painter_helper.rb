@@ -183,6 +183,27 @@ module GenePainterHelper
     return data
   end
 
+  def parse_statspattern(filename)
+    pattern = []
+    stats = [] 
+    IO.foreach(filename) do |line|
+      # file consists of two parts:
+      # part 1: normal pattern
+      if is_pattern(line) then 
+        parts = pattern_line_to_arr(line)
+        pattern.push parts
+      end
+
+      # part 2: list with statistics 
+      if is_table(line) then 
+        parts = table_line_to_arr(line)
+        stats.push parts
+      end
+
+    end
+    return pattern, stats
+  end
+
   def parse_fuzzypattern(filename)
     pattern = []
     pos = nil # init with nil to separate between normal pattern and fuzzy-pattern (follows after fuzzy pos)
@@ -228,7 +249,21 @@ module GenePainterHelper
     end
     return hash
   end
-  def parse_statspattern(filename)
+
+  def data_to_th(arr)
+    table_rows = []
+    arr.each do |row|
+      tr = "<tr>"
+
+      row.each do |cell|
+        tr += "<th>#{cell}</th>"
+      end
+
+      tr += "</tr>"
+      table_rows.push tr
+
+    end
+    return table_rows.join
   end
 
   # convert data to tr-data
@@ -309,12 +344,7 @@ module GenePainterHelper
     intron_numbers = pattern_to_intron_numbers(patterns)
 
     # empty tr
-    tr = "<tr>"
-    tr += "<th class='genename tfoot-spacer'>&nbsp;</th>"
-    patterns[0].each do |cell|
-      tr += "<th class='tfoot-spacer'>&nbsp;</th>"
-    end
-    tr += "</tr>"
+    tr = pattern_to_dummy_tr(patterns[0])
     table_rows.push tr
 
     # data tr
@@ -327,6 +357,33 @@ module GenePainterHelper
         tr += "<th class='#{this_class}'>#{cell}</th>"
       else
         tr += "<th>#{cell}</th>"
+      end
+    end
+
+    tr += "</tr>"
+    table_rows.push tr
+    return table_rows.join
+  end
+
+  def data_to_intronindex_tr(arr)
+    table_rows = []
+
+    name = "Intron number"
+    patterns = arr.collect{ |inner_arr| inner_arr[1..-1] }
+
+    # empty tr
+    tr = pattern_to_dummy_tr(patterns[0])
+    table_rows.push tr
+
+    # data tr
+    tr = "<tr>"
+    tr += "<th class='genename'>#{name}</th>"
+
+    pattern_to_intron_indices(patterns).each do |cell|
+      if cell then 
+        tr += "<th class=intron_#{cell}>#{cell}</th>"
+      else
+        tr += "<th>&nbsp;</th>"  
       end
     end
 
@@ -410,6 +467,16 @@ module GenePainterHelper
         "?"
       end
     end
+  end
+
+  def pattern_to_dummy_tr(arr)
+    tr = "<tr>"
+    tr += "<th class='genename tfoot-spacer'>&nbsp;</th>"
+    arr.each do |cell|
+      tr += "<th class='tfoot-spacer'>&nbsp;</th>"
+    end
+    tr += "</tr>"
+    return tr
   end
 # ENDE - neu
 

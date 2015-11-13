@@ -261,6 +261,9 @@ input[type='file'] {
 .spacer {
   margin-top: 5px;
 }
+.large-spacer {
+  margin-top: 15px;
+}
 #results_section {
     position: relative;
     margin-top: 25px;
@@ -395,8 +398,20 @@ div.large_div, #graphical {
 div.pattern {
   font-family: Courier;
   max-height: 320px;
-  // overflow: auto;
   width: 100%;
+}
+div.stats-info {
+  max-height: 320px;
+  width: 100%;
+}
+#stats-pattern {
+  text-align: center;
+} 
+#stats-pattern .genename {
+  text-align: left;
+}
+#stats-info th {
+  padding-bottom: 5px;
 }
 div.res_left_col {
   float: left;
@@ -522,9 +537,6 @@ div.pattern table, div.pattern th, div.pattern td {
   border-spacing: 0;
   color: black;
   font-weight: normal;
-}
-div.pattern table.with_border td {
-  text-align: center;
 }
 .pattern-hover, .pattern-hover td[style] {
   background-color: #ededed !important;
