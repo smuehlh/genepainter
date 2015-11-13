@@ -11,16 +11,7 @@
   # statistics info
   th_data = [ stats_data.shift ]
   stats_th = data_to_th(th_data)
-  stats_tr = data_to_tr(stats_data)
-
-# TODO
-# javascript: hover over info-table: remove all classes highlight & highlight all cells with same class -> (use intron indices) 
-
-# 1) nucleotide alignemnt:
-# auch tabelle statt div's
-# CSS:
-# aufraumen
-
+  stats_tr = stats_data_to_tr(stats_data)
 %>
 
 <div class="pattern" id="stats-pattern-div">
@@ -50,6 +41,26 @@
   $(document).ready(function() {
     $("#stats-pattern.fixTable").tableHeadFixer({'foot': true, 'head': false, 'left': 1}); 
     $("#stats-info.fixTable").tableHeadFixer({'foot': false, 'head': true, 'left': 0}); 
+  });
+
+  // hovering info table to highlight column in pattern table
+  $("#stats-info td").hover(
+    function () {
+      var thisclass = this.className;
+      $('.'+thisclass).addClass('pattern-highlight');
+    }, 
+    function () {
+      // remove class first, to use other class (= intron-index) as selector
+      $(this).removeClass('pattern-highlight');
+      var thisclass = this.className;   
+      $('.'+thisclass).removeClass('pattern-highlight');      
+    }
+  );
+
+  // quick-fix to init footer whenever stats-tab is entered
+  $("#tab-intron-history").click(function() {
+    $("#stats-pattern-div").scrollTop(1);
+    $("#stats-pattern-div").scrollTop(-1);
   });
 
 </script>

@@ -302,6 +302,33 @@ module GenePainterHelper
     return table_rows.join
   end
 
+  # convert stats data to tr-data
+  # classes: depending on first column (= intron index + 1)
+  # intron_X -> intron index 
+  def stats_data_to_tr(arr)
+    table_rows = []
+
+    patterns = arr.collect{ |inner_arr| inner_arr[1..-1] }
+
+    arr.each do |row|
+      tr = "<tr>"
+
+      intron = row[0]
+      pattern = row[1..-1]
+
+      this_class = "intron_#{human_to_ruby_counting( intron.to_i )}" 
+      tr += "<td class='#{this_class}'>#{intron}</td>"
+      pattern.each_with_index do |cell, ind|
+        tr += "<td class='#{this_class}'>#{cell}</td>"
+      end
+     
+      tr += "</tr>"
+      table_rows.push tr
+
+    end
+    return table_rows.join    
+  end
+
   # convert fuzzy data to tr-data
   # classes:
   # col-X -> number of introns in the respective table column
@@ -379,9 +406,10 @@ module GenePainterHelper
     tr = "<tr>"
     tr += "<th class='genename'>#{name}</th>"
 
-    pattern_to_intron_indices(patterns).each do |cell|
-      if cell then 
-        tr += "<th class=intron_#{cell}>#{cell}</th>"
+    pattern_to_intron_indices(patterns).each do |ind|
+      if ind then 
+        num = ruby_to_human_counting(ind)
+        tr += "<th class=intron_#{ind}>#{num}</th>"
       else
         tr += "<th>&nbsp;</th>"  
       end
@@ -663,6 +691,9 @@ module GenePainterHelper
   end
   def human_to_ruby_counting(num)
     num.to_i - 1
+  end
+  def ruby_to_human_counting(num)
+    num.to_i + 1
   end
   # END
 
