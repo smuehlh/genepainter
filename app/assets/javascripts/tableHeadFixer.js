@@ -73,6 +73,7 @@
 					tr.each(function(k, row) {
 						solverLeftColspan(row, function(cell) {
 							$(cell).css("z-index", settings['z-index']);
+							$(cell).css('display', '-moz-box');
 						});
 					});
 				}
@@ -129,7 +130,8 @@
 
 			setBackground(cells);
 			cells.css({
-				'position' : 'relative'
+				'position' : 'relative'//,
+				// 'display': '-moz-box'
 			});
 		}
 
@@ -137,11 +139,20 @@
 			var tfoot = $(settings.table).find("tfoot");
 			var tr = tfoot.find("tr");
 			var cells = tfoot.find("tr > *");
+			cells.each(function(k, cell) {
+				var cell = $(cell);
 
-			setBackground(cells);
-			cells.css({
-				'position' : 'relative'
+				setBackground(cell);
+				cell.css({
+					'position' : 'relative',
+					'display': 'table-cell'
+				});
 			});
+
+			// setBackground(cells);
+			// cells.css({
+			// 	'position' : 'relative',
+			// });
 		}
 
 		function fixLeft () {
@@ -177,8 +188,11 @@
 				var cell = $(cell);
 
 				setBackground(cell);
+
 				cell.css({
-					'position' : 'relative'
+					'position' : 'relative',
+					'display': '-moz-box',
+					'width': cell.css('width')
 				});
 			});
 		}
@@ -204,7 +218,9 @@
 
 				setBackground(cell);
 				cell.css({
-					'position' : 'relative'
+					'position' : 'relative',
+					'display': '-moz-box',
+					'width': cell.css('width')
 				});
 			});
 
