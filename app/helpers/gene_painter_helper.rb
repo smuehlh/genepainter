@@ -211,6 +211,15 @@ module GenePainterHelper
     return hash
   end
 
+  def parse_svg(filename)
+    data = [""]
+    IO.foreach(filename) do |line|
+      line = line.chomp
+      data[0] += line
+    end
+    return data
+  end
+
   def data_to_th(arr)
     table_rows = []
     arr.each do |row|

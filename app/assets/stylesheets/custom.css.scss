@@ -504,6 +504,24 @@ ul.ui-tabs-nav.ui-helper-reset.ui-helper-clearfix.ui-widget-header.ui-corner-all
   // font-size: 12px;
 }
 
+// results-tabs:
+// exon-intron pattern
+
+// svg-pattern
+.svg-genenames {
+  float: left;
+  width: 125px;
+}
+.svg-pattern {
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+.svg-merged {
+  height: 50px;
+  margin-top: 10px;
+  clear: both;
+}
+
 // phylogenetic tree
 #svg_placeholder {
   width: 100%;
@@ -549,6 +567,9 @@ div.pattern table, div.pattern th, div.pattern td {
 
 table .genename {
   padding-right: 10px;
+}
+.genenamesvg {
+  width: 120px;
 }
 .tfoot-spacer {
   // uncomment to reduce spacing between table and (fixed positioned) footer

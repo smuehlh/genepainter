@@ -1,53 +1,64 @@
-<div id='graphical' class="large_div">
-  <div class="res_left_col" style='width: 125px'>
-    <div id='genenames' class="res_height res_names">
-      <%= render_svg("genenames-normal.svg", "hide-horizontal-overflow").html_safe %>
+<%  
+  # names 
+  names_path = controller.build_output_path("genenames-normal.svg")
+  merged_names_path = controller.build_output_path("genenames-normal-merged.svg") 
+
+  # normal pattern
+  structs_path = controller.build_output_path("genestructures-normal.svg")
+  mergend_structs_path = controller.build_output_path("genestructures-normal-merged.svg")
+  legend_path = controller.build_output_path("legend-normal.svg")
+
+  names = parse_svg(names_path)
+  normal_structs = parse_svg(structs_path)
+
+  merged_names = parse_svg(merged_names_path)
+  normal_merged_structs = parse_svg(mergend_structs_path)
+  normal_legend = parse_svg(legend_path)
+
+  # reduced pattern
+  structs_path = controller.build_output_path("genestructures-reduced.svg")  
+  mergend_structs_path = controller.build_output_path("genestructures-reduced-merged.svg")
+  legend_path = controller.build_output_path("legend-reduced.svg")
+
+  reduced_structs = parse_svg(structs_path)
+
+  reduced_merged_structs = parse_svg(mergend_structs_path)
+  reduced_legend = parse_svg(legend_path)
+
+%>
+<div id="svg-upper-wrapper" class="pattern svg-pattern">
+  <div class="svg-genenames">
+    <%= names.join.html_safe %>
+  </div>
+  <div id="svg-struct" style="overflow-x:hidden;">
+    <div class="normal">
+      <%= normal_structs.join.html_safe %>
+    </div>
+    <div class="reduced">
+      <%= reduced_structs.join.html_safe %>
     </div>
   </div>
-
-  <div id='right-column'>
-    <div id='genestructures' class="res_height res_names">
-      <%= render_svg("genestructures-normal.svg", "normal").html_safe %>
-      <%= render_svg("genestructures-reduced.svg", "reduced").html_safe %>
+</div>
+<div id="svg-lower-wrapper" class="svg-pattern svg-merged">
+  <div class="svg-genenames">
+    <%= merged_names.join.html_safe %>
+  </div>
+  <div id="svg-merged" style="overflow-x:auto;">
+    <div class="normal">
+      <%= normal_merged_structs.join.html_safe %>
     </div>
-  </div>
-
-  <div id='legend' style='overflow: hidden'>
-    <%= render_svg("legend-normal.svg", "normal").html_safe %>
-    <%= render_svg("legend-reduced.svg", "reduced").html_safe %>
-  </div>
-
-  <div id='left-column' class="res_left_col" style='width: 125px'>
-    <div id='genenames-merged' class="res_height" style='overflow: hidden'>
-      <%= render_svg("genenames-normal-merged.svg", "merged-name").html_safe %>
+    <div class="reduced">
+      <%= reduced_merged_structs.join.html_safe %>
     </div>
+  </div> 
+</div>
+<div id="svg-legend-wrapper" class="svg-pattern">
+  <div class="normal">
+    <%= normal_legend.join.html_safe %>
   </div>
-
-  <div id='right-column'>
-    <div id='genestructures-merged' class="res_height res_names">
-      <%= render_svg("genestructures-normal-merged.svg", "normal").html_safe %>
-      <%= render_svg("genestructures-reduced-merged.svg", "reduced").html_safe %>
-
-    </div>
+  <div class="reduced">
+    <%= reduced_legend.join.html_safe %>
   </div>
-
-  <%= javascript_tag defer: 'defer' do -%>
-
-    // simultaneously scroll up/down, left/right
-    $('div#genestructures').on('scroll', function() {
-      $('div#genenames').scrollTop($(this).scrollTop());
-      $('div#genestructures-merged').scrollLeft($(this).scrollLeft());
-    });
-
-    $('div#genestructures-merged').on('scroll', function() {
-      $('div#genestructures').scrollLeft($(this).scrollLeft());
-    });
-
-    $('div#genenames').on('scroll', function() {
-      $('div#genestructures').scrollTop($(this).scrollTop());
-    });
-   <% end -%>
-
 </div>
 
 <h4>View Options</h4>
@@ -81,20 +92,26 @@
 
 <script>
 
-  $("div.reduced").toggle();
+  // scroll footer (= merged pattern) together with structures
+  $('#svg-merged').on('scroll', function () {
+      $('#svg-struct').scrollLeft($(this).scrollLeft());
+  });
+  
+  // init: hide reduced pattern
+  $("div.reduced").hide();
 
   $("input#standard").change(function() {
     if ($(this).is(":checked")) {
       $("div.normal").toggle(true);
       $("div.reduced").toggle(false);
     }
-  })
+  });
 
   $("input#focus_on_common_introns").change(function() {
     if ($(this).is(":checked")) {
       $("div.normal").toggle(false);
       $("div.reduced").toggle(true);
     }
-  })
+  });
 
 </script>
