@@ -47,13 +47,13 @@
   $("#stats-info td").hover(
     function () {
       var thisclass = this.className;
-      $('.'+thisclass).addClass('pattern-highlight');
+      $('.'+thisclass).addClass('pattern-hover');
     }, 
     function () {
       // remove class first, to use other class (= intron-index) as selector
-      $(this).removeClass('pattern-highlight');
+      $(this).removeClass('pattern-hover');
       var thisclass = this.className;   
-      $('.'+thisclass).removeClass('pattern-highlight');      
+      $('.'+thisclass).removeClass('pattern-hover');      
     }
   );
 

@@ -33,9 +33,9 @@
 
 <% if is_new_genestructs then %>
 	<h3>Newly generated gene structures</h3>
-		<table id="download">
+		<table class="hovering">
 			<colgroup>
-				<col class="first_col">
+				<col class="download-first-col">
 				<col>
 			</colgroup>
 			<tr>
@@ -48,9 +48,9 @@
 
 <% if is_text_files then %>
 	<h3>Intron and protein alignments</h3>
-		<table id="download">
+		<table class="hovering">
 			<colgroup>
-				<col class="first_col">
+				<col class="download-first-col">
 				<col>
 			</colgroup>
 			<% files_with_desc.each do |f_name, desc| %>
@@ -67,9 +67,9 @@
 
 <% if is_graphic_file then %>	
 	<h3>Nucleotide alignments</h3>
-		<table id="download">
+		<table class="hovering">
 			<colgroup>
-				<col class="first_col">
+				<col class="download-first-col">
 				<col>
 			</colgroup>
 			<% files_with_desc.each do |f_name, desc| %>
@@ -86,9 +86,9 @@
 
 <% if is_pdb_files then %>	
 	<h3>Gene structures mapped to protein structures</h3>
-		<table id="download">
+		<table class="hovering">
 			<colgroup>
-				<col class="first_col">
+				<col class="download-first-col">
 				<col>
 			</colgroup>
 			<% files_with_desc.each do |f_name, desc| %>
@@ -105,9 +105,9 @@
 
 <% if is_tree_files then %>	
 	<h3>History of intron gain and loss events</h3>
-		<table id="download">
+		<table class="hovering">
 			<colgroup>
-				<col class="first_col">
+				<col class="download-first-col">
 				<col>
 			</colgroup>
 			<% files_with_desc.each do |f_name, desc| %>

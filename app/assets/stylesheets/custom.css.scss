@@ -247,53 +247,6 @@ h1, h2, h3, h4, h5 {
     }
 }
 
-input[type='file'] {
-  color: transparent;
-}
-.file-upload-button {
-  width: 50%;
-  float: left;
-}
-.file-upload-file {
-  width: 50%;
-  float: left;
-}
-.spacer {
-  margin-top: 5px;
-}
-.large-spacer {
-  margin-top: 15px;
-}
-#results_section {
-    position: relative;
-    margin-top: 25px;
-    padding-left: 0px !important;
-}
-
-form.disabled {
-    color: $dunkelgrau;
-}
-.disabled_textarea {
-  width: 700px;
-  color: rgb(84, 84, 84);
-}
-input[type=checkbox][disabled] + label {
-    color: $dunkelgrau;
-}
-.active_example {
-  color: black;
-  text-decoration: underline;
-  font-style: italic;
-  cursor: pointer;
-}
-.inactive_example {
-  color: $dunkelgrau;
-  text-decoration: none;
-  font-style: normal;
-  cursor: inherit;
-}
-
-
 .notice {
     -webkit-border-radius: 10px;
     -moz-border-radius: 10px;
@@ -362,10 +315,80 @@ td, th {
     zoom: 1;
 }
 
-// label {
-//   margin-right: 20px;
+// Style for data center and download table
+table {
+  text-align: left;
+  border-collapse: collapse;
+}
+
+#unlink_genes_modal tr.with_border {
+  border-top: 1px solid #e8edff;
+}
+.hovering tr:hover td {
+  color: #339;
+  background: $info_blue;
+}
+
+// .unstyled tr:hover td {
+//   color: #000;
+//   background: none;
 // }
 
+.filename, th {
+  color: $h1_color; //#039
+  font-weight: bold;
+}
+.spacer {
+  margin-top: 5px;
+}
+.large-spacer {
+  margin-top: 15px;
+}
+.vertical_line {
+    border-left: 1px solid $dunkelgrau;
+    padding-left: 10px;
+}
+
+/* === Data upload === */
+input[type='file'] {
+  color: transparent;
+}
+.file-upload-button {
+  width: 50%;
+  float: left;
+}
+.file-upload-file {
+  width: 50%;
+  float: left;
+}
+#results_section {
+    position: relative;
+    margin-top: 25px;
+    padding-left: 0px !important;
+}
+
+form.disabled {
+    color: $dunkelgrau;
+}
+.disabled_textarea {
+  width: 700px;
+  color: rgb(84, 84, 84);
+}
+input[type=checkbox][disabled] + label {
+    color: $dunkelgrau;
+}
+.active_example {
+  color: black;
+  text-decoration: underline;
+  font-style: italic;
+  cursor: pointer;
+}
+.inactive_example {
+  color: $dunkelgrau;
+  text-decoration: none;
+  font-style: normal;
+  cursor: inherit;
+}
 .manual_species_mapping_left {
   float: left;
   width: 60%;
@@ -385,59 +408,8 @@ td, th {
   width: 40%;
   overflow: auto;
 }
-.vertical_line {
-    border-left: 1px solid $dunkelgrau;
-    padding-left: 10px;
-}
 
-div.large_div, #graphical {
-  max-height: 400px;
-  overflow: auto;
-}
-
-div.pattern {
-  font-family: Courier;
-  max-height: 320px;
-  width: 100%;
-}
-div.stats-info {
-  max-height: 320px;
-  width: 100%;
-}
-#stats-pattern {
-  text-align: center;
-} 
-#stats-pattern .genename {
-  text-align: left;
-}
-#stats-info th {
-  padding-bottom: 5px;
-}
-div.res_left_col {
-  float: left;
-  max-height: 400px;
-  width: 150px;
-}
-
-div.res_height {
-  max-height: 300px;
-  overflow: auto; 
-}
-div.res_names {
-  overflow: auto;
-}
-iframe.res_height {
-  height: 300px;
-}
-div.hide-horizontal-overflow {
-  overflow-x: hidden;
-}
-
-// Style for data center and download table
-table {
-  text-align: left;
-  border-collapse: collapse;
-}
+/* === Data center === */
 table.one-column-emphasis td
 {
   color: #669;
@@ -450,24 +422,6 @@ table.one-column-emphasis td.genestruct_complete {
 }
 table.one-column-emphasis td.genestruct_incomplete {
   color: $warning_red;
-}
-#unlink_genes_modal tr.with_border {
-  border-top: 1px solid #e8edff;
-}
-tr:hover td {
-  color: #339;
-  background: $info_blue;
-}
-.unstyled tr:hover td {
-  color: #000;
-  background: none;
-}
-#download .first_col {
-  width: 180px;
-}
-.filename, th {
-  color: $h1_color; //#039
-  font-weight: bold;
 }
 .oce-checkbox-col {
   width: 60px;
@@ -484,30 +438,88 @@ tr:hover td {
   width: 240px;
 }
 
-.stats-intron-count-col {
-  width: 48px;
-}
-.stats-intron-num-col {
-  width: 75px;
-}
-.stats-taxon-col {
-  width: 225px;
-}
+/* === Results tabs === */
+/* tab-styling */
 ul.ui-tabs-nav.ui-helper-reset.ui-helper-clearfix.ui-widget-header.ui-corner-all {
   border: 1px solid #aaaaaa;
 }
-
 .ui-tabs .ui-tabs-panel {
-	padding: 1em 0.4em !important;
+  padding: 1em 0.4em !important;
   /* apply changes to fit jquery-ui to default layout; OR adjust default layout */
   // font-family: Arial, sans-serif;
   // font-size: 12px;
 }
+.ui-autocomplete-loading {
+    background: white image-url("jquery_ui/ui-anim_basic_16x16.gif") right center no-repeat;
+}
 
-// results-tabs:
-// exon-intron pattern
+/* general styling */
+.pattern {
+  font-family: Courier;
+  max-height: 320px;
+  width: 100%;
+}
+.pattern table, .pattern th, .pattern td {
+  border-spacing: 0;
+  color: black;
+  font-weight: normal;
+}
 
-// svg-pattern
+/* intron-alignment */
+.genename {
+  padding-right: 10px;
+}
+.tfoot-spacer {
+  // uncomment to reduce spacing between table and (fixed positioned) footer
+  // font-size: 5px;
+}
+// be more specific to win over pattern-hovering and pattern-onclick-highlighting
+td.highlighted {
+  background-color: #334d99;
+  color: white;
+}
+td.highlighted-2 {
+  background-color: #42558a;
+  color: white;
+}
+.pattern-hover {
+  background-color: #ededed;
+}
+.pattern-highlight {
+  background-color: #f1e9e9;
+}
+
+
+// div.large_div, #graphical {
+//   max-height: 400px;
+//   overflow: auto;
+// }
+
+// div.res_left_col {
+//   float: left;
+//   max-height: 400px;
+//   width: 150px;
+// }
+
+// div.res_height {
+//   max-height: 300px;
+//   overflow: auto; 
+// }
+// div.res_names {
+//   overflow: auto;
+// }
+
+// div.hide-horizontal-overflow {
+//   overflow-x: hidden;
+// }
+
+
+/* protein-alignment */
+iframe.res_height {
+  height: 300px;
+}
+
+/* nucleotide-alignment */
 .svg-genenames {
   float: left;
   width: 125px;
@@ -520,6 +532,31 @@ ul.ui-tabs-nav.ui-helper-reset.ui-helper-clearfix.ui-widget-header.ui-corner-all
   height: 50px;
   margin-top: 10px;
   clear: both;
+}
+
+/* intron-history */
+.stats-info {
+  max-height: 320px;
+  width: 100%;
+}
+#stats-pattern {
+  text-align: center;
+} 
+#stats-pattern .genename {
+  text-align: left;
+}
+#stats-info th {
+  padding-bottom: 5px;
+}
+
+/* phylo-tree */
+
+
+
+
+/* === Download === */
+.download-first-col {
+  width: 180px;
 }
 
 // phylogenetic tree
@@ -551,39 +588,6 @@ div.highlight-gain {
   fill: $h1_color;
 }
 
-div.pattern table, div.pattern th, div.pattern td {
-  border-spacing: 0;
-  color: black;
-  font-weight: normal;
-}
-.pattern-hover, .pattern-hover td[style] {
-  background-color: #ededed !important;
-  color: black !important;
-}
-.pattern-highlight, .pattern-highlight td[style] {
-  background-color: $info_blue !important;
-  color: black !important;
-}
-
-table .genename {
-  padding-right: 10px;
-}
-.genenamesvg {
-  width: 120px;
-}
-.tfoot-spacer {
-  // uncomment to reduce spacing between table and (fixed positioned) footer
-  // font-size: 5px;
-}
-// color table (text-based and statistics rep.)
-.highlighted {
-  background-color: $h1_color !important;
-  color: $hellgrau !important;
-}
-.highlighted-2 {
-  background-color: $h1_color_variation !important;
-  color: $hellgrau !important;
-}
 // color graphical-rep.
 .fill-darkgrey {
   fill: $grau;
@@ -600,6 +604,4 @@ table.mapped_headers th {
   padding: 5px 15px !important;
 }
 
-.ui-autocomplete-loading {
-    background: white image-url("jquery_ui/ui-anim_basic_16x16.gif") right center no-repeat;
-}
+
