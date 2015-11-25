@@ -82,11 +82,11 @@
         // color graphical representation in grey
         function deColorizeGraphic() {
             // color all rect grey
-            $('#genestructures-merged rect').each(function () {
+            $('#svg-merged rect').each(function () {
                 this.addClass('fill-darkgrey');
             });
             // re-color background
-            $('#genestructures-merged .background').each(function () {
+            $('#svg-merged .background').each(function () {
                 this.removeClass('fill-darkgrey');
                 this.addClass('fill-grey')
             });
@@ -98,7 +98,7 @@
             $('table .'+className).addClass('highlighted');
             
             // color graphical rep.
-            $('#genestructures-merged .'+className).each(function () {
+            $('#svg-merged .'+className).each(function () {
                 this.removeClass('fill-darkgrey'); // just re-store the original color!
             });
         }
