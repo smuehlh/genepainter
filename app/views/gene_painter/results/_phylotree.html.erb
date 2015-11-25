@@ -134,6 +134,10 @@
                 // link to text-based rep.
                 // un-check checkboxes with highlighting-options in text-based representation (and have the events of un-checking triggered)
                 $('.checkbox-textbased-highlight').prop('checked', true).trigger('click');
+                if (! is_fuzzy_file) {
+                    // unchecking via trigger('click') will not work on the highlight-fuzzy checkbox; it is disabled 
+                    $('input#highlight_fuzzy').prop('checked', false);
+                }
                 resetTable();
 
                 // link to graphical rep.
