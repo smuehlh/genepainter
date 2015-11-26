@@ -476,18 +476,18 @@ ul.ui-tabs-nav.ui-helper-reset.ui-helper-clearfix.ui-widget-header.ui-corner-all
   // font-size: 5px;
 }
 // be more specific to win over pattern-hovering and pattern-onclick-highlighting
-td.highlighted {
+table td.highlighted {
   background-color: #334d99;
   color: white;
 }
-td.highlighted-2 {
+table td.highlighted-2 {
   background-color: #42558a;
   color: white;
 }
-.pattern-hover {
+.pattern-hover td {
   background-color: #ededed;
 }
-.pattern-highlight {
+.pattern-highlight td {
   background-color: #f1e9e9;
 }
 
