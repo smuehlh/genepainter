@@ -1,5 +1,5 @@
 <% 
-	table_body = prepare_table_body(
+	data_table = prepare_data_table(
 		controller.sequence_names, 
 		controller.genes_to_species_map, 
 		controller.gene_structure_to_status_map
@@ -20,28 +20,14 @@
 		:class => "warning",
 		:style => "display:none;"
 	) +
-	content_tag(:table, 
-		content_tag(:thead, escape: false) do 
-			content_tag(:tr) do 
-				content_tag(:th, "Analyze", :class => "oce-checkbox-col" ) +
-				content_tag(:th, "Gene names", :class => "oce-text-col") +
-				content_tag(:th, "Gene structures", :class => "oce-text-col") +
-				content_tag(:th, 
-					"Generate gene structure".html_safe,
-					:class => "oce-broad-checkbox-col"
-				) +
-				content_tag(:th, "Species", :class => "oce-species-col")
-			end
-		end,
-		:class => "one-column-emphasis"
-	) +
 	form_tag(post_call_genepainter_path, remote: true, :id => "dataCenterForm") do
 		content_tag(:div, 
 			content_tag(:table,
-				table_body,
-				:class => "one-column-emphasis hovering"
-			),
-		:class => "res_height" # large_div
+				data_table,
+				:class => "one-column-emphasis hovering",
+				:id => 'table-data-center'
+			), 
+			:class => "data-center"
 		) + 
 		content_tag(:p, 
 			button_tag("Select All", 
@@ -76,6 +62,8 @@
 %>
 
 <script defer>
+	// fix table header
+	$("#table-data-center").tableHeadFixer({'foot': false, 'head': true}); 
 
 	// toggle help with image-click
 	$("img.data_center_info").click(function() {

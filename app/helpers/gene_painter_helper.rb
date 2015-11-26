@@ -60,7 +60,16 @@ module GenePainterHelper
     end
   end
   # table for data center
-  def prepare_table_body(col1_data, col1_data_with_species, col1_data_with_genestruct)
+  def prepare_data_table(col1_data, col1_data_with_species, col1_data_with_genestruct)
+    content_tag(:thead, escape: false) do 
+      content_tag(:tr) do 
+        content_tag(:th, "Analyze", :class => "table-checkbox" ) +
+        content_tag(:th, "Gene names") +
+        content_tag(:th, "Gene structures", :class => "table-checkbox") +
+        content_tag(:th, "Generate gene structure", :class => "table-fixed-width") +
+        content_tag(:th, "Species")
+      end
+    end +
     content_tag(:tbody) do 
       col1_data.sort.each.collect do |gene|
         species, status_genestruct = "", ""
@@ -95,15 +104,14 @@ module GenePainterHelper
               :class => "analyse_checkbox",
               :style => style_analyse_checkbox
             ),
-            :class => "oce-checkbox-col"
+            :class => "table-checkbox"
           ) +
           content_tag(:td, 
-            label_tag("#{gene}_analyse", gene),
-            :class => "oce-text-col"
+            label_tag("#{gene}_analyse", gene)
           ) +
           content_tag(:td,
             status_genestruct.html_safe,
-            :class => "oce-text-col #{class_status_genestruct}",
+            :class => "#{class_status_genestruct}",
             :id => "#{gene}_status"
           ) +
           content_tag(:td,
@@ -111,9 +119,9 @@ module GenePainterHelper
               gene, nil, 
               :id => "#{gene}_generate", 
               :style => style_generate_genestruct_checkbox,
-              :class => "generate_checkbox"
+              :class => "generate_checkbox table-fixed-width"
             ),
-            :class => "oce-broad-checkbox-col",
+            :class => "table-checkbox",
             :title => title_generate_cell
           ) +
           content_tag(:td,
@@ -122,7 +130,6 @@ module GenePainterHelper
               species, 
               :id => "#{gene}_hidden"
             ),
-            :class => "oce-species-col",
             :id => "#{gene}_species"
           )
         end
