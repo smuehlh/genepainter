@@ -484,7 +484,8 @@ table td.highlighted-2 {
   background-color: #42558a;
   color: white;
 }
-.pattern-hover td {
+// apply style to 'pure' class for vertical & horizontal highlighting in stats-tab
+.pattern-hover td, .pattern-hover {
   background-color: #ededed;
 }
 .pattern-highlight td {
