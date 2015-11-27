@@ -78,6 +78,9 @@ function resetTable() {
   $('.highlighted').removeClass('highlighted');
   $('.highlighted-2').removeClass('highlighted-2');
   $('.common-highlighted').removeAttr('style');
+
+  // hide info-box in statistics-tab
+  $("#intron-coloring").hide('slow');
 }
 function resetPhyloTree() {
   // reset taxon apperance
@@ -91,5 +94,9 @@ function resetGraphic() {
     this.removeClass('fill-grey');
     this.removeClass('fill-darkgrey');
   });
+}
+function resetStats() {
+  // show info-box in statistics-tab
+  $("#intron-coloring").show();
 }
 
