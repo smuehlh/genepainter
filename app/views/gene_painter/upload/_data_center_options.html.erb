@@ -6,7 +6,7 @@
 	content_tag(:h1, "Options and Submission") +
 	content_tag(:h2, "Options") +
 	content_tag(:h3, "General options") +
-	content_tag(:table, :class => "unstyled") do
+	content_tag(:table) do
 		content_tag(:colgroup) do 
 			content_tag(:col, "", :style => "width:160px;")
 		end +
@@ -27,7 +27,7 @@
 %>
 <%=
 	content_tag(:h3, "PDB options") +
-	content_tag(:table, :class => "unstyled", :id => "pdb_options") do
+	content_tag(:table, :id => "pdb_options") do
 		content_tag(:colgroup) do 
 			content_tag(:col, "", :style => "width:160px;")
 		end +

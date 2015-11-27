@@ -32,7 +32,7 @@
 %>
 
 <div data-fuzzy='<%= fuzzy_pos.to_json %>' class="pattern" id="pattern-div">
-  <table id="std" class="fixTable fixedPatternTable unstyled">
+  <table id="std" class="fixTable fixedPatternTable">
     <tbody>
       <%= std_tr.html_safe %>
     </tbody>
@@ -40,7 +40,7 @@
       <%= std_merged_tr.html_safe %>
     </tfoot>
   </table>
-  <table id="intron-phase" class="fixTable unstyled">
+  <table id="intron-phase" class="fixTable fixedPatternTable">
     <tbody>
       <%= intron_tr.html_safe %>
     </tbody>
@@ -48,7 +48,7 @@
       <%= intron_merged_tr.html_safe %>
     </tfoot>
   </table>   
-  <table id="std-fuzzy" class="fixTable fixedPatternTable unstyled">
+  <table id="std-fuzzy" class="fixTable fixedPatternTable">
     <tbody>
       <%= fuzzy_tr.html_safe %>
     </tbody>
@@ -59,7 +59,7 @@
 </div>
 
 <h4>Legend</h4>
-<table id='colorbar' class="unstyled">
+<table id='colorbar'>
   <tr>
     <td>0</td>
     <td class="0pct">&nbsp;</td><td class="5pct">&nbsp;</td><td class="10pct">&nbsp;</td><td class="15pct">&nbsp;</td>
@@ -80,7 +80,7 @@
 </table>
 
 <h4>View Options</h4>
-<table class="unstyled">
+<table>
   <tr>
     <td style='padding-right: 15px;'>
       <%=
