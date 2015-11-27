@@ -1,7 +1,13 @@
 module GenePainterHelper
 
-  def class_intron_col(n_introns)
-    "intron_" + n_introns.to_s
+  def intron_ind_to_class(ind)
+    "intron-index-" + ind.to_s
+  end
+  def intron_num_to_class(num)
+    "intron-num-" + num.to_s
+  end
+  def intron_num_to_merged_pattern_class(num)
+    "merged-intron-num-" + num.to_s
   end
   def exon_placeholder 
     "-"
@@ -212,7 +218,7 @@ module GenePainterHelper
     # add intron-index classes to position data
     hash.keys.each do |key|
       values = hash[key]
-      hash["intron_#{key}"] = values.map{|num| "intron_#{num}"}
+      hash[intron_ind_to_class(key)] = values.map{|num| intron_ind_to_class(num)}
       hash.delete(key) # delete old key-value pair
     end
     return hash
@@ -249,8 +255,8 @@ module GenePainterHelper
   # use number of introns in row & intron position as classes 
   # assume first cell = name; all other cells = exons/introns
   # classes:
-  # col-X -> the number of introns in the respective table column (appliccable for exons and introns)
-  # intron_X -> the index of the intron (only for intron-columns)
+  # intron-num-X -> the number of introns in the respective table column (appliccable for exons and introns)
+  # intron-index-X -> the index of the intron (only for intron-columns)
   def data_to_tr(arr)
     table_rows = []
 
@@ -266,8 +272,8 @@ module GenePainterHelper
 
       tr += "<td class='genename'>#{name}</td>"
       pattern.each_with_index do |cell, ind|
-        this_class = "col-#{intron_numbers[ind]}"
-        this_class += " intron_#{intron_indices[ind]}" if intron_indices[ind]  
+        this_class = "#{intron_num_to_class(intron_numbers[ind])}"
+        this_class += " #{intron_ind_to_class(intron_indices[ind])}" if intron_indices[ind]  
 
         tr += "<td class='#{this_class}'>#{cell}</td>"
       end
@@ -281,7 +287,7 @@ module GenePainterHelper
 
   # convert stats data to tr-data
   # classes: depending on first column (= intron index + 1)
-  # intron_X -> intron index 
+  # intron-index-X -> intron index 
   def stats_data_to_tr(arr)
     table_rows = []
 
@@ -293,7 +299,7 @@ module GenePainterHelper
       intron = row[0]
       pattern = row[1..-1]
 
-      this_class = "intron_#{human_to_ruby_counting( intron.to_i )}" 
+      this_class = intron_ind_to_class(human_to_ruby_counting( intron.to_i ))
       tr += "<td class='#{this_class}'>#{intron}</td>"
       pattern.each_with_index do |cell, ind|
         tr += "<td class='#{this_class}'>#{cell}</td>"
@@ -308,8 +314,8 @@ module GenePainterHelper
 
   # convert fuzzy data to tr-data
   # classes:
-  # col-X -> number of introns in the respective table column
-  # intron_X -> intron index _of the standard, un-fuzzy pattern_ 
+  # intron-num-X -> number of introns in the respective table column
+  # intron-index-X -> intron index _of the standard, un-fuzzy pattern_ 
   def fuzzy_data_to_tr(arr, fuzzy_pos)
     table_rows = []
 
@@ -325,9 +331,9 @@ module GenePainterHelper
 
       tr += "<td class='genename'>#{name}</td>"
       pattern.each_with_index do |cell, ind|
-          this_class = "col-#{intron_numbers[ind]}"
+          this_class = "#{intron_num_to_class(intron_numbers[ind])}"
           intron_indices[ind].each do |thisind|
-            this_class += " intron_#{thisind}"
+            this_class += " #{intron_ind_to_class(thisind)}"
           end
 
         tr += "<td class='#{this_class}'>#{cell}</td>"
@@ -356,8 +362,8 @@ module GenePainterHelper
     tr += "<th class='genename'>#{name}</th>"
 
     pattern_to_merged(patterns).each_with_index do |cell, pattern_ind|
-      this_class = intron_numbers[pattern_ind]
-      if this_class then 
+      if intron_numbers[pattern_ind] then 
+        this_class = intron_num_to_merged_pattern_class(intron_numbers[pattern_ind])
         tr += "<th class='#{this_class}'>#{cell}</th>"
       else
         tr += "<th>#{cell}</th>"
@@ -386,7 +392,7 @@ module GenePainterHelper
     pattern_to_intron_indices(patterns).each do |ind|
       if ind then 
         num = ruby_to_human_counting(ind)
-        tr += "<th class=intron_#{ind}>#{num}</th>"
+        tr += "<th class='#{intron_ind_to_class(ind)}'>#{num}</th>"
       else
         tr += "<th>&nbsp;</th>"  
       end
@@ -575,8 +581,8 @@ module GenePainterHelper
         gained_pos = match_data[2].split(/,\s*/)
         all_pos = match_data[3].split(/,\s*/)
 
-        taxa_with_gainedpos[taxon] = gained_pos.map{|num| class_intron_col(num)}
-        taxa_with_allpos[taxon] = all_pos.map{|num| class_intron_col(num)}
+        taxa_with_gainedpos[taxon] = gained_pos.map{|num| intron_ind_to_class(num)}
+        taxa_with_allpos[taxon] = all_pos.map{|num| intron_ind_to_class(num)}
       end
 
     end

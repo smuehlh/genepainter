@@ -221,9 +221,20 @@
   // number of rows
   var n_rows = <%= n_rows %>;
 
+  // convert number of introns in column to class name
+  function intronNumToClass(num) {
+    return "intron-num-" + num;
+  }
+  function intronNumToMergedClass(num) {
+    return "merged-intron-num-" + num;
+  } 
+  function mergedClassToIntronNum(this_class) {
+    return this_class.replace("merged-intron-num-", "");
+  }
+
   // color introns by occurence
   function spinnerEventHandler(percent) {
-    var min_occurence;
+    var min_occurence, merged_class_name, pattern_class_name, background_color;
     
     var active_merged_tr;
     if ( $std_merged_tr.is(":visible") ) {
@@ -239,11 +250,12 @@
 
     if (min_occurence > 0) {
       for (var i = min_occurence; i <= n_rows; i++) {
-        class_name = "col-" + i;
-        background_color = active_merged_tr.find("." + i).css("background-color");
+        merged_class_name = intronNumToMergedClass(i);
+        pattern_class_name = intronNumToClass(i);
+        background_color = active_merged_tr.find("." + merged_class_name).css("background-color");
 
-        $("." + class_name).addClass("common-highlighted");
-        $("." + class_name).css("background-color", background_color);
+        $("." + pattern_class_name).addClass("common-highlighted");
+        $("." + pattern_class_name).css("background-color", background_color);
       }
     }
   }
@@ -252,7 +264,8 @@
   function colorMergedTable(row) {
     // cell[0] contains genename; start with cell 1 instead.
     for (var i = 1, cell; cell = row.cells[i]; i++) {
-      var nIntrons = cell.className;
+      var nIntrons = mergedClassToIntronNum(cell.className);
+      // merged-intron-num-
       if (nIntrons == 0) {
         $(cell).css({'background-color': '#F5F5F5'});
       } else {
@@ -278,7 +291,8 @@
     var checked = $(this).is(':checked');
     resetTable(); // reset table in any case (checked or unchecked)
     if (checked) {
-      $('td.col-1').addClass('highlighted');
+      var uniq_pos = intronNumToClass(1);
+      $('td.' + uniq_pos).addClass('highlighted');
       $('input#highlight_common').prop('checked', false);
       $('input#highlight_fuzzy').prop('checked', false);
       $("#no_fuzzy_info").hide();
