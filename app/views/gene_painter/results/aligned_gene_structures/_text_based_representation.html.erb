@@ -32,7 +32,7 @@
 %>
 
 <div data-fuzzy='<%= fuzzy_pos.to_json %>' class="pattern" id="pattern-div">
-  <table id="std" class="fixTable unstyled">
+  <table id="std" class="fixTable fixedPatternTable unstyled">
     <tbody>
       <%= std_tr.html_safe %>
     </tbody>
@@ -48,7 +48,7 @@
       <%= intron_merged_tr.html_safe %>
     </tfoot>
   </table>   
-  <table id="std-fuzzy" class="fixTable unstyled">
+  <table id="std-fuzzy" class="fixTable fixedPatternTable unstyled">
     <tbody>
       <%= fuzzy_tr.html_safe %>
     </tbody>
@@ -167,7 +167,7 @@
   });
 
   // pattern table hover
-  $(".fixTable tr").hover(
+  $(".fixedPatternTable tr").hover(
     function () {
       $(this).addClass("pattern-hover");
       // quick-fix: background of fixed first column
@@ -186,11 +186,15 @@
     }
   );
   // pattern table highlight
-  $(".fixTable tr").click(function() {
+  $(".fixedPatternTable tr").click(function() {
     $(this).toggleClass("pattern-highlight");
     $(this).toggleClass("pattern-hover"); 
 
-    // (no quick-fix for fixed first column needed, as this is handled in hover-function)
+    // quick-fix: add hover class if pattern-highlight class was just removed 
+    // (no need to quick-fix background of first column)
+    if ( ! $(this).hasClass("pattern-highlight") ) { 
+      $(this).addClass("pattern-hover"); 
+    }
   });
 
 
