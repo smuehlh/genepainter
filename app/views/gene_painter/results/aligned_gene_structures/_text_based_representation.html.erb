@@ -165,6 +165,8 @@
     $("#intron-phase.fixTable").tableHeadFixer({'foot': true, 'head': false, 'left': 1}); 
     $("#std-fuzzy.fixTable").tableHeadFixer({'foot': true, 'head': false, 'left': 1}); 
   });
+  // quick-fix to init footer
+  $("#pattern-div").scrollTop(1);
 
   // pattern table hover
   $(".fixedPatternTable tr").hover(

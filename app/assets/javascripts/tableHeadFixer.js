@@ -35,10 +35,6 @@
 			$(window).resize(function() {
 				$(settings.parent).trigger("scroll");
 			});
-
-			// quick-fix to init footer
-			$(settings.parent).scrollTop(1);
-			$(settings.parent).scrollTop(-1);
 		});
 
 		function setCorner() {
