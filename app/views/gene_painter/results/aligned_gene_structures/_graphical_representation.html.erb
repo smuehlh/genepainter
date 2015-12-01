@@ -114,4 +114,18 @@
     }
   });
 
+  // position of first visible element in pattern-table
+  var svg_left = $("#svg-merged .intron-index-0:first").position().left;
+  // jump to first highlighted element (if its not already visible) -> invoked by phylotree
+  function scrollSvgIntoView(this_class) {
+    var pos = $("#svg-merged ." + this_class + ":first").position().left;
+    if ( svg_left <= pos && pos <= $("#svg-merged")[0].clientWidth ) {
+      // nothing to do, first element is already visible
+    } else {
+      // jump to first position
+      var offset = pos - svg_left;
+      $("#svg-merged").scrollLeft(offset);
+    }
+  }
+
 </script>

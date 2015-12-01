@@ -67,4 +67,30 @@
     $("#stats-pattern-div").scrollTop(-1);
   });
 
+  // position of first visible element in pattern-table
+  var stats_pattern_left = $("#stats-pattern-div .intron-index-0:first").position().left;
+  var stats_info_top = $("#stats-info-div .intron-index-0:first").position().top;
+  // jump to first highlighted element (if its not already visible)
+  function scrollStatsIntoView(this_class) {
+    // 1) pattern table
+    var pos = $("#stats-pattern-div ." + this_class + ":first").position().left;
+    if ( stats_pattern_left <= pos && pos <= $("#stats-pattern-div")[0].clientWidth ) {
+      // nothing to do, first element is already visible
+    } else {
+      // jump to first position
+      var offset = pos - stats_pattern_left;
+      $("#stats-pattern-div").scrollLeft(offset);
+    }
+
+    // 2) info table
+    pos = $("#stats-info-div ." + this_class + ":first").position().top;
+    if ( stats_info_top <= pos && pos <= $("#stats-info-div")[0].clientHeight ) {
+      // nothing to do, first element is already visible
+    } else {
+      // jump to first position
+      var offset = pos - stats_info_top;
+      $("#stats-info-div").scrollTop(offset);    
+    }
+  }
+
 </script>

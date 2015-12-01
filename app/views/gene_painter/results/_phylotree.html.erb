@@ -160,6 +160,12 @@
                     colorizeByIntronNum(val);
                 });
 
+                // jump to first highlighted position in each view
+                if ( targetClasses.length > 0 ) {
+                    scrollPatternIntoView( targetClasses[0] );
+                    scrollSvgIntoView( targetClasses[0] );
+                    scrollStatsIntoView( targetClasses[0] );
+                }
 
             } // else: don't do anything, behave as if the element is not-clickable at all
         });

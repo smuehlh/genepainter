@@ -292,6 +292,20 @@
     $("."+i+"pct")[0].setAttribute('style', 'background-color: rgb(' +  color.red + ', ' + color.green + ', ' + color.blue + ')');
   }
 
+  // position of first visible element in pattern-table
+  var pattern_left = $(".merged-intron-num-1").position().left;
+  // jump to first highlighted element (if its not already visible)
+  function scrollPatternIntoView(this_class) {
+    var pos = $("." + this_class + ":first").position().left;
+    if ( pattern_left <= pos && pos <= $("#pattern-div")[0].clientWidth ) {
+      // nothing to do, first element is already visible
+    } else {
+      // jump to first position
+      var offset = pos - pattern_left;
+      $("#pattern-div").scrollLeft(offset);
+    }
+  }
+
   // bind event to check boxes
   $('input#highlight_unique').change(function() {
     var checked = $(this).is(':checked');
@@ -302,6 +316,9 @@
       $('input#highlight_common').prop('checked', false);
       $('input#highlight_fuzzy').prop('checked', false);
       $("#no_fuzzy_info").hide();
+
+      // jump to first position
+      scrollPatternIntoView(uniq_pos);
 
       // link to phylotree and graphic
       resetPhyloTree();
@@ -318,6 +335,9 @@
       $('input#highlight_unique').prop('checked', false);
       $('input#highlight_fuzzy').prop('checked', false);
       $("#no_fuzzy_info").hide();
+
+      // jump to first position
+      scrollPatternIntoView("common-highlighted");
 
       // link to phylotree and graphic
       resetPhyloTree();
@@ -351,6 +371,9 @@
           $("."+this_val).addClass(useClass);
         });
       });
+
+      // jump to first position
+      scrollPatternIntoView("highlighted");
 
       $('input#highlight_unique').prop('checked', false);
       $('input#highlight_common').prop('checked', false);
