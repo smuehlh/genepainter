@@ -380,18 +380,23 @@ module GenePainterHelper
 
     name = "Intron number"
     patterns = arr.collect{ |inner_arr| inner_arr[1..-1] }
+    intron_indices = pattern_to_intron_indices(patterns)
+    max_digits = intron_indices.compact.collect{|num| num.to_s.size}.max
 
     # empty tr
-    tr = pattern_to_dummy_tr(patterns[0])
+    tr = pattern_to_dummy_tr(intron_indices)
+    if max_digits > 1 then
+      tr = tr.gsub("&nbsp\;", "&nbsp\;" * max_digits)
+    end
     table_rows.push tr
 
     # data tr
     tr = "<tr>"
     tr += "<th class='genename'>#{name}</th>"
 
-    pattern_to_intron_indices(patterns).each do |ind|
+    intron_indices.each do |ind|
       if ind then 
-        num = ruby_to_human_counting(ind)
+        num = ruby_to_human_counting(ind).to_s
         tr += "<th class='#{intron_ind_to_class(ind)}'>#{num}</th>"
       else
         tr += "<th>&nbsp;</th>"  
