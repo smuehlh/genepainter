@@ -100,4 +100,10 @@ module Helper
 		is_success = system("zip -jr #{p_dest} #{p_scr}")
 		worked_or_die(is_success, "Cannot compress folder #{p_scr}.")
 	end
+
+	def split_file_into_name_and_ext(file)
+		file_extension = File.extname(file).downcase
+		file_basename = File.basename(file, file_extension)
+		return file_basename, file_extension
+	end
 end

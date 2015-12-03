@@ -39,6 +39,15 @@ module SequenceHelper
 		">" + str
 	end
 
+	def get_aligned_seq_by_name(path, name)
+		names, seqs = read_in_alignment(path)
+		ind = names.index(name)
+		if ind.nil? then 
+			raise "Cannot find aligned sequence #{name}."
+		end
+		return seqs[ind]
+	end
+
 	# this method parses a file with mapping between species and genes
 	# @path [String] path to mapping file
 	# returns [Hash] keys: gene names (i.e. fasta headers), values: corresponding species

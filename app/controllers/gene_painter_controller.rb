@@ -169,11 +169,12 @@ class GenePainterController < ApplicationController
           session[:gene_structure_to_status_map][gene] = GenestructureHelper.get_status_of_gene_structure(path)
         end
       else
-
         params[:files].each do |file|
-          # validate file
 
-          FormatChecker.validate_genestructure( file.path, file.original_filename )
+          # validate file           
+          genename, extension = Helper.split_file_into_name_and_ext(file.original_filename)               
+          FormatChecker.validate_genestructure_type(file.path, extension)     
+          FormatChecker.validate_genestructure_content(file.path, session[:p_alignment], genename, extension)
 
           # check file size
           Helper.filesize_below_limit(file.tempfile, MAX_FILESIZE)
