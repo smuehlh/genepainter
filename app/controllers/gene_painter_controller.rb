@@ -475,11 +475,12 @@ class GenePainterController < ApplicationController
     # apply data selection for analysis, in case of example: use all genes
     d_gene_structures = File.join(session[:basepath_data], 'selected_gene_structures')
     Helper.mkdir_or_die(d_gene_structures)
+    Helper.empty_dir(d_gene_structures)
 
     all_genes = Dir[ File.join( session[:p_gene_structures], "*" ) ]
     all_genes.each do |f_src|
       f_src_basename = File.basename(f_src, ".*")
-      if @is_example || selected_genes.include?( f_src_basename ) then 
+      if selected_genes.include?( f_src_basename ) then 
         Helper.move_or_copy_file(f_src, d_gene_structures, 'copy')
       end
     end

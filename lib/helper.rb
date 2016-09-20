@@ -44,6 +44,10 @@ module Helper
 		FileTest.directory?(path)
 	end
 
+	def empty_dir(path)
+		FileUtils.rm( Dir[File.join(path, "*")] )
+	end
+
 	def mkdir_or_die(path)
 		if ! does_dir_exist(path) then
 			begin
