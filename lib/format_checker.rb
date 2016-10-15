@@ -109,6 +109,7 @@ module FormatChecker
 end
 
 class ToGene
+	# INFO: it might be worth to use (Standalone) GenePainter's build-classes 'YamlToGene' and "GffToGene' for ultimate consistency
 	def self.is_yaml(genestruct, genename)
 		begin 
 			contigs = YAML.load( genestruct )
@@ -141,12 +142,14 @@ class ToGene
 	end
 	def self.get_yaml_seq(genestruct, genename)
 		contigs = YAML.load( genestruct )
-		if contigs[genename] then
-			# replace collection of gene structures by the one of interest
-			contigs = contigs[genename]
-		elsif contigs["ScipioResult"]
-			# this yaml was downloaded by WebScipio, but is perfectly valid
-			contigs = contigs["ScipioResult"]
+		if contigs.kind_of?(Hash) then		
+			if contigs[genename] then
+				# replace collection of gene structures by the one of interest
+				contigs = contigs[genename]
+			elsif contigs["ScipioResult"]
+				# this yaml was downloaded by WebScipio, but is perfectly valid
+				contigs = contigs["ScipioResult"]
+			end
 		end
 		return contigs.collect{|contig| contig["prot_seq"]}.join
 	end
