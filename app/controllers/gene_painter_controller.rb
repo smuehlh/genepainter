@@ -403,6 +403,7 @@ class GenePainterController < ApplicationController
     f_taxonomy_list = File.join(session[:basepath_data], 'taxonomy_list.csv')
 
     Helper.mkdir_or_die(d_output)
+    Helper.empty_dir(d_output)
 
     @is_example = params[:is_example] == "true" # params is string "true" or string "false"
     missing_gene_structures = params[:generate_genestruct] == nil ? [] : params[:generate_genestruct]
