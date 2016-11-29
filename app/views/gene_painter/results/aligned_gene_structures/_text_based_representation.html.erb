@@ -293,7 +293,7 @@
   }
 
   // position of first visible element in pattern-table
-  var pattern_left = $(".merged-intron-num-1").position().left;
+  var pattern_left = $('*[class^="merged-intron-num"]').first().position().left;
   // jump to first highlighted element (if its not already visible)
   function scrollPatternIntoView(this_class) {
     var pos = $("." + this_class + ":first").position().left;
