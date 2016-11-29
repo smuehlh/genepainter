@@ -156,24 +156,10 @@ class ToGene
 
 	def self.is_gff(genestruct)
 		gff = genestruct.lines
-		if gff.any? {|line| line.include?("ScipioResult")} then
-			# gff is obtained from Scipio (and does not follow standard format)
-			cds_lines = gff.select {|line| line.match("protein_match")}
-		else
-			first_mRNA_line = gff.find {|line| line.match("mRNA")}
-			first_mRNA_id = nil # default: use every CDS description line
-			if first_mRNA_line then 
-				first_mRNA_id = get_id_from_attributes(first_mRNA_line)
-			end
-			cds_lines = gff.select do |line|
-				line.match("CDS") && is_child_of(line, first_mRNA_id)
-			end
+		gff.each do |line|
+			return "not-gff" unless line.start_with?("#") || line.split("\t").size == 9 || line.chomp.empty?
 		end
-		if cds_lines.any? then 
-			return "gff"
-		else
-			return "not-gff"
-		end
+		return "gff"
 	end
 end
 
