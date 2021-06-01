@@ -2,7 +2,7 @@
 
 A [web application](https://genepainter.motorprotein.de/) for mapping gene structures onto multiple sequence alignments.
 
-__Author__ Stefanie Mühlhausen
+__Authors__ Stefanie Mühlhausen, Vu Bui
 __Affiliation__ Martin Kollmar
 __Contact__ Martin Kollmar (mako@nmr.mpibpc.mpg.de)
 
